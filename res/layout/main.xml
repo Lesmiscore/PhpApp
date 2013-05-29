@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:orientation="vertical" android:padding="10dp"
+>
+	<Button 
+		android:id="@+id/start"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:text="@string/server_start"
+	/>
+	<Button 
+		android:id="@+id/stop"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:text="@string/server_stop"
+	/>
+	<TextView 
+		android:id="@+id/label"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:text="@string/server_status_updating" android:gravity="center"
+	/>
+</LinearLayout>
+
