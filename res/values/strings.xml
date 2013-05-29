@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="server_running">Server is running on %s</string>
+	<string name="server_stopped">Server is stopped</string>
+	<string name="server_start">Start server</string>
+	<string name="server_stop">Stop server</string>
+	<string name="server_status_updating">Updating server status...</string>
+</resources>
