@@ -2,13 +2,16 @@ package esminis.server.php.service;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
-import android.text.format.Formatter;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Collections;
+import java.util.List;
+import org.apache.http.conn.util.InetAddressUtils;
 
 public class PhpServer extends HandlerThread {
 	
@@ -66,13 +69,30 @@ public class PhpServer extends HandlerThread {
 		return handler;
 	}
 	
+	public static String getIPAddress() {
+		try {
+			List<NetworkInterface> interfaces = Collections.list(
+				NetworkInterface.getNetworkInterfaces()
+			);
+			for (NetworkInterface iface : interfaces) {
+				List<InetAddress> addresses = Collections.list(
+					iface.getInetAddresses()
+				);
+				for (InetAddress address : addresses) {
+					if (!address.isLoopbackAddress()) {
+						String host = address.getHostAddress().toUpperCase();
+						if (InetAddressUtils.isIPv4Address(host)) {
+							return host;
+						}
+					}
+				}
+			}
+		} catch (Exception ex) {}
+		return "127.0.0.1";
+	}
+	
 	private String getAddress() {
-		WifiManager manager = (WifiManager)context.getSystemService(
-			Context.WIFI_SERVICE
-		);
-		return Formatter.formatIpAddress(
-			manager.getConnectionInfo().getIpAddress()
-		) + ":8080";
+		return getIPAddress() + ":8080";
 	}
 	
 	private void serverStart() {
