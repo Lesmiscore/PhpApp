@@ -57,12 +57,12 @@
 		<Button 
 			android:id="@+id/start"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:text="@string/server_start"
+			android:text="@string/server_start" android:visibility="gone"
 		/>	
 		<Button 
 			android:id="@+id/stop"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:text="@string/server_stop"
+			android:text="@string/server_stop" android:visibility="gone"
 		/>	
 	</LinearLayout>
 </RelativeLayout>
