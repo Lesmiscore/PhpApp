@@ -2,10 +2,12 @@ package esminis.server.php.service;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -15,6 +17,12 @@ import java.util.List;
 import org.apache.http.conn.util.InetAddressUtils;
 
 public class PhpServer extends HandlerThread {
+	
+	static public String PREFERENCES_DOCUMENT_ROOT = "documentRoot";
+	
+	static public String PREFERENCES_PORT = "port";
+	
+	static public String PREFERENCES_START_ON_BOOT = "startOnBoot";
 	
 	static public final String INTENT_ACTION = "STATUS_SERVER_CHANGED";
 	
@@ -28,7 +36,9 @@ public class PhpServer extends HandlerThread {
 	
 	private Context context = null;
 	
-	private String address = "127.0.0.1:8080";
+	private String address = "";
+	
+	private boolean startWhenReady = false;
 
 	static public PhpServer getInstance(Context context) {
 		if (instance == null) {
@@ -46,7 +56,8 @@ public class PhpServer extends HandlerThread {
 			new Install().fromAsset(php, "php", context);
 			php.setExecutable(true);
 		} catch (IOException ex) {}
-		new Process().killIfFound(php);
+		address = getIPAddress() + ":" + PreferenceManager
+			.getDefaultSharedPreferences(context).getString(PREFERENCES_PORT, "8080");
 	}
 
 	@Override
@@ -68,6 +79,9 @@ public class PhpServer extends HandlerThread {
 			
 		};
 		serverStatus();
+		if (startWhenReady) {
+			sendAction("start");
+		}
 	}
 	
 	public Handler getHandler() {
@@ -113,16 +127,48 @@ public class PhpServer extends HandlerThread {
 			process.destroy();
 			process = null;
 		}
+		new Process().killIfFound(php);
 	}
 	
 	private void serverStatus() {
-		boolean running = process != null;
+		boolean running = process != null || new Process().getIsRunning(php);
 		Intent intent = new Intent(INTENT_ACTION);		
 		intent.putExtra("running", running);
 		if (running) {
 			intent.putExtra("address", address);
 		}
 		context.sendBroadcast(intent);
+	}
+	
+	public void sendAction(String action) {		
+		if (handler != null) {
+			SharedPreferences preferences = PreferenceManager
+				.getDefaultSharedPreferences(context);
+			Bundle bundle = new Bundle();
+			bundle.putString("action", action);
+			bundle.putString(
+				PREFERENCES_DOCUMENT_ROOT, 
+				preferences.getString(PREFERENCES_DOCUMENT_ROOT, "")
+			);
+			bundle.putString(
+				PREFERENCES_PORT, preferences.getString(PREFERENCES_PORT, "")
+			);
+			Message message = new Message();
+			message.setData(bundle);
+			handler.sendMessage(message);
+		}
+	}
+	
+	public void startWhenReady() {
+		if (handler == null) {
+			startWhenReady = true;
+		} else {
+			sendAction("start");
+		}
+	}
+	
+	public SharedPreferences getPreferences() {
+		return PreferenceManager.getDefaultSharedPreferences(context);
 	}
 	
 }
