@@ -2,26 +2,49 @@ package esminis.server.php.service;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Process {
 	
-	protected int find(File command) {
-		BufferedReader reader;
-		try {
-			reader = new BufferedReader(
-				new InputStreamReader(Runtime.getRuntime().exec("ps").getInputStream())
-			);
-			String line;
-			while ((line = reader.readLine()) != null) {
-				if (line.contains(command.getAbsolutePath())) {
-					String[] parts = line.split("[ ]+");
-					return Integer.parseInt(parts[1]);
+	protected int find(File command) {		
+		File root = new File(File.separator + "proc");
+		if (root.isDirectory()) {
+			File[] list = root.listFiles();
+			for (File file : list) {
+				if (file.isDirectory()) {
+					try {
+						int pid = Integer.parseInt(file.getName());
+						File fileCommandLine = new File(
+							file.getAbsolutePath() + File.separator + "cmdline"
+						);
+						if (!fileCommandLine.isFile() || !fileCommandLine.canRead()) {
+							continue;
+						}
+						BufferedReader reader = null;
+						try {														
+							reader = new BufferedReader(
+								new InputStreamReader(new FileInputStream(fileCommandLine))
+							);
+							String line;
+							while ((line = reader.readLine()) != null) {
+								if (line.contains(command.getAbsolutePath())) {
+									return pid;
+								}
+							}							
+						} catch (IOException ex) {
+						} finally {
+							try {
+								if (reader != null) {
+									reader.close();
+								}
+							} catch (IOException ex) {}
+						}
+					} catch (NumberFormatException e) {}
 				}
 			}
-			reader.close();
-		} catch (IOException ex) {}
+		}
 		return -1;
 	}
 	
@@ -32,8 +55,12 @@ public class Process {
 	public void killIfFound(File command) {
 		int process = find(command);
 		if (process != -1) {
-			android.os.Process.killProcess(process);	
+			kill(process);	
+		}
 	}
-	}
+	
+	public void kill(int pid) {
+		android.os.Process.killProcess(pid);
+	}	
 	
 }
