@@ -19,6 +19,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import esminis.server.php.service.PhpServer;
 import java.io.File;
@@ -26,17 +28,14 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import net.rdrei.android.dirchooser.DirectoryChooserActivity;
 
-public class MainActivity extends Activity {
-
-	static private String PREFERENCES_DOCUMENT_ROOT = "documentRoot";
-	static private String PREFERENCES_PORT = "port";
+public class MainActivity extends Activity {	
 	
 	static private int REQUEST_DIRECTORY = 1;
 	
 	private BroadcastReceiver receiver = null;
 	
 	private SharedPreferences getDefaultSharedPreferences() {
-		return PreferenceManager.getDefaultSharedPreferences(this);
+		return PhpServer.getInstance(this).getPreferences();
 	}
 	
 	@Override
@@ -45,7 +44,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.main);
 		
 		SharedPreferences preferences = getDefaultSharedPreferences();		
-		if (!preferences.contains(PREFERENCES_DOCUMENT_ROOT)) {
+		if (!preferences.contains(PhpServer.PREFERENCES_DOCUMENT_ROOT)) {
 			File file = new File(
 				Environment.getExternalStorageDirectory().getAbsolutePath() + 
 					File.separator + "www"
@@ -64,18 +63,21 @@ public class MainActivity extends Activity {
 				}
 			}
 			SharedPreferences.Editor editor = preferences.edit();
-			editor.putString(PREFERENCES_DOCUMENT_ROOT, file.getAbsolutePath());
+			editor.putString(
+				PhpServer.PREFERENCES_DOCUMENT_ROOT, file.getAbsolutePath()
+			);
 			editor.commit();
 		}
-		if (!preferences.contains(PREFERENCES_PORT)) {
+		if (!preferences.contains(PhpServer.PREFERENCES_PORT)) {
 			SharedPreferences.Editor editor = preferences.edit();
-			editor.putString(PREFERENCES_PORT, "8080");
+			editor.putString(PhpServer.PREFERENCES_PORT, "8080");
 			editor.commit();
 		}				
 		
 		TextView text = (TextView)findViewById(R.id.server_root);		
 		text.setText(
-			getDefaultSharedPreferences().getString(PREFERENCES_DOCUMENT_ROOT, "")
+			getDefaultSharedPreferences()
+				.getString(PhpServer.PREFERENCES_DOCUMENT_ROOT, "")
 		);	
 		text.setOnClickListener(new View.OnClickListener() {
 
@@ -105,7 +107,8 @@ public class MainActivity extends Activity {
 
 			public void afterTextChanged(Editable text) {
 				int port = Integer.parseInt(
-					getDefaultSharedPreferences().getString(PREFERENCES_PORT, "")
+					getDefaultSharedPreferences()
+						.getString(PhpServer.PREFERENCES_PORT, "")
 				);
 				try {
 					port = Integer.parseInt(text.toString());					
@@ -113,7 +116,7 @@ public class MainActivity extends Activity {
 				boolean error = true;
 				if (port >= 1024 && port <= 65535) {
 					SharedPreferences.Editor editor = getDefaultSharedPreferences().edit();
-					editor.putString(PREFERENCES_PORT, String.valueOf(port));
+					editor.putString(PhpServer.PREFERENCES_PORT, String.valueOf(port));
 					editor.commit();
 					error = false;
 				}
@@ -122,8 +125,23 @@ public class MainActivity extends Activity {
 			}
 		});
 		text.setText(
-			getDefaultSharedPreferences().getString(PREFERENCES_PORT, "")
+			getDefaultSharedPreferences().getString(PhpServer.PREFERENCES_PORT, "")
 		);
+		CheckBox checkbox = (CheckBox)findViewById(R.id.server_start_on_boot);
+		checkbox.setOnCheckedChangeListener(
+			new CompoundButton.OnCheckedChangeListener() {
+				public void onCheckedChanged(
+					CompoundButton checkox, boolean checked
+				) {
+					SharedPreferences.Editor editor = getDefaultSharedPreferences()
+						.edit();
+					editor.putBoolean(PhpServer.PREFERENCES_START_ON_BOOT, checked);
+					editor.commit();
+				}
+			}
+		);
+		checkbox.setChecked(getDefaultSharedPreferences()
+			.getBoolean(PhpServer.PREFERENCES_START_ON_BOOT, false));
 		
 		receiver = new BroadcastReceiver() {
 
@@ -151,36 +169,17 @@ public class MainActivity extends Activity {
 		
 		findViewById(R.id.start).setOnClickListener(new View.OnClickListener() {
 			public void onClick(View arg0) {
-				sendAction("start");
+				PhpServer.getInstance(MainActivity.this).sendAction("start");
 			}
 		});
 
 		findViewById(R.id.stop).setOnClickListener(new View.OnClickListener() {
 			public void onClick(View arg0) {
-				sendAction("stop");
+				PhpServer.getInstance(MainActivity.this).sendAction("stop");
 			}
 		});
 		
 		PhpServer.getInstance(MainActivity.this);
-	}
-	
-	private void sendAction(String action) {
-		Handler handler = PhpServer.getInstance(MainActivity.this).getHandler();
-		if (handler != null) {
-			Bundle bundle = new Bundle();
-			bundle.putString("action", action);
-			bundle.putString(
-				PREFERENCES_DOCUMENT_ROOT, 
-				getDefaultSharedPreferences().getString(PREFERENCES_DOCUMENT_ROOT, "")
-			);
-			bundle.putString(
-				PREFERENCES_PORT, 
-				getDefaultSharedPreferences().getString(PREFERENCES_PORT, "")
-			);
-			Message message = new Message();
-			message.setData(bundle);
-			handler.sendMessage(message);
-		}
 	}
 
 	private void setLabel(String label) {
@@ -191,7 +190,7 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		registerReceiver(receiver, new IntentFilter(PhpServer.INTENT_ACTION));
-		sendAction("status");
+		PhpServer.getInstance(MainActivity.this).sendAction("status");
 	}
 
 	@Override
@@ -212,10 +211,13 @@ public class MainActivity extends Activity {
 			);
 			if (file.isDirectory()) {
 				SharedPreferences.Editor editor = getDefaultSharedPreferences().edit();
-				editor.putString(PREFERENCES_DOCUMENT_ROOT, file.getAbsolutePath());
+				editor.putString(
+					PhpServer.PREFERENCES_DOCUMENT_ROOT, file.getAbsolutePath()
+				);
 				editor.commit();
 				((TextView)findViewById(R.id.server_root)).setText(
-					getDefaultSharedPreferences().getString(PREFERENCES_DOCUMENT_ROOT, "")
+					getDefaultSharedPreferences()
+						.getString(PhpServer.PREFERENCES_DOCUMENT_ROOT, "")
 				);
 			}
 		}
