@@ -2,6 +2,7 @@ package esminis.server.php.service;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
@@ -26,6 +27,8 @@ public class PhpServer extends HandlerThread {
 	private Handler handler = null;
 	
 	private Context context = null;
+	
+	private String address = "127.0.0.1:8080";
 
 	static public PhpServer getInstance(Context context) {
 		if (instance == null) {
@@ -53,9 +56,11 @@ public class PhpServer extends HandlerThread {
 
 			@Override
 			public void handleMessage(Message message) {
-				if (message.getData().get("action").equals("start")) {
-					serverStart();
-				} else if (message.getData().get("action").equals("stop")) {
+				Bundle data = message.getData();
+				if (data.get("action").equals("start")) {
+					address = getIPAddress() + ":" + data.getString("port");
+					serverStart(data.getString("documentRoot"));
+				} else if (data.get("action").equals("stop")) {
 					serverStop();
 				}
 				serverStatus();
@@ -91,16 +96,12 @@ public class PhpServer extends HandlerThread {
 		return "127.0.0.1";
 	}
 	
-	private String getAddress() {
-		return getIPAddress() + ":8080";
-	}
-	
-	private void serverStart() {
+	private void serverStart(String documentRoot) {
 		if (process == null) {
 			try {
 				process = Runtime.getRuntime().exec(
 					new String[] {
-						php.getAbsolutePath(), "-S", getAddress(), "-t", "/sdcard/www"
+						php.getAbsolutePath(), "-S", address, "-t", documentRoot
 					}
 				);
 			} catch (IOException ex) {}
@@ -119,7 +120,7 @@ public class PhpServer extends HandlerThread {
 		Intent intent = new Intent(INTENT_ACTION);		
 		intent.putExtra("running", running);
 		if (running) {
-			intent.putExtra("address", getAddress());
+			intent.putExtra("address", address);
 		}
 		context.sendBroadcast(intent);
 	}

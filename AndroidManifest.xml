@@ -4,12 +4,17 @@
 	package="esminis.server.php" android:versionCode="1" android:versionName="1.0"
 >
 	<uses-permission android:name="android.permission.INTERNET" />
-	<application android:theme="@android:style/Theme.Light.NoTitleBar">
+	<uses-sdk android:minSdkVersion="11" />
+	<application android:theme="@android:style/Theme.Holo.Light.NoActionBar">
 		<activity android:name="MainActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+		<activity 
+			android:name="net.rdrei.android.dirchooser.DirectoryChooserActivity"
+			android:theme="@android:style/Theme.Holo.Light"
+		/>
 	</application>
 </manifest>

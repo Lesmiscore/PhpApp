@@ -1,23 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout 
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:orientation="vertical" android:padding="10dp"
 >
-	<Button 
-		android:id="@+id/start"
+	<LinearLayout		
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:text="@string/server_start"
-	/>
-	<Button 
-		android:id="@+id/stop"
+		android:orientation="vertical" android:padding="10dp"
+	>
+		<RelativeLayout 
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+		>
+			<TextView 
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:text="@string/server_document_root"
+			/>
+			<TextView 
+				android:layout_width="80dp" android:layout_height="wrap_content"
+				android:text="@string/server_port" android:layout_alignParentRight="true"
+			/>
+		</RelativeLayout>
+		<RelativeLayout 
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+		>
+			<EditText 
+				android:id="@+id/server_root"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:layout_toLeftOf="@+id/server_port" android:editable="false"
+				android:inputType="none" 
+				android:focusable="false" android:focusableInTouchMode="false"
+			/>		
+			<EditText 
+				android:id="@+id/server_port"
+				android:layout_width="80dp" android:layout_height="wrap_content"
+				android:layout_alignParentRight="true"
+				android:imeOptions="actionDone"
+				android:inputType="number" android:digits="0123456789"
+				android:maxLength="5" android:singleLine="true"
+			/>
+		</RelativeLayout>
+	</LinearLayout>
+	<LinearLayout
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:text="@string/server_stop"
-	/>
-	<TextView 
-		android:id="@+id/label"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:text="@string/server_status_updating" android:gravity="center"
-	/>
-</LinearLayout>
-
+		android:orientation="vertical" android:padding="10dp"
+		android:layout_alignParentBottom="true"
+	>
+		<TextView 
+			android:id="@+id/label"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:text="@string/server_status_updating" android:gravity="center"
+		/>
+		<Button 
+			android:id="@+id/start"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:text="@string/server_start"
+		/>	
+		<Button 
+			android:id="@+id/stop"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:text="@string/server_stop"
+		/>	
+	</LinearLayout>
+</RelativeLayout>

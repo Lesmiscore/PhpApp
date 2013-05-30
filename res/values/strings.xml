@@ -5,4 +5,6 @@
 	<string name="server_start">Start server</string>
 	<string name="server_stop">Stop server</string>
 	<string name="server_status_updating">Updating server status...</string>
+	<string name="server_port">Server port</string>
+	<string name="server_document_root">Document root</string>
 </resources>

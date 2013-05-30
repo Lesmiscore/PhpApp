@@ -1,2 +1,2 @@
 syntax: regexp
-^(bin|gen)/.*$
+^(bin|gen|nbandroid|private)/.*$
