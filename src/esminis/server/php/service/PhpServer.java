@@ -53,7 +53,7 @@ public class PhpServer extends HandlerThread {
 		this.context = context.getApplicationContext();
 		php = new File(context.getFilesDir() + File.separator + "php");		
 		try {
-			new Install().fromAsset(php, "php", context);
+			new Install().fromAssetFile(php, "php", context);
 			php.setExecutable(true);
 		} catch (IOException ex) {}
 		address = getIPAddress() + ":" + PreferenceManager
@@ -113,9 +113,11 @@ public class PhpServer extends HandlerThread {
 	private void serverStart(String documentRoot) {
 		if (process == null) {
 			try {
+				File file = new File(documentRoot + File.separator + "php.ini");
 				process = Runtime.getRuntime().exec(
 					new String[] {
-						php.getAbsolutePath(), "-S", address, "-t", documentRoot
+						php.getAbsolutePath(), "-S", address, "-t", documentRoot, 
+							"-c", file.exists() ? file.getAbsolutePath() : documentRoot
 					}
 				);
 			} catch (IOException ex) {}
