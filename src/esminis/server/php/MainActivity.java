@@ -10,9 +10,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -25,11 +22,8 @@ import android.widget.TextView;
 import esminis.server.php.service.Install;
 import esminis.server.php.service.PhpServer;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.HashMap;
 import net.rdrei.android.dirchooser.DirectoryChooserActivity;
 
 public class MainActivity extends Activity {	
@@ -57,9 +51,19 @@ public class MainActivity extends Activity {
 				file.mkdir();
 				if (file.isDirectory()) {
 					try {
-						new Install().fromAsset(
-							new File(file.getAbsolutePath() + File.separator + "index.php"), 
-							"www/index.php", this
+						Install install = new Install();
+						install.fromAssetDirectory(file, "www", this);						
+						HashMap<String, String> variables = new HashMap<String, String>();
+						File tempDirectory = new File(
+							getExternalFilesDir(null).getAbsolutePath() + File.separator + 
+							"tmp"
+						);
+						if (!tempDirectory.isDirectory()) {
+							tempDirectory.mkdir();
+						}
+						variables.put("tempDirectory", tempDirectory.getAbsolutePath());
+						install.preprocessFile(
+							new File(file + File.separator + "php.ini"), variables
 						);
 					} catch (IOException ex) {}
 				}
