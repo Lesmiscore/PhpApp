@@ -1,17 +1,26 @@
 ! If you get error that android is not recognised for cross compile update config.sub and config.guess to newest versions
 
--	Build standalone android toolchain first to /tmp/toolchain directory
+-	Build standalone android toolchain to /tmp/toolchain directory
 - PCRE
 	- Download pcre, cross compile and install it to /tmp/toolchain directory
+	./configure --host=arm-linux-androideabi --prefix=/tmp/toolchain --disable-shared
 - LibBind
-	- Download libbind
-	- edit its include/resolv.h by changing "resolv.conf" path
-	- cross compile and install it to /tmp/toolchain directory
+	- edit include/resolv.h by changing "resolv.conf" path
+	./configure --host=arm-linux-androideabi --prefix=/tmp/toolchain --disable-shared
+- LibXml2
+	./configure --host=arm-linux-androideabi --prefix=/tmp/toolchain --disable-shared
+- LibIconv
+	./configure --host=arm-linux-androideabi --prefix=/tmp/toolchain --disable-shared gl_cv_header_working_stdint_h=yes --enable-static
+- LibXslt
+	./configure --host=arm-linux-androideabi --prefix=/tmp/toolchain --disable-shared
+- Bzip2
+	- Edit make file setting correct compilers/lds and prefix
 - PHP
 	- Download php 5.4(tested on it) and extract
 	- Download php 5.3 and copy ext/sqlite/ from it to php 5.4 ext/sqlite/, you can remove 5.3 now
 	- cd into php 5.4 and run ./buildconf --force
-	- Configure php with this command for cross compilation: ./configure --host=arm-linux-androideabi PCRECONFIG=/tmp/toolchain/bin/pcre-config --without-iconv --disable-libxml --disable-dom --disable-simplexml --disable-xml --disable-xmlreader --disable-xmlwriter --without-pear --disable-posix CFLAGS="-I/tmp/toolchain/include/bind" LIBS="-lbind -L/tmp/toolchain/lib" --disable-cgi --with-pdo-mysql --with-mysqli --with-mysql --with-sqlite
+	- Configure php with this command for cross compilation: 
+		./configure --host=arm-linux-androideabi PCRECONFIG=/tmp/toolchain/bin/pcre-config --without-pear --disable-posix CFLAGS="-I/tmp/toolchain/include/bind" LDFLAGS="-liconv -L/tmp/toolchain/lib" LIBS="-lbind -L/tmp/toolchain/lib" --disable-cgi --with-pdo-mysql --with-mysqli --with-mysql --with-sqlite --with-iconv=/tmp/toolchain --with-libxml-dir=/tmp/toolchain --enable-mbstring --with-xsl=/tmp/toolchain --enable-soap --enable-sockets --enable-ftp --enable-bcmath --with-bz2 --enable-zip --with-zlib
 	-	update main/php_config.h as needed, for example you can disable locale and setlocale there if not needed
 	- fix errors in sqlite php files
 	- make
