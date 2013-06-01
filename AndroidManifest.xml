@@ -6,7 +6,11 @@
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 	<uses-sdk android:minSdkVersion="11" />
-	<application android:theme="@android:style/Theme.Holo.Light.NoActionBar">
+	<application 
+		android:theme="@android:style/Theme.Holo.Light"
+		android:icon="@drawable/ic_launcher"
+		android:label="@string/title"
+	>
 		<receiver android:name=".service.AutoStart">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
