@@ -22,10 +22,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import esminis.server.php.service.Install;
 import esminis.server.php.service.PhpServer;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.rdrei.android.dirchooser.DirectoryChooserActivity;
 
 public class MainActivity extends Activity {	
@@ -52,14 +56,12 @@ public class MainActivity extends Activity {
 			if (!file.isDirectory()) {
 				file.mkdir();
 				if (file.isDirectory()) {
-					PrintWriter writer;
 					try {
-						writer = new PrintWriter(
-							new File(file.getAbsolutePath() + File.separator + "index.php")
+						new Install().fromAsset(
+							new File(file.getAbsolutePath() + File.separator + "index.php"), 
+							"www/index.php", this
 						);
-						writer.write("<?php phpinfo(); ?>");
-						writer.close();
-					} catch (FileNotFoundException ex) {}					
+					} catch (IOException ex) {}
 				}
 			}
 			SharedPreferences.Editor editor = preferences.edit();
