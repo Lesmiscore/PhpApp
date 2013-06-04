@@ -14,6 +14,14 @@
 	./configure --host=arm-linux-androideabi --prefix=/tmp/toolchain --disable-shared gl_cv_header_working_stdint_h=yes --enable-static
 - LibXslt
 	./configure --host=arm-linux-androideabi --prefix=/tmp/toolchain --disable-shared
+- LibPng
+	./configure --host=arm-linux-androideabi --prefix=/tmp/toolchain --disable-shared
+- LibJpeg
+	./configure --host=arm-linux-androideabi --prefix=/tmp/toolchain --disable-shared
+- FreeType
+	./configure --host=arm-linux-androideabi --prefix=/tmp/toolchain --disable-shared
+- LibGd
+	./configure --host=arm-linux-androideabi --prefix=/tmp/toolchain --disable-shared CFLAGS="-I/tmp/toolchain/include" --with-png=/tmp/toolchain --with-jpeg=/tmp/toolchain --without-fontconfig
 - Bzip2
 	- Edit make file setting correct compilers/lds and prefix
 - OpenSSL
@@ -33,7 +41,7 @@
 	- Download php 5.3 and copy ext/sqlite/ from it to php 5.4 ext/sqlite/, you can remove 5.3 now
 	- cd into php 5.4 and run ./buildconf --force
 	- Configure php with this command for cross compilation: 
-		./configure --host=arm-linux-androideabi PCRECONFIG=/tmp/toolchain/bin/pcre-config --without-pear --disable-posix CFLAGS="-I/tmp/toolchain/include/bind" LDFLAGS="-liconv -L/tmp/toolchain/lib" LIBS="-licui18n -lstdc++ -lbind -L/tmp/toolchain/lib" --disable-cgi --with-pdo-mysql --with-mysqli --with-mysql --with-sqlite --with-iconv=/tmp/toolchain --with-libxml-dir=/tmp/toolchain --enable-mbstring --with-xsl=/tmp/toolchain --enable-soap --enable-sockets --enable-ftp --enable-bcmath --with-bz2 --enable-zip --with-zlib --with-openssl=/tmp/toolchain ac_cv_header_locale_h=no ac_cv_func_setlocale=no --enable-intl=static --with-icu-dir=/tmp/toolchain
+		./configure --host=arm-linux-androideabi PCRECONFIG=/tmp/toolchain/bin/pcre-config --without-pear --disable-posix CFLAGS="-I/tmp/toolchain/include/bind" LDFLAGS="-liconv -L/tmp/toolchain/lib" LIBS="-licui18n -lstdc++ -lbind -L/tmp/toolchain/lib" --disable-cgi --with-pdo-mysql --with-mysqli --with-mysql --with-sqlite --with-iconv=/tmp/toolchain --with-libxml-dir=/tmp/toolchain --enable-mbstring --with-xsl=/tmp/toolchain --enable-soap --enable-sockets --enable-ftp --enable-bcmath --with-bz2 --enable-zip --with-zlib --with-openssl=/tmp/toolchain ac_cv_header_locale_h=no ac_cv_func_setlocale=no --enable-intl=static --with-icu-dir=/tmp/toolchain --with-gd=/tmp/toolchain
 	-	update main/php_config.h as needed, for example you can disable locale and setlocale there if not needed
 	- fix errors in sqlite php files
 	- make
