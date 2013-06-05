@@ -14,9 +14,13 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Spinner;
 import android.widget.TextView;
+import esminis.server.php.service.Network;
 import esminis.server.php.service.PhpServer;
 import esminis.server.php.service.Preferences;
 import java.io.File;
@@ -28,8 +32,15 @@ public class MainActivity extends Activity {
 	
 	private BroadcastReceiver receiver = null;
 	
+	private Preferences preferences = null;
+	
+	private Network network = null;
+	
 	private Preferences getPreferences() {
-		return new Preferences(this);
+		if (preferences == null) {
+			preferences = new Preferences(this);
+		}
+		return preferences;
 	}
 	
 	@Override
@@ -38,6 +49,29 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.main);
 		
 		getPreferences().initialize(this);
+		
+		network = new Network();
+		
+		Spinner spinner = (Spinner)findViewById(R.id.server_interface);
+		spinner.setAdapter(
+			new ArrayAdapter(
+				this, android.R.layout.simple_spinner_dropdown_item, network.getTitles()
+			)
+		);
+		spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+			public void onItemSelected(
+				AdapterView<?> parent, View view, int position, long id
+			) {
+				preferences.set(Preferences.ADDRESS, network.getName(position));
+			}
+
+			public void onNothingSelected(AdapterView<?> parent) {}
+			
+		});
+		spinner.setSelection(
+			network.getPosition(preferences.getString(Preferences.ADDRESS))
+		);
 		
 		TextView text = (TextView)findViewById(R.id.server_root);		
 		text.setText(getPreferences().getString(Preferences.DOCUMENT_ROOT));	
