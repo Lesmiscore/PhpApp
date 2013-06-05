@@ -33,6 +33,8 @@ public class PhpServer extends HandlerThread {
 	private boolean startWhenReady = false;
 	
 	private Preferences preferences = null;
+	
+	private Network network = null;
 
 	static public PhpServer getInstance(Context context) {
 		if (instance == null) {
@@ -44,6 +46,7 @@ public class PhpServer extends HandlerThread {
 	
 	public PhpServer(Context context) {
 		super("PhpServer");
+		network = new Network();
 		preferences = new Preferences(context);
 		this.context = context.getApplicationContext();
 		php = new File(context.getFilesDir() + File.separator + "php");		
@@ -82,26 +85,10 @@ public class PhpServer extends HandlerThread {
 		return handler;
 	}
 	
-	public static String getIPAddress() {
-		try {
-			List<NetworkInterface> interfaces = Collections.list(
-				NetworkInterface.getNetworkInterfaces()
-			);
-			for (NetworkInterface iface : interfaces) {
-				List<InetAddress> addresses = Collections.list(
-					iface.getInetAddresses()
-				);
-				for (InetAddress address : addresses) {
-					if (!address.isLoopbackAddress()) {
-						String host = address.getHostAddress().toUpperCase();
-						if (InetAddressUtils.isIPv4Address(host)) {
-							return host;
-						}
-					}
-				}
-			}
-		} catch (Exception ex) {}
-		return "127.0.0.1";
+	private String getIPAddress() {
+		return network.getAddress(
+			network.getPosition(preferences.getString(Preferences.ADDRESS))
+		);
 	}
 	
 	private void serverStart(String documentRoot) {

@@ -12,6 +12,8 @@ public class Preferences {
 
 	static public String DOCUMENT_ROOT = "documentRoot";
 	
+	static public String ADDRESS = "address";
+	
 	static public String PORT = "port";
 	
 	static public String START_ON_BOOT = "startOnBoot";
@@ -73,6 +75,9 @@ public class Preferences {
 		}
 		if (!preferences.contains(Preferences.PORT)) {
 			set(Preferences.PORT, "8080");
+		}
+		if (!preferences.contains(Preferences.ADDRESS)) {
+			set(Preferences.ADDRESS, "all");
 		}
 	}
 	
