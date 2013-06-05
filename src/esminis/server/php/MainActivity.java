@@ -6,10 +6,8 @@ import android.content.Context;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -19,11 +17,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import esminis.server.php.service.Install;
 import esminis.server.php.service.PhpServer;
+import esminis.server.php.service.Preferences;
 import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
 import net.rdrei.android.dirchooser.DirectoryChooserActivity;
 
 public class MainActivity extends Activity {	
@@ -32,8 +28,8 @@ public class MainActivity extends Activity {
 	
 	private BroadcastReceiver receiver = null;
 	
-	private SharedPreferences getDefaultSharedPreferences() {
-		return PhpServer.getInstance(this).getPreferences();
+	private Preferences getPreferences() {
+		return new Preferences(this);
 	}
 	
 	@Override
@@ -41,50 +37,10 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		
-		SharedPreferences preferences = getDefaultSharedPreferences();		
-		if (!preferences.contains(PhpServer.PREFERENCES_DOCUMENT_ROOT)) {
-			File file = new File(
-				Environment.getExternalStorageDirectory().getAbsolutePath() + 
-					File.separator + "www"
-			);
-			if (!file.isDirectory()) {
-				file.mkdir();
-				if (file.isDirectory()) {
-					try {
-						Install install = new Install();
-						install.fromAssetDirectory(file, "www", this);						
-						HashMap<String, String> variables = new HashMap<String, String>();
-						File tempDirectory = new File(
-							getExternalFilesDir(null).getAbsolutePath() + File.separator + 
-							"tmp"
-						);
-						if (!tempDirectory.isDirectory()) {
-							tempDirectory.mkdir();
-						}
-						variables.put("tempDirectory", tempDirectory.getAbsolutePath());
-						install.preprocessFile(
-							new File(file + File.separator + "php.ini"), variables
-						);
-					} catch (IOException ex) {}
-				}
-			}
-			SharedPreferences.Editor editor = preferences.edit();
-			editor.putString(
-				PhpServer.PREFERENCES_DOCUMENT_ROOT, file.getAbsolutePath()
-			);
-			editor.commit();
-		}
-		if (!preferences.contains(PhpServer.PREFERENCES_PORT)) {
-			SharedPreferences.Editor editor = preferences.edit();
-			editor.putString(PhpServer.PREFERENCES_PORT, "8080");
-			editor.commit();
-		}				
+		getPreferences().initialize(this);
 		
 		TextView text = (TextView)findViewById(R.id.server_root);		
-		text.setText(
-			getDefaultSharedPreferences()
-				.getString(PhpServer.PREFERENCES_DOCUMENT_ROOT, "")
-		);	
+		text.setText(getPreferences().getString(Preferences.DOCUMENT_ROOT));	
 		text.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View arg0) {
@@ -113,17 +69,14 @@ public class MainActivity extends Activity {
 
 			public void afterTextChanged(Editable text) {
 				int port = Integer.parseInt(
-					getDefaultSharedPreferences()
-						.getString(PhpServer.PREFERENCES_PORT, "")
+					getPreferences().getString(Preferences.PORT)
 				);
 				try {
 					port = Integer.parseInt(text.toString());					
 				} catch (NumberFormatException e) {}
 				boolean error = true;
 				if (port >= 1024 && port <= 65535) {
-					SharedPreferences.Editor editor = getDefaultSharedPreferences().edit();
-					editor.putString(PhpServer.PREFERENCES_PORT, String.valueOf(port));
-					editor.commit();
+					getPreferences().set(Preferences.PORT, String.valueOf(port));
 					error = false;
 				}
 				((TextView)findViewById(R.id.server_port))
@@ -131,7 +84,7 @@ public class MainActivity extends Activity {
 			}
 		});
 		text.setText(
-			getDefaultSharedPreferences().getString(PhpServer.PREFERENCES_PORT, "")
+			getPreferences().getString(Preferences.PORT)
 		);
 		CheckBox checkbox = (CheckBox)findViewById(R.id.server_start_on_boot);
 		checkbox.setOnCheckedChangeListener(
@@ -139,15 +92,13 @@ public class MainActivity extends Activity {
 				public void onCheckedChanged(
 					CompoundButton checkox, boolean checked
 				) {
-					SharedPreferences.Editor editor = getDefaultSharedPreferences()
-						.edit();
-					editor.putBoolean(PhpServer.PREFERENCES_START_ON_BOOT, checked);
-					editor.commit();
+					getPreferences().set(Preferences.START_ON_BOOT, checked);
 				}
 			}
 		);
-		checkbox.setChecked(getDefaultSharedPreferences()
-			.getBoolean(PhpServer.PREFERENCES_START_ON_BOOT, false));
+		checkbox.setChecked(
+			getPreferences().getBoolean(Preferences.START_ON_BOOT)
+		);
 		
 		receiver = new BroadcastReceiver() {
 
@@ -216,14 +167,11 @@ public class MainActivity extends Activity {
 				data.getStringExtra(DirectoryChooserActivity.RESULT_SELECTED_DIR)
 			);
 			if (file.isDirectory()) {
-				SharedPreferences.Editor editor = getDefaultSharedPreferences().edit();
-				editor.putString(
-					PhpServer.PREFERENCES_DOCUMENT_ROOT, file.getAbsolutePath()
+				getPreferences().set(
+					Preferences.DOCUMENT_ROOT, file.getAbsolutePath()
 				);
-				editor.commit();
 				((TextView)findViewById(R.id.server_root)).setText(
-					getDefaultSharedPreferences()
-						.getString(PhpServer.PREFERENCES_DOCUMENT_ROOT, "")
+					getPreferences().getString(Preferences.DOCUMENT_ROOT)
 				);
 			}
 		}
