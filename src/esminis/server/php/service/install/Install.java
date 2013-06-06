@@ -1,4 +1,4 @@
-package esminis.server.php.service;
+package esminis.server.php.service.install;
 
 import android.content.Context;
 import java.io.BufferedReader;
