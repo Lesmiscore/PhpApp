@@ -1,5 +1,6 @@
 package esminis.server.php.service;
 
+import esminis.server.php.service.install.Install;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -44,16 +45,16 @@ public class PhpServer extends HandlerThread {
 		return instance;
 	}
 	
+	public File getPhp() {
+		return php;
+	}
+	
 	public PhpServer(Context context) {
 		super("PhpServer");
 		network = new Network();
 		preferences = new Preferences(context);
 		this.context = context.getApplicationContext();
 		php = new File(context.getFilesDir() + File.separator + "php");		
-		try {
-			new Install().fromAssetFile(php, "php", context);
-			php.setExecutable(true);
-		} catch (IOException ex) {}
 		address = getIPAddress() + ":" + preferences.getString(Preferences.PORT);
 	}
 
@@ -86,9 +87,9 @@ public class PhpServer extends HandlerThread {
 	}
 	
 	private String getIPAddress() {
-		return network.getAddress(
-			network.getPosition(preferences.getString(Preferences.ADDRESS))
-		);
+		int position = network
+			.getPosition(preferences.getString(Preferences.ADDRESS));
+		return position == -1 ? "0.0.0.0" : network.getAddress(position);
 	}
 	
 	private void serverStart(String documentRoot) {

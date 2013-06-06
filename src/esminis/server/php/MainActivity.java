@@ -23,10 +23,13 @@ import android.widget.TextView;
 import esminis.server.php.service.Network;
 import esminis.server.php.service.PhpServer;
 import esminis.server.php.service.Preferences;
+import esminis.server.php.service.install.InstallServer;
 import java.io.File;
 import net.rdrei.android.dirchooser.DirectoryChooserActivity;
 
-public class MainActivity extends Activity {	
+public class 
+	MainActivity extends Activity implements InstallServer.OnInstallListener
+{	
 	
 	static private int REQUEST_DIRECTORY = 1;
 	
@@ -35,6 +38,12 @@ public class MainActivity extends Activity {
 	private Preferences preferences = null;
 	
 	private Network network = null;
+	
+	private boolean requestResultView = false;
+	
+	private boolean requestResultViewSuccess = false;
+	
+	private boolean paused = true;
 	
 	private Preferences getPreferences() {
 		if (preferences == null) {
@@ -46,10 +55,82 @@ public class MainActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		setContentView(R.layout.main);		
+		new InstallServer(this).installIfNeeded(this);
+	}
+
+	private void setLabel(String label) {
+		((TextView)findViewById(R.id.label)).setText(label);
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		paused = false;
+		if (requestResultView) {
+			requestResultView = false;
+			resultView();
+		}
+		if (receiver != null) {
+			registerReceiver(receiver, new IntentFilter(PhpServer.INTENT_ACTION));
+		}
+		PhpServer.getInstance(MainActivity.this).sendAction("status");
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		paused = true;
+		if (receiver != null) {
+			unregisterReceiver(receiver);
+		}
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (
+			requestCode == REQUEST_DIRECTORY && 
+			resultCode == DirectoryChooserActivity.RESULT_CODE_DIR_SELECTED
+		) {
+			File file = new File(
+				data.getStringExtra(DirectoryChooserActivity.RESULT_SELECTED_DIR)
+			);
+			if (file.isDirectory()) {
+				getPreferences().set(
+					Preferences.DOCUMENT_ROOT, file.getAbsolutePath()
+				);
+				((TextView)findViewById(R.id.server_root)).setText(
+					getPreferences().getString(Preferences.DOCUMENT_ROOT)
+				);
+			}
+		}
+	}
+
+	private void requestResultView() {
+		if (paused) {
+			requestResultView = true;
+		} else {
+			resultView();
+		}
+	}
+	
+	private void resultView() {
+		if (requestResultViewSuccess) {
+			startup();
+		} else {
+			error();
+		}		
+		findViewById(R.id.preloader).setVisibility(View.GONE);
+		findViewById(R.id.preloader_container).setVisibility(View.GONE);
+		findViewById(R.id.container).setVisibility(View.VISIBLE);
+	}
+	
+	private void error() {
 		
-		getPreferences().initialize(this);
-		
+	}
+	
+	private void startup() {
 		network = new Network();
 		
 		Spinner spinner = (Spinner)findViewById(R.id.server_interface);
@@ -63,16 +144,16 @@ public class MainActivity extends Activity {
 			public void onItemSelected(
 				AdapterView<?> parent, View view, int position, long id
 			) {
-				preferences.set(Preferences.ADDRESS, network.getName(position));
+				getPreferences().set(Preferences.ADDRESS, network.getName(position));
 			}
 
 			public void onNothingSelected(AdapterView<?> parent) {}
-			
+
 		});
 		spinner.setSelection(
-			network.getPosition(preferences.getString(Preferences.ADDRESS))
+			network.getPosition(getPreferences().getString(Preferences.ADDRESS))
 		);
-		
+
 		TextView text = (TextView)findViewById(R.id.server_root);		
 		text.setText(getPreferences().getString(Preferences.DOCUMENT_ROOT));	
 		text.setOnClickListener(new View.OnClickListener() {
@@ -133,7 +214,7 @@ public class MainActivity extends Activity {
 		checkbox.setChecked(
 			getPreferences().getBoolean(Preferences.START_ON_BOOT)
 		);
-		
+
 		receiver = new BroadcastReceiver() {
 
 			@Override
@@ -157,7 +238,7 @@ public class MainActivity extends Activity {
 			}
 
 		};
-		
+
 		findViewById(R.id.start).setOnClickListener(new View.OnClickListener() {
 			public void onClick(View arg0) {
 				PhpServer.getInstance(MainActivity.this).sendAction("start");
@@ -170,45 +251,15 @@ public class MainActivity extends Activity {
 			}
 		});
 		
-		PhpServer.getInstance(MainActivity.this);
-	}
-
-	private void setLabel(String label) {
-		((TextView)findViewById(R.id.label)).setText(label);
-	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
 		registerReceiver(receiver, new IntentFilter(PhpServer.INTENT_ACTION));
 		PhpServer.getInstance(MainActivity.this).sendAction("status");
 	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		unregisterReceiver(receiver);
-	}
 	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (
-			requestCode == REQUEST_DIRECTORY && 
-			resultCode == DirectoryChooserActivity.RESULT_CODE_DIR_SELECTED
-		) {
-			File file = new File(
-				data.getStringExtra(DirectoryChooserActivity.RESULT_SELECTED_DIR)
-			);
-			if (file.isDirectory()) {
-				getPreferences().set(
-					Preferences.DOCUMENT_ROOT, file.getAbsolutePath()
-				);
-				((TextView)findViewById(R.id.server_root)).setText(
-					getPreferences().getString(Preferences.DOCUMENT_ROOT)
-				);
-			}
-		}
+	public void OnInstallStart() {}
+
+	public void OnInstallEnd(boolean success) {
+		requestResultViewSuccess = success;
+		requestResultView();
 	}
 	
 }
