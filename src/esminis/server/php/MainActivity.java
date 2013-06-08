@@ -1,6 +1,8 @@
 package esminis.server.php;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import static android.content.Context.INPUT_METHOD_SERVICE;
@@ -9,8 +11,13 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
+import android.text.method.ScrollingMovementMethod;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -269,6 +276,29 @@ public class
 	public void OnInstallEnd(boolean success) {
 		requestResultViewSuccess = success;
 		requestResultView();
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.menu_about) {
+			View view = getLayoutInflater().inflate(R.layout.about, null);
+			TextView text = (TextView)view.findViewById(R.id.text);
+			text.setText(Html.fromHtml(getString(R.string.about)));
+			text.setMovementMethod(new ScrollingMovementMethod());
+			new AlertDialog.Builder(this)
+				.setNegativeButton(getString(R.string.close), null)
+				.setView(view)
+				.show();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	
 }

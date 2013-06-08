@@ -11,4 +11,44 @@
 	<string name="server_start_on_boot">Start server on boot</string>
 	<string name="server_interface">Server address</string>
 	<string name="server_installing">Installing server...</string>
+	<string name="close">Close</string>
+	<string name="about"><![CDATA[<b>About</b><br />
+<br />
+This is pure php server(the one that is available in php since 5.4 version) built for android.<br />
+<br />
+! Recommended for usage in development or very very small websites with very small amount of visitors couse it this server supports only one request at a time.<br />
+<br />
+! Most of php modules are turned on(see phpinfo() for exact list).<br />
+<br />
+! Edit php.ini and resolv.conf as needed, they are loaded from document root directory.<br />
+<br />
+! Currently it is only for ARM architecture.<br />
+<br />
+! If openssl is used - don`t forget to create and use custom openssl.cnf file.<br />
+<br />
+! Sorry but standard php locales wont work(setlocale and such).<br />
+<br />
+<b>Author</b><br />
+<br />
+Tautvydas Andrikys<br />
+<br />
+<b>Special thanks</b><br />
+<br />
+To Pascal Hartig for Android DirectoryChooser<br />
+<br />
+<b>Third party licenses</b><br />
+<br />
+Copyright 2013 Pascal Hartig<br />
+<br />
+Licensed under the Apache License, Version 2.0 (the "License");<br />
+you may not use this file except in compliance with the License.<br />
+You may obtain a copy of the License at<br />
+<br />
+http://www.apache.org/licenses/LICENSE-2.0<br />
+<br />
+Unless required by applicable law or agreed to in writing, software<br />
+distributed under the License is distributed on an "AS IS" BASIS,<br />
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<br />
+See the License for the specific language governing permissions and<br />
+limitations under the License.]]></string>
 </resources>
