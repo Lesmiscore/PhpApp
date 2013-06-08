@@ -19,10 +19,7 @@ public class Network {
 	public Network() {
 		names = new LinkedList<String>();
 		titles = new LinkedList<String>();		
-		adresses = new LinkedList<String>();
-		names.add("all");
-		adresses.add("0.0.0.0");
-		titles.add("0.0.0.0 (all)");
+		adresses = new LinkedList<String>();		
 		try {
 			List<NetworkInterface> list = Collections.list(
 				NetworkInterface.getNetworkInterfaces()
@@ -32,15 +29,35 @@ public class Network {
 					iface.getInetAddresses()
 				);
 				for (InetAddress address : addresses) {
-					String host = address.getHostAddress().toUpperCase();
-					if (InetAddressUtils.isIPv4Address(host)) {
-						names.add(iface.getName());
-						titles.add(host + "(" + iface.getDisplayName() + ")");
-						adresses.add(host);
+					if (!address.isLoopbackAddress()) {
+						String host = address.getHostAddress().toUpperCase();
+						if (InetAddressUtils.isIPv4Address(host)) {
+							names.add(iface.getName());
+							titles.add(host + "(" + iface.getDisplayName() + ")");
+							adresses.add(host);
+						}
+					}
+				}
+			}
+			for (NetworkInterface iface : list) {
+				List<InetAddress> addresses = Collections.list(
+					iface.getInetAddresses()
+				);
+				for (InetAddress address : addresses) {
+					if (address.isLoopbackAddress()) {
+						String host = address.getHostAddress().toUpperCase();
+						if (InetAddressUtils.isIPv4Address(host)) {
+							names.add(iface.getName());
+							titles.add(host + "(" + iface.getDisplayName() + ")");
+							adresses.add(host);
+						}
 					}
 				}
 			}
 		} catch (Exception ex) {}
+		names.add("all");
+		adresses.add("0.0.0.0");
+		titles.add("0.0.0.0 (all)");
 	}
 	
 	public int getPosition(String name) {
