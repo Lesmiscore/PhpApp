@@ -3,6 +3,7 @@ package esminis.server.php.service.install;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
+import esminis.server.php.service.Network;
 import esminis.server.php.service.server.Php;
 import esminis.server.php.service.Preferences;
 import java.io.File;
@@ -79,8 +80,8 @@ public class InstallServer extends AsyncTask<Context, Void, Void> {
 		if (!preferences.contains(Preferences.PORT)) {
 			preferences.set(Preferences.PORT, "8080");
 		}
-		if (!preferences.contains(Preferences.ADDRESS)) {
-			preferences.set(Preferences.ADDRESS, "all");
+		if (!preferences.contains(Preferences.ADDRESS)) {			
+			preferences.set(Preferences.ADDRESS, new Network().getNames().get(0));
 		}
 		return null;
 	}
