@@ -21,7 +21,7 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import esminis.server.php.service.Network;
-import esminis.server.php.service.PhpServer;
+import esminis.server.php.service.server.Php;
 import esminis.server.php.service.Preferences;
 import esminis.server.php.service.install.InstallServer;
 import java.io.File;
@@ -58,7 +58,7 @@ public class
 		setContentView(R.layout.main);		
 		new InstallServer(this).installIfNeeded(this);
 	}
-
+	
 	private void setLabel(String label) {
 		((TextView)findViewById(R.id.label)).setText(label);
 	}
@@ -72,9 +72,9 @@ public class
 			resultView();
 		}
 		if (receiver != null) {
-			registerReceiver(receiver, new IntentFilter(PhpServer.INTENT_ACTION));
+			registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
 		}
-		PhpServer.getInstance(MainActivity.this).sendAction("status");
+		Php.getInstance(MainActivity.this).sendAction("status");
 	}
 
 	@Override
@@ -219,21 +219,29 @@ public class
 
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				if (intent.getAction().equals(PhpServer.INTENT_ACTION)) {
+				if (intent.getAction().equals(Php.INTENT_ACTION)) {
 					Bundle extras = intent.getExtras();
-					findViewById(R.id.start).setVisibility(View.GONE);
-					findViewById(R.id.stop).setVisibility(View.GONE);
-					if (extras.getBoolean("running")) {
-						findViewById(R.id.stop).setVisibility(View.VISIBLE);
-						setLabel(
-							String.format(
-								getString(R.string.server_running), extras.getString("address")
-							)
+					if (extras.containsKey("errorLine")) {
+						TextView text = (TextView)findViewById(R.id.error);
+						text.append(
+							(text.getText().length() > 0 ? "\n" : "") + 
+								extras.getString("errorLine")
 						);
 					} else {
-						findViewById(R.id.start).setVisibility(View.VISIBLE);
-						setLabel(getString(R.string.server_stopped));
-					}
+						findViewById(R.id.start).setVisibility(View.GONE);
+						findViewById(R.id.stop).setVisibility(View.GONE);
+						if (extras.getBoolean("running")) {
+							findViewById(R.id.stop).setVisibility(View.VISIBLE);
+							setLabel(
+								String.format(
+									getString(R.string.server_running), extras.getString("address")
+								)
+							);
+						} else {
+							findViewById(R.id.start).setVisibility(View.VISIBLE);
+							setLabel(getString(R.string.server_stopped));
+						}
+					}					
 				}
 			}
 
@@ -241,18 +249,19 @@ public class
 
 		findViewById(R.id.start).setOnClickListener(new View.OnClickListener() {
 			public void onClick(View arg0) {
-				PhpServer.getInstance(MainActivity.this).sendAction("start");
+				((TextView)findViewById(R.id.error)).setText("");
+				Php.getInstance(MainActivity.this).sendAction("start");
 			}
 		});
 
 		findViewById(R.id.stop).setOnClickListener(new View.OnClickListener() {
 			public void onClick(View arg0) {
-				PhpServer.getInstance(MainActivity.this).sendAction("stop");
+				Php.getInstance(MainActivity.this).sendAction("stop");
 			}
 		});
 		
-		registerReceiver(receiver, new IntentFilter(PhpServer.INTENT_ACTION));
-		PhpServer.getInstance(MainActivity.this).sendAction("status");
+		registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
+		Php.getInstance(MainActivity.this).sendAction("status");
 	}
 	
 	public void OnInstallStart() {}

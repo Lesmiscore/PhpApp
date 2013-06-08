@@ -3,7 +3,7 @@ package esminis.server.php.service.install;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
-import esminis.server.php.service.PhpServer;
+import esminis.server.php.service.server.Php;
 import esminis.server.php.service.Preferences;
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class InstallServer extends AsyncTask<Context, Void, Void> {
 		if (listener != null) {
 			listener.OnInstallStart();
 		}
-		if (PhpServer.getInstance(context).getPhp().isFile()) {
+		if (Php.getInstance(context).getPhp().isFile()) {
 			if (listener != null) {
 				listener.OnInstallEnd(true);
 				listener = null;
@@ -42,7 +42,7 @@ public class InstallServer extends AsyncTask<Context, Void, Void> {
 	@Override
 	protected Void doInBackground(Context... arguments) {
 		Context context = arguments[0];
-		File php = PhpServer.getInstance(context).getPhp();
+		File php = Php.getInstance(context).getPhp();
 		try {
 			new Install().fromAssetFile(php, "php", context);
 			php.setExecutable(true);

@@ -1,25 +1,22 @@
-package esminis.server.php.service;
+package esminis.server.php.service.server;
 
-import esminis.server.php.service.install.Install;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import esminis.server.php.service.Network;
+import esminis.server.php.service.Preferences;
+import esminis.server.php.service.Process;
 import java.io.File;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.util.Collections;
-import java.util.List;
-import org.apache.http.conn.util.InetAddressUtils;
 
-public class PhpServer extends HandlerThread {
+public class Php extends HandlerThread {
 	
 	static public final String INTENT_ACTION = "STATUS_SERVER_CHANGED";
 	
-	private static PhpServer instance = null;
+	private static Php instance = null;
 		
 	private java.lang.Process process = null;
 	
@@ -37,9 +34,9 @@ public class PhpServer extends HandlerThread {
 	
 	private Network network = null;
 
-	static public PhpServer getInstance(Context context) {
+	static public Php getInstance(Context context) {
 		if (instance == null) {
-			instance = new PhpServer(context);
+			instance = new Php(context);
 			instance.start();
 		}
 		return instance;
@@ -49,7 +46,7 @@ public class PhpServer extends HandlerThread {
 		return php;
 	}
 	
-	public PhpServer(Context context) {
+	public Php(Context context) {
 		super("PhpServer");
 		network = new Network();
 		preferences = new Preferences(context);
@@ -66,13 +63,19 @@ public class PhpServer extends HandlerThread {
 			@Override
 			public void handleMessage(Message message) {
 				Bundle data = message.getData();
-				if (data.get("action").equals("start")) {
-					address = getIPAddress() + ":" + data.getString("port");
-					serverStart(data.getString("documentRoot"));
-				} else if (data.get("action").equals("stop")) {
-					serverStop();
-				}
-				serverStatus();
+				if (data.get("action").equals("error")) {
+					Intent intent = new Intent(INTENT_ACTION);		
+					intent.putExtra("errorLine", data.getString("message"));
+					context.sendBroadcast(intent);
+				} else {
+					if (data.get("action").equals("start")) {
+						address = getIPAddress() + ":" + data.getString("port");
+						serverStart(data.getString("documentRoot"));
+					} else if (data.get("action").equals("stop")) {
+						serverStop();
+					}
+					serverStatus();
+				}				
 			}
 			
 		};
@@ -102,6 +105,7 @@ public class PhpServer extends HandlerThread {
 							"-c", file.exists() ? file.getAbsolutePath() : documentRoot
 					}
 				);
+				new StreamReader().execute(process.getErrorStream(), this);
 			} catch (IOException ex) {}
 		}
 	}
@@ -124,10 +128,26 @@ public class PhpServer extends HandlerThread {
 		context.sendBroadcast(intent);
 	}
 	
-	public void sendAction(String action) {		
+	private void sendMessage(String action, Bundle bundle) {
+		if (handler != null) {
+			bundle.putString("action", action);
+			Message message = new Message();
+			message.setData(bundle);
+			handler.sendMessage(message);
+		}
+	}
+	
+	public void sendErrorLine(String error) {
 		if (handler != null) {
 			Bundle bundle = new Bundle();
-			bundle.putString("action", action);
+			bundle.putString("message", error);
+			sendMessage("error", bundle);
+		}
+	}
+	
+	public void sendAction(String action) {
+		if (handler != null) {
+			Bundle bundle = new Bundle();			
 			bundle.putString(
 				Preferences.DOCUMENT_ROOT, 
 				preferences.getString(Preferences.DOCUMENT_ROOT)
@@ -135,9 +155,7 @@ public class PhpServer extends HandlerThread {
 			bundle.putString(
 				Preferences.PORT, preferences.getString(Preferences.PORT)
 			);
-			Message message = new Message();
-			message.setData(bundle);
-			handler.sendMessage(message);
+			sendMessage(action, bundle);
 		}
 	}
 	
