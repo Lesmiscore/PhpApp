@@ -63,7 +63,19 @@ public class
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);		
+		if (savedInstanceState != null) {
+			TextView text = (TextView)findViewById(R.id.error);
+			text.setText(savedInstanceState.getString("errors"));
+		}
 		new InstallServer(this).installIfNeeded(this);
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putString(
+			"errors", ((TextView)findViewById(R.id.error)).getText().toString()
+		);
 	}
 	
 	private void setLabel(String label) {
