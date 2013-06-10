@@ -119,11 +119,27 @@ public class Php extends HandlerThread {
 	}
 	
 	private void serverStatus() {
-		boolean running = process != null || new Process().getIsRunning(php);
+		boolean running = process != null;
+		String realAddress = address;
+		if (process == null) {
+			String[] commandLine = new Process().getCommandLine(php);			
+			if (commandLine != null) {
+				boolean next = false;
+				for (String part : commandLine) {
+					if (part.equals("-S")) {
+						next = true;
+					} else if (next) {
+						realAddress = part;
+						break;
+					}
+				}
+				running = true;
+			}
+		}		
 		Intent intent = new Intent(INTENT_ACTION);		
 		intent.putExtra("running", running);
 		if (running) {
-			intent.putExtra("address", address);
+			intent.putExtra("address", realAddress);
 		}
 		context.sendBroadcast(intent);
 	}

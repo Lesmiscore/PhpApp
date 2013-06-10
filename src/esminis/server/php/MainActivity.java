@@ -137,16 +137,10 @@ public class
 	private void resultView() {
 		if (requestResultViewSuccess) {
 			startup();
-		} else {
-			error();
-		}		
+		}
 		findViewById(R.id.preloader).setVisibility(View.GONE);
 		findViewById(R.id.preloader_container).setVisibility(View.GONE);
 		findViewById(R.id.container).setVisibility(View.VISIBLE);
-	}
-	
-	private void error() {
-		
 	}
 	
 	private void startup() {
@@ -202,9 +196,9 @@ public class
 			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
 
 			public void afterTextChanged(Editable text) {
-				int port = Integer.parseInt(
-					getPreferences().getString(Preferences.PORT)
-				);
+				String portPreference = getPreferences().getString(Preferences.PORT);
+				int port = portPreference.isEmpty() ? 
+					8080 : Integer.parseInt(portPreference);
 				try {
 					port = Integer.parseInt(text.toString());					
 				} catch (NumberFormatException e) {}
@@ -217,9 +211,7 @@ public class
 					.setTextColor(error ? Color.RED : Color.BLACK);
 			}
 		});
-		text.setText(
-			getPreferences().getString(Preferences.PORT)
-		);
+		text.setText(getPreferences().getString(Preferences.PORT));
 		CheckBox checkbox = (CheckBox)findViewById(R.id.server_start_on_boot);
 		checkbox.setOnCheckedChangeListener(
 			new CompoundButton.OnCheckedChangeListener() {
