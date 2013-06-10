@@ -1,15 +1,17 @@
 package esminis.server.php.service;
 
-import android.util.Log;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Process {
 	
-	protected int find(File command) {		
+	protected String[] find(File command) {
 		File root = new File(File.separator + "proc");
 		if (root.isDirectory()) {
 			File[] list = root.listFiles();
@@ -31,7 +33,7 @@ public class Process {
 							String line;
 							while ((line = reader.readLine()) != null) {
 								if (line.contains(command.getAbsolutePath())) {
-									return pid;
+									return new String[] {String.valueOf(pid), line};
 								}
 							}							
 						} catch (IOException ex) {
@@ -46,17 +48,37 @@ public class Process {
 				}
 			}
 		}
-		return -1;
+		return null;
+	}
+	
+	public String[] getCommandLine(File command) {
+		String[] commandLine = find(command);
+		if (commandLine == null) {
+			return null;
+		}
+		String part = "";
+		List<String> parts = new LinkedList<String>();
+		int length = commandLine[1].length();
+		for (int i = 0; i < length; i++) {
+			char letter = commandLine[1].charAt(i);
+			if (i == length - 1 || letter == 0) {
+				parts.add(part);
+				part = "";
+			} else {
+				part += letter;
+			}
+		}
+		return parts.toArray(new String[parts.size()]);
 	}
 	
 	public boolean getIsRunning(File command) {
-		return find(command) != -1;
+		return find(command) != null;
 	}
 	
 	public void killIfFound(File command) {
-		int process = find(command);
-		if (process != -1) {
-			kill(process);	
+		String[] commandLine = find(command);
+		if (commandLine != null) {
+			kill(Integer.parseInt(commandLine[0]));	
 		}
 	}
 	

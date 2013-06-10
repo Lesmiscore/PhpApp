@@ -42,12 +42,7 @@ public class InstallServer extends AsyncTask<Context, Void, Void> {
 	
 	@Override
 	protected Void doInBackground(Context... arguments) {
-		Context context = arguments[0];
-		File php = Php.getInstance(context).getPhp();
-		try {
-			new Install().fromAssetFile(php, "php", context);
-			php.setExecutable(true);
-		} catch (IOException ex) {}
+		Context context = arguments[0];		
 		Preferences preferences = new Preferences(context);
 		if (!preferences.contains(Preferences.DOCUMENT_ROOT)) {
 			File file = new File(
@@ -83,6 +78,11 @@ public class InstallServer extends AsyncTask<Context, Void, Void> {
 		if (!preferences.contains(Preferences.ADDRESS)) {			
 			preferences.set(Preferences.ADDRESS, new Network().getNames().get(0));
 		}
+		File php = Php.getInstance(context).getPhp();
+		try {
+			new Install().fromAssetFile(php, "php", context);
+			php.setExecutable(true);
+		} catch (IOException ex) {}
 		return null;
 	}
 
