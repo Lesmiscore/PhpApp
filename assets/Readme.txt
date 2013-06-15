@@ -31,9 +31,9 @@
 	- copy libs/armeabi/*.so to /tmp/toolchaing/lib
 	- Fix php source as needed
 - ICU
-	- Do non cross build of ICU to /home/esminis/Downloads/icu-build-linux	
+	- Do non cross build of ICU to /tmp/icu-build-linux	
 	- Configure
-		./configure --host=arm-linux-androideabi --prefix=/tmp/toolchain --with-cross-build=/home/esminis/Downloads/icu-build-linux ac_cv_func_nl_langinfo=no ac_cv_func_nl_langinfo=no --disable-shared --enable-static
+		./configure --host=arm-linux-androideabi --prefix=/tmp/toolchain --with-cross-build=/tmp/icu-build-linux ac_cv_func_nl_langinfo=no ac_cv_func_nl_langinfo=no --disable-shared --enable-static
 	- Edit source code as needed
 	- make
 - PHP
