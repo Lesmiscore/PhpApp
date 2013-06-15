@@ -21,6 +21,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -293,9 +295,9 @@ public class
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.menu_about) {
 			View view = getLayoutInflater().inflate(R.layout.about, null);
-			TextView text = (TextView)view.findViewById(R.id.text);
-			text.setText(Html.fromHtml(getString(R.string.about)));
-			text.setMovementMethod(new ScrollingMovementMethod());
+			WebView htmlView = (WebView)view.findViewById(R.id.text);
+			htmlView.setBackgroundColor(Color.TRANSPARENT);
+			htmlView.loadUrl("file:///android_asset/About.html");
 			new AlertDialog.Builder(this)
 				.setNegativeButton(getString(R.string.close), null)
 				.setView(view)
