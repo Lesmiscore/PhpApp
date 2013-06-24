@@ -1,6 +1,5 @@
-package esminis.server.php.service;
+package com.esminis.server.php.service;
 
-import android.location.Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Collections;

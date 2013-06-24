@@ -1,6 +1,6 @@
-package esminis.server.php.service;
+package com.esminis.server.php.service;
 
-import esminis.server.php.service.server.Php;
+import com.esminis.server.php.service.server.Php;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

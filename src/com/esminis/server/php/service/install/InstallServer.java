@@ -1,11 +1,11 @@
-package esminis.server.php.service.install;
+package com.esminis.server.php.service.install;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
-import esminis.server.php.service.Network;
-import esminis.server.php.service.server.Php;
-import esminis.server.php.service.Preferences;
+import com.esminis.server.php.service.Network;
+import com.esminis.server.php.service.server.Php;
+import com.esminis.server.php.service.Preferences;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;

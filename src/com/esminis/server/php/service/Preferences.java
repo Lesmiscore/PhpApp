@@ -1,4 +1,4 @@
-package esminis.server.php.service;
+package com.esminis.server.php.service;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -50,8 +50,3 @@
 ! Dont forget that usually /sdcard/ is mounted without exec permissions so you should copy php file to some directory with exec permissions for example /data/data/[your application directory]/php
 
 ! If you set "resolv.conf" as path then dont forget that php chmods to document directory, so if document directory is /sdcard/www then resolv.conf should be in /sdcard/www/resolv.conf
-
-! Recommended filesystem layout:
-/data/data/[your application directory]/php - php cli executable
-/sdcard/www/ - root of webserver, put all your files here
-/sdcard/www/resolv.conf - for DNS
