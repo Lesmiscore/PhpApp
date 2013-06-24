@@ -1,4 +1,4 @@
-package esminis.server.php.service.server;
+package com.esminis.server.php.service.server;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
-import esminis.server.php.service.Network;
-import esminis.server.php.service.Preferences;
-import esminis.server.php.service.Process;
+import com.esminis.server.php.service.Network;
+import com.esminis.server.php.service.Preferences;
+import com.esminis.process.Manager;
 import java.io.File;
 import java.io.IOException;
 
@@ -115,14 +115,14 @@ public class Php extends HandlerThread {
 			process.destroy();
 			process = null;
 		}
-		new Process().killIfFound(php);
+		new Manager().killIfFound(php);
 	}
 	
 	private void serverStatus() {
 		boolean running = process != null;
 		String realAddress = address;
 		if (process == null) {
-			String[] commandLine = new Process().getCommandLine(php);			
+			String[] commandLine = new Manager().getCommandLine(php);			
 			if (commandLine != null) {
 				boolean next = false;
 				for (String part : commandLine) {
