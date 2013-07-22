@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="title">Standard server for PHP</string>
+	<string name="title">Server for PHP</string>
 	<string name="server_running">Server is running on %s</string>
 	<string name="server_stopped">Server is stopped</string>
 	<string name="server_start">Start server</string>
