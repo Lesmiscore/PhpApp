@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <style>
 	* {
-		background-color: transparent;
+		background-color: #FFFFFF;
 		font-size: 14px;
 		font-family: Arial;
 	}
@@ -31,13 +31,13 @@
 </head>
 <body>
 <h1>About</h1>
-<p>This is pure php server(the one that is available in php since 5.4 version) built for android.</p>
-<p>! Recommended for usage in development or very very small websites with very small amount of visitors couse it this server supports only one request at a time.</p>
-<p>! Most of php modules are turned on(see phpinfo() for exact list).</p>
-<p>! Edit php.ini and resolv.conf as needed, they are loaded from document root directory.</p>
-<p>! Currently it is only for ARM architecture.</p>
-<p>! If openssl is used - don`t forget to create and use custom openssl.cnf file.</p>
-<p>! Sorry but standard php locales wont work(setlocale and such).</p>
+<p>This is app has built-in PHP server(the one that is available in PHP since 5.4 version) compiled for Android ARM architecture, and can be started automatically on Android boot.</p>
+<p>PHP(version 5.4.15) has theese modules: bcmath, bz2, dom, ereg, fileinfo, ftp, gd, hash, iconv, intl, libxml, mbstring, mysql, mysqli, mysqlnd, openssl, pcre, pdo, pdo_mysql, pdo_sqlite, simplexml, sqlite, sqlite3, xml, xmlreader, xmlwriter, xsl, zip, zlib; phar, soap, sockets, reflection, session, tokenizer, spl, filter, ctype, date, json; also has proper support for DNS.</p>
+<p>Recommended for usage: in development or for very very small websites with very small amount of visitors, couse this server supports only one request at a time.</p>
+<p>Server document root by default(it can be changed) is sdcard/www so put files there.</p>
+<p>Edit php.ini and resolv.conf as needed, they are loaded from document root directory.</p>
+<p>If openssl is used - don`t forget to create and use custom openssl.cnf file.</p>
+<p>Sorry but standard PHP locales wont work(setlocale and such).</p>
 <h1>Author</h1>
 <p>Tautvydas Andrikys</p>
 <h1>Special thanks to</h1>
@@ -1956,5 +1956,6 @@ ICU uses the public domain data and code derived from Time Zone Database for its
    database or code waives all rights to future claims in that
    contribution or in the TZ Database.
 </div>
+<script>document.location="custom:complete";</script>
 </body>
 </html>
