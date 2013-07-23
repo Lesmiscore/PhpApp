@@ -8,7 +8,9 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -18,7 +20,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -30,6 +34,7 @@ import com.esminis.server.php.service.server.Php;
 import com.esminis.server.php.service.Preferences;
 import com.esminis.server.php.service.install.InstallServer;
 import java.io.File;
+import java.lang.annotation.Annotation;
 import net.rdrei.android.dirchooser.DirectoryChooserActivity;
 
 public class 
@@ -290,9 +295,33 @@ public class
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.menu_about) {
-			View view = getLayoutInflater().inflate(R.layout.about, null);
+			final Handler handler = new Handler();
+			final View view = getLayoutInflater().inflate(R.layout.about, null);
 			WebView htmlView = (WebView)view.findViewById(R.id.text);
-			htmlView.setBackgroundColor(Color.TRANSPARENT);
+			htmlView.getSettings().setJavaScriptEnabled(true);
+			htmlView.setWebViewClient(new WebViewClient() {
+
+				@Override
+				public boolean shouldOverrideUrlLoading(WebView v, String url) {
+					if (url.equals("custom:complete")) {						
+						handler.postDelayed(
+							new Runnable() {
+								public void run() {
+									view.findViewById(R.id.text).setVisibility(View.VISIBLE);
+									view.findViewById(R.id.preloader).setVisibility(View.GONE);
+									view.findViewById(R.id.preloader_container).setVisibility(View.GONE);
+								}
+							}, 1000
+						);
+					} else {
+						v.getContext().startActivity(
+							new Intent(Intent.ACTION_VIEW, Uri.parse(url))
+						);
+					}
+					return true;
+				}
+				
+			});
 			htmlView.loadUrl("file:///android_asset/About.html");
 			new AlertDialog.Builder(this)
 				.setNegativeButton(getString(R.string.close), null)

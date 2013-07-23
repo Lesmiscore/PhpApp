@@ -11,5 +11,6 @@
 	<string name="server_start_on_boot">Start server on boot</string>
 	<string name="server_interface">Server address</string>
 	<string name="server_installing">Installing server…</string>
+	<string name="loading_text">Loading text…</string>
 	<string name="close">Close</string>
 </resources>
