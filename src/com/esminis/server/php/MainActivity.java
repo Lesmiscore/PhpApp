@@ -20,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
@@ -34,7 +33,6 @@ import com.esminis.server.php.service.server.Php;
 import com.esminis.server.php.service.Preferences;
 import com.esminis.server.php.service.install.InstallServer;
 import java.io.File;
-import java.lang.annotation.Annotation;
 import net.rdrei.android.dirchooser.DirectoryChooserActivity;
 
 public class 
@@ -302,22 +300,23 @@ public class
 			htmlView.setWebViewClient(new WebViewClient() {
 
 				@Override
+				public void onPageFinished(WebView v, String url) {
+					handler.postDelayed(
+						new Runnable() {
+							public void run() {
+								view.findViewById(R.id.text).setVisibility(View.VISIBLE);
+								view.findViewById(R.id.preloader).setVisibility(View.GONE);
+								view.findViewById(R.id.preloader_container).setVisibility(View.GONE);
+							}
+						}, 1500
+					);
+				}
+				
+				@Override
 				public boolean shouldOverrideUrlLoading(WebView v, String url) {
-					if (url.equals("custom:complete")) {						
-						handler.postDelayed(
-							new Runnable() {
-								public void run() {
-									view.findViewById(R.id.text).setVisibility(View.VISIBLE);
-									view.findViewById(R.id.preloader).setVisibility(View.GONE);
-									view.findViewById(R.id.preloader_container).setVisibility(View.GONE);
-								}
-							}, 1000
-						);
-					} else {
-						v.getContext().startActivity(
-							new Intent(Intent.ACTION_VIEW, Uri.parse(url))
-						);
-					}
+					v.getContext().startActivity(
+						new Intent(Intent.ACTION_VIEW, Uri.parse(url))
+					);
 					return true;
 				}
 				
