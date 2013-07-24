@@ -1,2 +1,3 @@
 syntax: regexp
-^(bin|gen|nbandroid|private)/.*$
+^(bin|gen|nbandroid|private|obj)/.*$
+^libs/armeabi/.*\.so$
