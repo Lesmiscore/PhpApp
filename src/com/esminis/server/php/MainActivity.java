@@ -28,12 +28,12 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import com.esminis.popup.DirectoryChooser;
 import com.esminis.server.php.service.Network;
 import com.esminis.server.php.service.server.Php;
 import com.esminis.server.php.service.Preferences;
 import com.esminis.server.php.service.install.InstallServer;
 import java.io.File;
-import net.rdrei.android.dirchooser.DirectoryChooserActivity;
 
 public class 
 	MainActivity extends Activity implements InstallServer.OnInstallListener
@@ -105,27 +105,6 @@ public class
 			unregisterReceiver(receiver);
 		}
 	}
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (
-			requestCode == REQUEST_DIRECTORY && 
-			resultCode == DirectoryChooserActivity.RESULT_CODE_DIR_SELECTED
-		) {
-			File file = new File(
-				data.getStringExtra(DirectoryChooserActivity.RESULT_SELECTED_DIR)
-			);
-			if (file.isDirectory()) {
-				getPreferences().set(
-					Preferences.DOCUMENT_ROOT, file.getAbsolutePath()
-				);
-				((TextView)findViewById(R.id.server_root)).setText(
-					getPreferences().getString(Preferences.DOCUMENT_ROOT)
-				);
-			}
-		}
-	}
 
 	private void requestResultView() {
 		if (paused) {
@@ -173,10 +152,23 @@ public class
 		text.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View arg0) {
-				final Intent chooserIntent = new Intent(
-					MainActivity.this, DirectoryChooserActivity.class
+				DirectoryChooser chooser = new DirectoryChooser(MainActivity.this);
+				chooser.setParent(
+					new File(getPreferences().getString(Preferences.DOCUMENT_ROOT))
 				);
-				startActivityForResult(chooserIntent, REQUEST_DIRECTORY);
+				chooser.setOnDirectoryChooserListener(
+					new DirectoryChooser.OnDirectoryChooserListener() {
+						public void OnDirectoryChosen(File directory) {
+							getPreferences().set(
+								Preferences.DOCUMENT_ROOT, directory.getAbsolutePath()
+							);
+							((TextView)findViewById(R.id.server_root)).setText(
+								getPreferences().getString(Preferences.DOCUMENT_ROOT)
+							);
+						}
+					}
+				);
+				chooser.show();				
 			}
 		});
 		text = (TextView)findViewById(R.id.server_port);
