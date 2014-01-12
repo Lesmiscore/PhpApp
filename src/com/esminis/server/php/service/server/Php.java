@@ -118,10 +118,10 @@ public class Php extends HandlerThread {
 					new String[] {
 						php.getAbsolutePath(), "-S", address, "-t", documentRoot, 
 							"-c", file.exists() ? file.getAbsolutePath() : documentRoot
-					}
+					}, null, new File(documentRoot)
 				);
 				new StreamReader().execute(process.getErrorStream(), this);
-			} catch (IOException ex) {}
+			} catch (IOException ignored) {}
 		}
 	}
 
