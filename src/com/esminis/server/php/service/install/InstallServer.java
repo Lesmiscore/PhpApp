@@ -60,29 +60,23 @@ public class InstallServer extends AsyncTask<Context, Void, Void> {
 		Context context = arguments[0];		
 		Preferences preferences = new Preferences(context);
 		if (!preferences.contains(Preferences.DOCUMENT_ROOT)) {
-			File file = new File(
-				Environment.getExternalStorageDirectory().getAbsolutePath() + 
-					File.separator + "www"
-			);
+			File file = new File(Environment.getExternalStorageDirectory(), "www");
 			if (!file.isDirectory()) {
 				file.mkdir();
 				if (file.isDirectory()) {
 					try {
 						Install install = new Install();
-						install.fromAssetDirectory(file, "www", context);						
+						install.fromAssetDirectory(file, "www", context);
 						HashMap<String, String> variables = new HashMap<String, String>();
-						File tempDirectory = new File(
-							context.getExternalFilesDir(null).getAbsolutePath() + 
-								File.separator + "tmp"
-						);
+						File tempDirectory = new File(context.getExternalFilesDir(null), "tmp");
 						if (!tempDirectory.isDirectory()) {
 							tempDirectory.mkdir();
 						}
 						variables.put("tempDirectory", tempDirectory.getAbsolutePath());
-						install.preprocessFile(
-							new File(file + File.separator + "php.ini"), variables
-						);
-					} catch (IOException ex) {}
+						variables.put("wwwDirectory", file.getAbsolutePath());
+						install.preprocessFile(new File(file, "php.ini"), variables);
+						install.preprocessFile(new File(file, "extensions.ini"), variables);
+					} catch (IOException ignored) {}
 				}
 			}
 			preferences.set(Preferences.DOCUMENT_ROOT, file.getAbsolutePath());
