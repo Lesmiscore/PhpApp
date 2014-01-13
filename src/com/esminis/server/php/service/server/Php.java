@@ -100,10 +100,6 @@ public class Php extends HandlerThread {
 		}
 	}
 	
-	public Handler getHandler() {
-		return handler;
-	}
-	
 	private String getIPAddress() {
 		int position = network
 			.getPosition(preferences.getString(Preferences.ADDRESS));

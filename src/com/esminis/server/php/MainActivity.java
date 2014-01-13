@@ -50,7 +50,6 @@ import com.esminis.server.php.service.install.InstallServer;
 import java.io.File;
 
 // @todo stop php server, compare php binary size and ask user if upgrade needed
-// @todo php script to test all modules
 
 public class 
 	MainActivity extends Activity implements InstallServer.OnInstallListener

@@ -19,13 +19,13 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import static android.content.DialogInterface.BUTTON_NEUTRAL;
 import android.os.Environment;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import java.io.File;
@@ -80,7 +80,7 @@ public class DirectoryChooser extends AlertDialog {
 						convertView = new TextView(getContext());
 						convertView.setPadding(padding, padding, padding, padding);
 					}
-					((TextView)convertView).setText(((File)getItem(position)).getName());
+					((TextView)convertView).setText(getItem(position).getName());
 					return convertView;
 				}
 			}
@@ -99,38 +99,33 @@ public class DirectoryChooser extends AlertDialog {
 		setTitle("?");
 	}
 	
-	private void initialize() {		
-		getButton(BUTTON_NEUTRAL).setOnClickListener(
+	private void initialize() {
+		Button button = getButton(BUTTON_NEUTRAL);
+		if (button == null) {
+			return;
+		}
+		button.setOnClickListener(
 			new View.OnClickListener() {
 				public void onClick(View view) {
-					setParent(parent.getParentFile());
+					if (parent != null) {
+						setParent(parent.getParentFile());
+					}
 				}
 			}
 		);
 		setParent(parent);
 	}
-	
-	public void setButtonGoUpTitle(String title) {
-		getButton(BUTTON_NEUTRAL).setText(title);
-	}
-	
-	public void setButtonChooseTitle(String title) {
-		getButton(BUTTON_POSITIVE).setText(title);
-	}
-	
-	public void setButtonCancelTitle(String title) {
-		getButton(BUTTON_NEGATIVE).setText(title);
-	}
-	
+
 	public void setParent(File parent) {
 		this.parent = parent;
 		if (!firstShow) {
-			getButton(BUTTON_NEUTRAL).setVisibility(
-				parent.getParentFile() != null ? View.VISIBLE : View.GONE
-			);
+			Button button = getButton(BUTTON_NEUTRAL);
+			if (button != null) {
+				button.setVisibility(parent.getParentFile() != null ? View.VISIBLE : View.GONE);
+			}
 			setTitle(parent.getAbsolutePath());
 			ArrayAdapter<File> adapter = (ArrayAdapter<File>)listView.getAdapter();
-			ArrayList<File> list = manager.getSubdicrectories(parent);
+			ArrayList<File> list = manager.getSubdirectories(parent);
 			adapter.clear();
 			for (File file : list) {
 				adapter.add(file);

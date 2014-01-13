@@ -62,15 +62,14 @@ public class InstallServer extends AsyncTask<Context, Void, Void> {
 		if (!preferences.contains(Preferences.DOCUMENT_ROOT)) {
 			File file = new File(Environment.getExternalStorageDirectory(), "www");
 			if (!file.isDirectory()) {
-				file.mkdir();
-				if (file.isDirectory()) {
+				if (file.mkdir() && file.isDirectory()) {
 					try {
 						Install install = new Install();
 						install.fromAssetDirectory(file, "www", context);
 						HashMap<String, String> variables = new HashMap<String, String>();
 						File tempDirectory = new File(context.getExternalFilesDir(null), "tmp");
-						if (!tempDirectory.isDirectory()) {
-							tempDirectory.mkdir();
+						if (!tempDirectory.isDirectory() && !tempDirectory.mkdir()) {
+							tempDirectory = file;
 						}
 						variables.put("tempDirectory", tempDirectory.getAbsolutePath());
 						variables.put("wwwDirectory", file.getAbsolutePath());
@@ -91,7 +90,7 @@ public class InstallServer extends AsyncTask<Context, Void, Void> {
 		try {
 			new Install().fromAssetFile(php, "php", context);
 			php.setExecutable(true);
-		} catch (IOException ex) {}
+		} catch (IOException ignored) {}
 		return null;
 	}
 
