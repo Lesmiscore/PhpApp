@@ -19,7 +19,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import static android.content.Context.INPUT_METHOD_SERVICE;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -90,9 +89,10 @@ public class
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putString(
-			"errors", ((TextView)findViewById(R.id.error)).getText().toString()
-		);
+		TextView view = (TextView)findViewById(R.id.error);
+		if (view != null && view.getText() != null) {
+			outState.putString("errors", view.getText().toString());
+		}
 	}
 	
 	private void setLabel(String label) {
@@ -210,7 +210,7 @@ public class
 					8080 : Integer.parseInt(portPreference);
 				try {
 					port = Integer.parseInt(text.toString());					
-				} catch (NumberFormatException e) {}
+				} catch (NumberFormatException ignored) {}
 				boolean error = true;
 				if (port >= 1024 && port <= 65535) {
 					getPreferences().set(Preferences.PORT, String.valueOf(port));
@@ -239,18 +239,18 @@ public class
 
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				if (intent.getAction().equals(Php.INTENT_ACTION)) {
+				if (intent.getAction() != null && intent.getAction().equals(Php.INTENT_ACTION)) {
 					Bundle extras = intent.getExtras();
-					if (extras.containsKey("errorLine")) {
+					if (extras != null && extras.containsKey("errorLine")) {
 						TextView text = (TextView)findViewById(R.id.error);
 						text.append(
-							(text.getText().length() > 0 ? "\n" : "") + 
+							(text.getText() != null && text.getText().length() > 0 ? "\n" : "") +
 								extras.getString("errorLine")
 						);
 					} else {
 						findViewById(R.id.start).setVisibility(View.GONE);
 						findViewById(R.id.stop).setVisibility(View.GONE);
-						if (extras.getBoolean("running")) {
+						if (extras != null && extras.getBoolean("running")) {
 							findViewById(R.id.stop).setVisibility(View.VISIBLE);
 							setLabel(
 								String.format(
@@ -301,9 +301,15 @@ public class
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.menu_about) {
-			final Handler handler = new Handler();
 			final View view = getLayoutInflater().inflate(R.layout.about, null);
+			if (view == null) {
+				return false;
+			}
 			WebView htmlView = (WebView)view.findViewById(R.id.text);
+			if (htmlView == null) {
+				return false;
+			}
+			final Handler handler = new Handler();
 			htmlView.getSettings().setJavaScriptEnabled(true);
 			htmlView.setWebViewClient(new WebViewClient() {
 
@@ -322,9 +328,10 @@ public class
 				
 				@Override
 				public boolean shouldOverrideUrlLoading(WebView v, String url) {
-					v.getContext().startActivity(
-						new Intent(Intent.ACTION_VIEW, Uri.parse(url))
-					);
+					if (v == null || v.getContext() == null) {
+						return false;
+					}
+					v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 					return true;
 				}
 				
