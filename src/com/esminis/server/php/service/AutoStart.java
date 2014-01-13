@@ -24,9 +24,7 @@ public class AutoStart extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		if (
-			new Preferences(context).getBoolean(Preferences.START_ON_BOOT)
-		) {
+		if (new Preferences(context).getBoolean(Preferences.START_ON_BOOT)) {
 			Php.getInstance(context).startWhenReady();
 		}
 	}

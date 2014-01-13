@@ -58,10 +58,7 @@ public class Install {
 			String filePath = path + File.separator + file;
 			File targetFile = new File(target + File.separator + file);
 			if (context.getAssets().list(filePath).length > 0) {
-				if (!targetFile.isDirectory()) {
-					targetFile.mkdir();
-				}
-				if (targetFile.isDirectory()) {
+				if (targetFile.isDirectory() || targetFile.mkdir()) {
 					fromAssetDirectory(targetFile, filePath, context);
 				}
 			} else {
@@ -90,13 +87,13 @@ public class Install {
 			writer = new PrintWriter(new FileWriter(file));
 			writer.write(content.toString());
 			writer.close();
-		} catch (IOException ex) {		
+		} catch (IOException ignored) {
 		} finally {
 			try {
 				if (reader != null) {
 					reader.close();
 				}
-			} catch (IOException ex) {}
+			} catch (IOException ignored) {}
 			if (writer != null) {
 				writer.close();
 			}			

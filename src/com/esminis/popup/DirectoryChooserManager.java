@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class DirectoryChooserManager {
 	
-	public ArrayList<File> getSubdicrectories(File parent) {
+	public ArrayList<File> getSubdirectories(File parent) {
 		ArrayList<File> result = new ArrayList<File>();
 		File[] list = parent.listFiles();
 		if (list != null) {

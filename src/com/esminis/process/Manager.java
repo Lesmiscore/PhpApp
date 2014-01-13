@@ -29,6 +29,9 @@ public class Manager {
 		File root = new File(File.separator + "proc");
 		if (root.isDirectory()) {
 			File[] list = root.listFiles();
+			if (list == null) {
+				return null;
+			}
 			for (File file : list) {
 				if (file.isDirectory()) {
 					try {
@@ -50,15 +53,15 @@ public class Manager {
 									return new String[] {String.valueOf(pid), line};
 								}
 							}							
-						} catch (IOException ex) {
+						} catch (IOException ignored) {
 						} finally {
 							try {
 								if (reader != null) {
 									reader.close();
 								}
-							} catch (IOException ex) {}
+							} catch (IOException ignored) {}
 						}
-					} catch (NumberFormatException e) {}
+					} catch (NumberFormatException ignored) {}
 				}
 			}
 		}
@@ -83,10 +86,6 @@ public class Manager {
 			}
 		}
 		return parts.toArray(new String[parts.size()]);
-	}
-	
-	public boolean getIsRunning(File command) {
-		return find(command) != null;
 	}
 	
 	public void killIfFound(File command) {

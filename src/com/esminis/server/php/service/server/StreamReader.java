@@ -28,7 +28,7 @@ public class StreamReader extends AsyncTask<Object, Void, Void> {
 		BufferedReader reader = new BufferedReader(
 			new InputStreamReader((InputStream)arguments[0])
 		);
-		String line = null;
+		String line;
 		for (;;) {
 			try {
 				line = reader.readLine();
