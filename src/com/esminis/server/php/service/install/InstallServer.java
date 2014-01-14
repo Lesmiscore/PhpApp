@@ -141,11 +141,17 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 		}
 		File php = Php.getInstance(context).getPhp();
 		try {
-			new Install().fromAssetFile(php, PATH_ASSET_PHP, context);
-			if (!php.isFile() || (!php.canExecute() && !php.setExecutable(true))) {
+			if (!php.isFile() || php.delete()) {
+				new Install().fromAssetFile(php, PATH_ASSET_PHP, context);
+				if (!php.isFile() || (!php.canExecute() && !php.setExecutable(true))) {
+					return false;
+				}
+			}	else {
 				return false;
 			}
-		} catch (IOException ignored) {}
+		} catch (IOException ignored) {
+			return false;
+		}
 		return true;
 	}
 
