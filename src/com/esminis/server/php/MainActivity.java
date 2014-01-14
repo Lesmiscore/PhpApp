@@ -15,10 +15,12 @@
  */
 package com.esminis.server.php;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -49,11 +51,7 @@ import com.esminis.server.php.service.Preferences;
 import com.esminis.server.php.service.install.InstallServer;
 import java.io.File;
 
-// @todo stop php server, compare php binary size and ask user if upgrade needed
-
-public class 
-	MainActivity extends Activity implements InstallServer.OnInstallListener
-{
+public class MainActivity extends Activity implements InstallServer.OnInstallListener {
 	
 	private BroadcastReceiver receiver = null;
 	
@@ -282,8 +280,32 @@ public class
 		registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
 		Php.getInstance(MainActivity.this).sendAction("status");
 	}
-	
-	public void OnInstallStart() {}
+
+	@Override
+	public void OnInstallNewVersionRequest(final InstallServer installer) {
+		AlertDialog dialog = new AlertDialog.Builder(this)
+			.setMessage(R.string.server_install_new_version_question)
+			.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					((AlertDialog) dialog).setOnDismissListener(null);
+					installer.continueInstall(MainActivity.this, true);
+				}
+			})
+			.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					((AlertDialog)dialog).setOnDismissListener(null);
+					installer.continueInstall(MainActivity.this, false);
+				}
+			}).show();
+		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				installer.continueInstall(MainActivity.this, false);
+			}
+		});
+	}
 
 	public void OnInstallEnd(boolean success) {
 		requestResultViewSuccess = success;
@@ -297,6 +319,7 @@ public class
 		return true;
 	}
 
+	@SuppressLint("SetJavaScriptEnabled")
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.menu_about) {

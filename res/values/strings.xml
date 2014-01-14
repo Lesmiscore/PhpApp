@@ -13,4 +13,7 @@
 	<string name="server_installing">Installing server…</string>
 	<string name="loading_text">Loading text…</string>
 	<string name="close">Close</string>
+    <string name="server_install_new_version_question">
+        New version of PHP is available, do You want to install it instead of current version?
+    </string>
 </resources>

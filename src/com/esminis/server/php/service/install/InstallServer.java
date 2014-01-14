@@ -15,8 +15,12 @@
  */
 package com.esminis.server.php.service.install;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Environment;
 import com.esminis.server.php.service.Network;
 import com.esminis.server.php.service.server.Php;
@@ -25,39 +29,88 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class InstallServer extends AsyncTask<Context, Void, Void> {
+public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 
 	public interface OnInstallListener {
-		
-		public void OnInstallStart();
-		
+
+		public void OnInstallNewVersionRequest(InstallServer installer);
+
 		public void OnInstallEnd(boolean success);
 		
 	}
 	
 	private OnInstallListener listener = null;
+
+	private boolean canStartInstall = false;
+
+	static final private String PATH_ASSET_PHP = "php";
 	
 	public InstallServer(OnInstallListener listener) {
 		this.listener = listener;
 	}
 	
 	public void installIfNeeded(Context context) {
-		if (listener != null) {
-			listener.OnInstallStart();
-		}
-		if (Php.getInstance(context).getPhp().isFile()) {
-			if (listener != null) {
-				listener.OnInstallEnd(true);
-				listener = null;
+		File file = Php.getInstance(context).getPhp();
+		if (file.isFile()) {
+			try {
+				if (file.length() != context.getAssets().open(PATH_ASSET_PHP).available()) {
+					if (listener != null) {
+						listener.OnInstallNewVersionRequest(this);
+					}
+				} else {
+					installEnd(true);
+				}
+			} catch (IOException e) {
+				installEnd(false);
 			}
 		} else {
-			execute(context);
+			startInstall(context);
 		}
 	}
-	
+
+	public void continueInstall(Context context, boolean confirm) {
+		if (confirm) {
+			startInstall(context);
+		} else {
+			installEnd(true);
+		}
+	}
+
+	private void startInstall(Context context) {
+		executeOnExecutor(THREAD_POOL_EXECUTOR, context);
+	}
+
+	private void installEnd(boolean success) {
+		if (listener != null) {
+			listener.OnInstallEnd(success);
+			listener = null;
+		}
+	}
+
 	@Override
-	protected Void doInBackground(Context... arguments) {
-		Context context = arguments[0];		
+	protected Boolean doInBackground(Context... arguments) {
+		Context context = arguments[0];
+		BroadcastReceiver receiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if (intent.getAction() == null || !intent.getAction().equals(Php.INTENT_ACTION)) {
+					return;
+				}
+				Bundle extras = intent.getExtras();
+				if (extras == null || extras.containsKey("errorLine") || extras.getBoolean("running")) {
+					return;
+				}
+				canStartInstall = true;
+			}
+		};
+		context.registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
+		Php.getInstance(context).sendAction("stop");
+		while (canStartInstall) {
+			try {
+				Thread.sleep(250);
+			} catch (InterruptedException ignored) {}
+		}
+		context.unregisterReceiver(receiver);
 		Preferences preferences = new Preferences(context);
 		if (!preferences.contains(Preferences.DOCUMENT_ROOT)) {
 			File file = new File(Environment.getExternalStorageDirectory(), "www");
@@ -88,26 +141,22 @@ public class InstallServer extends AsyncTask<Context, Void, Void> {
 		}
 		File php = Php.getInstance(context).getPhp();
 		try {
-			new Install().fromAssetFile(php, "php", context);
-			php.setExecutable(true);
+			new Install().fromAssetFile(php, PATH_ASSET_PHP, context);
+			if (!php.isFile() || (!php.canExecute() && !php.setExecutable(true))) {
+				return false;
+			}
 		} catch (IOException ignored) {}
-		return null;
+		return true;
 	}
 
 	@Override
 	protected void onCancelled() {
-		if (listener != null) {
-			listener.OnInstallEnd(false);
-			listener = null;
-		}		
+		installEnd(false);
 	}
 
 	@Override
-	protected void onPostExecute(Void result) {
-		if (listener != null) {
-			listener.OnInstallEnd(true);
-			listener = null;
-		}
+	protected void onPostExecute(Boolean result) {
+		installEnd(result);
 	}
 	
 }
