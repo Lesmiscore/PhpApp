@@ -44,6 +44,7 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 	private boolean canStartInstall = false;
 
 	static final private String PATH_ASSET_PHP = "php";
+	static final private String PATH_ASSET_SO_OPCACHE = "opcache.so";
 	
 	public InstallServer(OnInstallListener listener) {
 		this.listener = listener;
@@ -112,6 +113,7 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 		}
 		context.unregisterReceiver(receiver);
 		Preferences preferences = new Preferences(context);
+		File php = Php.getInstance(context).getPhp();
 		if (!preferences.contains(Preferences.DOCUMENT_ROOT)) {
 			File file = new File(Environment.getExternalStorageDirectory(), "www");
 			if (!file.isDirectory()) {
@@ -126,6 +128,7 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 						}
 						variables.put("tempDirectory", tempDirectory.getAbsolutePath());
 						variables.put("wwwDirectory", file.getAbsolutePath());
+						variables.put("soDirectory", php.getParentFile().getAbsolutePath());
 						install.preprocessFile(new File(file, "php.ini"), variables);
 						install.preprocessFile(new File(file, "extensions.ini"), variables);
 					} catch (IOException ignored) {}
@@ -139,7 +142,11 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 		if (!preferences.contains(Preferences.ADDRESS)) {			
 			preferences.set(Preferences.ADDRESS, new Network().getNames().get(0));
 		}
-		File php = Php.getInstance(context).getPhp();
+		try {
+			new Install().fromAssetFile(
+				new File(php.getParentFile(), PATH_ASSET_SO_OPCACHE), PATH_ASSET_SO_OPCACHE, context
+			);
+		} catch (IOException ignored) {}
 		try {
 			if (!php.isFile() || php.delete()) {
 				new Install().fromAssetFile(php, PATH_ASSET_PHP, context);
