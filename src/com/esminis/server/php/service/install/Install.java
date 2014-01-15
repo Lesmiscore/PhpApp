@@ -39,7 +39,7 @@ public class Install {
 		InputStream input = context.getAssets().open(path);
 		OutputStream output = new FileOutputStream(target);
 		int read;
-		byte[] bytes = new byte[1024];
+		byte[] bytes = new byte[4096];
 		while ((read = input.read(bytes)) != -1) {
 			output.write(bytes, 0, read);
 		}
