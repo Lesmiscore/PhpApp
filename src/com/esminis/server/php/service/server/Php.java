@@ -21,6 +21,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+
+import com.esminis.server.php.R;
 import com.esminis.server.php.service.Network;
 import com.esminis.server.php.service.Preferences;
 import com.esminis.process.Manager;
@@ -108,16 +110,25 @@ public class Php extends HandlerThread {
 	
 	private void serverStart(String documentRoot) {
 		if (process == null) {
+			File fileDocumentRoot = new File(documentRoot);
 			try {
-				File file = new File(documentRoot + File.separator + "php.ini");
+				File file = new File(fileDocumentRoot, "php.ini");
 				process = Runtime.getRuntime().exec(
 					new String[] {
 						php.getAbsolutePath(), "-S", address, "-t", documentRoot, 
 							"-c", file.exists() ? file.getAbsolutePath() : documentRoot
-					}, null, new File(documentRoot)
+					}, null, fileDocumentRoot
 				);
 				new StreamReader().execute(process.getErrorStream(), this);
-			} catch (IOException ignored) {}
+			} catch (IOException ignored) {
+				if (process == null) {
+					if (fileDocumentRoot.isDirectory()) {
+						sendErrorLine(ignored.getCause().getMessage());
+					} else {
+						sendErrorLine(context.getString(R.string.error_document_root_does_not_exist));
+					}
+				}
+			}
 		}
 	}
 

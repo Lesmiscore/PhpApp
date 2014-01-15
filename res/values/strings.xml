@@ -14,6 +14,10 @@
 	<string name="loading_text">Loading text…</string>
 	<string name="close">Close</string>
     <string name="server_install_new_version_question">
-        New version of PHP is available, do You want to install it instead of current version?
+        New version of PHP(5.5.7) is available,
+        do You want to install it instead of current version?
+    </string>
+    <string name="error_document_root_does_not_exist">
+        Cannot start server - document root directory does not exist
     </string>
 </resources>
