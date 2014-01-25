@@ -80,7 +80,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 			TextView text = (TextView)findViewById(R.id.error);
 			text.setText(savedInstanceState.getString("errors"));
 		}
-		new InstallServer(this).installIfNeeded(this);
+		InstallServer.getInstance(this).installIfNeeded(this);
 	}
 
 	@Override
@@ -284,7 +284,9 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 	@Override
 	public void OnInstallNewVersionRequest(final InstallServer installer) {
 		AlertDialog dialog = new AlertDialog.Builder(this)
-			.setMessage(R.string.server_install_new_version_question)
+			.setMessage(
+				getString(R.string.server_install_new_version_question, getString(R.string.php_build))
+			)
 			.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {

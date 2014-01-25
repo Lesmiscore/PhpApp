@@ -22,6 +22,7 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import com.esminis.server.php.R;
 import com.esminis.server.php.service.Network;
 import com.esminis.server.php.service.server.Php;
 import com.esminis.server.php.service.Preferences;
@@ -45,24 +46,39 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 
 	static final private String PATH_ASSET_PHP = "php";
 	static final private String PATH_ASSET_SO_OPCACHE = "opcache.so";
+
+	static private InstallServer instance = null;
+
+	private boolean installStarted = false;
 	
-	public InstallServer(OnInstallListener listener) {
+	private InstallServer(OnInstallListener listener) {
 		this.listener = listener;
+	}
+
+	static public InstallServer getInstance(OnInstallListener listener) {
+		if (instance == null) {
+			instance = new InstallServer(listener);
+		} else {
+			instance.listener = listener;
+		}
+		return instance;
 	}
 	
 	public void installIfNeeded(Context context) {
+		if (installStarted) {
+			return;
+		}
 		File file = Php.getInstance(context).getPhp();
 		if (file.isFile()) {
-			try {
-				if (file.length() != context.getAssets().open(PATH_ASSET_PHP).available()) {
-					if (listener != null) {
-						listener.OnInstallNewVersionRequest(this);
-					}
-				} else {
-					installEnd(true);
+			if (
+				!new Preferences(context).getString(Preferences.PHP_BUILD)
+					.equals(context.getString(R.string.php_build))
+			) {
+				if (listener != null) {
+					listener.OnInstallNewVersionRequest(this);
 				}
-			} catch (IOException e) {
-				installEnd(false);
+			} else {
+				installEnd(true);
 			}
 		} else {
 			startInstall(context);
@@ -78,10 +94,15 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 	}
 
 	private void startInstall(Context context) {
+		if (installStarted) {
+			return;
+		}
+		installStarted = true;
 		executeOnExecutor(THREAD_POOL_EXECUTOR, context);
 	}
 
 	private void installEnd(boolean success) {
+		installStarted = false;
 		if (listener != null) {
 			listener.OnInstallEnd(success);
 			listener = null;
@@ -159,6 +180,7 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 		} catch (IOException ignored) {
 			return false;
 		}
+		preferences.set(Preferences.PHP_BUILD, context.getString(R.string.php_build));
 		return true;
 	}
 
