@@ -1,5 +1,5 @@
 /**
- * Copyright 2013 Tautvydas Andrikys
+ * Copyright 2014 Tautvydas Andrikys
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ public class AutoStart extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if (Manager.get(Preferences.class).getBoolean(context, Preferences.START_ON_BOOT)) {
-			Php.getInstance(context).startWhenReady();
+			Php.getInstance(context).requestStart();
 		}
 	}
 	

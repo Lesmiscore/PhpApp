@@ -1,5 +1,5 @@
 /**
- * Copyright 2013 Tautvydas Andrikys
+ * Copyright 2014 Tautvydas Andrikys
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -128,7 +128,7 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 			}
 		};
 		context.registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
-		Php.getInstance(context).sendAction("stop");
+		Php.getInstance(context).requestStop();
 		while (canStartInstall) {
 			try {
 				Thread.sleep(250);
