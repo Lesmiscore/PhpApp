@@ -22,10 +22,12 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 
+import com.esminis.model.manager.Manager;
+import com.esminis.model.manager.Process;
 import com.esminis.server.php.R;
-import com.esminis.server.php.service.Network;
-import com.esminis.server.php.service.Preferences;
-import com.esminis.process.Manager;
+import com.esminis.model.manager.Network;
+import com.esminis.server.php.model.manager.Preferences;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -65,30 +67,33 @@ public class Php extends HandlerThread {
 	
 	public Php(Context context) {
 		super("PhpServer");
-		network = new Network();
-		preferences = new Preferences(context);
+		network = Manager.get(Network.class);
+		preferences = Manager.get(Preferences.class);
 		this.context = context.getApplicationContext();
 		php = new File(context.getFilesDir() + File.separator + "php");		
-		address = getIPAddress() + ":" + preferences.getString(Preferences.PORT);
+		address = getIPAddress() + ":" + preferences.getString(context, Preferences.PORT);
 	}
 
 	@Override
 	protected void onLooperPrepared() {
 		super.onLooperPrepared();
+		if (getLooper() == null) {
+			return;
+		}
 		handler = new Handler(getLooper()) {
 
 			@Override
 			public void handleMessage(Message message) {
 				Bundle data = message.getData();
-				if (data.get("action").equals("error")) {
+				if (data != null && data.get("action").equals("error")) {
 					Intent intent = new Intent(INTENT_ACTION);		
 					intent.putExtra("errorLine", data.getString("message"));
 					context.sendBroadcast(intent);
 				} else {
-					if (data.get("action").equals("start")) {
+					if (data != null && data.get("action").equals("start")) {
 						address = getIPAddress() + ":" + data.getString("port");
 						serverStart(data.getString("documentRoot"));
-					} else if (data.get("action").equals("stop")) {
+					} else if (data != null && data.get("action").equals("stop")) {
 						serverStop();
 					}
 					serverStatus();
@@ -103,9 +108,8 @@ public class Php extends HandlerThread {
 	}
 	
 	private String getIPAddress() {
-		int position = network
-			.getPosition(preferences.getString(Preferences.ADDRESS));
-		return position == -1 ? "0.0.0.0" : network.getAddress(position);
+		int position = network.getPosition(preferences.getString(context, Preferences.ADDRESS));
+		return position == -1 ? "0.0.0.0" : network.get(position).address;
 	}
 	
 	private void serverStart(String documentRoot) {
@@ -137,14 +141,14 @@ public class Php extends HandlerThread {
 			process.destroy();
 			process = null;
 		}
-		new Manager().killIfFound(php);
+		new Process().kill(php);
 	}
 	
 	private void serverStatus() {
 		boolean running = process != null;
 		String realAddress = address;
 		if (process == null) {
-			String[] commandLine = new Manager().getCommandLine(php);			
+			String[] commandLine = new Process().getCommandLine(php);
 			if (commandLine != null) {
 				boolean next = false;
 				for (String part : commandLine) {
@@ -188,10 +192,10 @@ public class Php extends HandlerThread {
 			Bundle bundle = new Bundle();			
 			bundle.putString(
 				Preferences.DOCUMENT_ROOT, 
-				preferences.getString(Preferences.DOCUMENT_ROOT)
+				preferences.getString(context, Preferences.DOCUMENT_ROOT)
 			);
 			bundle.putString(
-				Preferences.PORT, preferences.getString(Preferences.PORT)
+				Preferences.PORT, preferences.getString(context, Preferences.PORT)
 			);
 			sendMessage(action, bundle);
 		}

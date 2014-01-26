@@ -22,10 +22,12 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+
+import com.esminis.model.manager.Manager;
 import com.esminis.server.php.R;
-import com.esminis.server.php.service.Network;
+import com.esminis.model.manager.Network;
 import com.esminis.server.php.service.server.Php;
-import com.esminis.server.php.service.Preferences;
+import com.esminis.server.php.model.manager.Preferences;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -71,7 +73,7 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 		File file = Php.getInstance(context).getPhp();
 		if (file.isFile()) {
 			if (
-				!new Preferences(context).getString(Preferences.PHP_BUILD)
+				!Manager.get(Preferences.class).getString(context, Preferences.PHP_BUILD)
 					.equals(context.getString(R.string.php_build))
 			) {
 				if (listener != null) {
@@ -133,9 +135,9 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 			} catch (InterruptedException ignored) {}
 		}
 		context.unregisterReceiver(receiver);
-		Preferences preferences = new Preferences(context);
+		Preferences preferences = Manager.get(Preferences.class);
 		File php = Php.getInstance(context).getPhp();
-		if (!preferences.contains(Preferences.DOCUMENT_ROOT)) {
+		if (!preferences.contains(context, Preferences.DOCUMENT_ROOT)) {
 			File file = new File(Environment.getExternalStorageDirectory(), "www");
 			if (!file.isDirectory()) {
 				if (file.mkdir() && file.isDirectory()) {
@@ -155,13 +157,13 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 					} catch (IOException ignored) {}
 				}
 			}
-			preferences.set(Preferences.DOCUMENT_ROOT, file.getAbsolutePath());
+			preferences.set(context, Preferences.DOCUMENT_ROOT, file.getAbsolutePath());
 		}
-		if (!preferences.contains(Preferences.PORT)) {
-			preferences.set(Preferences.PORT, "8080");
+		if (!preferences.contains(context, Preferences.PORT)) {
+			preferences.set(context, Preferences.PORT, "8080");
 		}
-		if (!preferences.contains(Preferences.ADDRESS)) {			
-			preferences.set(Preferences.ADDRESS, new Network().getNames().get(0));
+		if (!preferences.contains(context, Preferences.ADDRESS)) {
+			preferences.set(context, Preferences.ADDRESS, Manager.get(Network.class).get(0).name);
 		}
 		try {
 			new Install().fromAssetFile(
@@ -180,7 +182,7 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 		} catch (IOException ignored) {
 			return false;
 		}
-		preferences.set(Preferences.PHP_BUILD, context.getString(R.string.php_build));
+		preferences.set(context, Preferences.PHP_BUILD, context.getString(R.string.php_build));
 		return true;
 	}
 

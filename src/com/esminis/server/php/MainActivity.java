@@ -1,5 +1,5 @@
 /**
- * Copyright 2013 Tautvydas Andrikys
+ * Copyright 2014 Tautvydas Andrikys
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,10 +44,12 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.esminis.model.manager.Manager;
 import com.esminis.popup.DirectoryChooser;
-import com.esminis.server.php.service.Network;
+import com.esminis.model.manager.Network;
 import com.esminis.server.php.service.server.Php;
-import com.esminis.server.php.service.Preferences;
+import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.install.InstallServer;
 import java.io.File;
 
@@ -67,7 +69,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 	
 	private Preferences getPreferences() {
 		if (preferences == null) {
-			preferences = new Preferences(this);
+			preferences = Manager.get(Preferences.class);
 		}
 		return preferences;
 	}
@@ -83,6 +85,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		InstallServer.getInstance(this).installIfNeeded(this);
 	}
 
+	@SuppressWarnings("NullableProblems")
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -137,46 +140,42 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 	}
 	
 	private void startup() {
-		network = new Network();
+		network = Manager.get(Network.class);
 		
 		Spinner spinner = (Spinner)findViewById(R.id.server_interface);
 		spinner.setAdapter(
-			new ArrayAdapter(
-				this, android.R.layout.simple_spinner_dropdown_item, network.getTitles()
-			)
+			new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, network.get())
 		);
 		spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-			public void onItemSelected(
-				AdapterView<?> parent, View view, int position, long id
-			) {
-				getPreferences().set(Preferences.ADDRESS, network.getName(position));
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				getPreferences().set(MainActivity.this, Preferences.ADDRESS, network.get(position).name);
 			}
 
 			public void onNothingSelected(AdapterView<?> parent) {}
 
 		});
 		spinner.setSelection(
-			network.getPosition(getPreferences().getString(Preferences.ADDRESS))
+			network.getPosition(getPreferences().getString(MainActivity.this, Preferences.ADDRESS))
 		);
 
 		TextView text = (TextView)findViewById(R.id.server_root);		
-		text.setText(getPreferences().getString(Preferences.DOCUMENT_ROOT));	
+		text.setText(getPreferences().getString(MainActivity.this, Preferences.DOCUMENT_ROOT));
 		text.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View arg0) {
 				DirectoryChooser chooser = new DirectoryChooser(MainActivity.this);
 				chooser.setParent(
-					new File(getPreferences().getString(Preferences.DOCUMENT_ROOT))
+					new File(getPreferences().getString(MainActivity.this, Preferences.DOCUMENT_ROOT))
 				);
 				chooser.setOnDirectoryChooserListener(
 					new DirectoryChooser.OnDirectoryChooserListener() {
 						public void OnDirectoryChosen(File directory) {
 							getPreferences().set(
-								Preferences.DOCUMENT_ROOT, directory.getAbsolutePath()
+								MainActivity.this, Preferences.DOCUMENT_ROOT, directory.getAbsolutePath()
 							);
 							((TextView)findViewById(R.id.server_root)).setText(
-								getPreferences().getString(Preferences.DOCUMENT_ROOT)
+								getPreferences().getString(MainActivity.this, Preferences.DOCUMENT_ROOT)
 							);
 						}
 					}
@@ -202,7 +201,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
 
 			public void afterTextChanged(Editable text) {
-				String portPreference = getPreferences().getString(Preferences.PORT);
+				String portPreference = getPreferences().getString(MainActivity.this, Preferences.PORT);
 				int port = portPreference.isEmpty() ? 
 					8080 : Integer.parseInt(portPreference);
 				try {
@@ -210,26 +209,26 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 				} catch (NumberFormatException ignored) {}
 				boolean error = true;
 				if (port >= 1024 && port <= 65535) {
-					getPreferences().set(Preferences.PORT, String.valueOf(port));
+					getPreferences().set(MainActivity.this, Preferences.PORT, String.valueOf(port));
 					error = false;
 				}
 				((TextView)findViewById(R.id.server_port))
 					.setTextColor(error ? Color.RED : Color.BLACK);
 			}
 		});
-		text.setText(getPreferences().getString(Preferences.PORT));
+		text.setText(getPreferences().getString(MainActivity.this, Preferences.PORT));
 		CheckBox checkbox = (CheckBox)findViewById(R.id.server_start_on_boot);
 		checkbox.setOnCheckedChangeListener(
 			new CompoundButton.OnCheckedChangeListener() {
 				public void onCheckedChanged(
 					CompoundButton checkox, boolean checked
 				) {
-					getPreferences().set(Preferences.START_ON_BOOT, checked);
+					getPreferences().set(MainActivity.this, Preferences.START_ON_BOOT, checked);
 				}
 			}
 		);
 		checkbox.setChecked(
-			getPreferences().getBoolean(Preferences.START_ON_BOOT)
+			getPreferences().getBoolean(MainActivity.this, Preferences.START_ON_BOOT)
 		);
 
 		receiver = new BroadcastReceiver() {

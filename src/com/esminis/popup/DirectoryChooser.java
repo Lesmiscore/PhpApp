@@ -28,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -39,7 +40,7 @@ public class DirectoryChooser extends AlertDialog {
 		
 	}
 	
-	private DirectoryChooserManager manager = new DirectoryChooserManager();
+	private com.esminis.model.manager.DirectoryChooser manager = new com.esminis.model.manager.DirectoryChooser();
 	private File parent = Environment.getExternalStorageDirectory();
 	private ListView listView = null;
 	private OnShowListener listenerShow = null;

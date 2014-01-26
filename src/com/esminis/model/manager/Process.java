@@ -1,5 +1,5 @@
 /**
- * Copyright 2013 Tautvydas Andrikys
+ * Copyright 2014 Tautvydas Andrikys
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. 
  */
-package com.esminis.process;
+package com.esminis.model.manager;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,7 +23,7 @@ import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Manager {
+public class Process extends com.esminis.model.manager.Manager<Void> {
 	
 	protected String[] find(File command) {
 		File root = new File(File.separator + "proc");
@@ -88,7 +88,7 @@ public class Manager {
 		return parts.toArray(new String[parts.size()]);
 	}
 	
-	public void killIfFound(File command) {
+	public void kill(File command) {
 		String[] commandLine = find(command);
 		if (commandLine != null) {
 			kill(Integer.parseInt(commandLine[0]));	
