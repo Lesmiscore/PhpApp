@@ -1,5 +1,5 @@
 /**
- * Copyright 2013 Tautvydas Andrikys
+ * Copyright 2014 Tautvydas Andrikys
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ package com.esminis.server.php.service.server;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Message;
 
 import com.esminis.model.manager.Manager;
@@ -31,32 +29,31 @@ import com.esminis.server.php.model.manager.Preferences;
 import java.io.File;
 import java.io.IOException;
 
-public class Php extends HandlerThread {
+public class Php {
 	
 	static public final String INTENT_ACTION = "STATUS_SERVER_CHANGED";
 	
 	private static Php instance = null;
-		
+
 	private java.lang.Process process = null;
 	
-	private File php = null;		
-	
-	private Handler handler = null;
-	
-	private Context context = null;
+	private File php = null;
 	
 	private String address = "";
 	
-	private boolean startWhenReady = false;
+	private boolean start = false;
 	
-	private Preferences preferences = null;
+	private Preferences preferences = Manager.get(Preferences.class);
 	
-	private Network network = null;
+	private Network network = Manager.get(Network.class);
+
+	private PhpHandler handler = null;
+
+	private Context context = null;
 
 	static public Php getInstance(Context context) {
 		if (instance == null) {
 			instance = new Php(context);
-			instance.start();
 		}
 		return instance;
 	}
@@ -65,46 +62,11 @@ public class Php extends HandlerThread {
 		return php;
 	}
 	
-	public Php(Context context) {
-		super("PhpServer");
-		network = Manager.get(Network.class);
-		preferences = Manager.get(Preferences.class);
+	protected Php(Context context) {
 		this.context = context.getApplicationContext();
+		handler = new PhpHandler(this.context, this);
 		php = new File(context.getFilesDir() + File.separator + "php");		
 		address = getIPAddress() + ":" + preferences.getString(context, Preferences.PORT);
-	}
-
-	@Override
-	protected void onLooperPrepared() {
-		super.onLooperPrepared();
-		if (getLooper() == null) {
-			return;
-		}
-		handler = new Handler(getLooper()) {
-
-			@Override
-			public void handleMessage(Message message) {
-				Bundle data = message.getData();
-				if (data != null && data.get("action").equals("error")) {
-					Intent intent = new Intent(INTENT_ACTION);		
-					intent.putExtra("errorLine", data.getString("message"));
-					context.sendBroadcast(intent);
-				} else {
-					if (data != null && data.get("action").equals("start")) {
-						address = getIPAddress() + ":" + data.getString("port");
-						serverStart(data.getString("documentRoot"));
-					} else if (data != null && data.get("action").equals("stop")) {
-						serverStop();
-					}
-					serverStatus();
-				}				
-			}
-			
-		};
-		serverStatus();
-		if (startWhenReady) {
-			sendAction("start");
-		}
 	}
 	
 	private String getIPAddress() {
@@ -112,31 +74,31 @@ public class Php extends HandlerThread {
 		return position == -1 ? "0.0.0.0" : network.get(position).address;
 	}
 	
-	private void serverStart(String documentRoot) {
-		if (process == null) {
-			File fileDocumentRoot = new File(documentRoot);
-			try {
-				File file = new File(fileDocumentRoot, "php.ini");
-				process = Runtime.getRuntime().exec(
-					new String[] {
-						php.getAbsolutePath(), "-S", address, "-t", documentRoot, 
-							"-c", file.exists() ? file.getAbsolutePath() : documentRoot
-					}, null, fileDocumentRoot
-				);
-				new StreamReader().execute(process.getErrorStream(), this);
-			} catch (IOException ignored) {
-				if (process == null) {
-					if (fileDocumentRoot.isDirectory()) {
-						sendErrorLine(ignored.getCause().getMessage());
-					} else {
-						sendErrorLine(context.getString(R.string.error_document_root_does_not_exist));
-					}
-				}
+	private void start(String root) {
+		if (process != null) {
+			return;
+		}
+		File fileRoot = new File(root);
+		if (!fileRoot.isDirectory()) {
+			handler.sendError(context.getString(R.string.error_document_root_does_not_exist));
+		}
+		try {
+			File file = new File(fileRoot, "php.ini");
+			process = Runtime.getRuntime().exec(
+				new String[] {
+					php.getAbsolutePath(), "-S", address, "-t", root, "-c",
+					file.exists() ? file.getAbsolutePath() : root
+				}, null, fileRoot
+			);
+			new PhpStreamReader(this, handler).execute(process.getErrorStream());
+		} catch (IOException ignored) {
+			if (process == null) {
+				handler.sendError(ignored.getCause().getMessage());
 			}
 		}
 	}
 
-	private void serverStop() {
+	private void stop() {
 		if (process != null) {
 			process.destroy();
 			process = null;
@@ -144,7 +106,7 @@ public class Php extends HandlerThread {
 		new Process().kill(php);
 	}
 	
-	private void serverStatus() {
+	private void status() {
 		boolean running = process != null;
 		String realAddress = address;
 		if (process == null) {
@@ -169,44 +131,48 @@ public class Php extends HandlerThread {
 		}
 		context.sendBroadcast(intent);
 	}
-	
-	private void sendMessage(String action, Bundle bundle) {
-		if (handler != null) {
-			bundle.putString("action", action);
-			Message message = new Message();
-			message.setData(bundle);
-			handler.sendMessage(message);
-		}
+
+	public void requestStatus() {
+		handler.sendAction("status");
 	}
-	
-	public void sendErrorLine(String error) {
-		if (handler != null) {
-			Bundle bundle = new Bundle();
-			bundle.putString("message", error);
-			sendMessage("error", bundle);
-		}
+
+	public void requestStop() {
+		handler.sendAction("stop");
 	}
-	
-	public void sendAction(String action) {
-		if (handler != null) {
-			Bundle bundle = new Bundle();			
-			bundle.putString(
-				Preferences.DOCUMENT_ROOT, 
-				preferences.getString(context, Preferences.DOCUMENT_ROOT)
-			);
-			bundle.putString(
-				Preferences.PORT, preferences.getString(context, Preferences.PORT)
-			);
-			sendMessage(action, bundle);
-		}
-	}
-	
-	public void startWhenReady() {
-		if (handler == null) {
-			startWhenReady = true;
+
+	public void requestStart() {
+		if (handler.isReady()) {
+			handler.sendAction("start");
 		} else {
-			sendAction("start");
+			start = true;
 		}
+	}
+
+	void onHandlerReady() {
+		status();
+		if (start) {
+			requestStart();
+		}
+	}
+
+	void onHandlerMessage(Message message) {
+		Bundle data = message.getData();
+		if (data == null) {
+			return;
+		}
+		if (data.get("action").equals("error")) {
+			Intent intent = new Intent(INTENT_ACTION);
+			intent.putExtra("errorLine", data.getString("message"));
+			context.sendBroadcast(intent);
+			return;
+		}
+		if (data.get("action").equals("start")) {
+			address = getIPAddress() + ":" + data.getString("port");
+			start(data.getString("documentRoot"));
+		} else if (data.get("action").equals("stop")) {
+			stop();
+		}
+		status();
 	}
 	
 }

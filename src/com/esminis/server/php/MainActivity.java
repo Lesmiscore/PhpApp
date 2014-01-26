@@ -110,7 +110,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		if (receiver != null) {
 			registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
 		}
-		Php.getInstance(MainActivity.this).sendAction("status");
+		Php.getInstance(MainActivity.this).requestStatus();
 	}
 
 	@Override
@@ -144,7 +144,9 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		
 		Spinner spinner = (Spinner)findViewById(R.id.server_interface);
 		spinner.setAdapter(
-			new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, network.get())
+			new ArrayAdapter<com.esminis.model.Network>(
+				this, android.R.layout.simple_spinner_dropdown_item, network.get()
+			)
 		);
 		spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -266,18 +268,18 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		findViewById(R.id.start).setOnClickListener(new View.OnClickListener() {
 			public void onClick(View arg0) {
 				((TextView)findViewById(R.id.error)).setText("");
-				Php.getInstance(MainActivity.this).sendAction("start");
+				Php.getInstance(MainActivity.this).requestStart();
 			}
 		});
 
 		findViewById(R.id.stop).setOnClickListener(new View.OnClickListener() {
 			public void onClick(View arg0) {
-				Php.getInstance(MainActivity.this).sendAction("stop");
+				Php.getInstance(MainActivity.this).requestStop();
 			}
 		});
 		
 		registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
-		Php.getInstance(MainActivity.this).sendAction("status");
+		Php.getInstance(MainActivity.this).requestStatus();
 	}
 
 	@Override

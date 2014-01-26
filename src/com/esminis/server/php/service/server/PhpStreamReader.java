@@ -1,5 +1,5 @@
 /**
- * Copyright 2013 Tautvydas Andrikys
+ * Copyright 2014 Tautvydas Andrikys
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class StreamReader extends AsyncTask<Object, Void, Void> {
+public class PhpStreamReader extends AsyncTask<InputStream, Void, Void> {
+
+	private Php php = null;
+	private PhpHandler handler = null;
+
+	public PhpStreamReader(Php php, PhpHandler handler) {
+		this.php = php;
+		this.handler = handler;
+	}
 
 	@Override
-	protected Void doInBackground(Object... arguments) {
+	protected Void doInBackground(InputStream... arguments) {
 		BufferedReader reader = new BufferedReader(
-			new InputStreamReader((InputStream)arguments[0])
+			new InputStreamReader(arguments[0])
 		);
 		String line;
 		for (;;) {
@@ -38,9 +46,9 @@ public class StreamReader extends AsyncTask<Object, Void, Void> {
 			if (line == null) {
 				break;
 			}
-			((Php)arguments[1]).sendErrorLine(line);
+			handler.sendError(line);
 		}
-		((Php)arguments[1]).sendAction("stop");
+		php.requestStop();
 		return null;
 	}
 	
