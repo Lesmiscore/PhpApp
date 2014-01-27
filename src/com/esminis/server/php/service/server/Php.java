@@ -64,9 +64,9 @@ public class Php {
 	
 	protected Php(Context context) {
 		this.context = context.getApplicationContext();
-		handler = new PhpHandler(this.context, this);
 		php = new File(context.getFilesDir() + File.separator + "php");		
 		address = getIPAddress() + ":" + preferences.getString(context, Preferences.PORT);
+		handler = new PhpHandler(this.context, this);
 	}
 	
 	private String getIPAddress() {
