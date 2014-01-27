@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="title">Server für PHP</string>
+	<string name="server_running">Server läuft auf %s</string>
+	<string name="server_stopped">Server ist stopped</string>
+	<string name="server_start">Server starten</string>
+	<string name="server_stop">Stoppen server</string>
+	<string name="server_status_updating">Aktualisieren server status…</string>
+	<string name="server_port">Serverport</string>
+	<string name="server_document_root">Dokumentstamm</string>
+	<string name="server_start_on_boot">Starten server beim booten</string>
+	<string name="server_interface">Server adresse</string>
+	<string name="server_installing">Installieren server…</string>
+	<string name="loading_text">Text wird vorbereitet…</string>
+	<string name="close">Schließen</string>
+	<string name="server_install_new_version_question">
+		Neu PHP(%1$s) ist verfügbar zu bauen - willst du es installieren?
+	</string>
+	<string name="error_document_root_does_not_exist">
+		Server kann nicht starten - dokumentstamm existiert nicht
+	</string>
+	<string name="php_build">5.5.7_1</string>
+</resources>
