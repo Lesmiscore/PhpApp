@@ -29,6 +29,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.esminis.server.php.R;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -54,10 +56,10 @@ public class DirectoryChooser extends AlertDialog {
 			TypedValue.COMPLEX_UNIT_DIP, 8, context.getResources().getDisplayMetrics()
 		);
 		setView(listView = new ListView(context));
-		setButton(Dialog.BUTTON_NEUTRAL, "Go up", (OnClickListener)null);
-		setButton(Dialog.BUTTON_NEGATIVE, "Cancel", (OnClickListener)null);
+		setButton(Dialog.BUTTON_NEUTRAL, context.getString(R.string.go_up), (OnClickListener)null);
+		setButton(Dialog.BUTTON_NEGATIVE, context.getString(R.string.cancel), (OnClickListener)null);
 		setButton(
-			Dialog.BUTTON_POSITIVE, "Choose", new OnClickListener() {
+			Dialog.BUTTON_POSITIVE, context.getString(R.string.choose), new OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					if (listener != null) {
 						listener.OnDirectoryChosen(parent);

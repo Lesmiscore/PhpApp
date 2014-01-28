@@ -15,7 +15,6 @@
  */
 package com.esminis.server.php;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -24,9 +23,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -36,8 +37,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -46,6 +45,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.esminis.model.manager.Manager;
+import com.esminis.popup.About;
 import com.esminis.popup.DirectoryChooser;
 import com.esminis.model.manager.Network;
 import com.esminis.server.php.service.server.Php;
@@ -53,7 +53,7 @@ import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.install.InstallServer;
 import java.io.File;
 
-public class MainActivity extends Activity implements InstallServer.OnInstallListener {
+public class MainActivity extends FragmentActivity implements InstallServer.OnInstallListener {
 	
 	private BroadcastReceiver receiver = null;
 	
@@ -322,50 +322,16 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		return true;
 	}
 
-	@SuppressLint("SetJavaScriptEnabled")
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.menu_about) {
-			final View view = getLayoutInflater().inflate(R.layout.about, null);
-			if (view == null) {
-				return false;
+			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+			Fragment previous = getSupportFragmentManager().findFragmentByTag("dialog");
+			if (previous != null) {
+				transaction.remove(previous);
 			}
-			WebView htmlView = (WebView)view.findViewById(R.id.text);
-			if (htmlView == null) {
-				return false;
-			}
-			final Handler handler = new Handler();
-			htmlView.getSettings().setJavaScriptEnabled(true);
-			htmlView.setWebViewClient(new WebViewClient() {
-
-				@Override
-				public void onPageFinished(WebView v, String url) {
-					handler.postDelayed(
-						new Runnable() {
-							public void run() {
-								view.findViewById(R.id.text).setVisibility(View.VISIBLE);
-								view.findViewById(R.id.preloader).setVisibility(View.GONE);
-								view.findViewById(R.id.preloader_container).setVisibility(View.GONE);
-							}
-						}, 1500
-					);
-				}
-				
-				@Override
-				public boolean shouldOverrideUrlLoading(WebView v, String url) {
-					if (v == null || v.getContext() == null) {
-						return false;
-					}
-					v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-					return true;
-				}
-				
-			});
-			htmlView.loadUrl("file:///android_asset/About.html");
-			new AlertDialog.Builder(this)
-				.setNegativeButton(getString(R.string.close), null)
-				.setView(view)
-				.show();
+			transaction.addToBackStack(null);
+			new About().show(transaction, "dialog");
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
