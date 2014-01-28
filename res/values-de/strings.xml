@@ -20,4 +20,17 @@
 		Server kann nicht starten - dokumentstamm existiert nicht
 	</string>
 	<string name="php_build">5.5.7_1</string>
+	<!--string name="choose">Choose</string>
+	<string name="cancel">Cancel</string>
+	<string name="go_up">Go up</string>
+	<string name="about">About</string>
+	<string name="about_content"><![CDATA[<br />This is app has built-in PHP server(the one that is available in PHP since 5.4 version) compiled for Android ARM architecture, and can be started automatically on Android boot.<br /><br />
+		PHP(version 5.5.7) has these modules: Core, date, ereg, libxml, openssl, pcre, sqlite3, zlib, bcmath, bz2, calendar, ctype, curl, dom, hash, fileinfo, filter, ftp, gd, gettext, gmp, SPL, iconv, intl, json, mbstring, mcrypt, session, standard, mysqlnd, mysqli, PDO, pdo_mysql, pdo_sqlite, Phar, posix, pspell, recode, Reflection, mysql, SimpleXML, soap, sockets, exif, tidy, tokenizer, wddx, xml, xmlreader, xmlrpc, xmlwriter, xsl, zip, cli_server, mhash, Zend OPcache<br /><br />
+		Recommended for usage: in development or for very very small websites with very small amount of visitors, couse this server supports only one request at a time.<br /><br />
+		Server document root by default(it can be changed) is sdcard/www so put files there.<br /><br />
+		Edit php.ini, extensions.ini as needed, they are loaded from document root directory.<br /><br />
+		Sorry but standard PHP locales wont work(setlocale and such).<br /><br />
+		<b>Author</b><br /><br />
+		Tautvydas Andrikys<br />]]></string>
+	<string name="licenses">Third party licenses</string-->
 </resources>
