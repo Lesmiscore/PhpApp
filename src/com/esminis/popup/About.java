@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -48,10 +49,20 @@ public class About extends AlertDialog {
 		tab.setContent(new TabHost.TabContentFactory() {
 			@Override
 			public View createTabContent(String tag) {
-				return createLicenses((ViewGroup)view.findViewById(android.R.id.tabcontent));
+				return createLicenses((ViewGroup) view.findViewById(android.R.id.tabcontent));
 			}
 		});
 		tabhost.addTab(tab);
+		int tabCount = tabhost.getTabWidget() == null ? 0 : tabhost.getTabWidget().getTabCount();
+		for (int i = 0; i < tabCount; i++) {
+			View viewTab = tabhost.getTabWidget().getChildTabViewAt(i);
+			if (viewTab != null) {
+				View textView = viewTab.findViewById(android.R.id.title);
+				if (textView != null && textView instanceof TextView) {
+					((TextView)textView).setGravity(Gravity.CENTER);
+				}
+			}
+		}
 		return view;
 	}
 
