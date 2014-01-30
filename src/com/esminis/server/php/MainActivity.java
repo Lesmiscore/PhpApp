@@ -17,6 +17,7 @@ package com.esminis.server.php;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,10 +25,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -53,7 +50,7 @@ import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.install.InstallServer;
 import java.io.File;
 
-public class MainActivity extends FragmentActivity implements InstallServer.OnInstallListener {
+public class MainActivity extends Activity implements InstallServer.OnInstallListener {
 	
 	private BroadcastReceiver receiver = null;
 	
@@ -66,6 +63,8 @@ public class MainActivity extends FragmentActivity implements InstallServer.OnIn
 	private boolean requestResultViewSuccess = false;
 	
 	private boolean paused = true;
+
+	private Dialog dialog = null;
 	
 	private Preferences getPreferences() {
 		if (preferences == null) {
@@ -325,16 +324,24 @@ public class MainActivity extends FragmentActivity implements InstallServer.OnIn
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.menu_about) {
-			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-			Fragment previous = getSupportFragmentManager().findFragmentByTag("dialog");
-			if (previous != null) {
-				transaction.remove(previous);
-			}
-			transaction.addToBackStack(null);
-			new About().show(transaction, "dialog");
+			dialog = new About(this);
+			dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+				@Override
+				public void onDismiss(DialogInterface dialog) {
+					MainActivity.this.dialog = null;
+				}
+			});
+			dialog.show();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		if (dialog != null) {
+			dialog.dismiss();
+		}
+	}
 }
