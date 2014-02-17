@@ -19,7 +19,7 @@
 	<string name="error_document_root_does_not_exist">
 		Cannot start server - document root directory does not exist
 	</string>
-	<string name="php_build">5.5.7_1</string>
+	<string name="php_build">5.5.7_2</string>
 	<string name="choose">Choose</string>
 	<string name="cancel">Cancel</string>
 	<string name="go_up">Go up</string>
