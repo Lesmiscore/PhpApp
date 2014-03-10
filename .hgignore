@@ -1,3 +1,4 @@
 syntax: regexp
 ^(bin|gen|nbandroid|private|obj|out|\.idea)/.*$
 ^libs/armeabi/.*\.so$
+^local\.properties$
