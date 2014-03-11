@@ -28,6 +28,8 @@ import com.esminis.server.php.model.manager.Preferences;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Php {
 	
@@ -73,6 +75,33 @@ public class Php {
 		int position = network.getPosition(preferences.getString(context, Preferences.ADDRESS));
 		return position == -1 ? "0.0.0.0" : network.get(position).address;
 	}
+
+	private String[] getModules() {
+		return new String[] {};
+	}
+
+	private String[] getZendModules() {
+		return new String[] {"opcache.so"};
+	}
+
+	private void addStartupOptions(List<String> options) {
+		String moduleDirectory = context.getFilesDir() + File.separator;
+		List<String> list = new ArrayList<String>();
+		list.add("opcache.enable=1");
+		list.add("opcache.enable_cli=1");
+		String[] modules = getZendModules();
+		for (String module : modules) {
+			list.add("zend_extension=" + moduleDirectory + module);
+		}
+		modules = getModules();
+		for (String module : modules) {
+			list.add("extension=" + moduleDirectory + module);
+		}
+		for (String row : list) {
+			options.add("-d");
+			options.add(row);
+		}
+	}
 	
 	private void start(String root) {
 		if (process != null) {
@@ -84,11 +113,17 @@ public class Php {
 		}
 		try {
 			File file = new File(fileRoot, "php.ini");
+			List<String> options = new ArrayList<String>();
+			options.add(php.getAbsolutePath());
+			options.add("-S");
+			options.add(address);
+			options.add("-t");
+			options.add(root);
+			options.add("-c");
+			options.add(file.exists() ? file.getAbsolutePath() : root);
+			addStartupOptions(options);
 			process = Runtime.getRuntime().exec(
-				new String[] {
-					php.getAbsolutePath(), "-S", address, "-t", root, "-c",
-					file.exists() ? file.getAbsolutePath() : root
-				}, null, fileRoot
+				options.toArray(new String[options.size()]), null, fileRoot
 			);
 			new PhpStreamReader(this, handler).execute(process.getErrorStream());
 		} catch (IOException ignored) {
