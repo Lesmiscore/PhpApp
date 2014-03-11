@@ -85,17 +85,23 @@ public class Php {
 	}
 
 	private void addStartupOptions(List<String> options) {
-		String moduleDirectory = context.getFilesDir() + File.separator;
+		File directory = context.getFilesDir();
 		List<String> list = new ArrayList<String>();
 		list.add("opcache.enable=1");
 		list.add("opcache.enable_cli=1");
 		String[] modules = getZendModules();
 		for (String module : modules) {
-			list.add("zend_extension=" + moduleDirectory + module);
+			File file = new File(directory, module);
+			if (file.exists()) {
+				list.add("zend_extension=" + file.getAbsolutePath());
+			}
 		}
 		modules = getModules();
 		for (String module : modules) {
-			list.add("extension=" + moduleDirectory + module);
+			File file = new File(directory, module);
+			if (file.exists()) {
+				list.add("extension=" + file.getAbsolutePath());
+			}
 		}
 		for (String row : list) {
 			options.add("-d");

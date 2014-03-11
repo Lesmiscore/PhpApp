@@ -153,7 +153,6 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 						variables.put("wwwDirectory", file.getAbsolutePath());
 						variables.put("soDirectory", php.getParentFile().getAbsolutePath());
 						install.preprocessFile(new File(file, "php.ini"), variables);
-						install.preprocessFile(new File(file, "extensions.ini"), variables);
 					} catch (IOException ignored) {}
 				}
 			}
