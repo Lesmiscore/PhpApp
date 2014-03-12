@@ -26,7 +26,9 @@ import com.esminis.server.php.R;
 import com.esminis.model.manager.Network;
 import com.esminis.server.php.model.manager.Preferences;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,22 +86,63 @@ public class Php {
 		return new String[] {"opcache.so"};
 	}
 
-	private void addStartupOptions(List<String> options) {
-		File directory = context.getFilesDir();
+	private List<String> getIniModules(File iniDirectory) {
 		List<String> list = new ArrayList<String>();
-		list.add("opcache.enable=1");
-		list.add("opcache.enable_cli=1");
+		File[] files = iniDirectory.listFiles();
+		if (files != null) {
+			for (File file : files) {
+				if (file.getName().endsWith(".ini")) {
+					list.addAll(getIniModulesFromFile(file));
+				}
+			}
+		}
+		return list;
+	}
+
+	private List<String> getIniModulesFromFile(File file) {
+		List<String> list = new ArrayList<String>();
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader(file));
+			String line;
+			while ((line = reader.readLine()) != null) {
+				if (line.contains("#") || line.contains(";")) {
+					continue;
+				}
+				if (line.contains("extension")) {
+					File fileTemp = new File(
+						line.replaceAll("^[^#]*(zend_extension|extension).*=(.+\\.so).*$", "$2").trim()
+					);
+					list.add(fileTemp.getName().toLowerCase());
+				}
+			}
+			reader.close();
+		} catch (IOException ignored) {
+		} finally {
+			try {
+				if (reader != null) {
+					reader.close();
+				}
+			} catch (IOException ignored) {}
+		}
+		return list;
+	}
+
+	private void addStartupOptions(List<String> options, File iniDirectory) {
+		File directory = context.getFilesDir();
+		List<String> iniModules = getIniModules(iniDirectory);
+		List<String> list = new ArrayList<String>();
 		String[] modules = getZendModules();
 		for (String module : modules) {
 			File file = new File(directory, module);
-			if (file.exists()) {
+			if (file.exists() && !iniModules.contains(file.getName().toLowerCase())) {
 				list.add("zend_extension=" + file.getAbsolutePath());
 			}
 		}
 		modules = getModules();
 		for (String module : modules) {
 			File file = new File(directory, module);
-			if (file.exists()) {
+			if (file.exists() && !iniModules.contains(file.getName().toLowerCase())) {
 				list.add("extension=" + file.getAbsolutePath());
 			}
 		}
@@ -118,16 +161,13 @@ public class Php {
 			handler.sendError(context.getString(R.string.error_document_root_does_not_exist));
 		}
 		try {
-			File file = new File(fileRoot, "php.ini");
 			List<String> options = new ArrayList<String>();
 			options.add(php.getAbsolutePath());
 			options.add("-S");
 			options.add(address);
 			options.add("-t");
 			options.add(root);
-			options.add("-c");
-			options.add(file.exists() ? file.getAbsolutePath() : root);
-			addStartupOptions(options);
+			addStartupOptions(options, fileRoot);
 			process = Runtime.getRuntime().exec(
 				options.toArray(new String[options.size()]), null, fileRoot
 			);
