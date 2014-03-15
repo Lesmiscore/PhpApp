@@ -24,6 +24,7 @@ import com.esminis.model.manager.Manager;
 import com.esminis.model.manager.Process;
 import com.esminis.server.php.R;
 import com.esminis.model.manager.Network;
+import com.esminis.server.php.model.manager.Log;
 import com.esminis.server.php.model.manager.Preferences;
 
 import java.io.BufferedReader;
@@ -227,6 +228,11 @@ public class Php {
 		} else {
 			start = true;
 		}
+	}
+
+	public void requestRestart() {
+		requestStop();
+		requestStart();
 	}
 
 	void onHandlerReady() {
