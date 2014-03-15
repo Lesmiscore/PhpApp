@@ -18,7 +18,7 @@
 		/>
 	</LinearLayout>
 	<RelativeLayout 
-		android:id="@+id/container" android:visibility="gone"
+		android:id="@+id/container"
 		android:layout_width="match_parent" android:layout_height="match_parent"
 		android:focusable="true" android:focusableInTouchMode="true"
 	>
@@ -26,7 +26,7 @@
 		<LinearLayout		
 			android:layout_width="match_parent" android:layout_height="wrap_content"
 			android:orientation="vertical" android:padding="10dp"
-		>
+			android:id="@+id/linearLayout2">
 			<RelativeLayout 
 				android:layout_width="match_parent" android:layout_height="wrap_content"
 			>
@@ -79,18 +79,18 @@
 				/>
 			</RelativeLayout>
 		</LinearLayout>
+		<TextView
+			android:id="@+id/error"
+			android:layout_width="match_parent" android:layout_height="wrap_content"
+			android:textSize="12sp"
+			android:layout_above="@+id/linearLayout" android:layout_below="@+id/linearLayout2"
+			android:layout_margin="10dp" android:gravity="bottom"/>
 		<LinearLayout
 			android:layout_width="match_parent" android:layout_height="wrap_content"
 			android:orientation="vertical" android:padding="10dp"
 			android:layout_alignParentBottom="true"
-		>
-			<TextView 
-				android:id="@+id/error"
-				android:layout_width="match_parent" android:layout_height="wrap_content"
-				android:gravity="center" android:textColor="#FF0000" 
-				android:maxLines="4" android:textSize="10sp"
-			/>
-			<TextView 
+			android:id="@+id/linearLayout">
+			<TextView
 				android:id="@+id/label"
 				android:layout_width="match_parent" android:layout_height="wrap_content"
 				android:text="@string/server_status_updating" android:gravity="center"

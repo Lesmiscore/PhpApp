@@ -26,7 +26,9 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Spannable;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -80,7 +82,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		setContentView(R.layout.main);		
 		if (savedInstanceState != null) {
 			TextView text = (TextView)findViewById(R.id.error);
-			text.setText(savedInstanceState.getString("errors"));
+			text.setText(savedInstanceState.getCharSequence("errors"));
 		}
 		InstallServer.getInstance(this).installIfNeeded(this);
 		findViewById(R.id.container).setOnTouchListener(new View.OnTouchListener() {
@@ -100,7 +102,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		super.onSaveInstanceState(outState);
 		TextView view = (TextView)findViewById(R.id.error);
 		if (view != null && view.getText() != null) {
-			outState.putString("errors", view.getText().toString());
+			outState.putCharSequence("errors", view.getText());
 		}
 	}
 	
@@ -251,19 +253,23 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 					Bundle extras = intent.getExtras();
 					if (extras != null && extras.containsKey("errorLine")) {
 						TextView text = (TextView)findViewById(R.id.error);
-						text.append(
-							(text.getText() != null && text.getText().length() > 0 ? "\n" : "") +
-								extras.getString("errorLine")
+						String message = extras.getString("errorLine");
+						Spannable textLine = new Spannable.Factory().newSpannable(message);
+						textLine.setSpan(
+							new ForegroundColorSpan(
+								message.matches("^.+: /[^ ]*$") ? Color.rgb(0, 0x66, 0) : Color.RED
+							), 0, message.length(), 0
 						);
+						text.append(text.getText() != null && text.getText().length() > 0 ? "\n" : "");
+						text.append(textLine);
+						text.scrollTo(0, (text.getLineHeight() * text.getLineCount()) - text.getHeight());
 					} else {
 						findViewById(R.id.start).setVisibility(View.GONE);
 						findViewById(R.id.stop).setVisibility(View.GONE);
 						if (extras != null && extras.getBoolean("running")) {
 							findViewById(R.id.stop).setVisibility(View.VISIBLE);
 							setLabel(
-								String.format(
-									getString(R.string.server_running), extras.getString("address")
-								)
+								String.format(getString(R.string.server_running), extras.getString("address"))
 							);
 						} else {
 							findViewById(R.id.start).setVisibility(View.VISIBLE);
