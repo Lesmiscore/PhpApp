@@ -26,9 +26,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Spannable;
 import android.text.TextWatcher;
-import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,6 +46,7 @@ import com.esminis.model.manager.Manager;
 import com.esminis.popup.About;
 import com.esminis.popup.DirectoryChooser;
 import com.esminis.model.manager.Network;
+import com.esminis.server.php.model.manager.Log;
 import com.esminis.server.php.service.server.Php;
 import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.install.InstallServer;
@@ -123,6 +122,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		}
 		Php.getInstance(MainActivity.this).requestStatus();
 		findViewById(R.id.container).requestFocus();
+		resetLog();
 	}
 
 	@Override
@@ -252,17 +252,9 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 				if (intent.getAction() != null && intent.getAction().equals(Php.INTENT_ACTION)) {
 					Bundle extras = intent.getExtras();
 					if (extras != null && extras.containsKey("errorLine")) {
-						TextView text = (TextView)findViewById(R.id.error);
 						String message = extras.getString("errorLine");
-						Spannable textLine = new Spannable.Factory().newSpannable(message);
-						textLine.setSpan(
-							new ForegroundColorSpan(
-								message.matches("^.+: /[^ ]*$") ? Color.rgb(0, 0x66, 0) : Color.RED
-							), 0, message.length(), 0
-						);
-						text.append(text.getText() != null && text.getText().length() > 0 ? "\n" : "");
-						text.append(textLine);
-						text.scrollTo(0, (text.getLineHeight() * text.getLineCount()) - text.getHeight());
+						Manager.get(Log.class).add(context, message, !message.matches("^.+: /[^ ]*$"));
+						resetLog();
 					} else {
 						findViewById(R.id.start).setVisibility(View.GONE);
 						findViewById(R.id.stop).setVisibility(View.GONE);
@@ -289,13 +281,21 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		});
 
 		findViewById(R.id.stop).setOnClickListener(new View.OnClickListener() {
-			public void onClick(View arg0) {
+			public void onClick(View view) {
 				Php.getInstance(MainActivity.this).requestStop();
+				Manager.get(Log.class).clear(view.getContext());
+				resetLog();
 			}
 		});
 		
 		registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
 		Php.getInstance(MainActivity.this).requestStatus();
+	}
+
+	private void resetLog() {
+		TextView text = (TextView)findViewById(R.id.error);
+		text.setText(Manager.get(Log.class).get(this));
+		text.scrollTo(0, (text.getLineHeight() * text.getLineCount()) - text.getHeight());
 	}
 
 	@Override
