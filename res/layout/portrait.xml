@@ -18,9 +18,12 @@
 		/>
 	</LinearLayout>
 	<RelativeLayout 
-		android:id="@+id/container" android:visibility="gone"
+		android:id="@+id/container"
 		android:layout_width="fill_parent" android:layout_height="fill_parent"
-	>
+		android:focusable="true" android:focusableInTouchMode="true"
+		android:descendantFocusability="beforeDescendants"
+		>
+		<requestFocus />
 		<LinearLayout		
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:orientation="vertical" android:padding="10dp"

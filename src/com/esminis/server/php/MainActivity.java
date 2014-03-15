@@ -31,6 +31,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -82,6 +83,15 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 			text.setText(savedInstanceState.getString("errors"));
 		}
 		InstallServer.getInstance(this).installIfNeeded(this);
+		findViewById(R.id.container).setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View view, MotionEvent event) {
+				view.requestFocus();
+				((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE))
+					.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+				return true;
+			}
+		});
 	}
 
 	@SuppressWarnings("NullableProblems")
@@ -110,6 +120,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 			registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
 		}
 		Php.getInstance(MainActivity.this).requestStatus();
+		findViewById(R.id.container).requestFocus();
 	}
 
 	@Override
