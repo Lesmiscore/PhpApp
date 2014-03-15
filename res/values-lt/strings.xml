@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="title">Serveris skirtas PHP</string>
+	<string name="server_running">Serveris veikia adresu %s</string>
+	<string name="server_stopped">Serveris sustabdytas</string>
+	<string name="server_start">Paleisti serverį</string>
+	<string name="server_stop">Sustabdyti serverį</string>
+	<string name="server_status_updating">Atnaujinamas serverio statusas…</string>
+	<string name="server_port">Prievadas</string>
+	<string name="server_document_root">Pagrindinis katalogas</string>
+	<string name="server_start_on_boot">Paleisti serverį įjungiant įrenginį</string>
+	<string name="server_interface">Serverio adresas</string>
+	<string name="server_installing">Serveris instaliuojamas…</string>
+	<string name="loading_text">Kraunamas tekstas…</string>
+	<string name="close">Uždaryti</string>
+	<string name="server_install_new_version_question">
+		Yra nauja PHP versija(%1$s), ar norite ją įdiegti?
+	</string>
+	<string name="error_document_root_does_not_exist">
+		Negalima paleisti serverio - pagrindinis katalogas neegzistuoja
+	</string>
+	<string name="choose">Pasirinkti</string>
+	<string name="cancel">Atsisakyti</string>
+	<string name="go_up">Aukštyn</string>
+	<string name="about">Apie</string>
+	<string name="about_content"><![CDATA[<br />Tai yra visai nemokama ir atviro kodo aplikacija, kuri veikia naudodama PHP standartinį serverį, ir gali būti paleista automatiškai paleidžiant įrenginį.<br /><br />
+		PHP(versija 5.5.10) turi šiuos modulius: Core, date, ereg, libxml, openssl, pcre, sqlite3, zlib, bcmath, bz2, calendar, ctype, curl, dom, hash, fileinfo, filter, ftp, gd, gettext, gmp, SPL, iconv, intl, json, mbstring, mcrypt, session, standard, mysqlnd, mysqli, PDO, pdo_mysql, pdo_sqlite, Phar, posix, pspell, recode, Reflection, mysql, SimpleXML, soap, sockets, exif, tidy, tokenizer, wddx, xml, xmlreader, xmlrpc, xmlwriter, xsl, zip, cli_server, mhash, ssh2, Zend OPcache<br /><br />
+		Rekomenduoajam naudoti: programavimui arba labai mažiems tinklapiams su labai mažai lankytojų, nes serveris palaiko tik vieną užklausą vienu metu.<br /><br />
+		Serverio šakninis katalogas pagal nutylėjimą(gali būti pakeistas) yra sdcard/www taigi dėkte failus į tą katalogą.<br /><br />
+		Galite koreguoti serverio nustatymus php.ini faile kuris yra serverio šakninėje direktorijoje.<br /><br />
+		Standartinės PHP lokalės neveikia(setlocale ir pan.).<br /><br />
+		<b>Autorius</b><br /><br />
+		Tautvydas Andrikys<br />]]></string>
+	<string name="licenses">Trečių šalių licenzijos</string>
+</resources>
