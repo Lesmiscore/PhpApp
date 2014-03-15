@@ -252,8 +252,6 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 				if (intent.getAction() != null && intent.getAction().equals(Php.INTENT_ACTION)) {
 					Bundle extras = intent.getExtras();
 					if (extras != null && extras.containsKey("errorLine")) {
-						String message = extras.getString("errorLine");
-						Manager.get(Log.class).add(context, message, !message.matches("^.+: /[^ ]*$"));
 						resetLog();
 					} else {
 						findViewById(R.id.start).setVisibility(View.GONE);

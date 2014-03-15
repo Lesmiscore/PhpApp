@@ -248,8 +248,10 @@ public class Php {
 			return;
 		}
 		if (data.get("action").equals("error")) {
+			String line = data.getString("message");
+			Manager.get(Log.class).add(context, line, !line.matches("^.+: /[^ ]*$"));
 			Intent intent = new Intent(INTENT_ACTION);
-			intent.putExtra("errorLine", data.getString("message"));
+			intent.putExtra("errorLine", line);
 			context.sendBroadcast(intent);
 			return;
 		}
