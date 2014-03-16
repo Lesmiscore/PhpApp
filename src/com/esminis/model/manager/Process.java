@@ -36,9 +36,7 @@ public class Process extends com.esminis.model.manager.Manager<Void> {
 				if (file.isDirectory()) {
 					try {
 						int pid = Integer.parseInt(file.getName());
-						File fileCommandLine = new File(
-							file.getAbsolutePath() + File.separator + "cmdline"
-						);
+						File fileCommandLine = new File(file.getAbsolutePath(), "cmdline");
 						if (!fileCommandLine.isFile() || !fileCommandLine.canRead()) {
 							continue;
 						}
@@ -68,6 +66,11 @@ public class Process extends com.esminis.model.manager.Manager<Void> {
 		return null;
 	}
 	
+	public int getPid(File command) {
+		String[] commandLine = find(command);
+		return commandLine == null ? -1 : Integer.parseInt(commandLine[0]);
+	}
+
 	public String[] getCommandLine(File command) {
 		String[] commandLine = find(command);
 		if (commandLine == null) {
