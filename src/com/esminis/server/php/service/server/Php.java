@@ -27,12 +27,8 @@ import com.esminis.model.manager.Network;
 import com.esminis.server.php.model.manager.Log;
 import com.esminis.server.php.model.manager.Preferences;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Php {
 	
@@ -43,6 +39,8 @@ public class Php {
 	private java.lang.Process process = null;
 	
 	private File php = null;
+
+	private File modulesDirectory = null;
 	
 	private String address = "";
 	
@@ -56,22 +54,22 @@ public class Php {
 
 	private Context context = null;
 
+	private PhpStartup startup = new PhpStartup();
+
 	static public Php getInstance(Context context) {
-		if (instance == null) {
-			instance = new Php(context);
-		}
-		return instance;
-	}
-	
-	public File getPhp() {
-		return php;
+		return instance == null ? instance = new Php(context) : instance;
 	}
 	
 	protected Php(Context context) {
 		this.context = context.getApplicationContext();
-		php = new File(context.getFilesDir() + File.separator + "php");		
+		modulesDirectory = context.getFilesDir();
+		php = new File(modulesDirectory, "php");
 		address = getIPAddress() + ":" + preferences.getString(context, Preferences.PORT);
 		handler = new PhpHandler(this.context, this);
+	}
+
+	public File getPhp() {
+		return php;
 	}
 	
 	private String getIPAddress() {
@@ -79,80 +77,6 @@ public class Php {
 		return position == -1 ? "0.0.0.0" : network.get(position).address;
 	}
 
-	private String[] getModules() {
-		return new String[] {};
-	}
-
-	private String[] getZendModules() {
-		return new String[] {"opcache.so"};
-	}
-
-	private List<String> getIniModules(File iniDirectory) {
-		List<String> list = new ArrayList<String>();
-		File[] files = iniDirectory.listFiles();
-		if (files != null) {
-			for (File file : files) {
-				if (file.getName().endsWith(".ini")) {
-					list.addAll(getIniModulesFromFile(file));
-				}
-			}
-		}
-		return list;
-	}
-
-	private List<String> getIniModulesFromFile(File file) {
-		List<String> list = new ArrayList<String>();
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new FileReader(file));
-			String line;
-			while ((line = reader.readLine()) != null) {
-				if (line.contains("#") || line.contains(";")) {
-					continue;
-				}
-				if (line.contains("extension")) {
-					File fileTemp = new File(
-						line.replaceAll("^[^#]*(zend_extension|extension).*=(.+\\.so).*$", "$2").trim()
-					);
-					list.add(fileTemp.getName().toLowerCase());
-				}
-			}
-			reader.close();
-		} catch (IOException ignored) {
-		} finally {
-			try {
-				if (reader != null) {
-					reader.close();
-				}
-			} catch (IOException ignored) {}
-		}
-		return list;
-	}
-
-	private void addStartupOptions(List<String> options, File iniDirectory) {
-		File directory = context.getFilesDir();
-		List<String> iniModules = getIniModules(iniDirectory);
-		List<String> list = new ArrayList<String>();
-		String[] modules = getZendModules();
-		for (String module : modules) {
-			File file = new File(directory, module);
-			if (file.exists() && !iniModules.contains(file.getName().toLowerCase())) {
-				list.add("zend_extension=" + file.getAbsolutePath());
-			}
-		}
-		modules = getModules();
-		for (String module : modules) {
-			File file = new File(directory, module);
-			if (file.exists() && !iniModules.contains(file.getName().toLowerCase())) {
-				list.add("extension=" + file.getAbsolutePath());
-			}
-		}
-		for (String row : list) {
-			options.add("-d");
-			options.add(row);
-		}
-	}
-	
 	private void start(String root) {
 		if (process != null) {
 			return;
@@ -162,20 +86,14 @@ public class Php {
 			handler.sendError(context.getString(R.string.error_document_root_does_not_exist));
 		}
 		try {
-			List<String> options = new ArrayList<String>();
-			options.add(php.getAbsolutePath());
-			options.add("-S");
-			options.add(address);
-			options.add("-t");
-			options.add(root);
-			addStartupOptions(options, fileRoot);
-			process = Runtime.getRuntime().exec(
-				options.toArray(new String[options.size()]), null, fileRoot
+			process = startup.start(
+				php, address, root, modulesDirectory, fileRoot,
+				new String[] {}, new String[] {"opcache.so"}
 			);
 			new PhpStreamReader(this, handler).execute(process.getErrorStream());
-		} catch (IOException ignored) {
+		} catch (IOException error) {
 			if (process == null) {
-				handler.sendError(ignored.getCause().getMessage());
+				handler.sendError(error.getCause().getMessage());
 			}
 		}
 	}
@@ -235,24 +153,26 @@ public class Php {
 		requestStart();
 	}
 
-	void onHandlerReady() {
+	protected void onHandlerReady() {
 		status();
 		if (start) {
 			requestStart();
 		}
 	}
 
-	void onHandlerMessage(Message message) {
+	protected void onHandlerMessage(Message message) {
 		Bundle data = message.getData();
 		if (data == null) {
 			return;
 		}
 		if (data.get("action").equals("error")) {
 			String line = data.getString("message");
-			Manager.get(Log.class).add(context, line, !line.matches("^.+: /[^ ]*$"));
-			Intent intent = new Intent(INTENT_ACTION);
-			intent.putExtra("errorLine", line);
-			context.sendBroadcast(intent);
+			if (line != null) {
+				Manager.get(Log.class).add(context, line, !line.matches("^.+: /[^ ]*$"));
+				Intent intent = new Intent(INTENT_ACTION);
+				intent.putExtra("errorLine", line);
+				context.sendBroadcast(intent);
+			}
 			return;
 		}
 		if (data.get("action").equals("start")) {
