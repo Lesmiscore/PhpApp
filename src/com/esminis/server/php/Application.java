@@ -5,10 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.view.View;
-
-import com.esminis.model.manager.Manager;
-import com.esminis.server.php.model.manager.Log;
 import com.esminis.server.php.service.server.Php;
 
 public class Application extends android.app.Application {
@@ -24,12 +20,11 @@ public class Application extends android.app.Application {
 					Bundle extras = intent.getExtras();
 					if (extras != null && extras.containsKey("errorLine")) {
 						return;
-					} else {
-						if (extras != null && extras.getBoolean("running")) {
-							Php.getInstance(context).requestRestart();
-						}
-						unregisterReceiver(this);
 					}
+					if (extras != null && extras.getBoolean("running")) {
+						Php.getInstance(context).requestRestart();
+					}
+					unregisterReceiver(this);
 				}
 			}
 
