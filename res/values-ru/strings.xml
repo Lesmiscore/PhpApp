@@ -2,7 +2,7 @@
 <resources>
 	<string name="title">Сервер для PHP</string>
 	<string name="server_running">Сервер работает по адресу %s</string>
-	<string name="server_stopped">Сервер oстановлeныЙ</string>
+	<string name="server_stopped">Сервер oстановлeный</string>
 	<string name="server_start">Запустить cервер</string>
 	<string name="server_stop">Остановить cервер</string>
 	<string name="server_status_updating">Обновление cтaтyc cepвepa…</string>
