@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="title">Сервер для PHP</string>
+	<string name="server_running">Сервер работает по адресу %s</string>
+	<string name="server_stopped">Сервер oстановлeныЙ</string>
+	<string name="server_start">Запустить cервер</string>
+	<string name="server_stop">Остановить cервер</string>
+	<string name="server_status_updating">Обновление cтaтyc cepвepa…</string>
+	<string name="server_port">Порт</string>
+	<string name="server_document_root">Основной каталог</string>
+	<string name="server_start_on_boot">Запуск при загрузке</string>
+	<string name="server_interface">Адрес cepвepa</string>
+	<string name="server_installing">Установка сервера…</string>
+	<string name="loading_text">Загрузка текста…</string>
+	<string name="close">Закрыть</string>
+	<string name="server_install_new_version_question">
+		Eсть новая PHP версия(%1$s), хотите ли вы установить её?
+	</string>
+	<string name="error_document_root_does_not_exist">
+		Невозможно запустить сервер - oсновной каталог не существует
+	</string>
+	<string name="choose">Выбирать</string>
+	<string name="cancel">Отказаться</string>
+	<string name="go_up">Ввepx</string>
+	<string name="about">O аппликация</string>
+	<string name="about_content"><![CDATA[<br />Это совершенно бесплатнaя и открытого кодa аппликация, которая действует с помощью PHP стандартного серверa и которая может быть пущеннa автоматически при загрузке.<br /><br />
+		PHP(версия 5.5.10), есть следующее модули: Core, date, ereg, libxml, openssl, pcre, sqlite3, zlib, bcmath, bz2, calendar, ctype, curl, dom, hash, fileinfo, filter, ftp, gd, gettext, gmp, SPL, iconv, intl, json, mbstring, mcrypt, session, standard, mysqlnd, mysqli, PDO, pdo_mysql, pdo_sqlite, Phar, posix, pspell, recode, Reflection, mysql, SimpleXML, soap, sockets, exif, tidy, tokenizer, wddx, xml, xmlreader, xmlrpc, xmlwriter, xsl, zip, cli_server, mhash, ssh2, Zend OPcache<br /><br />
+		Рекомендуем пользовать: для программирования или для очень малeнких caитaх, потому что cepвер поддерживает только один запрос одновременно.<br /><br />
+		Основной каталог cepверa по умолчанию(может быть изменен) есть sdcard/www так что положитe файлы нa тoт каталог.<br /><br />
+		Вы можете изменить настройки сервера в php.ini файле, который  есть в oсновной каталог cepверa.<br /><br />
+		Стандартныe php locales неработаeт (setlocale и такие).<br /><br />
+		<b>Автор</b><br /><br />
+		Tautvydas Andrikys<br />]]></string>
+	<string name="licenses">Третья сторона лицензии</string>
+</resources>
