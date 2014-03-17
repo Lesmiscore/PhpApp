@@ -24,7 +24,7 @@
 	<string name="go_up">Steigen</string>
 	<string name="about">Über</string>
 	<string name="about_content"><![CDATA[<br />Es ist gesamt frei und offen app es arbeitet mit PHP intergrierten Server und kann automatisch beim booten gestartet werden.<br /><br />
-		PHP(version 5.5.10) hat diese Module: Core, date, ereg, libxml, openssl, pcre, sqlite3, zlib, bcmath, bz2, calendar, ctype, curl, dom, hash, fileinfo, filter, ftp, gd, gettext, gmp, SPL, iconv, intl, json, mbstring, mcrypt, session, standard, mysqlnd, mysqli, PDO, pdo_mysql, pdo_sqlite, Phar, posix, pspell, recode, Reflection, mysql, SimpleXML, soap, sockets, exif, tidy, tokenizer, wddx, xml, xmlreader, xmlrpc, xmlwriter, xsl, zip, cli_server, mhash, ssh2, Zend OPcache<br /><br />
+		PHP(version %1$s) hat diese Module: Core, date, ereg, libxml, openssl, pcre, sqlite3, zlib, bcmath, bz2, calendar, ctype, curl, dom, hash, fileinfo, filter, ftp, gd, gettext, gmp, SPL, iconv, intl, json, mbstring, mcrypt, session, standard, mysqlnd, mysqli, PDO, pdo_mysql, pdo_sqlite, Phar, posix, pspell, recode, Reflection, mysql, SimpleXML, soap, sockets, exif, tidy, tokenizer, wddx, xml, xmlreader, xmlrpc, xmlwriter, xsl, zip, cli_server, mhash, ssh2, Zend OPcache<br /><br />
 		Empfehlung für verwendung: in der Entwicklung oder für sehr kleine Websites mit einer kleinen Menge von Besuchern, weil dieser Server unterstützt nur eine Anforderung zu einem Zeitpunkt. Zum Beispiel verwenden mit Android mini PC als Hauptentwicklungsserver von kleinen Projekten.<br /><br />
 		Dokumentstamm ist standardmäßig /sdcard/www (es kann man andern), deshalb setzen Sie Dateien hier.<br /><br />
 		Bearbeiten php.ini nach Bedarf, sie sind aus Dokumentstamm geladenen.<br /><br />

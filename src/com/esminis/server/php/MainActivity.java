@@ -300,7 +300,10 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 	public void OnInstallNewVersionRequest(final InstallServer installer) {
 		AlertDialog dialog = new AlertDialog.Builder(this)
 			.setMessage(
-				getString(R.string.server_install_new_version_question, getString(R.string.php_build))
+				getString(
+					R.string.server_install_new_version_question, Manager.get(Preferences.class)
+						.getPhpBuild(this)
+				)
 			)
 			.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 				@Override

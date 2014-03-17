@@ -69,7 +69,13 @@ public class About extends AlertDialog {
 	private View createMain(ViewGroup container) {
 		TextView view = (TextView)getLayoutInflater().inflate(R.layout.about_main, container, false);
 		if (view != null) {
-			view.setText(Html.fromHtml(getContext().getString(R.string.about_content)));
+			view.setText(
+				Html.fromHtml(
+					getContext().getString(
+						R.string.about_content, getContext().getString(R.string.php_version)
+					)
+				)
+			);
 			view.setMovementMethod(new ScrollingMovementMethod());
 		}
 		return view;

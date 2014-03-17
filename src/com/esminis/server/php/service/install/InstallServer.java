@@ -72,10 +72,7 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 		}
 		File file = Php.getInstance(context).getPhp();
 		if (file.isFile()) {
-			if (
-				!Manager.get(Preferences.class).getString(context, Preferences.PHP_BUILD)
-					.equals(context.getString(R.string.php_build))
-			) {
+			if (!Manager.get(Preferences.class).getIsSameBuild(context)) {
 				if (listener != null) {
 					listener.OnInstallNewVersionRequest(this);
 				}
@@ -181,7 +178,7 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 		} catch (IOException ignored) {
 			return false;
 		}
-		preferences.set(context, Preferences.PHP_BUILD, context.getString(R.string.php_build));
+		preferences.set(context, Preferences.PHP_BUILD, preferences.getPhpBuild(context));
 		return true;
 	}
 
