@@ -21,7 +21,7 @@ abstract public class Manager<T> {
 
 	private Class<T> modelClass = null;
 
-	static private Manager<? extends Manager> instance = null;
+	static private Manager instance = null;
 
 	private Class<T> getModelClass() {
 		if (modelClass == null) {
