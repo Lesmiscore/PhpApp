@@ -87,12 +87,17 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		findViewById(R.id.container).setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View view, MotionEvent event) {
-				view.requestFocus();
-				((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE))
-					.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+				removeFocus();
 				return true;
 			}
 		});
+	}
+
+	private void removeFocus() {
+		View view = findViewById(R.id.container);
+		view.requestFocus();
+		((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE))
+			.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
 	}
 
 	@SuppressWarnings("NullableProblems")
@@ -121,8 +126,8 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 			registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
 		}
 		Php.getInstance(MainActivity.this).requestStatus();
-		findViewById(R.id.container).requestFocus();
 		resetLog();
+		removeFocus();
 	}
 
 	@Override
@@ -149,6 +154,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		findViewById(R.id.preloader).setVisibility(View.GONE);
 		findViewById(R.id.preloader_container).setVisibility(View.GONE);
 		findViewById(R.id.container).setVisibility(View.VISIBLE);
+		removeFocus();
 	}
 	
 	private void startup() {
