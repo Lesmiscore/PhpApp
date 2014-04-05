@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="title">Server für PHP</string>
-	<string name="server_running">Server läuft auf %s</string>
+	<string name="server_running"><![CDATA[Server läuft auf <a href="http://%1$s">%s</a>]]></string>
 	<string name="server_stopped">Server ist stopped</string>
 	<string name="server_start">Server starten</string>
 	<string name="server_stop">Stoppen Server</string>
@@ -9,6 +9,7 @@
 	<string name="server_port">Serverport</string>
 	<string name="server_document_root">Dokumentstamm</string>
 	<string name="server_start_on_boot">Starten Server beim booten</string>
+	<string name="server_keep_running">Hör nicht auf Sie Server, wenn App wird gestoppt</string>
 	<string name="server_interface">Server Adresse</string>
 	<string name="server_installing">Installieren Server…</string>
 	<string name="loading_text">Text wird vorbereitet…</string>

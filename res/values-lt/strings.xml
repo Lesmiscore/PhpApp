@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="title">Serveris skirtas PHP</string>
-	<string name="server_running">Serveris veikia adresu %s</string>
+	<string name="server_running"><![CDATA[Serveris veikia adresu <a href="http://%1$s">%s</a>]]></string>
 	<string name="server_stopped">Serveris sustabdytas</string>
 	<string name="server_start">Paleisti serverį</string>
 	<string name="server_stop">Sustabdyti serverį</string>
@@ -9,6 +9,7 @@
 	<string name="server_port">Prievadas</string>
 	<string name="server_document_root">Pagrindinis katalogas</string>
 	<string name="server_start_on_boot">Paleisti serverį įjungiant įrenginį</string>
+	<string name="server_keep_running">Nestabdyti serverio jei aplikacija išjungta</string>
 	<string name="server_interface">Serverio adresas</string>
 	<string name="server_installing">Serveris instaliuojamas…</string>
 	<string name="loading_text">Kraunamas tekstas…</string>
