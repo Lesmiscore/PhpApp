@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="title">Сервер для PHP</string>
-	<string name="server_running">Сервер работает по адресу %s</string>
+	<string name="server_running"><![CDATA[Сервер работает по адресу <a href="http://%1$s">%s</a>]]></string>
 	<string name="server_stopped">Сервер oстановлeный</string>
 	<string name="server_start">Запустить cервер</string>
 	<string name="server_stop">Остановить cервер</string>
@@ -9,6 +9,7 @@
 	<string name="server_port">Порт</string>
 	<string name="server_document_root">Основной каталог</string>
 	<string name="server_start_on_boot">Запуск при загрузке</string>
+	<string name="server_keep_running">Не останавливат сервера если аппликация выключена</string>
 	<string name="server_interface">Адрес cepвepa</string>
 	<string name="server_installing">Установка сервера…</string>
 	<string name="loading_text">Загрузка текста…</string>
