@@ -71,6 +71,11 @@
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:text="@string/server_start_on_boot" 
 			/>
+			<CheckBox
+				android:id="@+id/server_keep_running"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:text="@string/server_keep_running"
+				/>
 		</LinearLayout>
 		<TextView
 			android:id="@+id/error"

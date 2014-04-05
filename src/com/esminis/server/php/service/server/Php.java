@@ -56,6 +56,8 @@ public class Php {
 
 	private PhpStartup startup = new PhpStartup();
 
+	private PhpStreamReader streamReader = null;
+
 	static public Php getInstance(Context context) {
 		return instance == null ? instance = new Php(context) : instance;
 	}
@@ -88,9 +90,11 @@ public class Php {
 		try {
 			process = startup.start(
 				php, address, root, modulesDirectory, fileRoot,
+				preferences.getBoolean(context, Preferences.KEEP_RUNNING),
 				new String[] {}, new String[] {"opcache.so"}
 			);
-			new PhpStreamReader(this, handler).execute(process.getErrorStream());
+			streamReader = new PhpStreamReader(this, handler);
+			streamReader.execute(process.getErrorStream());
 		} catch (IOException error) {
 			if (process == null) {
 				handler.sendError(error.getCause().getMessage());
@@ -99,6 +103,10 @@ public class Php {
 	}
 
 	private void stop() {
+		if (streamReader != null) {
+			streamReader.cancel(false);
+			streamReader = null;
+		}
 		if (process != null) {
 			process.destroy();
 			process = null;

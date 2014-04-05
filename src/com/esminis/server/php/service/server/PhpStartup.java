@@ -106,21 +106,23 @@ public class PhpStartup {
 
 	public Process start(
 		File php, String address, String root, File moduleDirectory, File documentRoot,
-		String[] modules, String[] modulesZend
+		boolean keepRunning, String[] modules, String[] modulesZend
 	) throws IOException {
 		Process process = Runtime.getRuntime().exec(
 			createCommand(php, address, root, moduleDirectory, documentRoot, modules, modulesZend), null,
 			documentRoot
 		);
-		int pid = new com.esminis.model.manager.Process().getPid(php);
-		if (pid > 0) {
-			Runtime.getRuntime().exec(
-				new String[]{
-					"/system/bin/sh", "-c",
-					"while [ -d /proc/" + android.os.Process.myPid() + " ] && [ -d /proc/" + pid + " ];" +
-						"do sleep 5;done; kill -9 " + pid
-				}
-			);
+		if (!keepRunning) {
+			int pid = new com.esminis.model.manager.Process().getPid(php);
+			if (pid > 0) {
+				Runtime.getRuntime().exec(
+					new String[]{
+						"/system/bin/sh", "-c",
+						"while [ -d /proc/" + android.os.Process.myPid() + " ] && [ -d /proc/" + pid + " ];" +
+							"do sleep 5;done; kill -9 " + pid
+					}
+				);
+			}
 		}
 		return process;
 	}

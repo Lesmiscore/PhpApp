@@ -48,7 +48,9 @@ public class PhpStreamReader extends AsyncTask<InputStream, Void, Void> {
 			}
 			handler.sendError(line);
 		}
-		php.requestStop();
+		if (!isCancelled()) {
+			php.requestStop();
+		}
 		return null;
 	}
 	
