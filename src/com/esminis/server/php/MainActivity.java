@@ -26,7 +26,9 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -110,8 +112,11 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		}
 	}
 	
-	private void setLabel(String label) {
-		((TextView)findViewById(R.id.label)).setText(label);
+	private void setLabel(CharSequence label) {
+		TextView view = (TextView)findViewById(R.id.label);
+		view.setText(label);
+		view.setLinksClickable(true);
+		view.setMovementMethod(LinkMovementMethod.getInstance());
 	}
 	
 	@Override
@@ -265,7 +270,9 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 						if (extras != null && extras.getBoolean("running")) {
 							findViewById(R.id.stop).setVisibility(View.VISIBLE);
 							setLabel(
-								String.format(getString(R.string.server_running), extras.getString("address"))
+								Html.fromHtml(
+									String.format(getString(R.string.server_running), extras.getString("address"))
+								)
 							);
 						} else {
 							findViewById(R.id.start).setVisibility(View.VISIBLE);
