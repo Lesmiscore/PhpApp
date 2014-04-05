@@ -68,6 +68,8 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 	
 	private boolean paused = true;
 
+	private boolean restartIfRunning = false;
+
 	private Dialog dialog = null;
 	
 	private Preferences getPreferences() {
@@ -245,15 +247,26 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		CheckBox checkbox = (CheckBox)findViewById(R.id.server_start_on_boot);
 		checkbox.setOnCheckedChangeListener(
 			new CompoundButton.OnCheckedChangeListener() {
-				public void onCheckedChanged(
-					CompoundButton checkox, boolean checked
-				) {
+				public void onCheckedChanged(CompoundButton checkbox, boolean checked) {
 					getPreferences().set(MainActivity.this, Preferences.START_ON_BOOT, checked);
 				}
 			}
 		);
 		checkbox.setChecked(
 			getPreferences().getBoolean(MainActivity.this, Preferences.START_ON_BOOT)
+		);
+		checkbox = (CheckBox)findViewById(R.id.server_keep_running);
+		checkbox.setOnCheckedChangeListener(
+			new CompoundButton.OnCheckedChangeListener() {
+				public void onCheckedChanged(CompoundButton checkbox, boolean checked) {
+					restartIfRunning = true;
+					getPreferences().set(MainActivity.this, Preferences.KEEP_RUNNING, checked);
+					Php.getInstance(MainActivity.this).requestStatus();
+				}
+			}
+		);
+		checkbox.setChecked(
+			getPreferences().getBoolean(MainActivity.this, Preferences.KEEP_RUNNING)
 		);
 
 		receiver = new BroadcastReceiver() {
@@ -274,7 +287,12 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 									String.format(getString(R.string.server_running), extras.getString("address"))
 								)
 							);
+							if (restartIfRunning) {
+								restartIfRunning = false;
+								Php.getInstance(context).requestRestart();
+							}
 						} else {
+							restartIfRunning = false;
 							findViewById(R.id.start).setVisibility(View.VISIBLE);
 							setLabel(getString(R.string.server_stopped));
 						}

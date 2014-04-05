@@ -10,6 +10,7 @@ public class Preferences extends com.esminis.model.manager.Preferences {
 	final static public String ADDRESS = "address";
 	final static public String PORT = "port";
 	final static public String START_ON_BOOT = "startOnBoot";
+	final static public String KEEP_RUNNING = "keepRunning";
 	final static public String PHP_BUILD = "installedPhpBuild";
 
 	public String getPhpBuild(Context context) {
