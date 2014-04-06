@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
-	<include layout="@layout/portrait"/>
-</merge>
+<android.support.v4.widget.DrawerLayout
+	xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/drawer_layout"
+	android:layout_width="match_parent" android:layout_height="match_parent"
+	>
+	<include layout="@layout/main_content" />
+	<fragment
+		android:id="@+id/drawer" android:layout_width="280dp" android:layout_height="match_parent"
+		android:layout_gravity="start" android:name="com.esminis.server.php.DrawerFragment"
+	/>
+</android.support.v4.widget.DrawerLayout>
