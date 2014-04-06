@@ -60,28 +60,12 @@
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:text="@string/server_document_root"
 			/>
-			<RelativeLayout 
+			<EditText 
+				android:id="@+id/server_root"
 				android:layout_width="match_parent" android:layout_height="wrap_content"
-			>				
-				<EditText 
-					android:id="@+id/server_root"
-					android:layout_width="match_parent" android:layout_height="wrap_content"
-					android:inputType="none" 
-					android:focusable="false" android:focusableInTouchMode="false"
-					android:layout_toLeftOf="@+id/server_start_on_boot"
-				/>
-				<CheckBox 
-					android:id="@+id/server_start_on_boot"
-					android:layout_width="wrap_content" android:layout_height="wrap_content"
-					android:text="@string/server_start_on_boot" 
-					android:layout_alignParentRight="true"
-				/>
-			</RelativeLayout>
-			<CheckBox
-				android:id="@+id/server_keep_running"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:text="@string/server_keep_running"
-				android:layout_gravity="right"/>
+				android:inputType="none" 
+				android:focusable="false" android:focusableInTouchMode="false"
+			/>
 		</LinearLayout>
 		<TextView
 			android:id="@+id/error"

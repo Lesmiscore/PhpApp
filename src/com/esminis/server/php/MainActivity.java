@@ -25,6 +25,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -68,9 +70,9 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 	
 	private boolean paused = true;
 
-	private boolean restartIfRunning = false;
-
 	private Dialog dialog = null;
+
+	private ActionBarDrawerToggle drawerToggle = null;
 	
 	private Preferences getPreferences() {
 		if (preferences == null) {
@@ -95,6 +97,21 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 				return true;
 			}
 		});
+		DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+		drawerLayout.setDrawerListener(drawerToggle = new ActionBarDrawerToggle(
+			this, drawerLayout, R.drawable.ic_drawer, R.string.open, R.string.close
+		));
+		drawerToggle.setDrawerIndicatorEnabled(true);
+
+		if (getActionBar() != null) {
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
+	}
+
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		drawerToggle.syncState();
 	}
 
 	private void removeFocus() {
@@ -244,30 +261,6 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 			}
 		});
 		text.setText(getPreferences().getString(MainActivity.this, Preferences.PORT));
-		CheckBox checkbox = (CheckBox)findViewById(R.id.server_start_on_boot);
-		checkbox.setOnCheckedChangeListener(
-			new CompoundButton.OnCheckedChangeListener() {
-				public void onCheckedChanged(CompoundButton checkbox, boolean checked) {
-					getPreferences().set(MainActivity.this, Preferences.START_ON_BOOT, checked);
-				}
-			}
-		);
-		checkbox.setChecked(
-			getPreferences().getBoolean(MainActivity.this, Preferences.START_ON_BOOT)
-		);
-		checkbox = (CheckBox)findViewById(R.id.server_keep_running);
-		checkbox.setOnCheckedChangeListener(
-			new CompoundButton.OnCheckedChangeListener() {
-				public void onCheckedChanged(CompoundButton checkbox, boolean checked) {
-					restartIfRunning = true;
-					getPreferences().set(MainActivity.this, Preferences.KEEP_RUNNING, checked);
-					Php.getInstance(MainActivity.this).requestStatus();
-				}
-			}
-		);
-		checkbox.setChecked(
-			getPreferences().getBoolean(MainActivity.this, Preferences.KEEP_RUNNING)
-		);
 
 		receiver = new BroadcastReceiver() {
 
@@ -287,12 +280,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 									String.format(getString(R.string.server_running), extras.getString("address"))
 								)
 							);
-							if (restartIfRunning) {
-								restartIfRunning = false;
-								Php.getInstance(context).requestRestart();
-							}
 						} else {
-							restartIfRunning = false;
 							findViewById(R.id.start).setVisibility(View.VISIBLE);
 							setLabel(getString(R.string.server_stopped));
 						}
@@ -372,6 +360,9 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		if (drawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		}
 		if (item.getItemId() == R.id.menu_about) {
 			dialog = new About(this);
 			dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {

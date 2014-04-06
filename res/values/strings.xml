@@ -35,4 +35,9 @@
 	<string name="licenses">Third party licenses</string>
 	<string name="php_version">5.5.10</string>
 	<string name="php_build">0</string>
+
+	<string name="server_keep_running_title">Keep server alive</string>
+	<string name="open">Open</string>
+	<string name="modules_title">PHP extensions</string>
+	<string name="modules_summary">List of all PHP extensions, part of them can be enabled or disabled</string>
 </resources>
