@@ -67,21 +67,15 @@ public class PhpStartup {
 	}
 
 	private void addStartupModules(
-		List<String> options, File moduleDirectory, File iniDirectory, String[] modules,
-		String[] modulesZend
+		List<String> options, File moduleDirectory, File iniDirectory, String[] modules
 	) {
 		List<String> iniModules = getIniModules(iniDirectory);
 		List<String> list = new ArrayList<String>();
-		for (String module : modulesZend) {
-			File file = new File(moduleDirectory, module);
-			if (file.exists() && !iniModules.contains(file.getName().toLowerCase())) {
-				list.add("zend_extension=" + file.getAbsolutePath());
-			}
-		}
 		for (String module : modules) {
-			File file = new File(moduleDirectory, module);
+			boolean zend = module.startsWith("zend_");
+			File file = new File(moduleDirectory, (zend ? module.substring(5) : module) + ".so");
 			if (file.exists() && !iniModules.contains(file.getName().toLowerCase())) {
-				list.add("extension=" + file.getAbsolutePath());
+				list.add((zend ? "zend_" : "") + "extension=" + file.getAbsolutePath());
 			}
 		}
 		for (String row : list) {
@@ -91,8 +85,7 @@ public class PhpStartup {
 	}
 
 	private String[] createCommand(
-		File php, String address, String root, File moduleDirectory, File iniDirectory,
-		String[] modules, String[] modulesZend
+		File php, String address, String root, File moduleDirectory, File iniDirectory, String[] modules
 	) {
 		List<String> options = new ArrayList<String>();
 		options.add(php.getAbsolutePath());
@@ -100,16 +93,16 @@ public class PhpStartup {
 		options.add(address);
 		options.add("-t");
 		options.add(root);
-		addStartupModules(options, moduleDirectory, iniDirectory, modules, modulesZend);
+		addStartupModules(options, moduleDirectory, iniDirectory, modules);
 		return options.toArray(new String[options.size()]);
 	}
 
 	public Process start(
 		File php, String address, String root, File moduleDirectory, File documentRoot,
-		boolean keepRunning, String[] modules, String[] modulesZend
+		boolean keepRunning, String[] modules
 	) throws IOException {
 		Process process = Runtime.getRuntime().exec(
-			createCommand(php, address, root, moduleDirectory, documentRoot, modules, modulesZend), null,
+			createCommand(php, address, root, moduleDirectory, documentRoot, modules), null,
 			documentRoot
 		);
 		if (!keepRunning) {
