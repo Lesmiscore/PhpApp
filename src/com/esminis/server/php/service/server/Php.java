@@ -29,6 +29,8 @@ import com.esminis.server.php.model.manager.Preferences;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Php {
 	
@@ -91,7 +93,7 @@ public class Php {
 			process = startup.start(
 				php, address, root, modulesDirectory, fileRoot,
 				preferences.getBoolean(context, Preferences.KEEP_RUNNING),
-				new String[] {}, new String[] {"opcache.so"}
+				Manager.get(Preferences.class).getEnabledModules(context)
 			);
 			streamReader = new PhpStreamReader(this, handler);
 			streamReader.execute(process.getErrorStream());

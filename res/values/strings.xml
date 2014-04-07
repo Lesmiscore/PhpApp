@@ -40,4 +40,68 @@
 	<string name="open">Open</string>
 	<string name="modules_title">PHP extensions</string>
 	<string name="modules_summary">List of all PHP extensions, part of them can be enabled or disabled</string>
+	<string name="modules_title_builtin">%1$s (builtin)</string>
+	
+	<string-array name="modules">
+		<item>ftp</item><item>FTP</item><item>File Transfer Protocol</item>
+		<item>ssh2</item><item>SSH 2</item><item>Secure Shell 2</item>
+		<item>zend_opcache</item><item>OPcache</item><item>Zend OPcache</item>
+	</string-array>
+	<string-array name="modules_builtin">
+		<item>PHP core</item><item></item>
+		<item>BC Math</item><item>BCMath Arbitrary Precision Mathematics</item>
+		<item>Bzip 2</item><item></item>
+		<item>Calendar</item><item></item>
+		<item>Ctype</item><item>Character type checking</item>
+		<item>cURL</item><item>Client URL Library</item>
+		<item>DOM</item><item>Document Object Model</item>
+		<item>Date/Time</item><item>Date and Time</item>
+		<item>POSIX Regex</item><item>Regular Expression (POSIX Extended)</item>
+		<item>Iconv</item><item></item>
+
+		<item>libxml</item><item></item>
+		<item>openssl</item><item></item>
+		<item>pcre</item><item></item>
+		<item>sqlite3</item><item></item>
+		<item>zlib</item><item></item>
+		<item>hash</item><item>hash</item>
+		<item>fileinfo</item><item>fileinfo</item>
+		<item>filter</item><item>filter</item>
+		<item>gd</item><item>gd</item>
+		<item>gettext</item><item>gettext</item>
+		<item>gmp</item><item>gmp</item>
+		<item>SPL</item><item>SPL</item>
+		<item>intl</item><item>intl</item>
+		<item>json</item><item>json</item>
+		<item>mbstring</item><item>mbstring</item>
+		<item>mcrypt</item><item>mcrypt</item>
+		<item>session</item><item>session</item>
+		<item>standard</item><item>standard</item>
+		<item>mysqlnd</item><item>mysqlnd</item>
+		<item>mysqli</item><item>mysqli</item>
+		<item>PDO</item><item>PDO</item>
+		<item>pdo_mysql</item><item>pdo_mysql</item>
+		<item>pdo_sqlite</item><item>pdo_sqlite</item>
+		<item>Phar</item><item>Phar</item>
+		<item>posix</item><item>posix</item>
+		<item>pspell</item><item>pspell</item>
+		<item>recode</item><item>recode</item>
+		<item>Reflection</item><item>Reflection</item>
+		<item>mysql</item><item>mysql</item>
+		<item>SimpleXML</item><item>SimpleXML</item>
+		<item>soap</item><item>soap</item>
+		<item>sockets</item><item>sockets</item>
+		<item>exif</item><item>exif</item>
+		<item>tidy</item><item>tidy</item>
+		<item>tokenizer</item><item>tokenizer</item>
+		<item>wddx</item><item>wddx</item>
+		<item>xml</item><item>xml</item>
+		<item>xmlreader</item><item>xmlreader</item>
+		<item>xmlrpc</item><item>xmlrpc</item>
+		<item>xmlwriter</item><item>xmlwriter</item>
+		<item>xsl</item><item>xsl</item>
+		<item>zip</item><item>zip</item>
+		<item>cli_server</item><item>cli_server</item>
+		<item>mhash</item><item>mhash</item>
+	</string-array>
 </resources>
