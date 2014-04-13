@@ -41,8 +41,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -73,6 +71,8 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 	private Dialog dialog = null;
 
 	private ActionBarDrawerToggle drawerToggle = null;
+
+	private boolean syncedDrawerState = false;
 	
 	private Preferences getPreferences() {
 		if (preferences == null) {
@@ -97,21 +97,15 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 				return true;
 			}
 		});
-		DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-		drawerLayout.setDrawerListener(drawerToggle = new ActionBarDrawerToggle(
-			this, drawerLayout, R.drawable.ic_drawer, R.string.open, R.string.close
-		));
-		drawerToggle.setDrawerIndicatorEnabled(true);
-
-		if (getActionBar() != null) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
-		}
 	}
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		drawerToggle.syncState();
+		if (drawerToggle != null) {
+			drawerToggle.syncState();
+			syncedDrawerState = true;
+		}
 	}
 
 	private void removeFocus() {
@@ -174,14 +168,29 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 	private void resultView() {
 		if (requestResultViewSuccess) {
 			startup();
+			findViewById(R.id.preloader_container).setVisibility(View.GONE);
+			findViewById(R.id.container).setVisibility(View.VISIBLE);
+			removeFocus();
+		} else {
+			((TextView)findViewById(R.id.preloader_label)).setText(R.string.server_installation_failed);
 		}
 		findViewById(R.id.preloader).setVisibility(View.GONE);
-		findViewById(R.id.preloader_container).setVisibility(View.GONE);
-		findViewById(R.id.container).setVisibility(View.VISIBLE);
-		removeFocus();
 	}
 	
 	private void startup() {
+		DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+		drawerLayout.setDrawerListener(drawerToggle = new ActionBarDrawerToggle(
+			this, drawerLayout, R.drawable.ic_drawer, R.string.open, R.string.close
+		));
+		drawerToggle.setDrawerIndicatorEnabled(true);
+
+		if (getActionBar() != null) {
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
+		if (!syncedDrawerState) {
+			drawerToggle.syncState();
+			syncedDrawerState = true;
+		}
 		network = Manager.get(Network.class);
 		
 		Spinner spinner = (Spinner)findViewById(R.id.server_interface);
@@ -360,7 +369,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (drawerToggle.onOptionsItemSelected(item)) {
+		if (drawerToggle != null && drawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
 		if (item.getItemId() == R.id.menu_about) {

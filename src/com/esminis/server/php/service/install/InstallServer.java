@@ -24,13 +24,15 @@ import android.os.Bundle;
 import android.os.Environment;
 
 import com.esminis.model.manager.Manager;
-import com.esminis.server.php.R;
 import com.esminis.model.manager.Network;
 import com.esminis.server.php.service.server.Php;
 import com.esminis.server.php.model.manager.Preferences;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 
@@ -47,7 +49,6 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 	private boolean canStartInstall = false;
 
 	static final private String PATH_ASSET_PHP = "php";
-	static final private String PATH_ASSET_SO_OPCACHE = "opcache.so";
 
 	static private InstallServer instance = null;
 
@@ -133,7 +134,6 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 		}
 		context.unregisterReceiver(receiver);
 		Preferences preferences = Manager.get(Preferences.class);
-		File php = Php.getInstance(context).getPhp();
 		if (!preferences.contains(context, Preferences.DOCUMENT_ROOT)) {
 			File file = new File(Environment.getExternalStorageDirectory(), "www");
 			if (!file.isDirectory()) {
@@ -147,8 +147,6 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 							tempDirectory = file;
 						}
 						variables.put("tempDirectory", tempDirectory.getAbsolutePath());
-						variables.put("wwwDirectory", file.getAbsolutePath());
-						variables.put("soDirectory", php.getParentFile().getAbsolutePath());
 						install.preprocessFile(new File(file, "php.ini"), variables);
 					} catch (IOException ignored) {}
 				}
@@ -161,21 +159,15 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 		if (!preferences.contains(context, Preferences.ADDRESS)) {
 			preferences.set(context, Preferences.ADDRESS, Manager.get(Network.class).get(0).name);
 		}
-		try {
-			new Install().fromAssetFile(
-				new File(php.getParentFile(), PATH_ASSET_SO_OPCACHE), PATH_ASSET_SO_OPCACHE, context
-			);
-		} catch (IOException ignored) {}
-		try {
-			if (!php.isFile() || php.delete()) {
-				new Install().fromAssetFile(php, PATH_ASSET_PHP, context);
-				if (!php.isFile() || (!php.canExecute() && !php.setExecutable(true))) {
-					return false;
-				}
-			}	else {
-				return false;
-			}
-		} catch (IOException ignored) {
+		List<String> list = new ArrayList<String>();
+		list.add(PATH_ASSET_PHP);
+		Collections.addAll(list, preferences.getInstallModules(context));
+		if (
+			!new Install().fromAssetFiles(
+				Php.getInstance(context).getPhp().getParentFile(), list.toArray(new String[list.size()]),
+				context
+			)
+		) {
 			return false;
 		}
 		preferences.set(context, Preferences.PHP_BUILD, preferences.getPhpBuild(context));

@@ -12,7 +12,8 @@
 			android:id="@+id/preloader"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"			
 		/>
-		<TextView 
+		<TextView
+			android:id="@+id/preloader_label"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:text="@string/server_installing"
 		/>

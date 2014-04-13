@@ -37,4 +37,14 @@ public class Preferences extends com.esminis.model.manager.Preferences {
 		return modules.toArray(new String[modules.size()]);
 	}
 
+	public String[] getInstallModules(Context context) {
+		List<String> modules = new ArrayList<String>();
+		String[] list = context.getResources().getStringArray(R.array.modules);
+		for (int i = 0; i < list.length; i += 3) {
+			String module = list[i];
+			modules.add((module.startsWith("zend_") ? module.substring(5) : module) + ".so");
+		}
+		return modules.toArray(new String[modules.size()]);
+	}
+
 }
