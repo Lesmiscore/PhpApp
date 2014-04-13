@@ -29,10 +29,27 @@ import java.util.HashMap;
 import java.util.Set;
 
 public class Install {
-	
-	public void fromAssetFile(File target, String path, Context context) 
-		throws IOException 
-	{
+
+	public boolean fromAssetFiles(File directory, String[] names, Context context) {
+		try {
+			for (String name : names) {
+				File file = new File(directory, name);
+				if (!file.isFile() || file.delete()) {
+					new Install().fromAssetFile(file, name, context);
+					if (!file.isFile() || (!file.canExecute() && !file.setExecutable(true))) {
+						return false;
+					}
+				}	else {
+					return false;
+				}
+			}
+		} catch (IOException ignored) {
+			return false;
+		}
+		return true;
+	}
+
+	public void fromAssetFile(File target, String path, Context context) throws IOException {
 		if (target.isFile()) {
 			return;
 		}
@@ -47,9 +64,7 @@ public class Install {
 		output.close();
 	}
 	
-	public void fromAssetDirectory(File target, String path, Context context) 
-		throws IOException 
-	{
+	public void fromAssetDirectory(File target, String path, Context context) throws IOException {
 		if (!target.isDirectory() || !target.canWrite()) {
 			return;
 		}
