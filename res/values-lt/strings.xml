@@ -33,4 +33,10 @@
 		<b>Autorius</b><br /><br />
 		Tautvydas Andrikys<br />]]></string>
 	<string name="licenses">Trečių šalių licenzijos</string>
+	<string name="server_installation_failed">Nepavyko instaliuoti serverio.</string>
+	<string name="server_keep_running_title">Laikyti serverį įjungtą</string>
+	<string name="modules_title">PHP moduliai</string>
+	<string name="modules_summary">PHP modulių sąrašas, dalį jų galite įjugti ar išjungti</string>
+	<string name="modules_title_builtin">%1$s (įmontuotas)</string>
+	<string name="open">Atidaryti</string>
 </resources>
