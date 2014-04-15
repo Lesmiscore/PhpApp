@@ -54,53 +54,53 @@
 		<item>zip</item><item>Zip</item><item>Read or write ZIP compressed archives</item>
 	</string-array>
 	<string-array name="modules_builtin">
-		<item>Core</item><item>PHP core</item>
 		<item>Bzip 2</item><item>Bzip 2</item>
+		<item>Core</item><item>PHP core</item>
 		<item>Ctype</item><item>Character type checking</item>
 		<item>cURL</item><item>Client URL Library</item>
-		<item>DOM</item><item>Document Object Model</item>
 		<item>Date/Time</item><item>Date and Time</item>
+		<item>DOM</item><item>Document Object Model</item>
+		<item>Fileinfo</item><item>File Information</item>
+		<item>Filter</item><item>Data Filtering</item>
+		<item>Gettext</item><item>Native Language Support API for internationalize</item>
+		<item>GMP</item><item>GNU Multiple Precision</item>
+		<item>GNU Recode</item><item>Interface to GNU Recode library</item>
+		<item>Hash</item><item>HASH Message Digest Framework</item>
+		<item>iconv</item><item>Interface to iconv character set conversion facility</item>
+		<item>intl</item><item>Internationalization Functions</item>
+		<item>JSON</item><item>JavaScript Object Notation</item>
+		<item>libxml</item><item>Other extensions for xml use this</item>
+		<item>mbstring</item><item>Multibyte String</item>
+		<item>Mcrypt</item><item>Interface to mcrypt library</item>
+		<item>Mhash</item><item>Interface to mhash library</item>
+		<item>Mysql</item><item>Original MySQL API</item>
+		<item>Mysqli</item><item>MySQL Improved Extension</item>
+		<item>Mysqlnd</item><item>MySQL Native Driver</item>
+		<item>OpenSSL</item><item>Interface to OpenSSL</item>
+		<item>PCRE</item><item>Regular Expressions (Perl-Compatible)</item>
+		<item>PDO</item><item>PHP Data Objects</item>
+		<item>PDO_MYSQL</item><item>PDO MySQL driver</item>
+		<item>PDO_SQLITE</item><item>PDO SQLite 3 driver</item>
+		<item>Phar</item><item>PHP Archive</item>
+		<item>POSIX</item><item>Interface to POSIX functions</item>
 		<item>POSIX Regex</item><item>Regular Expression (POSIX Extended)</item>
-		<item>Iconv</item><item>Iconv</item>
-		<item>libxml</item><item>libxml</item>
-		<item>openssl</item><item>openssl</item>
-		<item>pcre</item><item>pcre</item>
-		<item>sqlite3</item><item>sqlite3</item>
-		<item>zlib</item><item>zlib</item>
-		<item>hash</item><item>hash</item>
-		<item>fileinfo</item><item>fileinfo</item>
-		<item>filter</item><item>filter</item>
-		<item>gettext</item><item>gettext</item>
-		<item>gmp</item><item>gmp</item>
-		<item>SPL</item><item>SPL</item>
-		<item>intl</item><item>intl</item>
-		<item>json</item><item>json</item>
-		<item>mbstring</item><item>mbstring</item>
-		<item>mcrypt</item><item>mcrypt</item>
-		<item>session</item><item>session</item>
-		<item>standard</item><item>standard</item>
-		<item>mysqlnd</item><item>mysqlnd</item>
-		<item>mysqli</item><item>mysqli</item>
-		<item>PDO</item><item>PDO</item>
-		<item>pdo_mysql</item><item>pdo_mysql</item>
-		<item>pdo_sqlite</item><item>pdo_sqlite</item>
-		<item>Phar</item><item>Phar</item>
-		<item>posix</item><item>posix</item>
-		<item>pspell</item><item>pspell</item>
-		<item>recode</item><item>recode</item>
-		<item>Reflection</item><item>Reflection</item>
-		<item>mysql</item><item>mysql</item>
-		<item>SimpleXML</item><item>SimpleXML</item>
-		<item>sockets</item><item>sockets</item>
-		<item>tidy</item><item>tidy</item>
-		<item>tokenizer</item><item>tokenizer</item>
-		<item>wddx</item><item>wddx</item>
-		<item>xml</item><item>xml</item>
-		<item>xmlreader</item><item>xmlreader</item>
-		<item>xmlrpc</item><item>xmlrpc</item>
-		<item>xmlwriter</item><item>xmlwriter</item>
-		<item>xsl</item><item>xsl</item>
-		<item>cli_server</item><item>cli_server</item>
-		<item>mhash</item><item>mhash</item>
+		<item>Pspell</item><item>Functions to check the spelling and offer suggestions</item>
+		<item>Reflection</item><item>PHP reflection</item>
+		<item>SAPI CLI</item><item>PHP Command Line SAPI</item>
+		<item>Session</item><item>Session Handling</item>
+		<item>SimpleXML</item><item>Simple and easily usable toolset for XML</item>
+		<item>Sockets</item><item>Low-level interface to socket functions</item>
+		<item>SPL</item><item>Standard PHP Library</item>
+		<item>SQLite3</item><item>Support for SQLite version 3 databases</item>
+		<item>Standard</item><item>PHP standard</item>
+		<item>Tidy</item><item>Binding for the Tidy HTML clean and repair utility</item>
+		<item>Tokenizer</item><item>Interface to the PHP tokenizer</item>
+		<item>WDDX</item><item>Functions are intended for working with WDDX</item>
+		<item>XML</item><item>XML Parser</item>
+		<item>XML-RPC</item><item>Functions to write XML-RPC servers and clients</item>
+		<item>XML Reader</item><item>XML Pull parser</item>
+		<item>XML Writer</item><item>Wrappper for libxml xmlWriter API</item>
+		<item>XSL</item><item>XSLT transformations using the libxslt library</item>
+		<item>Zlib</item><item>Zlib Compression</item>
 	</string-array>
 </resources>
