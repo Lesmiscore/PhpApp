@@ -33,4 +33,10 @@
 		<b>Автор</b><br /><br />
 		Tautvydas Andrikys<br />]]></string>
 	<string name="licenses">Третья сторона лицензии</string>
+	<string name="server_installation_failed">Установка сервера не удалось.</string>
+	<string name="server_keep_running_title">Держит сервер жив</string>
+	<string name="modules_title">PHP модули</string>
+	<string name="modules_summary">Список всех модули PHP, часть из них может быть включена или отключена</string>
+	<string name="modules_title_builtin">%1$s (встроенный)</string>
+	<string name="open">Открыть</string>
 </resources>

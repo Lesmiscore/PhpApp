@@ -33,4 +33,10 @@
 		<b>Autor</b><br /><br />
 		Tautvydas Andrikys<br />]]></string>
 	<string name="licenses">Drittpartei Lizenzen</string>
+	<string name="server_installation_failed">Mann kann nicht Server installieren.</string>
+	<string name="server_keep_running_title">Halten Server am Leben</string>
+	<string name="modules_title">PHP Module</string>
+	<string name="modules_summary">Liste aller PHP Module, Teil von ihnen können Sie ein-oder ausschalten</string>
+	<string name="modules_title_builtin">%1$s (ist eingebaut)</string>
+	<string name="open">Öffnen</string>
 </resources>
