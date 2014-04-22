@@ -15,6 +15,9 @@
  */
 package com.esminis.server.php.service.server;
 
+import android.app.ActivityManager;
+import android.content.Context;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -99,19 +102,30 @@ public class PhpStartup {
 
 	public Process start(
 		File php, String address, String root, File moduleDirectory, File documentRoot,
-		boolean keepRunning, String[] modules
+		boolean keepRunning, String[] modules, Context context
 	) throws IOException {
 		Process process = Runtime.getRuntime().exec(
 			createCommand(php, address, root, moduleDirectory, documentRoot, modules), null,
 			documentRoot
 		);
 		if (!keepRunning) {
+			List<ActivityManager.RunningAppProcessInfo> processes =
+				((ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE))
+					.getRunningAppProcesses();
+			int pidMe = 0;
+			if (processes != null) {
+				for (ActivityManager.RunningAppProcessInfo info : processes) {
+					if (info.processName.equalsIgnoreCase(context.getPackageName())) {
+						pidMe = info.pid;
+					}
+				}
+			}
 			int pid = new com.esminis.model.manager.Process().getPid(php);
 			if (pid > 0) {
 				Runtime.getRuntime().exec(
-					new String[]{
+					new String[] {
 						"/system/bin/sh", "-c",
-						"while [ -d /proc/" + android.os.Process.myPid() + " ] && [ -d /proc/" + pid + " ];" +
+						"while [ -d /proc/" + pidMe + " ]  && [ -d /proc/" + pid + " ];" +
 							"do sleep 5;done; kill -9 " + pid
 					}
 				);
