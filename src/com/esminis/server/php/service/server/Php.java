@@ -93,7 +93,7 @@ public class Php {
 			process = startup.start(
 				php, address, root, modulesDirectory, fileRoot,
 				preferences.getBoolean(context, Preferences.KEEP_RUNNING),
-				Manager.get(Preferences.class).getEnabledModules(context)
+				Manager.get(Preferences.class).getEnabledModules(context), context
 			);
 			streamReader = new PhpStreamReader(this, handler);
 			streamReader.execute(process.getErrorStream());
