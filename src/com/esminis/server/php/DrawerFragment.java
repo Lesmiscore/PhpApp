@@ -1,5 +1,6 @@
 package com.esminis.server.php;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,19 @@ public class DrawerFragment extends PreferenceFragment {
 		addPreferencesFromResource(R.xml.preferences);
 		restartOnChange(findPreference(Preferences.KEEP_RUNNING));
 		PreferenceScreen screen = (PreferenceScreen)findPreference("modules");
+		if (screen == null) {
+			return;
+		}
+		screen.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				Dialog dialog = ((PreferenceScreen) preference).getDialog();
+				if (dialog != null) {
+					dialog.getWindow().setBackgroundDrawableResource(android.R.color.white);
+				}
+				return false;
+			}
+		});
 		Resources resources = getResources();
 		String[] list = resources.getStringArray(R.array.modules);
 		for (int i = 0; i < list.length; i += 3) {
