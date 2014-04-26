@@ -19,7 +19,7 @@ public class Preferences extends com.esminis.model.manager.Preferences {
 	public String getPhpBuild(Context context) {
 		String build = context.getString(R.string.php_build);
 		return context.getString(R.string.php_version) +
-			(build.isEmpty() || build.equals("0") ? "" : build);
+			(build.isEmpty() || build.equals("0") ? "" : "_" + build);
 	}
 
 	public boolean getIsSameBuild(Context context) {
