@@ -125,8 +125,8 @@ public class PhpStartup {
 				Runtime.getRuntime().exec(
 					new String[] {
 						"/system/bin/sh", "-c",
-						"while [ -d /proc/" + pidMe + " ]  && [ -d /proc/" + pid + " ];" +
-							"do sleep 5;done; kill -9 " + pid
+						"while ls /proc/" + pidMe + " > /dev/null 2>&1 && " +
+								"ls /proc/" + pid + " > /dev/null 2>&1;do sleep 5;done; kill -9 " + pid
 					}
 				);
 			}
