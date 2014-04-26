@@ -39,4 +39,5 @@
 	<string name="modules_summary">Список всех модули PHP, часть из них может быть включена или отключена</string>
 	<string name="modules_title_builtin">%1$s (встроенный)</string>
 	<string name="open">Открыть</string>
+	<string name="settings">Настройки</string>
 </resources>
