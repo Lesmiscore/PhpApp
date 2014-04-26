@@ -180,7 +180,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 	private void startup() {
 		DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 		drawerLayout.setDrawerListener(drawerToggle = new ActionBarDrawerToggle(
-			this, drawerLayout, R.drawable.ic_drawer, R.string.open, R.string.close
+			this, drawerLayout, R.drawable.ic_navigation_drawer, R.string.open, R.string.close
 		));
 		drawerToggle.setDrawerIndicatorEnabled(true);
 
