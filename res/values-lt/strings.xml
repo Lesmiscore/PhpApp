@@ -39,4 +39,5 @@
 	<string name="modules_summary">PHP modulių sąrašas, dalį jų galite įjugti ar išjungti</string>
 	<string name="modules_title_builtin">%1$s (įmontuotas)</string>
 	<string name="open">Atidaryti</string>
+	<string name="settings">Nustatymai</string>
 </resources>

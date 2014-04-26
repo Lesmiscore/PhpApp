@@ -15,6 +15,7 @@
  */
 package com.esminis.server.php;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -23,6 +24,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -179,9 +181,31 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 	
 	private void startup() {
 		DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-		drawerLayout.setDrawerListener(drawerToggle = new ActionBarDrawerToggle(
-			this, drawerLayout, R.drawable.ic_navigation_drawer, R.string.open, R.string.close
-		));
+		drawerLayout.setDrawerListener(
+			drawerToggle = new ActionBarDrawerToggle(
+				this, drawerLayout, R.drawable.ic_navigation_drawer, R.string.open, R.string.close
+			) {
+
+				public void onDrawerClosed(View view) {
+					super.onDrawerClosed(view);
+					ActionBar bar = getActionBar();
+					ApplicationInfo info = getApplicationInfo();
+					if (bar != null && info != null) {
+						bar.setTitle(info.labelRes);
+					}
+					invalidateOptionsMenu();
+				}
+
+				public void onDrawerOpened(View drawerView) {
+					super.onDrawerOpened(drawerView);
+					ActionBar bar = getActionBar();
+					if (bar != null) {
+						bar.setTitle(R.string.settings);
+					}
+					invalidateOptionsMenu();
+				}
+			}
+		);
 		drawerToggle.setDrawerIndicatorEnabled(true);
 
 		if (getActionBar() != null) {
@@ -205,7 +229,8 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 				getPreferences().set(MainActivity.this, Preferences.ADDRESS, network.get(position).name);
 			}
 
-			public void onNothingSelected(AdapterView<?> parent) {}
+			public void onNothingSelected(AdapterView<?> parent) {
+			}
 
 		});
 		spinner.setSelection(
@@ -227,20 +252,20 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 							getPreferences().set(
 								MainActivity.this, Preferences.DOCUMENT_ROOT, directory.getAbsolutePath()
 							);
-							((TextView)findViewById(R.id.server_root)).setText(
+							((TextView) findViewById(R.id.server_root)).setText(
 								getPreferences().getString(MainActivity.this, Preferences.DOCUMENT_ROOT)
 							);
 						}
 					}
 				);
-				chooser.show();				
+				chooser.show();
 			}
 		});
 		text = (TextView)findViewById(R.id.server_port);
 		text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 			public boolean onEditorAction(TextView text, int actionId, KeyEvent event) {
 				if (actionId == EditorInfo.IME_ACTION_DONE) {
-					((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE))
+					((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))
 						.hideSoftInputFromWindow(text.getWindowToken(), 0);
 					return true;
 				}

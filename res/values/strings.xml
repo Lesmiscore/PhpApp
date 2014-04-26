@@ -39,6 +39,7 @@
 	<string name="modules_summary">List of all PHP extensions, part of them can be enabled or disabled</string>
 	<string name="modules_title_builtin">%1$s (builtin)</string>
 	<string name="open">Open</string>
+	<string name="settings">Settings</string>
 
 	<string name="php_version">5.5.10</string>
 	<string name="php_build">2</string>

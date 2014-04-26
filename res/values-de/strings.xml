@@ -39,4 +39,5 @@
 	<string name="modules_summary">Liste aller PHP Module, Teil von ihnen können Sie ein-oder ausschalten</string>
 	<string name="modules_title_builtin">%1$s (ist eingebaut)</string>
 	<string name="open">Öffnen</string>
+	<string name="settings">Einstellungen</string>
 </resources>
