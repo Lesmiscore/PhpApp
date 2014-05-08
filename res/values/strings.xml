@@ -25,7 +25,7 @@
 	<string name="go_up">Go up</string>
 	<string name="about">About</string>
 	<string name="about_content"><![CDATA[<br />This is totally free and open source app that works using PHP built-in server and can be started automatically on boot.<br /><br />
-		PHP(version %1$s) has these extensions: Core, date, ereg, libxml, openssl, pcre, sqlite3, zlib, bcmath, bz2, calendar, ctype, curl, dom, hash, fileinfo, filter, ftp, gd, gettext, gmp, SPL, iconv, intl, json, mbstring, mcrypt, session, standard, mysqlnd, mysqli, PDO, pdo_mysql, pdo_sqlite, Phar, posix, pspell, recode, Reflection, mysql, SimpleXML, soap, sockets, exif, tidy, tokenizer, wddx, xml, xmlreader, xmlrpc, xmlwriter, xsl, zip, cli_server, mhash, ssh2, Zend OPcache<br /><br />
+		PHP(version %1$s) has these extensions: Core, date, ereg, libxml, openssl, pcre, sqlite3, zlib, bcmath, bz2, calendar, ctype, curl, dom, hash, fileinfo, filter, ftp, gd, gettext, gmp, SPL, iconv, intl, json, mbstring, mcrypt, session, standard, mysqlnd, mysqli, PDO, pdo_mysql, pdo_sqlite, Phar, posix, pspell, recode, Reflection, mysql, SimpleXML, soap, sockets, exif, tidy, tokenizer, wddx, xml, xmlreader, xmlrpc, xmlwriter, xsl, zip, cli_server, mhash, ssh2, Zend OPcache, Phalcon, yaf, yar<br /><br />
 		Recommended for usage: in development or for very small websites with very small amount of visitors, couse this server supports only one request at a time.<br /><br />
 		Server document root by default(it can be changed) is sdcard/www so put files there.<br /><br />
 		Edit php.ini as needed, they are loaded from document root directory.<br /><br />
@@ -42,7 +42,7 @@
 	<string name="settings">Settings</string>
 
 	<string name="php_version">5.5.10</string>
-	<string name="php_build">2</string>
+	<string name="php_build">3</string>
 	<string-array name="modules">
 		<item>bcmath</item><item>BC Math</item><item>Arbitrary Precision Mathematics</item>
 		<item>calendar</item><item>Calendar</item><item>Functions to simplify converting between different calendar formats</item>
@@ -53,7 +53,8 @@
 		<item>phalcon</item><item>Phalcon</item><item>Web framework implemented as a C extension</item>
 		<item>soap</item><item>SOAP</item><item>SOAP Server and Client</item>
 		<item>ssh2</item><item>SSH 2</item><item>Secure Shell 2</item>
-		<item>zip</item><item>Zip</item><item>Read or write ZIP compressed archives</item>
+		<item>yaf</item><item>Yet Another Framework</item><item>Web framework implemented as a C extension</item>
+		<item>zip</item><item>ZIP</item><item>Read or write ZIP compressed archives</item>
 	</string-array>
 	<string-array name="modules_builtin">
 		<item>Bzip 2</item><item>Bzip 2</item>
@@ -103,6 +104,7 @@
 		<item>XML Reader</item><item>XML Pull parser</item>
 		<item>XML Writer</item><item>Wrappper for libxml xmlWriter API</item>
 		<item>XSL</item><item>XSLT transformations using the libxslt library</item>
+		<item>Yet another RPC framework</item><item>Light, concurrent RPC framework</item>
 		<item>Zlib</item><item>Zlib Compression</item>
 	</string-array>
 </resources>
