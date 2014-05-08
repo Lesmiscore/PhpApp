@@ -50,7 +50,7 @@
 		<item>ftp</item><item>FTP</item><item>File Transfer Protocol</item>
 		<item>gd</item><item>GD</item><item>Image Processing and GD</item>
 		<item>zend_opcache</item><item>OPcache</item><item>Improves performance by caching byte code</item>
-		<item>phalcon</item><item>Phalcon</item><item>Phalcon</item>
+		<item>phalcon</item><item>Phalcon</item><item>Web framework implemented as a C extension</item>
 		<item>soap</item><item>SOAP</item><item>SOAP Server and Client</item>
 		<item>ssh2</item><item>SSH 2</item><item>Secure Shell 2</item>
 		<item>zip</item><item>Zip</item><item>Read or write ZIP compressed archives</item>
