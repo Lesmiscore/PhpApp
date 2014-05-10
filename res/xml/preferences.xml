@@ -5,8 +5,8 @@
 		android:title="@string/modules_title" android:summary="@string/modules_summary"
 	/>
 	<CheckBoxPreference
-		android:key="startOnBoot" android:title="@string/server_start_on_boot"
-		android:defaultValue="false"
+		android:key="startOnBoot" android:title="@string/server_start_on_boot_title"
+		android:defaultValue="false" android:summary="@string/server_start_on_boot_summary"
 	/>
 	<CheckBoxPreference
 		android:key="keepRunning" android:defaultValue="false"

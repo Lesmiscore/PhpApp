@@ -8,7 +8,8 @@
 	<string name="server_status_updating">Aktualisieren Server status…</string>
 	<string name="server_port">Serverport</string>
 	<string name="server_document_root">Dokumentstamm</string>
-	<string name="server_start_on_boot">Starten Server beim booten</string>
+	<string name="server_start_on_boot_title">Starten beim booten</string>
+	<string name="server_start_on_boot_summary">Starten Server beim booten</string>
 	<string name="server_keep_running">Hör nicht auf Sie Server, wenn App wird gestoppt</string>
 	<string name="server_interface">Server Adresse</string>
 	<string name="server_installing">Installieren Server…</string>
