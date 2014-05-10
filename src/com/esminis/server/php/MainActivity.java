@@ -325,8 +325,10 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		};
 
 		findViewById(R.id.start).setOnClickListener(new View.OnClickListener() {
-			public void onClick(View arg0) {
+			public void onClick(View view) {
 				((TextView)findViewById(R.id.error)).setText("");
+				Manager.get(Log.class).clear(view.getContext());
+				resetLog();
 				Php.getInstance(MainActivity.this).requestStart();
 			}
 		});
@@ -334,7 +336,6 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		findViewById(R.id.stop).setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				Php.getInstance(MainActivity.this).requestStop();
-				Manager.get(Log.class).clear(view.getContext());
 				resetLog();
 			}
 		});
@@ -346,7 +347,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 	private void resetLog() {
 		TextView text = (TextView)findViewById(R.id.error);
 		text.setText(Manager.get(Log.class).get(this));
-		text.scrollTo(0, (text.getLineHeight() * text.getLineCount()) - text.getHeight());
+		text.scrollTo(0, Math.max((text.getLineHeight() * text.getLineCount()) - text.getHeight(), 0));
 	}
 
 	@Override
