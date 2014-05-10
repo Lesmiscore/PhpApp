@@ -8,7 +8,8 @@
 	<string name="server_status_updating">Atnaujinamas serverio statusas…</string>
 	<string name="server_port">Prievadas</string>
 	<string name="server_document_root">Pagrindinis katalogas</string>
-	<string name="server_start_on_boot">Paleisti serverį įjungiant įrenginį</string>
+	<string name="server_start_on_boot_title">Paleisti įjungiant</string>
+	<string name="server_start_on_boot_summary">Paleisti serverį įjungiant įrenginį</string>
 	<string name="server_keep_running">Nestabdyti serverio jei aplikacija išjungta</string>
 	<string name="server_interface">Serverio adresas</string>
 	<string name="server_installing">Serveris instaliuojamas…</string>
