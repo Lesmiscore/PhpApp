@@ -227,6 +227,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				getPreferences().set(MainActivity.this, Preferences.ADDRESS, network.get(position).name);
+				Php.getInstance(MainActivity.this).requestRestartIfRunning();
 			}
 
 			public void onNothingSelected(AdapterView<?> parent) {
@@ -252,6 +253,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 							getPreferences().set(
 								MainActivity.this, Preferences.DOCUMENT_ROOT, directory.getAbsolutePath()
 							);
+							Php.getInstance(MainActivity.this).requestRestartIfRunning();
 							((TextView) findViewById(R.id.server_root)).setText(
 								getPreferences().getString(MainActivity.this, Preferences.DOCUMENT_ROOT)
 							);
@@ -288,6 +290,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 				boolean error = true;
 				if (port >= 1024 && port <= 65535) {
 					getPreferences().set(MainActivity.this, Preferences.PORT, String.valueOf(port));
+					Php.getInstance(MainActivity.this).requestRestartIfRunning();
 					error = false;
 				}
 				((TextView)findViewById(R.id.server_port))
