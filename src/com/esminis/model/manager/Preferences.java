@@ -24,13 +24,13 @@ public class Preferences extends Manager<Void> {
 	public void set(Context context, String name, boolean value) {
 		SharedPreferences.Editor editor = getPreferences(context).edit();
 		editor.putBoolean(name, value);
-		editor.commit();
+		editor.apply();
 	}
 	
 	public void set(Context context, String name, String value) {
 		SharedPreferences.Editor editor = getPreferences(context).edit();
 		editor.putString(name, value);
-		editor.commit();
+		editor.apply();
 	}
 	
 	public String getString(Context context, String name) {
