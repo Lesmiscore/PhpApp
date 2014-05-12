@@ -15,8 +15,10 @@
  */
 package com.esminis.server.php.service.server;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Message;
 
@@ -156,6 +158,22 @@ public class Php {
 		} else {
 			start = true;
 		}
+	}
+
+	public void requestRestartIfRunning() {
+		context.registerReceiver(new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if (intent.getAction() != null && intent.getAction().equals(Php.INTENT_ACTION)) {
+					Bundle extra = intent.getExtras();
+					if (extra != null && !extra.containsKey("errorLine") && extra.getBoolean("running")) {
+						requestRestart();
+					}
+					context.unregisterReceiver(this);
+				}
+			}
+		}, new IntentFilter(Php.INTENT_ACTION));
+		requestStatus();
 	}
 
 	public void requestRestart() {

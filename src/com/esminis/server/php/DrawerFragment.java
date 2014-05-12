@@ -1,10 +1,6 @@
 package com.esminis.server.php;
 
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -60,24 +56,7 @@ public class DrawerFragment extends PreferenceFragment {
 		preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				Context context = getActivity();
-				if (context != null) {
-					context.registerReceiver(new BroadcastReceiver() {
-						@Override
-						public void onReceive(Context context, Intent intent) {
-							if (intent.getAction() != null && intent.getAction().equals(Php.INTENT_ACTION)) {
-								Bundle extras = intent.getExtras();
-								if (
-									extras != null && !extras.containsKey("errorLine") && extras.getBoolean("running")
-								) {
-									Php.getInstance(context).requestRestart();
-								}
-								getActivity().unregisterReceiver(this);
-							}
-						}
-					}, new IntentFilter(Php.INTENT_ACTION));
-				}
-				Php.getInstance(getActivity()).requestStatus();
+				Php.getInstance(getActivity()).requestRestartIfRunning();
 				return true;
 			}
 		});
