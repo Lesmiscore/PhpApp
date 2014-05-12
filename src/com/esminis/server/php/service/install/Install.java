@@ -35,7 +35,7 @@ public class Install {
 			for (String name : names) {
 				File file = new File(directory, name);
 				if (!file.isFile() || file.delete()) {
-					new Install().fromAssetFile(file, name, context);
+					fromAssetFile(file, name, context);
 					if (!file.isFile() || (!file.canExecute() && !file.setExecutable(true))) {
 						return false;
 					}
@@ -56,9 +56,10 @@ public class Install {
 		InputStream input = context.getAssets().open(path);
 		OutputStream output = new FileOutputStream(target);
 		int read;
-		byte[] bytes = new byte[4096];
+		byte[] bytes = new byte[8192];
 		while ((read = input.read(bytes)) != -1) {
 			output.write(bytes, 0, read);
+			output.flush();
 		}
 		input.close();
 		output.close();
