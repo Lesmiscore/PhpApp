@@ -28,9 +28,25 @@ public class DrawerFragment extends PreferenceFragment {
 		screen.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				Dialog dialog = ((PreferenceScreen) preference).getDialog();
+				final Dialog dialog = ((PreferenceScreen) preference).getDialog();
 				if (dialog != null) {
 					dialog.getWindow().setBackgroundDrawableResource(android.R.color.white);
+					dialog.getActionBar().setDisplayHomeAsUpEnabled(true);
+					View view = dialog.findViewById(android.R.id.home);
+					if (view.getParent() instanceof View) {
+						view = (View)view.getParent();
+						if (view != null && view.getParent() instanceof View) {
+							view = (View)view.getParent();
+						}
+					}
+					if (view != null) {
+						view.setOnClickListener(new View.OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								dialog.dismiss();
+							}
+						});
+					}
 				}
 				return false;
 			}
@@ -92,4 +108,5 @@ public class DrawerFragment extends PreferenceFragment {
 		}
 		return view;
 	}
+
 }
