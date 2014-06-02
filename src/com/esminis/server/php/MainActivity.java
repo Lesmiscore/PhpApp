@@ -340,6 +340,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		});
 		
 		registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
+		registerReceiver(receiverNetwork, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 		Php.getInstance(MainActivity.this).requestStatus();
 	}
 
@@ -421,7 +422,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 
 	private void resetNetwork() {
 		Spinner spinner = (Spinner)findViewById(R.id.server_interface);
-		if (spinner == null) {
+		if (spinner == null || network == null) {
 			return;
 		}
 		boolean changed = network.refresh();

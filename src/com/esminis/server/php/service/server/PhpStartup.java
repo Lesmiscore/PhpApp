@@ -108,28 +108,31 @@ public class PhpStartup {
 			createCommand(php, address, root, moduleDirectory, documentRoot, modules), null,
 			documentRoot
 		);
-		if (!keepRunning) {
-			List<ActivityManager.RunningAppProcessInfo> processes =
-				((ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE))
-					.getRunningAppProcesses();
-			int pidMe = 0;
-			if (processes != null) {
-				for (ActivityManager.RunningAppProcessInfo info : processes) {
-					if (info.processName.equalsIgnoreCase(context.getPackageName())) {
-						pidMe = info.pid;
+		int pid = new com.esminis.model.manager.Process().getPid(php);
+		if (pid > 0) {
+			String command;
+			if (!keepRunning) {
+				List<ActivityManager.RunningAppProcessInfo> processes =
+					((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE))
+						.getRunningAppProcesses();
+				int pidMe = 0;
+				if (processes != null) {
+					for (ActivityManager.RunningAppProcessInfo info : processes) {
+						if (info.processName.equalsIgnoreCase(context.getPackageName())) {
+							pidMe = info.pid;
+						}
 					}
 				}
+				command = "ls /proc/" + pidMe + " > /dev/null 2>&1 && " +
+					"ls /proc/" + pid + " > /dev/null 2>&1";
+			} else {
+				command = "ls " + php.getAbsolutePath() + " > /dev/null";
 			}
-			int pid = new com.esminis.model.manager.Process().getPid(php);
-			if (pid > 0) {
-				Runtime.getRuntime().exec(
-					new String[] {
-						"/system/bin/sh", "-c",
-						"while ls /proc/" + pidMe + " > /dev/null 2>&1 && " +
-								"ls /proc/" + pid + " > /dev/null 2>&1;do sleep 5;done; kill -9 " + pid
-					}
-				);
-			}
+			Runtime.getRuntime().exec(
+				new String[] {
+					"/system/bin/sh", "-c", "while " + command + ";do sleep 5;done; kill -9 " + pid
+				}
+			);
 		}
 		return process;
 	}
