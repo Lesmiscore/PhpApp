@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -59,6 +60,7 @@ import java.io.File;
 public class MainActivity extends Activity implements InstallServer.OnInstallListener {
 	
 	private BroadcastReceiver receiver = null;
+	private BroadcastReceiver receiverNetwork = null;
 	
 	private Preferences preferences = null;
 	
@@ -145,6 +147,10 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		if (receiver != null) {
 			registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
 		}
+		if (receiverNetwork != null) {
+			registerReceiver(receiverNetwork, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+		}
+		resetNetwork();
 		Php.getInstance(MainActivity.this).requestStatus();
 		resetLog();
 		removeFocus();
@@ -156,6 +162,9 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		paused = true;
 		if (receiver != null) {
 			unregisterReceiver(receiver);
+		}
+		if (receiverNetwork != null) {
+			unregisterReceiver(receiverNetwork);
 		}
 	}
 
@@ -216,27 +225,8 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 			syncedDrawerState = true;
 		}
 		network = Manager.get(Network.class);
-		
-		Spinner spinner = (Spinner)findViewById(R.id.server_interface);
-		spinner.setAdapter(
-			new ArrayAdapter<com.esminis.model.Network>(
-				this, android.R.layout.simple_spinner_dropdown_item, network.get()
-			)
-		);
-		spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				getPreferences().set(MainActivity.this, Preferences.ADDRESS, network.get(position).name);
-				Php.getInstance(MainActivity.this).requestRestartIfRunning();
-			}
-
-			public void onNothingSelected(AdapterView<?> parent) {
-			}
-
-		});
-		spinner.setSelection(
-			network.getPosition(getPreferences().getString(MainActivity.this, Preferences.ADDRESS))
-		);
+		resetNetwork();
 
 		TextView text = (TextView)findViewById(R.id.server_root);		
 		text.setText(getPreferences().getString(MainActivity.this, Preferences.DOCUMENT_ROOT));
@@ -274,6 +264,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 				return false;
 			}
 		});
+		text.setText(getPreferences().getString(MainActivity.this, Preferences.PORT));
 		text.addTextChangedListener(new TextWatcher() {
 
 			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
@@ -297,7 +288,6 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 					.setTextColor(error ? Color.RED : Color.BLACK);
 			}
 		});
-		text.setText(getPreferences().getString(MainActivity.this, Preferences.PORT));
 
 		receiver = new BroadcastReceiver() {
 
@@ -325,6 +315,12 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 				}
 			}
 
+		};
+		receiverNetwork = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				resetNetwork();
+			}
 		};
 
 		findViewById(R.id.start).setOnClickListener(new View.OnClickListener() {
@@ -422,4 +418,40 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 			dialog.dismiss();
 		}
 	}
+
+	private void resetNetwork() {
+		Spinner spinner = (Spinner)findViewById(R.id.server_interface);
+		if (spinner == null) {
+			return;
+		}
+		boolean changed = network.refresh();
+		spinner.setAdapter(
+			new ArrayAdapter<com.esminis.model.Network>(
+				this, android.R.layout.simple_spinner_dropdown_item, network.get()
+			)
+		);
+		spinner.setOnItemSelectedListener(null);
+		spinner.setSelection(
+			network.getPosition(getPreferences().getString(MainActivity.this, Preferences.ADDRESS))
+		);
+		spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				String value = getPreferences().getString(MainActivity.this, Preferences.ADDRESS);
+				String newValue = network.get(position).name;
+				if (value.equals(newValue)) {
+					return;
+				}
+				getPreferences().set(MainActivity.this, Preferences.ADDRESS, newValue);
+				Php.getInstance(MainActivity.this).requestRestartIfRunning();
+			}
+
+			public void onNothingSelected(AdapterView<?> parent) {}
+
+		});
+		if (changed) {
+			Php.getInstance(MainActivity.this).requestRestartIfRunning();
+		}
+	}
+
 }
