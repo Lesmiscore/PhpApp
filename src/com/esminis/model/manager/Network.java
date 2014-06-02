@@ -28,12 +28,28 @@ public class Network extends Manager<com.esminis.model.Network> {
 	private List<com.esminis.model.Network> list = new LinkedList<com.esminis.model.Network>();
 	
 	protected Network() {
+		refresh();
+	}
+
+	public boolean refresh() {
+		List<com.esminis.model.Network> listOld = new LinkedList<com.esminis.model.Network>();
+		listOld.addAll(list);
+		list.clear();
 		try {
 			List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
 			add(interfaces, false);
 			add(interfaces, true);
 		} catch (SocketException ignored) {}
 		add("0.0.0.0", "all", "0.0.0.0 (all)");
+		if (listOld.size() != list.size()) {
+			return true;
+		}
+		for (int i = 0; i < list.size(); i++) {
+			if (!list.get(i).title.equals(listOld.get(i).title)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void add(List<NetworkInterface> interfaces, boolean loopback) {
