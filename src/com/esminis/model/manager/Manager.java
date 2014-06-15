@@ -16,12 +16,14 @@
 package com.esminis.model.manager;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.HashMap;
 
 abstract public class Manager<T> {
 
 	private Class<T> modelClass = null;
 
-	static private Manager instance = null;
+	static private HashMap<Class<? extends Manager>,Manager> instances =
+		new HashMap<Class<? extends Manager>, Manager>();
 
 	private Class<T> getModelClass() {
 		if (modelClass == null) {
@@ -40,12 +42,14 @@ abstract public class Manager<T> {
 	}
 
 	static public <M extends Manager> M get(Class<M> managerClass) {
-		try {
-			instance = managerClass.newInstance();
-		} catch (Exception ignored) {
-			throw new RuntimeException("Could not create manager instance for class");
+		if (!instances.containsKey(managerClass)) {
+			try {
+				instances.put(managerClass, managerClass.newInstance());
+			} catch (Exception ignored) {
+				throw new RuntimeException("Could not create manager instance for class");
+			}
 		}
-		return (M)instance;
+		return (M)instances.get(managerClass);
 	}
 
 }
