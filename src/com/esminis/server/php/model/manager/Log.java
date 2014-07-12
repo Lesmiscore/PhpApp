@@ -25,12 +25,16 @@ public class Log extends Manager<String> {
 		manager.set(context, KEY, "");
 	}
 
-	public void add(Context context, String line, boolean error) {
-		String[] parts = manager.getString(context, KEY).split("\n");
+	public void add(Context context, String lines) {
+		String[] linesArray = TextUtils.split(lines, "\n");
 		List<String> list = new ArrayList<String>();
-		list.addAll(Arrays.asList(parts).subList(parts.length == 36 ? 1 : 0, parts.length));
-		list.add((error ? "1" : "0") + line);
-		manager.set(context, KEY, TextUtils.join("\n", list));
+		list.addAll(Arrays.asList(manager.getString(context, KEY).split("\n")));
+		for (String line : linesArray) {
+			list.add((line.matches("^.+: /[^ ]*$") ? "0" : "1") + line);
+		}
+		manager.set(
+			context, KEY, TextUtils.join("\n", list.subList(Math.max(list.size() - 36, 0), list.size()))
+		);
 		text = getText(context);
 	}
 

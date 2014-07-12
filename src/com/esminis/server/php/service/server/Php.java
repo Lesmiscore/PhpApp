@@ -194,7 +194,7 @@ public class Php {
 		if (data.get("action").equals("error")) {
 			String line = data.getString("message");
 			if (line != null) {
-				Manager.get(Log.class).add(context, line, !line.matches("^.+: /[^ ]*$"));
+				Manager.get(Log.class).add(context, line);
 				Intent intent = new Intent(INTENT_ACTION);
 				intent.putExtra("errorLine", line);
 				context.sendBroadcast(intent);
