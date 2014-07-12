@@ -16,10 +16,14 @@
 package com.esminis.server.php.service.server;
 
 import android.os.AsyncTask;
+import android.text.TextUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PhpStreamReader extends AsyncTask<InputStream, Void, Void> {
 
@@ -37,6 +41,7 @@ public class PhpStreamReader extends AsyncTask<InputStream, Void, Void> {
 			new InputStreamReader(arguments[0])
 		);
 		String line;
+		List<String> lines = new ArrayList<String>();
 		for (;;) {
 			try {
 				line = reader.readLine();
@@ -46,10 +51,21 @@ public class PhpStreamReader extends AsyncTask<InputStream, Void, Void> {
 			if (line == null) {
 				break;
 			}
+			lines.clear();
+			lines.add(line);
+			try {
+				while (reader.ready()) {
+					line = reader.readLine();
+					if (line == null) {
+						break;
+					}
+					lines.add(line);
+				}
+			} catch (IOException ignored) {}
 			try {
 				Thread.sleep(250);
 			} catch (InterruptedException ignored) {}
-			handler.sendError(line);
+			handler.sendError(TextUtils.join("\n", lines));
 		}
 		if (!isCancelled()) {
 			php.requestStop();
