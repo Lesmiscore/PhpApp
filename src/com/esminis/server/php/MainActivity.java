@@ -346,7 +346,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 
 	private void resetLog() {
 		TextView text = (TextView)findViewById(R.id.error);
-		text.setText(Manager.get(Log.class).get(this));
+		text.setText(Manager.get(Log.class).get());
 		text.scrollTo(0, Math.max((text.getLineHeight() * text.getLineCount()) - text.getHeight(), 0));
 	}
 

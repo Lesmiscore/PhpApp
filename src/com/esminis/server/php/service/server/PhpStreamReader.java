@@ -46,6 +46,9 @@ public class PhpStreamReader extends AsyncTask<InputStream, Void, Void> {
 			if (line == null) {
 				break;
 			}
+			try {
+				Thread.sleep(250);
+			} catch (InterruptedException ignored) {}
 			handler.sendError(line);
 		}
 		if (!isCancelled()) {

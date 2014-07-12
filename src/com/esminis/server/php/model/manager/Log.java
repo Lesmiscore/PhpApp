@@ -17,6 +17,8 @@ public class Log extends Manager<String> {
 
 	private Preferences manager = Manager.get(Preferences.class);
 
+	private CharSequence text = null;
+
 	static private String KEY = "__log__";
 
 	public void clear(Context context) {
@@ -29,20 +31,22 @@ public class Log extends Manager<String> {
 		list.addAll(Arrays.asList(parts).subList(parts.length == 36 ? 1 : 0, parts.length));
 		list.add((error ? "1" : "0") + line);
 		manager.set(context, KEY, TextUtils.join("\n", list));
+		text = getText(context);
 	}
 
-	public CharSequence get(Context context) {
+	private CharSequence getText(Context context) {
 		String[] lines = manager.getString(context, KEY).split("\n");
 		SpannableStringBuilder builder = new SpannableStringBuilder();
+		Spannable.Factory factory = new Spannable.Factory();
 		for (int i = 0; i < lines.length; i++) {
 			String line = lines[i];
 			if (line.isEmpty()) {
 				continue;
 			}
-			Spannable textLine = new Spannable.Factory().newSpannable(line.substring(1));
+			Spannable textLine = factory.newSpannable(line.substring(1));
 			textLine.setSpan(
-				new ForegroundColorSpan(line.charAt(0) == '0' ? Color.rgb(0, 0x66, 0) : Color.RED), 0,
-				line.length() - 1, 0
+				new ForegroundColorSpan(line.charAt(0) == '0' ? Color.rgb(0, 0x66, 0) : Color.RED),
+				0, line.length() - 1, 0
 			);
 			if (i > 0) {
 				builder.append("\n");
@@ -50,6 +54,10 @@ public class Log extends Manager<String> {
 			builder.append(textLine);
 		}
 		return builder;
+	}
+
+	public CharSequence get() {
+		return text;
 	}
 
 }
