@@ -43,7 +43,7 @@
 	<string name="settings">Settings</string>
 
 	<string name="php_version">5.5.10</string>
-	<string name="php_build">3</string>
+	<string name="php_build">4</string>
 	<string-array name="modules">
 		<item>bcmath</item><item>BC Math</item><item>Arbitrary Precision Mathematics</item>
 		<item>calendar</item><item>Calendar</item><item>Functions to simplify converting between different calendar formats</item>
