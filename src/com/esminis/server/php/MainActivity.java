@@ -77,6 +77,8 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 	private ActionBarDrawerToggle drawerToggle = null;
 
 	private boolean syncedDrawerState = false;
+
+	private String titleDefault = null;
 	
 	private Preferences getPreferences() {
 		if (preferences == null) {
@@ -93,6 +95,8 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 			TextView text = (TextView)findViewById(R.id.error);
 			text.setText(savedInstanceState.getCharSequence("errors"));
 		}
+		titleDefault = getString(R.string.title_with_version, getString(R.string.php_version));
+		getActionBar().setTitle(titleDefault);
 		InstallServer.getInstance(this).installIfNeeded(this);
 		findViewById(R.id.container).setOnTouchListener(new View.OnTouchListener() {
 			@Override
@@ -200,7 +204,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 					ActionBar bar = getActionBar();
 					ApplicationInfo info = getApplicationInfo();
 					if (bar != null && info != null) {
-						bar.setTitle(info.labelRes);
+						bar.setTitle(titleDefault);
 					}
 					invalidateOptionsMenu();
 				}
