@@ -95,7 +95,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 			TextView text = (TextView)findViewById(R.id.error);
 			text.setText(savedInstanceState.getCharSequence("errors"));
 		}
-		titleDefault = getString(R.string.title_with_version, getString(R.string.php_version));
+		titleDefault = getString(R.string.title) + " " + getString(R.string.php_version);
 		getActionBar().setTitle(titleDefault);
 		InstallServer.getInstance(this).installIfNeeded(this);
 		findViewById(R.id.container).setOnTouchListener(new View.OnTouchListener() {
