@@ -26,7 +26,7 @@
 	<string name="go_up">Go up</string>
 	<string name="about">About</string>
 	<string name="about_content"><![CDATA[<br />This is totally free and open source app that works using PHP built-in server and can be started automatically on boot.<br /><br />
-		PHP(version %1$s) has these extensions: Core, date, ereg, libxml, openssl, pcre, sqlite3, zlib, bcmath, bz2, calendar, ctype, curl, dom, hash, fileinfo, filter, ftp, gd, gettext, gmp, SPL, iconv, intl, json, mbstring, mcrypt, session, standard, mysqlnd, mysqli, PDO, pdo_mysql, pdo_sqlite, Phar, posix, pspell, recode, Reflection, mysql, SimpleXML, soap, sockets, exif, tidy, tokenizer, wddx, xml, xmlreader, xmlrpc, xmlwriter, xsl, zip, cli_server, mhash, ssh2, Zend OPcache, Phalcon, yaf, yar<br /><br />
+		PHP(version %1$s) has these extensions: core, date, ereg, libxml, openssl, pcre, sqlite3, zlib, bcmath, bz2, calendar, ctype, curl, dom, hash, fileinfo, filter, ftp, gd, gettext, gmp, spl, iconv, intl, json, mbstring, mcrypt, session, standard, mysqlnd, mysqli, odbc, pdo, pdo_mysql, pdo_odbc, pdo_pgsql, pdo_sqlite, pgsql, phar, posix, pspell, recode, reflection, mysql, simplexml, soap, sockets, exif, tidy, tokenizer, wddx, xml, xmlreader, xmlrpc, xmlwriter, xsl, zip, cli_server, mhash, ssh2, opcache, phalcon, yaf, yar<br /><br />
 		Recommended for usage: in development or for very small websites with very small amount of visitors, couse this server supports only one request at a time.<br /><br />
 		Server document root by default(it can be changed) is sdcard/www so put files there.<br /><br />
 		Edit php.ini as needed, they are loaded from document root directory.<br /><br />
@@ -43,7 +43,7 @@
 	<string name="settings">Settings</string>
 
 	<string name="php_version">5.6.0</string>
-	<string name="php_build">2</string>
+	<string name="php_build">1</string>
 	<string-array name="modules">
         <item>bcmath</item><item>BC Math</item><item>Arbitrary Precision Mathematics</item>
         <item>bz2</item><item>Bzip 2</item><item>Bzip 2</item>
