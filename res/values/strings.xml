@@ -43,7 +43,7 @@
 	<string name="settings">Settings</string>
 
 	<string name="php_version">5.6.0</string>
-	<string name="php_build">0</string>
+	<string name="php_build">2</string>
 	<string-array name="modules">
         <item>bcmath</item><item>BC Math</item><item>Arbitrary Precision Mathematics</item>
         <item>bz2</item><item>Bzip 2</item><item>Bzip 2</item>
@@ -60,11 +60,15 @@
         <item>mcrypt</item><item>Mcrypt</item><item>Interface to mcrypt library</item>
         <item>mysql</item><item>Mysql</item><item>Original MySQL API</item>
         <item>mysqli</item><item>Mysqli</item><item>MySQL Improved Extension</item>
+        <item>odbc</item><item>ODBC</item><item>ODBC</item>
         <item>zend_opcache</item><item>OPcache</item><item>Improves performance by caching byte code</item>
         <item>pdo_mysql</item><item>PDO MySQL</item><item>PDO MySQL driver</item>
+        <item>pdo_odbc</item><item>PDO ODBC</item><item>PDO ODBC driver</item>
+        <item>pdo_pgsql</item><item>PDO PostgreSQL</item><item>PDO PostgreSQL driver</item>
 		<item>phalcon</item><item>Phalcon</item><item>Web framework implemented as a C extension</item>
         <item>phar</item><item>Phar</item><item>PHP Archive</item>
         <item>posix</item><item>POSIX</item><item>Interface to POSIX functions</item>
+        <item>pgsql</item><item>PostgreSQL</item><item>PostgreSQL</item>
         <item>pspell</item><item>Pspell</item><item>Functions to check the spelling and offer suggestions</item>
 		<item>soap</item><item>SOAP</item><item>SOAP Server and Client</item>
 		<item>ssh2</item><item>SSH 2</item><item>Secure Shell 2</item>
