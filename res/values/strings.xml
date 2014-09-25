@@ -86,24 +86,24 @@
 		<item>Date/Time</item><item>Date and Time</item>
 		<item>DOM</item><item>Document Object Model</item>
 		<item>Filter</item><item>Data Filtering</item>
-        <item>Hash and Mhash</item><item>HASH Message Digest Framework</item>
+		<item>Hash and Mhash</item><item>HASH Message Digest Framework</item>
 		<item>intl</item><item>Internationalization Functions</item>
 		<item>JSON</item><item>JavaScript Object Notation</item>
 		<item>libxml</item><item>Other extensions for xml use this</item>
 		<item>mbstring</item><item>Multibyte String</item>
-        <item>Mysqlnd</item><item>MySQL Native Driver</item>
+		<item>Mysqlnd</item><item>MySQL Native Driver</item>
 		<item>OpenSSL</item><item>Interface to OpenSSL</item>
 		<item>PCRE</item><item>Regular Expressions (Perl-Compatible)</item>
-        <item>PDO</item><item>PHP Data Objects</item>
-        <item>PDO Sqlite</item><item>PDO SQLite 3 driver</item>
+		<item>PDO</item><item>PHP Data Objects</item>
+		<item>PDO Sqlite</item><item>PDO SQLite 3 driver</item>
 		<item>POSIX Regex</item><item>Regular Expression (POSIX Extended)</item>
 		<item>Reflection</item><item>PHP reflection</item>
 		<item>SAPI CLI</item><item>PHP Command Line SAPI</item>
-        <item>Session</item><item>Session Handling</item>
+		<item>Session</item><item>Session Handling</item>
 		<item>SimpleXML</item><item>Simple and easily usable toolset for XML</item>
 		<item>Sockets</item><item>Low-level interface to socket functions</item>
 		<item>SPL</item><item>Standard PHP Library</item>
-        <item>SQLite3</item><item>Support for SQLite version 3 databases</item>
+		<item>SQLite3</item><item>Support for SQLite version 3 databases</item>
 		<item>Standard</item><item>PHP standard</item>
 		<item>WDDX</item><item>Functions are intended for working with WDDX</item>
 		<item>XML</item><item>XML Parser</item>
@@ -112,4 +112,11 @@
 		<item>XML Writer</item><item>Wrappper for libxml xmlWriter API</item>
 		<item>Yet another RPC framework</item><item>Light, concurrent RPC framework</item>
 	</string-array>
+
+	<string-array name="assets_to_install">
+		<item>php</item>
+		<item>libsqlite3odbc.so</item>
+		<item>odbcinst.ini</item>
+	</string-array>
+
 </resources>
