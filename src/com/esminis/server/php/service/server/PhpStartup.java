@@ -105,7 +105,8 @@ public class PhpStartup {
 		boolean keepRunning, String[] modules, Context context
 	) throws IOException {
 		Process process = Runtime.getRuntime().exec(
-			createCommand(php, address, root, moduleDirectory, documentRoot, modules), null,
+			createCommand(php, address, root, moduleDirectory, documentRoot, modules),
+			new String[] {"ODBCSYSINI=" + moduleDirectory.getAbsolutePath()},
 			documentRoot
 		);
 		int pid = new com.esminis.model.manager.Process().getPid(php);

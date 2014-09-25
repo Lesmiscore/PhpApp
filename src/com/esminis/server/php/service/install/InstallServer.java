@@ -25,6 +25,7 @@ import android.os.Environment;
 
 import com.esminis.model.manager.Manager;
 import com.esminis.model.manager.Network;
+import com.esminis.server.php.R;
 import com.esminis.server.php.service.server.Php;
 import com.esminis.server.php.model.manager.Preferences;
 import java.io.File;
@@ -47,8 +48,6 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 	private OnInstallListener listener = null;
 
 	private boolean canStartInstall = false;
-
-	static final private String PATH_ASSET_PHP = "php";
 
 	static private InstallServer instance = null;
 
@@ -160,16 +159,21 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 			preferences.set(context, Preferences.ADDRESS, Manager.get(Network.class).get(0).name);
 		}
 		List<String> list = new ArrayList<String>();
-		list.add(PATH_ASSET_PHP);
+		Collections.addAll(list, context.getResources().getStringArray(R.array.assets_to_install));
 		Collections.addAll(list, preferences.getInstallModules(context));
+		File moduleDirectory = Php.getInstance(context).getPhp().getParentFile();
 		if (
-			!new Install().fromAssetFiles(
-				Php.getInstance(context).getPhp().getParentFile(), list.toArray(new String[list.size()]),
-				context
-			)
+			!new Install().fromAssetFiles(moduleDirectory, list.toArray(new String[list.size()]), context)
 		) {
 			return false;
 		}
+
+		HashMap<String, String> variables = new HashMap<String, String>();
+		variables.put("moduleDirectory", moduleDirectory.getAbsolutePath());
+		new Install().preprocessFile(
+			new File(Php.getInstance(context).getPhp().getParentFile(), "odbcinst.ini"), variables
+		);
+
 		preferences.set(context, Preferences.PHP_BUILD, preferences.getPhpBuild(context));
 		return true;
 	}
