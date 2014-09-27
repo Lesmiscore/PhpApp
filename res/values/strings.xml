@@ -116,6 +116,7 @@
 	<string-array name="assets_to_install">
 		<item>php</item>
 		<item>libsqlite3odbc.so</item>
+		<item>libodbcpsql.so</item>
 		<item>odbcinst.ini</item>
 	</string-array>
 
