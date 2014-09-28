@@ -35,12 +35,25 @@ public class About extends AlertDialog {
 		}
 		TabHost tabhost = (TabHost)view.findViewById(R.id.tabhost);
 		tabhost.setup();
-		TabHost.TabSpec tab = tabhost.newTabSpec(getContext().getString(R.string.about));
+		TabHost.TabSpec tab = tabhost.newTabSpec(getContext().getString(R.string.manual));
 		tab.setIndicator(tab.getTag());
 		tab.setContent(new TabHost.TabContentFactory() {
 			@Override
 			public View createTabContent(String tag) {
-				return createMain((ViewGroup)view.findViewById(android.R.id.tabcontent));
+				return createText(
+					(ViewGroup)view.findViewById(android.R.id.tabcontent), R.string.manual_content
+				);
+			}
+		});
+		tabhost.addTab(tab);
+		tab = tabhost.newTabSpec(getContext().getString(R.string.about));
+		tab.setIndicator(tab.getTag());
+		tab.setContent(new TabHost.TabContentFactory() {
+			@Override
+			public View createTabContent(String tag) {
+				return createText(
+					(ViewGroup)view.findViewById(android.R.id.tabcontent), R.string.about_content
+				);
 			}
 		});
 		tabhost.addTab(tab);
@@ -66,15 +79,11 @@ public class About extends AlertDialog {
 		return view;
 	}
 
-	private View createMain(ViewGroup container) {
+	private View createText(ViewGroup container, int content) {
 		TextView view = (TextView)getLayoutInflater().inflate(R.layout.about_main, container, false);
 		if (view != null) {
 			view.setText(
-				Html.fromHtml(
-					getContext().getString(
-						R.string.about_content, getContext().getString(R.string.php_version)
-					)
-				)
+				Html.fromHtml(getContext().getString(content, getContext().getString(R.string.php_version)))
 			);
 			view.setMovementMethod(new ScrollingMovementMethod());
 		}
