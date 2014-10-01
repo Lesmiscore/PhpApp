@@ -38,4 +38,13 @@
 	<string name="modules_title_builtin">%1$s (įmontuotas)</string>
 	<string name="open">Atidaryti</string>
 	<string name="settings">Nustatymai</string>
+	<string name="manual">Žinynas</string>
+	<string name="manual_content"><![CDATA[<br />
+		Šiame žinyne trumpai aprašomos kai kurios svarbios aplikacijos dalys:<br /><br />
+		Serverio šakninis katalogas pagal nutylėjimą(gali būti pakeistas) yra sdcard/www taigi dėkte failus į tą katalogą.<br /><br />
+		PHP konfigūracija yra php.ini faile kuris užkraunamas iš serverio šakninės direktorijos, jį pilnai galite koreguoti kaip jums tinka(tik jei keisite nepamirškite session.save_path ir upload_tmp_dir).<br /><br />
+		PHP lokalės neveikia - setlocale ir pan.<br /><br />
+		Aplikacija turi 2 ODBC draiver`ius: PostgreSQL ir SQLite3. Jei norite naudoti šiuos draiver`ius, tai galite padaryti panašiai:<br /><br />
+		odbc_connect(\'Driver=SQLite3;Database=\' . $path_to_file, \'\', \'\'); // SQLite3<br /><br />
+		odbc_connect(\'Driver=PostgreSQL;Database=\' . $database_name . \';Server=\' . $server, \'\', \'\'); // PostgreSQL<br />]]></string>
 </resources>
