@@ -41,7 +41,7 @@
 	<string name="manual">Manual</string>
 	<string name="manual_content"><![CDATA[<br />
 		This is short manual of some important parts of application:<br /><br />
-		Server document root by default(it can be changed) is sdcard/www so put files there.<br /><br />
+		Server document root by default is sdcard/www so put files there.<br /><br />
 		PHP configuration is in php.ini file which is loaded from document root, edit it as you need(but if you change it dont forget session.save_path and upload_tmp_dir).<br /><br />
 		PHP locales will not work - setlocale and such.<br /><br />
 		There are 2 ODBC drivers included in this application: PostgreSQL and SQLite3. If you want to use ODBC with them then do something like this:<br /><br />
