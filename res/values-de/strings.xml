@@ -44,7 +44,7 @@
 		Root-Verzeichnis des Server ist  sdcard/www (default). Legen Sie Dateien in dem Verzeichnis.<br /><br />
 		PHP Konfiguration ist in php.ini Datei, die aus Server-Root-Verzeichnis geladet ist. Sie können sie wie Sie wollen koregieren (als Sie ändern, vergessen Sie nicht session.save_path und upload_tmp_dir).<br /><br />
 		PHP Localen funktionieren nicht - setlocale usw.<br /><br />
-		Die Anwendung hat 2 ODBC Treiber, Sie können es ähnlich machen<br /><br />
+		Die Anwendung hat 2 ODBC Treiber. Wenn Sie diese Treiber verwenden wollen, können Sie es ähnlich machen:<br /><br />
 		odbc_connect(\'Driver=SQLite3;Database=\' . $path_to_file, \'\', \'\'); // SQLite3<br /><br />
 		odbc_connect(\'Driver=PostgreSQL;Database=\' . $database_name . \';Server=\' . $server, \'\', \'\'); // PostgreSQL<br />]]></string>
 </resources>
