@@ -106,7 +106,11 @@ public class PhpStartup {
 	) throws IOException {
 		Process process = Runtime.getRuntime().exec(
 			createCommand(php, address, root, moduleDirectory, documentRoot, modules),
-			new String[] {"ODBCSYSINI=" + moduleDirectory.getAbsolutePath()},
+			new String[] {
+				"ODBCSYSINI=" + moduleDirectory.getAbsolutePath(),
+				"ANDROID_DATA=" + System.getenv("ANDROID_DATA"),
+				"ANDROID_ROOT=" + System.getenv("ANDROID_ROOT")
+			},
 			documentRoot
 		);
 		int pid = new com.esminis.model.manager.Process().getPid(php);
