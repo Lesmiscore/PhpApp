@@ -125,8 +125,9 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 			}
 		};
 		context.registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
+		canStartInstall = false;
 		Php.getInstance(context).requestStop();
-		while (canStartInstall) {
+		while (!canStartInstall) {
 			try {
 				Thread.sleep(250);
 			} catch (InterruptedException ignored) {}
