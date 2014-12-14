@@ -22,10 +22,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.Process;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class PhpStartup {
+
+	@Inject
+	protected com.esminis.model.manager.Process managerProcess;
 
 	private List<String> getIniModules(File iniDirectory) {
 		List<String> list = new ArrayList<>();
@@ -113,7 +119,7 @@ public class PhpStartup {
 			},
 			documentRoot
 		);
-		int pid = new com.esminis.model.manager.Process().getPid(php);
+		int pid = managerProcess.getPid(php);
 		if (pid > 0) {
 			String command;
 			if (!keepRunning) {

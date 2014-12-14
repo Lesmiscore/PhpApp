@@ -23,7 +23,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 
-import com.esminis.model.manager.Manager;
 import com.esminis.model.manager.Network;
 import com.esminis.server.php.R;
 import com.esminis.server.php.service.server.Php;
@@ -35,6 +34,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 
 	public interface OnInstallListener {
@@ -49,30 +52,25 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 
 	private boolean canStartInstall = false;
 
-	static private InstallServer instance = null;
-
 	private boolean installStarted = false;
-	
-	private InstallServer(OnInstallListener listener) {
-		this.listener = listener;
-	}
 
-	static public InstallServer getInstance(OnInstallListener listener) {
-		if (instance == null) {
-			instance = new InstallServer(listener);
-		} else {
-			instance.listener = listener;
-		}
-		return instance;
-	}
-	
-	public void installIfNeeded(Context context) {
+	@Inject
+	protected Network network;
+
+	@Inject
+	protected Php php;
+
+	@Inject
+	protected Preferences preferences;
+
+	public void installIfNeeded(OnInstallListener listener, Context context) {
+		this.listener = listener;
 		if (installStarted) {
 			return;
 		}
-		File file = Php.getInstance(context).getPhp();
+		File file = php.getPhp();
 		if (file.isFile()) {
-			if (!Manager.get(Preferences.class).getIsSameBuild(context)) {
+			if (!preferences.getIsSameBuild(context)) {
 				if (listener != null) {
 					listener.OnInstallNewVersionRequest(this);
 				}
@@ -126,14 +124,13 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 		};
 		context.registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
 		canStartInstall = false;
-		Php.getInstance(context).requestStop();
+		php.requestStop();
 		while (!canStartInstall) {
 			try {
 				Thread.sleep(250);
 			} catch (InterruptedException ignored) {}
 		}
 		context.unregisterReceiver(receiver);
-		Preferences preferences = Manager.get(Preferences.class);
 		if (!preferences.contains(context, Preferences.DOCUMENT_ROOT)) {
 			File file = new File(Environment.getExternalStorageDirectory(), "www");
 			File tempDirectory = new File(context.getExternalFilesDir(null), "tmp");
@@ -157,12 +154,12 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 			preferences.set(context, Preferences.PORT, "8080");
 		}
 		if (!preferences.contains(context, Preferences.ADDRESS)) {
-			preferences.set(context, Preferences.ADDRESS, Manager.get(Network.class).get(0).name);
+			preferences.set(context, Preferences.ADDRESS, network.get(0).name);
 		}
 		List<String> list = new ArrayList<>();
 		Collections.addAll(list, context.getResources().getStringArray(R.array.assets_to_install));
 		Collections.addAll(list, preferences.getInstallModules(context));
-		File moduleDirectory = Php.getInstance(context).getPhp().getParentFile();
+		File moduleDirectory = php.getPhp().getParentFile();
 		if (
 			!new Install().fromAssetFiles(moduleDirectory, list.toArray(new String[list.size()]), context)
 		) {
@@ -172,7 +169,7 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 		HashMap<String, String> variables = new HashMap<>();
 		variables.put("moduleDirectory", moduleDirectory.getAbsolutePath());
 		new Install().preprocessFile(
-			new File(Php.getInstance(context).getPhp().getParentFile(), "odbcinst.ini"), variables
+			new File(php.getPhp().getParentFile(), "odbcinst.ini"), variables
 		);
 
 		preferences.set(context, Preferences.PHP_BUILD, preferences.getPhpBuild(context));

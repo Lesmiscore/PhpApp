@@ -41,8 +41,7 @@ public class DirectoryChooser extends AlertDialog {
 		public void OnDirectoryChosen(File directory);
 		
 	}
-	
-	private com.esminis.model.manager.DirectoryChooser manager = new com.esminis.model.manager.DirectoryChooser();
+
 	private File parent = Environment.getExternalStorageDirectory();
 	private ListView listView = null;
 	private OnShowListener listenerShow = null;
@@ -128,13 +127,26 @@ public class DirectoryChooser extends AlertDialog {
 			}
 			setTitle(parent.getAbsolutePath());
 			ArrayAdapter<File> adapter = (ArrayAdapter<File>)listView.getAdapter();
-			ArrayList<File> list = manager.getSubdirectories(parent);
+			ArrayList<File> list = getSubdirectories(parent);
 			adapter.clear();
 			for (File file : list) {
 				adapter.add(file);
 			}
 			adapter.notifyDataSetChanged();
 		}		
+	}
+
+	private ArrayList<File> getSubdirectories(File parent) {
+		ArrayList<File> result = new ArrayList<>();
+		File[] list = parent.listFiles();
+		if (list != null) {
+			for (File file : list) {
+				if (file.isDirectory()) {
+					result.add(file);
+				}
+			}
+		}
+		return result;
 	}
 
 	@Override

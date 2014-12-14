@@ -15,19 +15,27 @@
  */
 package com.esminis.server.php.service;
 
-import com.esminis.model.manager.Manager;
+import com.esminis.server.php.Application;
 import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.server.Php;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+
+import dagger.ObjectGraph;
 
 public class AutoStart extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		if (Manager.get(Preferences.class).getBoolean(context, Preferences.START_ON_BOOT)) {
-			Php.getInstance(context).requestStart();
+		Context applicationContext = context.getApplicationContext();
+		if (!(applicationContext instanceof Application)) {
+			return;
+		}
+		ObjectGraph graph = ((Application)applicationContext).getObjectGraph();
+		if (graph.get(Preferences.class).getBoolean(context, Preferences.START_ON_BOOT)) {
+			graph.get(Php.class).requestStart();
 		}
 	}
 	

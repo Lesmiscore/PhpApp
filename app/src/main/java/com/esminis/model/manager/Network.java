@@ -23,11 +23,16 @@ import java.util.LinkedList;
 import java.util.List;
 import org.apache.http.conn.util.InetAddressUtils;
 
-public class Network extends Manager {
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
+public class Network {
 
 	private List<com.esminis.model.Network> list = new LinkedList<>();
-	
-	protected Network() {
+
+	@Inject
+	public Network() {
 		refresh();
 	}
 

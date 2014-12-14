@@ -1,6 +1,6 @@
 package com.esminis.server.php;
 
-import android.app.Dialog;
+import android.app.*;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -72,7 +72,10 @@ public class DrawerFragment extends PreferenceFragment {
 		preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				Php.getInstance(getActivity()).requestRestartIfRunning();
+				android.app.Application application = getActivity().getApplication();
+				if (application instanceof Application) {
+					((Application)application).getObjectGraph().get(Php.class).requestRestartIfRunning();
+				}
 				return true;
 			}
 		});
