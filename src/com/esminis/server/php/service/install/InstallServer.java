@@ -145,7 +145,7 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 					try {
 						Install install = new Install();
 						install.fromAssetDirectory(file, "www", context);
-						HashMap<String, String> variables = new HashMap<String, String>();
+						HashMap<String, String> variables = new HashMap<>();
 						variables.put("tempDirectory", tempDirectory.getAbsolutePath());
 						install.preprocessFile(new File(file, "php.ini"), variables);
 					} catch (IOException ignored) {}
@@ -159,7 +159,7 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 		if (!preferences.contains(context, Preferences.ADDRESS)) {
 			preferences.set(context, Preferences.ADDRESS, Manager.get(Network.class).get(0).name);
 		}
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		Collections.addAll(list, context.getResources().getStringArray(R.array.assets_to_install));
 		Collections.addAll(list, preferences.getInstallModules(context));
 		File moduleDirectory = Php.getInstance(context).getPhp().getParentFile();
@@ -169,7 +169,7 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 			return false;
 		}
 
-		HashMap<String, String> variables = new HashMap<String, String>();
+		HashMap<String, String> variables = new HashMap<>();
 		variables.put("moduleDirectory", moduleDirectory.getAbsolutePath());
 		new Install().preprocessFile(
 			new File(Php.getInstance(context).getPhp().getParentFile(), "odbcinst.ini"), variables
