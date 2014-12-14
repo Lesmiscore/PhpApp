@@ -22,7 +22,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Message;
 
-import com.esminis.model.manager.Manager;
 import com.esminis.model.manager.Process;
 import com.esminis.server.php.R;
 import com.esminis.model.manager.Network;
@@ -35,8 +34,6 @@ import java.io.IOException;
 public class Php {
 	
 	static public final String INTENT_ACTION = "STATUS_SERVER_CHANGED";
-	
-	private static Php instance = null;
 
 	private java.lang.Process process = null;
 	
@@ -48,28 +45,36 @@ public class Php {
 	
 	private boolean start = false;
 	
-	private Preferences preferences = Manager.get(Preferences.class);
-	
-	private Network network = Manager.get(Network.class);
+	private Preferences preferences;
+
+	protected Network network = null;
 
 	private PhpHandler handler = null;
 
 	private Context context = null;
 
-	private PhpStartup startup = new PhpStartup();
+	private PhpStartup startup = null;
 
 	private PhpStreamReader streamReader = null;
 
-	static public Php getInstance(Context context) {
-		return instance == null ? instance = new Php(context) : instance;
-	}
-	
-	protected Php(Context context) {
+	private Process managerProcess = null;
+
+	private Log log = null;
+
+	public Php(
+		Network network, Process process, PhpStartup startup, Preferences preferences, Log log,
+		Context context
+	) {
+		this.log = log;
+		this.preferences = preferences;
+		this.startup = startup;
+		this.managerProcess = process;
+		this.network = network;
 		this.context = context.getApplicationContext();
 		modulesDirectory = context.getFilesDir();
 		php = new File(modulesDirectory, "php");
 		address = getIPAddress() + ":" + preferences.getString(context, Preferences.PORT);
-		handler = new PhpHandler(this.context, this);
+		handler = new PhpHandler(context, this, preferences);
 	}
 
 	public File getPhp() {
@@ -93,7 +98,7 @@ public class Php {
 			process = startup.start(
 				php, address, root, modulesDirectory, fileRoot,
 				preferences.getBoolean(context, Preferences.KEEP_RUNNING),
-				Manager.get(Preferences.class).getEnabledModules(context), context
+				preferences.getEnabledModules(context), context
 			);
 			streamReader = new PhpStreamReader(this, handler);
 			streamReader.execute(process.getErrorStream());
@@ -113,14 +118,14 @@ public class Php {
 			process.destroy();
 			process = null;
 		}
-		new Process().kill(php);
+		managerProcess.kill(php);
 	}
 	
 	private void status() {
 		boolean running = process != null;
 		String realAddress = address;
 		if (process == null) {
-			String[] commandLine = new Process().getCommandLine(php);
+			String[] commandLine = managerProcess.getCommandLine(php);
 			if (commandLine != null) {
 				boolean next = false;
 				for (String part : commandLine) {
@@ -194,7 +199,7 @@ public class Php {
 		if (data.get("action").equals("error")) {
 			String line = data.getString("message");
 			if (line != null) {
-				Manager.get(Log.class).add(context, line);
+				log.add(context, line);
 				Intent intent = new Intent(INTENT_ACTION);
 				intent.putExtra("errorLine", line);
 				context.sendBroadcast(intent);

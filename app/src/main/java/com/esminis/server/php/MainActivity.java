@@ -15,10 +15,7 @@
  */
 package com.esminis.server.php;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
+import android.app.*;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -47,7 +44,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.esminis.model.manager.Manager;
 import com.esminis.popup.About;
 import com.esminis.popup.DirectoryChooser;
 import com.esminis.model.manager.Network;
@@ -57,15 +53,28 @@ import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.install.InstallServer;
 import java.io.File;
 
+import javax.inject.Inject;
+
 public class MainActivity extends Activity implements InstallServer.OnInstallListener {
 	
 	private BroadcastReceiver receiver = null;
 	private BroadcastReceiver receiverNetwork = null;
-	
-	private Preferences preferences = null;
-	
-	private Network network = null;
-	
+
+	@Inject
+	protected Preferences preferences = null;
+
+	@Inject
+	protected Network network = null;
+
+	@Inject
+	protected InstallServer installServer = null;
+
+	@Inject
+	protected Php php = null;
+
+	@Inject
+	protected Log log = null;
+
 	private boolean requestResultView = false;
 	
 	private boolean requestResultViewSuccess = false;
@@ -80,16 +89,13 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 
 	private String titleDefault = null;
 	
-	private Preferences getPreferences() {
-		if (preferences == null) {
-			preferences = Manager.get(Preferences.class);
-		}
-		return preferences;
-	}
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		android.app.Application application = getApplication();
+		if (application instanceof Application) {
+			((Application)application).getObjectGraph().inject(this);
+		}
 		setContentView(R.layout.main);		
 		if (savedInstanceState != null) {
 			TextView text = (TextView)findViewById(R.id.error);
@@ -100,7 +106,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		if (actionBar != null) {
 			actionBar.setTitle(titleDefault);
 		}
-		InstallServer.getInstance(this).installIfNeeded(this);
+		installServer.installIfNeeded(this, this);
 		findViewById(R.id.container).setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View view, MotionEvent event) {
@@ -158,7 +164,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 			registerReceiver(receiverNetwork, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 		}
 		resetNetwork();
-		Php.getInstance(MainActivity.this).requestStatus();
+		php.requestStatus();
 		resetLog();
 		removeFocus();
 	}
@@ -231,28 +237,27 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 			drawerToggle.syncState();
 			syncedDrawerState = true;
 		}
-		network = Manager.get(Network.class);
 
 		resetNetwork();
 
 		TextView text = (TextView)findViewById(R.id.server_root);		
-		text.setText(getPreferences().getString(MainActivity.this, Preferences.DOCUMENT_ROOT));
+		text.setText(preferences.getString(MainActivity.this, Preferences.DOCUMENT_ROOT));
 		text.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View arg0) {
 				DirectoryChooser chooser = new DirectoryChooser(MainActivity.this);
 				chooser.setParent(
-					new File(getPreferences().getString(MainActivity.this, Preferences.DOCUMENT_ROOT))
+					new File(preferences.getString(MainActivity.this, Preferences.DOCUMENT_ROOT))
 				);
 				chooser.setOnDirectoryChooserListener(
 					new DirectoryChooser.OnDirectoryChooserListener() {
 						public void OnDirectoryChosen(File directory) {
-							getPreferences().set(
+							preferences.set(
 								MainActivity.this, Preferences.DOCUMENT_ROOT, directory.getAbsolutePath()
 							);
-							Php.getInstance(MainActivity.this).requestRestartIfRunning();
+							php.requestRestartIfRunning();
 							((TextView) findViewById(R.id.server_root)).setText(
-								getPreferences().getString(MainActivity.this, Preferences.DOCUMENT_ROOT)
+								preferences.getString(MainActivity.this, Preferences.DOCUMENT_ROOT)
 							);
 						}
 					}
@@ -271,7 +276,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 				return false;
 			}
 		});
-		text.setText(getPreferences().getString(MainActivity.this, Preferences.PORT));
+		text.setText(preferences.getString(MainActivity.this, Preferences.PORT));
 		text.addTextChangedListener(new TextWatcher() {
 
 			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
@@ -279,7 +284,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
 
 			public void afterTextChanged(Editable text) {
-				String portPreference = getPreferences().getString(MainActivity.this, Preferences.PORT);
+				String portPreference = preferences.getString(MainActivity.this, Preferences.PORT);
 				int port = portPreference.isEmpty() ? 
 					8080 : Integer.parseInt(portPreference);
 				try {
@@ -287,8 +292,8 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 				} catch (NumberFormatException ignored) {}
 				boolean error = true;
 				if (port >= 1024 && port <= 65535) {
-					getPreferences().set(MainActivity.this, Preferences.PORT, String.valueOf(port));
-					Php.getInstance(MainActivity.this).requestRestartIfRunning();
+					preferences.set(MainActivity.this, Preferences.PORT, String.valueOf(port));
+					php.requestRestartIfRunning();
 					error = false;
 				}
 				((TextView)findViewById(R.id.server_port))
@@ -333,27 +338,27 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		findViewById(R.id.start).setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				((TextView)findViewById(R.id.error)).setText("");
-				Manager.get(Log.class).clear(view.getContext());
+				log.clear(view.getContext());
 				resetLog();
-				Php.getInstance(MainActivity.this).requestStart();
+				php.requestStart();
 			}
 		});
 
 		findViewById(R.id.stop).setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				Php.getInstance(MainActivity.this).requestStop();
+				php.requestStop();
 				resetLog();
 			}
 		});
 		
 		registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
 		registerReceiver(receiverNetwork, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-		Php.getInstance(MainActivity.this).requestStatus();
+		php.requestStatus();
 	}
 
 	private void resetLog() {
 		TextView text = (TextView)findViewById(R.id.error);
-		text.setText(Manager.get(Log.class).get());
+		text.setText(log.get());
 		text.scrollTo(0, Math.max((text.getLineHeight() * text.getLineCount()) - text.getHeight(), 0));
 	}
 
@@ -361,10 +366,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 	public void OnInstallNewVersionRequest(final InstallServer installer) {
 		AlertDialog dialog = new AlertDialog.Builder(this)
 			.setMessage(
-				getString(
-					R.string.server_install_new_version_question, Manager.get(Preferences.class)
-						.getPhpBuild(this)
-				)
+				getString(R.string.server_install_new_version_question, preferences.getPhpBuild(this))
 			)
 			.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 				@Override
@@ -438,25 +440,25 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		);
 		spinner.setOnItemSelectedListener(null);
 		spinner.setSelection(
-			network.getPosition(getPreferences().getString(MainActivity.this, Preferences.ADDRESS))
+			network.getPosition(preferences.getString(MainActivity.this, Preferences.ADDRESS))
 		);
 		spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				String value = getPreferences().getString(MainActivity.this, Preferences.ADDRESS);
+				String value = preferences.getString(MainActivity.this, Preferences.ADDRESS);
 				String newValue = network.get(position).name;
 				if (value.equals(newValue)) {
 					return;
 				}
-				getPreferences().set(MainActivity.this, Preferences.ADDRESS, newValue);
-				Php.getInstance(MainActivity.this).requestRestartIfRunning();
+				preferences.set(MainActivity.this, Preferences.ADDRESS, newValue);
+				php.requestRestartIfRunning();
 			}
 
 			public void onNothingSelected(AdapterView<?> parent) {}
 
 		});
 		if (changed) {
-			Php.getInstance(MainActivity.this).requestRestartIfRunning();
+			php.requestRestartIfRunning();
 		}
 	}
 

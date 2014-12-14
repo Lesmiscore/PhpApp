@@ -7,15 +7,18 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 
-import com.esminis.model.manager.Manager;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Log extends Manager {
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
-	private Preferences manager = Manager.get(Preferences.class);
+@Singleton
+public class Log {
+
+	@Inject
+	protected Preferences manager;
 
 	private CharSequence text = null;
 

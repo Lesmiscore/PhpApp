@@ -23,8 +23,15 @@ import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Process extends com.esminis.model.manager.Manager {
-	
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
+public class Process {
+
+	@Inject
+	public Process() {}
+
 	protected String[] find(File command) {
 		File root = new File(File.separator + "proc");
 		if (root.isDirectory()) {
@@ -92,9 +99,10 @@ public class Process extends com.esminis.model.manager.Manager {
 	}
 	
 	public void kill(File command) {
-		String[] commandLine = find(command);
-		if (commandLine != null) {
-			kill(Integer.parseInt(commandLine[0]));	
+		String[] commandLine;
+		int n = 10;
+		while((commandLine = find(command)) != null && n-- > 0) {
+			kill(Integer.parseInt(commandLine[0]));
 		}
 	}
 	

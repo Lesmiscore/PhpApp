@@ -21,7 +21,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 
-import com.esminis.model.manager.Manager;
 import com.esminis.server.php.model.manager.Preferences;
 
 public class PhpHandler extends HandlerThread {
@@ -31,9 +30,9 @@ public class PhpHandler extends HandlerThread {
 	private Preferences preferences = null;
 	private Php php = null;
 
-	public PhpHandler(Context context, Php php) {
+	public PhpHandler(Context context, Php php, Preferences preferences) {
 		super("PhpServer");
-		preferences = Manager.get(Preferences.class);
+		this.preferences = preferences;
 		this.context = context;
 		this.php = php;
 		start();

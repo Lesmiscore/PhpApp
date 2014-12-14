@@ -19,8 +19,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-public class Preferences extends Manager {
-	
+public class Preferences {
+
 	public void set(Context context, String name, boolean value) {
 		SharedPreferences.Editor editor = getPreferences(context).edit();
 		editor.putBoolean(name, value);
