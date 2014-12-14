@@ -48,9 +48,9 @@
 		odbc_connect(\'Driver=SQLite3;Database=\' . $path_to_file, \'\', \'\'); // SQLite3<br /><br />
 		odbc_connect(\'Driver=PostgreSQL;Database=\' . $database_name . \';Server=\' . $server, \'\', \'\'); // PostgreSQL<br />]]></string>
 
-	<string name="php_version">5.6.3</string>
-	<string name="php_build">0</string>
-	<string-array name="modules">
+	<string name="php_version" translatable="false">5.6.3</string>
+	<string name="php_build" translatable="false">0</string>
+	<string-array name="modules" translatable="false">
 		<item>bcmath</item><item>BC Math</item><item>Arbitrary Precision Mathematics</item>
 		<item>bz2</item><item>Bzip 2</item><item>Bzip 2</item>
 		<item>calendar</item><item>Calendar</item><item>Functions to simplify converting between different calendar formats</item>
@@ -86,7 +86,7 @@
 		<item>zlib</item><item>Zlib</item><item>Zlib Compression</item>
 	</string-array>
 
-	<string-array name="modules_builtin">
+	<string-array name="modules_builtin" translatable="false">
 		<item>Core</item><item>PHP core</item>
 		<item>cURL</item><item>Client URL Library</item>
 		<item>Date/Time</item><item>Date and Time</item>
@@ -119,7 +119,7 @@
 		<item>Yet another RPC framework</item><item>Light, concurrent RPC framework</item>
 	</string-array>
 
-	<string-array name="assets_to_install">
+	<string-array name="assets_to_install" translatable="false">
 		<item>php</item>
 		<item>libsqlite3odbc.so</item>
 		<item>libodbcpsql.so</item>
