@@ -434,9 +434,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		}
 		boolean changed = network.refresh();
 		spinner.setAdapter(
-			new ArrayAdapter<com.esminis.model.Network>(
-				this, android.R.layout.simple_spinner_dropdown_item, network.get()
-			)
+			new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, network.get())
 		);
 		spinner.setOnItemSelectedListener(null);
 		spinner.setSelection(

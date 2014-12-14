@@ -15,30 +15,11 @@
  */
 package com.esminis.model.manager;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 
-abstract public class Manager<Model> {
-
-	private Class<Model> modelClass = null;
+abstract public class Manager {
 
 	static private HashMap<Class<? extends Manager>, Manager> instances = new HashMap<>();
-
-	private Class<Model> getModelClass() {
-		if (modelClass == null) {
-			modelClass = (Class<Model>)((ParameterizedType)getClass().getGenericSuperclass())
-				.getActualTypeArguments()[0];
-		}
-		return modelClass;
-	}
-
-	protected Model create() {
-		try {
-			return getModelClass().newInstance();
-		} catch (Exception ignored) {
-			throw new RuntimeException("Could not create model instance for class " + getModelClass());
-		}
-	}
 
 	static public <M extends Manager> M get(Class<M> managerClass) {
 		if (!instances.containsKey(managerClass)) {

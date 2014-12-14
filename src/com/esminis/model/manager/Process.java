@@ -23,7 +23,7 @@ import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Process extends com.esminis.model.manager.Manager<Void> {
+public class Process extends com.esminis.model.manager.Manager {
 	
 	protected String[] find(File command) {
 		File root = new File(File.separator + "proc");
