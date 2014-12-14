@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class DirectoryChooser extends Manager<File> {
 	
 	public ArrayList<File> getSubdirectories(File parent) {
-		ArrayList<File> result = new ArrayList<File>();
+		ArrayList<File> result = new ArrayList<>();
 		File[] list = parent.listFiles();
 		if (list != null) {
 			for (File file : list) {

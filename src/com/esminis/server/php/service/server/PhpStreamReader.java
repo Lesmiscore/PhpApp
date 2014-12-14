@@ -41,7 +41,7 @@ public class PhpStreamReader extends AsyncTask<InputStream, Void, Void> {
 			new InputStreamReader(arguments[0])
 		);
 		String line;
-		List<String> lines = new ArrayList<String>();
+		List<String> lines = new ArrayList<>();
 		for (;;) {
 			try {
 				line = reader.readLine();

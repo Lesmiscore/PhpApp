@@ -27,7 +27,7 @@ public class Preferences extends com.esminis.model.manager.Preferences {
 	}
 
 	public String[] getEnabledModules(Context context) {
-		List<String> modules = new ArrayList<String>();
+		List<String> modules = new ArrayList<>();
 		String[] list = context.getResources().getStringArray(R.array.modules);
 		for (int i = 0; i < list.length; i += 3) {
 			if (getBoolean(context, "module_" + list[i])) {
@@ -38,7 +38,7 @@ public class Preferences extends com.esminis.model.manager.Preferences {
 	}
 
 	public String[] getInstallModules(Context context) {
-		List<String> modules = new ArrayList<String>();
+		List<String> modules = new ArrayList<>();
 		String[] list = context.getResources().getStringArray(R.array.modules);
 		for (int i = 0; i < list.length; i += 3) {
 			String module = list[i];
