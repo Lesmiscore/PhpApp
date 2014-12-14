@@ -27,7 +27,7 @@ public class Log extends Manager<String> {
 
 	public void add(Context context, String lines) {
 		String[] linesArray = TextUtils.split(lines, "\n");
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		list.addAll(Arrays.asList(manager.getString(context, KEY).split("\n")));
 		for (String line : linesArray) {
 			list.add((line.matches("^.+: /[^ ]*$") ? "0" : "1") + line);

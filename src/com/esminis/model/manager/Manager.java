@@ -18,22 +18,21 @@ package com.esminis.model.manager;
 import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 
-abstract public class Manager<T> {
+abstract public class Manager<Model> {
 
-	private Class<T> modelClass = null;
+	private Class<Model> modelClass = null;
 
-	static private HashMap<Class<? extends Manager>,Manager> instances =
-		new HashMap<Class<? extends Manager>, Manager>();
+	static private HashMap<Class<? extends Manager>, Manager> instances = new HashMap<>();
 
-	private Class<T> getModelClass() {
+	private Class<Model> getModelClass() {
 		if (modelClass == null) {
-			modelClass = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass())
+			modelClass = (Class<Model>)((ParameterizedType)getClass().getGenericSuperclass())
 				.getActualTypeArguments()[0];
 		}
 		return modelClass;
 	}
 
-	protected T create() {
+	protected Model create() {
 		try {
 			return getModelClass().newInstance();
 		} catch (Exception ignored) {

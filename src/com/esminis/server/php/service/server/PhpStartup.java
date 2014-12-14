@@ -28,7 +28,7 @@ import java.util.List;
 public class PhpStartup {
 
 	private List<String> getIniModules(File iniDirectory) {
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		File[] files = iniDirectory.listFiles();
 		if (files != null) {
 			for (File file : files) {
@@ -41,7 +41,7 @@ public class PhpStartup {
 	}
 
 	private List<String> getIniModulesFromFile(File file) {
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new FileReader(file));
@@ -73,7 +73,7 @@ public class PhpStartup {
 		List<String> options, File moduleDirectory, File iniDirectory, String[] modules
 	) {
 		List<String> iniModules = getIniModules(iniDirectory);
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		for (String module : modules) {
 			boolean zend = module.startsWith("zend_");
 			File file = new File(moduleDirectory, (zend ? module.substring(5) : module) + ".so");
@@ -90,7 +90,7 @@ public class PhpStartup {
 	private String[] createCommand(
 		File php, String address, String root, File moduleDirectory, File iniDirectory, String[] modules
 	) {
-		List<String> options = new ArrayList<String>();
+		List<String> options = new ArrayList<>();
 		options.add(php.getAbsolutePath());
 		options.add("-S");
 		options.add(address);

@@ -96,7 +96,10 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 			text.setText(savedInstanceState.getCharSequence("errors"));
 		}
 		titleDefault = getString(R.string.title) + " " + getString(R.string.php_version);
-		getActionBar().setTitle(titleDefault);
+		ActionBar actionBar = getActionBar();
+		if (actionBar != null) {
+			actionBar.setTitle(titleDefault);
+		}
 		InstallServer.getInstance(this).installIfNeeded(this);
 		findViewById(R.id.container).setOnTouchListener(new View.OnTouchListener() {
 			@Override

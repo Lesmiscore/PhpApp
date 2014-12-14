@@ -77,7 +77,7 @@ public class Process extends com.esminis.model.manager.Manager<Void> {
 			return null;
 		}
 		String part = "";
-		List<String> parts = new LinkedList<String>();
+		List<String> parts = new LinkedList<>();
 		int length = commandLine[1].length();
 		for (int i = 0; i < length; i++) {
 			char letter = commandLine[1].charAt(i);
