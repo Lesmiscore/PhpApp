@@ -18,7 +18,7 @@ package com.esminis.model.manager;
 import java.io.File;
 import java.util.ArrayList;
 
-public class DirectoryChooser extends Manager<File> {
+public class DirectoryChooser extends Manager {
 	
 	public ArrayList<File> getSubdirectories(File parent) {
 		ArrayList<File> result = new ArrayList<>();

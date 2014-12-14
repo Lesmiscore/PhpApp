@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Log extends Manager<String> {
+public class Log extends Manager {
 
 	private Preferences manager = Manager.get(Preferences.class);
 

@@ -23,16 +23,16 @@ import java.util.LinkedList;
 import java.util.List;
 import org.apache.http.conn.util.InetAddressUtils;
 
-public class Network extends Manager<com.esminis.model.Network> {
+public class Network extends Manager {
 
-	private List<com.esminis.model.Network> list = new LinkedList<com.esminis.model.Network>();
+	private List<com.esminis.model.Network> list = new LinkedList<>();
 	
 	protected Network() {
 		refresh();
 	}
 
 	public boolean refresh() {
-		List<com.esminis.model.Network> listOld = new LinkedList<com.esminis.model.Network>();
+		List<com.esminis.model.Network> listOld = new LinkedList<>();
 		listOld.addAll(list);
 		list.clear();
 		try {
@@ -92,7 +92,7 @@ public class Network extends Manager<com.esminis.model.Network> {
 	}
 
 	public com.esminis.model.Network create(String address, String name, String title) {
-		com.esminis.model.Network model = create();
+		com.esminis.model.Network model = new com.esminis.model.Network();
 		model.address = address;
 		model.name = name;
 		model.title = title;
