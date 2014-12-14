@@ -1,5 +1,3 @@
 syntax: regexp
-^(bin|gen|nbandroid|private|obj|out|\.idea)/.*$
-^libs/armeabi/.*\.so$
-^local\.properties$
-^.+\.iml$
+^(app/build|build/intermediates|\.gradle|\.idea)/.+$
+^(local\.properties|app/manifest\-merger\-release\-report\.txt|app/app-release\.apk|.+\.iml)$

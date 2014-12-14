@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest 
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.esminis.server.php" android:versionCode="19" android:versionName="1.6.0"
+<manifest
+	xmlns:android="http://schemas.android.com/apk/res/android" package="com.esminis.server.php"
 >
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-	<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="21" />
 	<uses-feature android:name="android.hardware.telephony" android:required="false" />
 	<uses-feature android:name="android.hardware.camera" android:required="false" />
 	<uses-feature android:name="android.hardware.camera.front" android:required="false" />
-	<supports-screens 		
-		android:smallScreens="true" android:normalScreens="true" 
+	<supports-screens
+		android:smallScreens="true" android:normalScreens="true"
 		android:largeScreens="true" android:xlargeScreens="true" android:anyDensity="true"
-	/>
-	<application 
+		/>
+	<application
 		android:theme="@android:style/Theme.Holo.Light" android:icon="@drawable/ic_launcher"
 		android:label="@string/title" android:allowBackup="false" android:name="Application"
-	>
+		>
 		<receiver android:name=".service.AutoStart">
 			<intent-filter><action android:name="android.intent.action.BOOT_COMPLETED" /></intent-filter>
 		</receiver>
