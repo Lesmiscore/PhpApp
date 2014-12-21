@@ -11,7 +11,9 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
-@Module(injects = {Application.class, MainActivity.class, Php.class, Preferences.class})
+@Module(injects = {
+	Application.class, MainActivity.class, Php.class, Preferences.class, DrawerFragment.class
+})
 public class ApplicationModule {
 
 	private Application application;
