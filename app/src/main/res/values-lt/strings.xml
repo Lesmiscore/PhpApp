@@ -29,7 +29,9 @@
 		PHP(versija %1$s) turi šiuos modulius: Core, date, ereg, libxml, openssl, pcre, sqlite3, zlib, bcmath, bz2, calendar, ctype, curl, dom, hash, fileinfo, filter, ftp, gd, gettext, gmp, SPL, iconv, intl, json, mbstring, mcrypt, session, standard, mysqlnd, mysqli, PDO, pdo_mysql, pdo_sqlite, Phar, posix, pspell, recode, Reflection, mysql, SimpleXML, soap, sockets, exif, tidy, tokenizer, wddx, xml, xmlreader, xmlrpc, xmlwriter, xsl, zip, cli_server, mhash, ssh2, Zend OPcache, Phalcon, yaf, yar<br /><br />
 		Rekomenduoajam naudoti: programavimui arba labai mažiems tinklapiams su labai mažai lankytojų, nes serveris palaiko tik vieną užklausą vienu metu.<br /><br />
 		<b>Autorius</b><br /><br />
-		Tautvydas Andrikys<br />]]></string>
+		Tautvydas Andrikys, esminis@esminis.lt<br /><br />
+		<b>Vertimas į rusų kalbą</b><br /><br />
+		Бондарев Дмитрий, fserg37@gmail.com<br />]]></string>
 	<string name="licenses">Licenzijos</string>
 	<string name="server_installation_failed">Nepavyko instaliuoti serverio.</string>
 	<string name="server_keep_running_title">Laikyti serverį įjungtą</string>
