@@ -1,6 +1,7 @@
 package com.esminis.server.php;
 
 import android.app.*;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,19 +9,39 @@ import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.server.Php;
 
+import javax.inject.Inject;
+
 public class DrawerFragment extends PreferenceFragment {
+
+	@Inject
+	protected Preferences preferences;
+
+	@Inject
+	protected Php php;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
 		restartOnChange(findPreference(Preferences.KEEP_RUNNING));
+		Preference preference = findPreference(Preferences.START_ON_BOOT);
+		if (preference != null) {
+			preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+				@Override
+				public boolean onPreferenceChange(Preference preference, Object newValue) {
+					onPreferenceChanged(preference, newValue);
+					return true;
+				}
+			});
+		}
 		PreferenceScreen screen = (PreferenceScreen)findPreference("modules");
 		if (screen == null) {
 			return;
@@ -65,6 +86,37 @@ public class DrawerFragment extends PreferenceFragment {
 		}
 	}
 
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		((Application)getActivity().getApplication()).getObjectGraph().inject(this);
+	}
+
+	private void onPreferenceChanged(Preference preference, Object newValueObject) {
+		if (preference == null || !(preference instanceof CheckBoxPreference)) {
+			return;
+		}
+		Context context = getActivity();
+		if (context == null) {
+			return;
+		}
+		String name = preference.getKey();
+		boolean value = (Boolean)newValueObject;
+		if (
+			Preferences.KEEP_RUNNING.equals(name) && !value &&
+			preferences.getBoolean(context, Preferences.START_ON_BOOT)
+		) {
+			preferences.set(context, Preferences.START_ON_BOOT, false);
+			((CheckBoxPreference)findPreference(Preferences.START_ON_BOOT)).setChecked(false);
+		} else if (
+			Preferences.START_ON_BOOT.equals(name) && value &&
+			!preferences.getBoolean(context, Preferences.KEEP_RUNNING)
+		) {
+			preferences.set(context, Preferences.KEEP_RUNNING, true);
+			((CheckBoxPreference)findPreference(Preferences.KEEP_RUNNING)).setChecked(true);
+		}
+	}
+
 	private void restartOnChange(Preference preference) {
 		if (preference == null) {
 			return;
@@ -72,10 +124,8 @@ public class DrawerFragment extends PreferenceFragment {
 		preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				android.app.Application application = getActivity().getApplication();
-				if (application instanceof Application) {
-					((Application)application).getObjectGraph().get(Php.class).requestRestartIfRunning();
-				}
+				onPreferenceChanged(preference, newValue);
+				php.requestRestartIfRunning();
 				return true;
 			}
 		});
@@ -100,8 +150,8 @@ public class DrawerFragment extends PreferenceFragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = super.onCreateView(inflater, container, savedInstanceState);
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle state) {
+		View view = super.onCreateView(inflater, container, state);
 		if(view != null) {
 			view.setBackgroundColor(Color.WHITE);
 			View viewList = view.findViewById(android.R.id.list);
