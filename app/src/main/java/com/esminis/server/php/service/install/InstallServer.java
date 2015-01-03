@@ -24,15 +24,12 @@ import android.os.Bundle;
 import android.os.Environment;
 
 import com.esminis.model.manager.Network;
-import com.esminis.server.php.R;
-import com.esminis.server.php.service.server.Php;
 import com.esminis.server.php.model.manager.Preferences;
+import com.esminis.server.php.service.server.Php;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -156,21 +153,15 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 		if (!preferences.contains(context, Preferences.ADDRESS)) {
 			preferences.set(context, Preferences.ADDRESS, network.get(0).name);
 		}
-		List<String> list = new ArrayList<>();
-		Collections.addAll(list, context.getResources().getStringArray(R.array.assets_to_install));
-		Collections.addAll(list, preferences.getInstallModules(context));
+		String[] list = preferences.getInstallPaths(context);
 		File moduleDirectory = php.getPhp().getParentFile();
-		if (
-			!new Install().fromAssetFiles(moduleDirectory, list.toArray(new String[list.size()]), context)
-		) {
+		if (!new Install().fromAssetFiles(moduleDirectory, list, context)) {
 			return false;
 		}
 
 		HashMap<String, String> variables = new HashMap<>();
 		variables.put("moduleDirectory", moduleDirectory.getAbsolutePath());
-		new Install().preprocessFile(
-			new File(php.getPhp().getParentFile(), "odbcinst.ini"), variables
-		);
+		new Install().preprocessFile(new File(php.getPhp().getParentFile(), "odbcinst.ini"), variables);
 
 		preferences.set(context, Preferences.PHP_BUILD, preferences.getPhpBuild(context));
 		return true;

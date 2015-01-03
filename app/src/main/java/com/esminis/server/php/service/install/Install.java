@@ -30,12 +30,12 @@ import java.util.Set;
 
 public class Install {
 
-	public boolean fromAssetFiles(File directory, String[] names, Context context) {
+	public boolean fromAssetFiles(File directory, String[] paths, Context context) {
 		try {
-			for (String name : names) {
-				File file = new File(directory, name);
+			for (String path : paths) {
+				File file = new File(directory, new File(path).getName());
 				if (!file.isFile() || file.delete()) {
-					fromAssetFile(file, name, context);
+					fromAssetFile(file, path, context);
 					if (!file.isFile() || (!file.canExecute() && !file.setExecutable(true))) {
 						return false;
 					}

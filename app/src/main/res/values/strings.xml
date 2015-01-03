@@ -121,10 +121,13 @@
 		<item>Yet another RPC framework</item><item>Light, concurrent RPC framework</item>
 	</string-array>
 
-	<string-array name="assets_to_install" translatable="false">
+	<string-array name="install_binaries" translatable="false">
 		<item>php</item>
 		<item>libsqlite3odbc.so</item>
 		<item>libodbcpsql.so</item>
+	</string-array>
+
+	<string-array name="install_files" translatable="false">
 		<item>odbcinst.ini</item>
 	</string-array>
 
