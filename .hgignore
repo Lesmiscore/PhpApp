@@ -1,3 +1,4 @@
 syntax: regexp
-^(app/build|build/intermediates|\.gradle|\.idea)/.+$
+^(app/build|build/intermediates|\.gradle|\.idea|app/src/main/obj)/.+$
 ^(local\.properties|app/manifest\-merger\-release\-report\.txt|app/app-release\.apk|.+\.iml)$
+^app/src/main/libs/.+/.+\.so$

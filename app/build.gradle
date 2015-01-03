@@ -34,8 +34,15 @@ dependencies {
 
 // Temporary while gradle does not fully support ndk
 task ndkBuild(type: Exec) {
-    commandLine '/home/tautvydas/android-ndk-r10c/ndk-build', '-C',
-        file('src/main/jni').absolutePath
+    def ndkDir = android.plugin.ndkFolder
+    commandLine "$ndkDir/ndk-build", '-C', file('src/main/jni').absolutePath
 }
 
+task ndkClean(type: Exec, description: 'Clean JNI object files') {
+    def ndkDir = android.plugin.ndkFolder
+    commandLine "$ndkDir/ndk-build", '-C', file('src/main/jni').absolutePath, 'clean'
+}
+
+
 tasks.withType(JavaCompile) { compileTask -> compileTask.dependsOn ndkBuild }
+clean.dependsOn 'ndkClean'
