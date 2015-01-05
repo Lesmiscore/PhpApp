@@ -9,14 +9,14 @@ android {
         minSdkVersion 16
         targetSdkVersion 21
         versionName "1.6.2"
-        versionCode 22 // should increment by 2 since 20
+        versionCode 24 // should increment by 2 since 20
     }
     buildTypes {
         release {proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'}
     }
     productFlavors {
-        arm {}
-        x86 { versionCode android.defaultConfig.versionCode - 1 }
+        arm { versionCode android.defaultConfig.versionCode - 1 }
+        x86 { }
     }
     // Temporary while gradle does not fully support ndk
     sourceSets.arm {
