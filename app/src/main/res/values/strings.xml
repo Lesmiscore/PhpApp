@@ -51,7 +51,7 @@
 		odbc_connect(\'Driver=PostgreSQL;Database=\' . $database_name . \';Server=\' . $server, \'\', \'\'); // PostgreSQL<br />]]></string>
 
 	<string name="php_version" translatable="false">5.6.3</string>
-	<string name="php_build" translatable="false">0</string>
+	<string name="php_build" translatable="false">1</string>
 	<string-array name="modules" translatable="false">
 		<item>bcmath</item><item>BC Math</item><item>Arbitrary Precision Mathematics</item>
 		<item>bz2</item><item>Bzip 2</item><item>Bzip 2</item>
