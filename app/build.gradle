@@ -8,8 +8,8 @@ android {
         applicationId "com.esminis.server.php"
         minSdkVersion 16
         targetSdkVersion 21
-        versionName "1.6.2"
-        versionCode 24 // should increment by 2 since 20
+        versionName "1.6.3"
+        versionCode 26 // should increment by 2 since 20
     }
     buildTypes {
         release {proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'}
