@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.lang.Process;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -106,18 +107,23 @@ public class PhpStartup {
 		return options.toArray(new String[options.size()]);
 	}
 
+	private String[] getEnvironment(File moduleDirectory) {
+		Map<String, String> map = System.getenv();
+		List<String> environment = new ArrayList<>();
+		for (String key : map.keySet()) {
+			environment.add(key + "=" + map.get(key));
+		}
+		environment.add("ODBCSYSINI=" + moduleDirectory.getAbsolutePath());
+		return environment.toArray(new String[environment.size()]);
+	}
+
 	public Process start(
 		File php, String address, String root, File moduleDirectory, File documentRoot,
 		boolean keepRunning, String[] modules, Context context
 	) throws IOException {
 		Process process = Runtime.getRuntime().exec(
 			createCommand(php, address, root, moduleDirectory, documentRoot, modules),
-			new String[] {
-				"ODBCSYSINI=" + moduleDirectory.getAbsolutePath(),
-				"ANDROID_DATA=" + System.getenv("ANDROID_DATA"),
-				"ANDROID_ROOT=" + System.getenv("ANDROID_ROOT")
-			},
-			documentRoot
+			getEnvironment(moduleDirectory), documentRoot
 		);
 		int pid = managerProcess.getPid(php);
 		if (pid > 0) {
