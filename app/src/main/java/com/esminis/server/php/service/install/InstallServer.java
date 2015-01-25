@@ -18,6 +18,7 @@ package com.esminis.server.php.service.install;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.esminis.model.manager.Network;
 import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.server.Php;
 
@@ -42,6 +43,9 @@ public class InstallServer {
 
 	@Inject
 	protected Preferences preferences;
+
+	@Inject
+	protected Network network;
 
 	private OnInstallListener listener = null;
 	private InstallTask installTask = null;
@@ -79,7 +83,7 @@ public class InstallServer {
 	void start(Context context) {
 		synchronized (lock) {
 			if (installTask == null) {
-				installTask = new InstallTask(php, this, context);
+				installTask = new InstallTask(php, this, preferences, network, context);
 				installTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			}
 		}

@@ -14,6 +14,8 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 
+import com.esminis.model.manager.Network;
+import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.server.Php;
 
 class InstallTask extends AsyncTask<Void, Void, Boolean> {
@@ -25,6 +27,8 @@ class InstallTask extends AsyncTask<Void, Void, Boolean> {
 	private Php php;
 	private Context context;
 	private InstallServer installServer;
+	private Preferences preferences;
+	private Network network;
 
 	private Messenger messengerSender = null;
 	private Messenger messengerReceiver = new Messenger(new Handler() {
@@ -59,9 +63,14 @@ class InstallTask extends AsyncTask<Void, Void, Boolean> {
 		}
 	};
 
-	public InstallTask(Php php, InstallServer installServer, Context context) {
+	public InstallTask(
+		Php php, InstallServer installServer, Preferences preferences, Network network,
+		Context context
+	) {
 		this.php = php;
 		this.context = context;
+		this.network = network;
+		this.preferences = preferences;
 		this.installServer = installServer;
 	}
 
@@ -98,13 +107,33 @@ class InstallTask extends AsyncTask<Void, Void, Boolean> {
 				try {
 					lock.wait();
 				} catch (InterruptedException ignored) {}
-				return installSuccess;
+				if (!installSuccess) {
+					return false;
+				}
+				initializePreferences();
+				return true;
 			}
 		} catch (RemoteException e) {
 			return false;
 		} finally {
 			context.unbindService(connection);
 		}
+	}
+
+	private void initializePreferences() {
+		if (!preferences.contains(context, Preferences.PORT)) {
+			preferences.set(context, Preferences.PORT, "8080");
+		}
+		if (!preferences.contains(context, Preferences.ADDRESS)) {
+			preferences.set(context, Preferences.ADDRESS, network.get(0).name);
+		}
+		if (!preferences.contains(context, Preferences.DOCUMENT_ROOT)) {
+			preferences.set(
+				context, Preferences.DOCUMENT_ROOT,
+				preferences.getDefaultDocumentRoot().getAbsolutePath()
+			);
+		}
+		preferences.set(context, Preferences.PHP_BUILD, preferences.getPhpBuild(context));
 	}
 
 	@Override

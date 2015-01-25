@@ -2,9 +2,11 @@ package com.esminis.server.php.model.manager;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.Environment;
 
 import com.esminis.server.php.R;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -60,6 +62,10 @@ public class Preferences extends com.esminis.model.manager.Preferences {
 		}
 		Collections.addAll(list, context.getResources().getStringArray(R.array.install_files));
 		return list.toArray(new String[list.size()]);
+	}
+
+	public File getDefaultDocumentRoot() {
+		return new File(Environment.getExternalStorageDirectory(), "www");
 	}
 
 }
