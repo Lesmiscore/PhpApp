@@ -15,27 +15,19 @@
  */
 package com.esminis.server.php.service.install;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Environment;
 
-import com.esminis.model.manager.Network;
 import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.server.Php;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class InstallServer extends AsyncTask<Context, Void, Boolean> {
+public class InstallServer {
 
 	public interface OnInstallListener {
 
@@ -44,15 +36,6 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 		public void OnInstallEnd(boolean success);
 		
 	}
-	
-	private OnInstallListener listener = null;
-
-	private boolean canStartInstall = false;
-
-	private boolean installStarted = false;
-
-	@Inject
-	protected Network network;
 
 	@Inject
 	protected Php php;
@@ -60,10 +43,16 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 	@Inject
 	protected Preferences preferences;
 
+	private OnInstallListener listener = null;
+	private InstallTask installTask = null;
+	private final Object lock = new Object();
+
 	public void installIfNeeded(OnInstallListener listener, Context context) {
-		this.listener = listener;
-		if (installStarted) {
-			return;
+		synchronized (lock) {
+			this.listener = listener;
+			if (installTask != null) {
+				return;
+			}
 		}
 		File file = php.getPhp();
 		if (file.isFile()) {
@@ -72,109 +61,40 @@ public class InstallServer extends AsyncTask<Context, Void, Boolean> {
 					listener.OnInstallNewVersionRequest(this);
 				}
 			} else {
-				installEnd(true);
+				finish(true);
 			}
 		} else {
-			startInstall(context);
+			start(context);
 		}
 	}
 
 	public void continueInstall(Context context, boolean confirm) {
 		if (confirm) {
-			startInstall(context);
+			start(context);
 		} else {
-			installEnd(true);
+			finish(true);
 		}
 	}
 
-	private void startInstall(Context context) {
-		if (installStarted) {
-			return;
+	void start(Context context) {
+		synchronized (lock) {
+			if (installTask == null) {
+				installTask = new InstallTask(php, this, context);
+				installTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			}
 		}
-		installStarted = true;
-		executeOnExecutor(THREAD_POOL_EXECUTOR, context);
 	}
 
-	private void installEnd(boolean success) {
-		installStarted = false;
+	void finish(boolean success) {
+		OnInstallListener listener;
+		synchronized (lock) {
+			installTask = null;
+			listener = this.listener;
+			this.listener = null;
+		}
 		if (listener != null) {
 			listener.OnInstallEnd(success);
-			listener = null;
 		}
-	}
-
-	@Override
-	protected Boolean doInBackground(Context... arguments) {
-		Context context = arguments[0];
-		BroadcastReceiver receiver = new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				if (intent.getAction() == null || !intent.getAction().equals(Php.INTENT_ACTION)) {
-					return;
-				}
-				Bundle extras = intent.getExtras();
-				if (extras == null || extras.containsKey("errorLine") || extras.getBoolean("running")) {
-					return;
-				}
-				canStartInstall = true;
-			}
-		};
-		context.registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
-		canStartInstall = false;
-		php.requestStop();
-		while (!canStartInstall) {
-			try {
-				Thread.sleep(250);
-			} catch (InterruptedException ignored) {}
-		}
-		context.unregisterReceiver(receiver);
-		if (!preferences.contains(context, Preferences.DOCUMENT_ROOT)) {
-			File file = new File(Environment.getExternalStorageDirectory(), "www");
-			File tempDirectory = new File(context.getExternalFilesDir(null), "tmp");
-			if (!tempDirectory.isDirectory() && !tempDirectory.mkdir()) {
-				tempDirectory = file;
-			}
-			if (!file.isDirectory()) {
-				if (file.mkdir() && file.isDirectory()) {
-					try {
-						Install install = new Install();
-						install.fromAssetDirectory(file, "www", context);
-						HashMap<String, String> variables = new HashMap<>();
-						variables.put("tempDirectory", tempDirectory.getAbsolutePath());
-						install.preprocessFile(new File(file, "php.ini"), variables);
-					} catch (IOException ignored) {}
-				}
-			}
-			preferences.set(context, Preferences.DOCUMENT_ROOT, file.getAbsolutePath());
-		}
-		if (!preferences.contains(context, Preferences.PORT)) {
-			preferences.set(context, Preferences.PORT, "8080");
-		}
-		if (!preferences.contains(context, Preferences.ADDRESS)) {
-			preferences.set(context, Preferences.ADDRESS, network.get(0).name);
-		}
-		String[] list = preferences.getInstallPaths(context);
-		File moduleDirectory = php.getPhp().getParentFile();
-		if (!new Install().fromAssetFiles(moduleDirectory, list, context)) {
-			return false;
-		}
-
-		HashMap<String, String> variables = new HashMap<>();
-		variables.put("moduleDirectory", moduleDirectory.getAbsolutePath());
-		new Install().preprocessFile(new File(php.getPhp().getParentFile(), "odbcinst.ini"), variables);
-
-		preferences.set(context, Preferences.PHP_BUILD, preferences.getPhpBuild(context));
-		return true;
-	}
-
-	@Override
-	protected void onCancelled() {
-		installEnd(false);
-	}
-
-	@Override
-	protected void onPostExecute(Boolean result) {
-		installEnd(result);
 	}
 	
 }
