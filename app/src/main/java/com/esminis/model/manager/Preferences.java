@@ -26,11 +26,19 @@ public class Preferences {
 		editor.putBoolean(name, value);
 		editor.apply();
 	}
-	
+
 	public void set(Context context, String name, String value) {
+		set(context, name, value, true);
+	}
+
+	public void set(Context context, String name, String value, boolean delayed) {
 		SharedPreferences.Editor editor = getPreferences(context).edit();
 		editor.putString(name, value);
-		editor.apply();
+		if (delayed) {
+			editor.apply();
+		} else {
+			editor.commit();
+		}
 	}
 	
 	public String getString(Context context, String name) {
@@ -46,7 +54,9 @@ public class Preferences {
 	}
 
 	protected SharedPreferences getPreferences(Context context) {
-		return PreferenceManager.getDefaultSharedPreferences(context);
+		return context.getSharedPreferences(
+			context.getPackageName() + "_preferences", Context.MODE_MULTI_PROCESS
+		);
 	}
 	
 }

@@ -28,7 +28,7 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Set;
 
-public class Install {
+class InstallHelper {
 
 	public boolean fromAssetFiles(File directory, String[] paths, Context context) {
 		try {
