@@ -13,7 +13,7 @@
 		android:largeScreens="true" android:xlargeScreens="true" android:anyDensity="true"
 		/>
 	<application
-		android:theme="@android:style/Theme.Holo.Light" android:icon="@drawable/ic_launcher"
+		android:theme="@style/Theme.AppCompat.Light.NoActionBar" android:icon="@drawable/ic_launcher"
 		android:label="@string/title" android:allowBackup="false" android:name="Application"
 		>
 		<receiver android:name=".service.AutoStart">
