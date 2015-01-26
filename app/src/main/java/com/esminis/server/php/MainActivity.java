@@ -15,7 +15,8 @@
  */
 package com.esminis.server.php;
 
-import android.app.*;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -27,6 +28,8 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.*;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -55,7 +58,7 @@ import java.io.File;
 
 import javax.inject.Inject;
 
-public class MainActivity extends Activity implements InstallServer.OnInstallListener {
+public class MainActivity extends ActionBarActivity implements InstallServer.OnInstallListener {
 	
 	private BroadcastReceiver receiver = null;
 	private BroadcastReceiver receiverNetwork = null;
@@ -102,7 +105,10 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 			text.setText(savedInstanceState.getCharSequence("errors"));
 		}
 		titleDefault = getString(R.string.title) + " " + getString(R.string.php_version);
-		ActionBar actionBar = getActionBar();
+		Toolbar toolbar = (Toolbar)findViewById(R.id.tooblar);
+		setSupportActionBar(toolbar);
+		toolbar.inflateMenu(R.menu.main);
+		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
 			actionBar.setTitle(titleDefault);
 		}
@@ -210,7 +216,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 
 				public void onDrawerClosed(View view) {
 					super.onDrawerClosed(view);
-					ActionBar bar = getActionBar();
+					ActionBar bar = getSupportActionBar();
 					ApplicationInfo info = getApplicationInfo();
 					if (bar != null && info != null) {
 						bar.setTitle(titleDefault);
@@ -220,7 +226,7 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 
 				public void onDrawerOpened(View drawerView) {
 					super.onDrawerOpened(drawerView);
-					ActionBar bar = getActionBar();
+					ActionBar bar = getSupportActionBar();
 					if (bar != null) {
 						bar.setTitle(R.string.settings);
 					}
@@ -230,8 +236,8 @@ public class MainActivity extends Activity implements InstallServer.OnInstallLis
 		);
 		drawerToggle.setDrawerIndicatorEnabled(true);
 
-		if (getActionBar() != null) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 		if (!syncedDrawerState) {
 			drawerToggle.syncState();

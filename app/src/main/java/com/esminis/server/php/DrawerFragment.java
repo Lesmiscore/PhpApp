@@ -1,6 +1,6 @@
 package com.esminis.server.php;
 
-import android.app.*;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -10,9 +10,13 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.ListView;
+
 import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.server.Php;
 
@@ -48,26 +52,7 @@ public class DrawerFragment extends PreferenceFragment {
 		screen.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				final Dialog dialog = ((PreferenceScreen) preference).getDialog();
-				if (dialog != null) {
-					dialog.getWindow().setBackgroundDrawableResource(android.R.color.white);
-					dialog.getActionBar().setDisplayHomeAsUpEnabled(true);
-					View view = dialog.findViewById(android.R.id.home);
-					if (view.getParent() instanceof View) {
-						view = (View)view.getParent();
-						if (view != null && view.getParent() instanceof View) {
-							view = (View)view.getParent();
-						}
-					}
-					if (view != null) {
-						view.setOnClickListener(new View.OnClickListener() {
-							@Override
-							public void onClick(View v) {
-								dialog.dismiss();
-							}
-						});
-					}
-				}
+				initializeModulesDialog();
 				return false;
 			}
 		});
@@ -85,10 +70,42 @@ public class DrawerFragment extends PreferenceFragment {
 		}
 	}
 
+	private void initializeModulesDialog() {
+		PreferenceScreen screen = (PreferenceScreen)findPreference("modules");
+		if (screen == null) {
+			return;
+		}
+		final Dialog dialog = screen.getDialog();
+		if (dialog == null) {
+			return;
+		}
+		ListView list = (ListView)dialog.findViewById(android.R.id.list);
+		if (list == null || list.getParent() == null) {
+			return;
+		}
+		((ViewGroup)list.getParent()).removeView(list);
+		dialog.setContentView(R.layout.preference_modules);
+		Toolbar toolbar = ((Toolbar)dialog.findViewById(R.id.toolbar));
+		toolbar.setTitle(screen.getTitle());
+		toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+		((ViewGroup)dialog.findViewById(R.id.content)).addView(
+			list, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+		);
+	}
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		((Application)getActivity().getApplication()).getObjectGraph().inject(this);
+		if (savedInstanceState != null) {
+			initializeModulesDialog();
+		}
 	}
 
 	private void onPreferenceChanged(Preference preference, Object newValueObject) {
