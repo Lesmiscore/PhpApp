@@ -26,10 +26,8 @@ import android.content.pm.ApplicationInfo;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.*;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -78,6 +76,9 @@ public class MainActivity extends ActionBarActivity implements InstallServer.OnI
 	@Inject
 	protected Log log = null;
 
+	@Inject
+	protected ActivityHelper activityHelper;
+
 	private boolean requestResultView = false;
 	
 	private boolean requestResultViewSuccess = false;
@@ -105,9 +106,8 @@ public class MainActivity extends ActionBarActivity implements InstallServer.OnI
 			text.setText(savedInstanceState.getCharSequence("errors"));
 		}
 		titleDefault = getString(R.string.title) + " " + getString(R.string.php_version);
-		Toolbar toolbar = (Toolbar)findViewById(R.id.tooblar);
-		setSupportActionBar(toolbar);
-		toolbar.inflateMenu(R.menu.main);
+		activityHelper.createToolbar(this);
+
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
 			actionBar.setTitle(titleDefault);
@@ -210,9 +210,7 @@ public class MainActivity extends ActionBarActivity implements InstallServer.OnI
 	private void startup() {
 		DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 		drawerLayout.setDrawerListener(
-			drawerToggle = new ActionBarDrawerToggle(
-				this, drawerLayout, R.drawable.ic_navigation_drawer, R.string.open, R.string.close
-			) {
+			drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close) {
 
 				public void onDrawerClosed(View view) {
 					super.onDrawerClosed(view);
