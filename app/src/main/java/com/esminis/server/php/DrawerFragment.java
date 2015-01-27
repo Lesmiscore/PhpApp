@@ -30,6 +30,9 @@ public class DrawerFragment extends PreferenceFragment {
 	@Inject
 	protected Php php;
 
+	@Inject
+	protected ActivityHelper activityHelper;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -84,16 +87,10 @@ public class DrawerFragment extends PreferenceFragment {
 			return;
 		}
 		((ViewGroup)list.getParent()).removeView(list);
+		list.setPadding(0, 0, 0, 0);
 		dialog.setContentView(R.layout.preference_modules);
-		Toolbar toolbar = ((Toolbar)dialog.findViewById(R.id.toolbar));
+		Toolbar toolbar = activityHelper.createToolbar(dialog);
 		toolbar.setTitle(screen.getTitle());
-		toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				dialog.dismiss();
-			}
-		});
 		((ViewGroup)dialog.findViewById(R.id.content)).addView(
 			list, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
 		);
