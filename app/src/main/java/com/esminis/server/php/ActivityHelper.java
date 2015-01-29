@@ -46,7 +46,7 @@ public class ActivityHelper {
 	}
 
 	public Toolbar createToolbar(@NonNull Toolbar toolbar) {
-		toolbar.setLogo(R.drawable.ic_logo);
+		toolbar.setLogo(R.drawable.ic_toolbar);
 		return toolbar;
 	}
 
