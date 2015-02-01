@@ -3,7 +3,7 @@ package com.esminis.server.php;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
@@ -103,6 +103,20 @@ public class DrawerFragment extends PreferenceFragment {
 		if (savedInstanceState != null) {
 			initializeModulesDialog();
 		}
+		if (getView() == null) {
+			return;
+		}
+		View view = getView().findViewById(android.R.id.list);
+		if (view == null) {
+			return;
+		}
+		TypedArray attributes = getActivity().getTheme()
+			.obtainStyledAttributes(new int[] {android.R.attr.windowBackground});
+		int resourceId = attributes.getResourceId(0, 0);
+		if (resourceId > 0) {
+			view.setBackgroundColor(getResources().getColor(resourceId));
+		}
+		attributes.recycle();
 	}
 
 	private void onPreferenceChanged(Preference preference, Object newValueObject) {
@@ -166,7 +180,6 @@ public class DrawerFragment extends PreferenceFragment {
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle state) {
 		View view = super.onCreateView(inflater, container, state);
 		if(view != null) {
-			view.setBackgroundColor(Color.WHITE);
 			View viewList = view.findViewById(android.R.id.list);
 			if (viewList != null) {
 				viewList.setPadding(0, 0, 0, 0);
