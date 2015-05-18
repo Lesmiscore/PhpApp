@@ -53,6 +53,7 @@
 	<string name="php_version" translatable="false">5.6.3</string>
 	<string name="php_build" translatable="false">1</string>
 	<string-array name="modules" translatable="false">
+		<item>bbcode</item><item>BBCode</item><item>Bulletin Board Code</item>
 		<item>bcmath</item><item>BC Math</item><item>Arbitrary Precision Mathematics</item>
 		<item>bz2</item><item>Bzip 2</item><item>Bzip 2</item>
 		<item>calendar</item><item>Calendar</item><item>Functions to simplify converting between different calendar formats</item>
@@ -61,13 +62,17 @@
 		<item>exif</item><item>EXIF</item><item>Exchangeable image information</item>
 		<item>ftp</item><item>FTP</item><item>File Transfer Protocol</item>
 		<item>gd</item><item>GD</item><item>Image Processing and GD</item>
+		<item>gender</item><item>Gender</item><item>Determine gender of firstnames</item>
 		<item>gettext</item><item>Gettext</item><item>Native Language Support API for internationalize</item>
 		<item>gmp</item><item>GMP</item><item>GNU Multiple Precision</item>
 		<item>recode</item><item>GNU Recode</item><item>Interface to GNU Recode library</item>
 		<item>iconv</item><item>iconv</item><item>Interface to iconv character set conversion facility</item>
+		<item>id3</item><item>ID3</item><item>ID3 Tags</item>
+		<item>lzf</item><item>LZF</item><item>LZF compression</item>
 		<item>mcrypt</item><item>Mcrypt</item><item>Interface to mcrypt library</item>
 		<item>mysql</item><item>Mysql</item><item>Original MySQL API</item>
 		<item>mysqli</item><item>Mysqli</item><item>MySQL Improved Extension</item>
+		<item>oauth</item><item>OAuth</item><item>OAuth 1.0a consumer and provider bindings</item>
 		<item>odbc</item><item>ODBC</item><item>ODBC</item>
 		<item>zend_opcache</item><item>OPcache</item><item>Improves performance by caching byte code</item>
 		<item>pdo_mysql</item><item>PDO MySQL</item><item>PDO MySQL driver</item>
@@ -78,10 +83,15 @@
 		<item>posix</item><item>POSIX</item><item>Interface to POSIX functions</item>
 		<item>pgsql</item><item>PostgreSQL</item><item>PostgreSQL</item>
 		<item>pspell</item><item>Pspell</item><item>Functions to check the spelling and offer suggestions</item>
+		<item>quickhash</item><item>Quickhash</item><item>Quickhash</item>
+		<item>rar</item><item>RAR</item><item>Rar Archiving</item>
 		<item>soap</item><item>SOAP</item><item>SOAP Server and Client</item>
 		<item>ssh2</item><item>SSH 2</item><item>Secure Shell 2</item>
+		<item>stats</item><item>Statistics</item><item>Functions useful for statistical computations</item>
 		<item>tidy</item><item>Tidy</item><item>Binding for the Tidy HTML clean and repair utility</item>
 		<item>tokenizer</item><item>Tokenizer</item><item>Interface to the PHP tokenizer</item>
+		<item>xdiff</item><item>XDiff</item><item>Create and apply patches to text and binary files</item>
+		<item>xmldiff</item><item>XMLDiff</item><item>XML diff and merge</item>
 		<item>xsl</item><item>XSL</item><item>XSLT transformations using the libxslt library</item>
 		<item>yaf</item><item>Yet Another Framework</item><item>Web framework implemented as a C extension</item>
 		<item>zip</item><item>ZIP</item><item>Read or write ZIP compressed archives</item>
