@@ -3,7 +3,7 @@ package com.esminis.server.php;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
@@ -11,6 +11,8 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,8 @@ import javax.inject.Inject;
 
 public class DrawerFragment extends PreferenceFragment {
 
+	static private final String KEY_MODULES = "modules";
+
 	@Inject
 	protected Preferences preferences;
 
@@ -36,22 +40,45 @@ public class DrawerFragment extends PreferenceFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.preferences);
-		restartOnChange(findPreference(Preferences.KEEP_RUNNING));
-		Preference preference = findPreference(Preferences.START_ON_BOOT);
-		if (preference != null) {
-			preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-				@Override
-				public boolean onPreferenceChange(Preference preference, Object newValue) {
-					onPreferenceChanged(preference, newValue);
-					return true;
-				}
-			});
+		Context context = getActivity();
+		PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(context);
+		setPreferenceScreen(screen);
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+			context = new ContextThemeWrapper(getActivity(), R.style.Preference);
 		}
-		PreferenceScreen screen = (PreferenceScreen)findPreference("modules");
-		if (screen == null) {
-			return;
-		}
+		setupPreferences(screen, context);
+	}
+
+	private void setupPreferences(PreferenceScreen screen, Context context) {
+		PreferenceScreen modules = getPreferenceManager().createPreferenceScreen(context);
+		modules.setTitle(R.string.modules_title);
+		modules.setSummary(R.string.modules_summary);
+		modules.setKey(KEY_MODULES);
+		screen.addPreference(modules);
+		setupPreferencesModules(modules, context);
+		CheckBoxPreference preference = new CheckBoxPreference(context);
+		preference.setTitle(R.string.server_start_on_boot_title);
+		preference.setDefaultValue(false);
+		preference.setSummary(R.string.server_start_on_boot_summary);
+		preference.setKey(Preferences.START_ON_BOOT);
+		preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				onPreferenceChanged(preference, newValue);
+				return true;
+			}
+		});
+		screen.addPreference(preference);
+		preference = new CheckBoxPreference(context);
+		preference.setTitle(R.string.server_keep_running_title);
+		preference.setDefaultValue(false);
+		preference.setSummary(R.string.server_keep_running);
+		preference.setKey(Preferences.KEEP_RUNNING);
+		screen.addPreference(preference);
+		restartOnChange(preference);
+	}
+
+	private void setupPreferencesModules(PreferenceScreen screen, Context context) {
 		screen.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
@@ -62,19 +89,19 @@ public class DrawerFragment extends PreferenceFragment {
 		Resources resources = getResources();
 		String[] list = resources.getStringArray(R.array.modules);
 		for (int i = 0; i < list.length; i += 3) {
-			addPreference(list[i], list[i + 1], list[i + 2], screen, true);
+			addPreference(list[i], list[i + 1], list[i + 2], screen, context, true);
 		}
 		list = resources.getStringArray(R.array.modules_builtin);
 		for (int i = 0; i < list.length; i += 2) {
 			addPreference(
 				"builtin_" + i, resources.getString(R.string.modules_title_builtin, list[i]), list[i + 1],
-				screen, false
+				screen, context, false
 			);
 		}
 	}
 
 	private void initializeModulesDialog() {
-		PreferenceScreen screen = (PreferenceScreen)findPreference("modules");
+		PreferenceScreen screen = (PreferenceScreen)findPreference(KEY_MODULES);
 		if (screen == null) {
 			return;
 		}
@@ -110,13 +137,11 @@ public class DrawerFragment extends PreferenceFragment {
 		if (view == null) {
 			return;
 		}
-		TypedArray attributes = getActivity().getTheme()
-			.obtainStyledAttributes(new int[] {android.R.attr.windowBackground});
-		int resourceId = attributes.getResourceId(0, 0);
-		if (resourceId > 0) {
-			view.setBackgroundColor(getResources().getColor(resourceId));
+		TypedValue attribute = new TypedValue();
+		getActivity().getTheme().resolveAttribute(android.R.attr.windowBackground, attribute, true);
+		if (attribute.resourceId > 0) {
+			view.setBackgroundColor(getResources().getColor(attribute.resourceId));
 		}
-		attributes.recycle();
 	}
 
 	private void onPreferenceChanged(Preference preference, Object newValueObject) {
@@ -159,9 +184,10 @@ public class DrawerFragment extends PreferenceFragment {
 	}
 
 	private void addPreference(
-		String name, String title, String summary, PreferenceScreen screen, boolean enabled
+		String name, String title, String summary, PreferenceScreen screen, Context context,
+		boolean enabled
 	) {
-		CheckBoxPreference preference = new CheckBoxPreference(screen.getContext());
+		CheckBoxPreference preference = new CheckBoxPreference(context);
 		preference.setKey("module_" + name);
 		preference.setTitle(title);
 		preference.setSummary(summary);

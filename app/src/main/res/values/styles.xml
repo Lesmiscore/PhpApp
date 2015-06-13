@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<style name="Preference" parent="@style/ThemeApplication">
+		<item name="android:textAppearanceLarge">@style/TextAppearanceLarge</item>
+		<item name="android:textAppearanceMedium">@style/TextAppearanceMedium</item>
+	</style>
+	<style name="TextAppearanceLarge" parent="android:TextAppearance.Large">
+		<item name="android:textColor">?android:attr/textColorPrimary</item>
+	</style>
+	<style name="TextAppearanceMedium" parent="android:TextAppearance.Medium">
+		<item name="android:textColor">?android:attr/textColorPrimary</item>
+	</style>
+</resources>
