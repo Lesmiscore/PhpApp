@@ -1,15 +1,13 @@
 package com.esminis.server.php.service.install;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
@@ -25,12 +23,11 @@ class InstallTask extends AsyncTask<Void, Void, Boolean> {
 	private boolean installSuccess = false;
 	private boolean canStartInstall = false;
 	private Php php;
-	private Context context;
+	private Activity activity;
 	private InstallServer installServer;
 	private Preferences preferences;
 	private Network network;
 
-	private Messenger messengerSender = null;
 	private Messenger messengerReceiver = new Messenger(new Handler() {
 
 		@Override
@@ -50,25 +47,12 @@ class InstallTask extends AsyncTask<Void, Void, Boolean> {
 
 	});
 
-	private ServiceConnection connection = new ServiceConnection() {
-		public void onServiceConnected(ComponentName className, IBinder service) {
-			messengerSender = new Messenger(service);
-			synchronized (lock) {
-				lock.notify();
-			}
-		}
-
-		public void onServiceDisconnected(ComponentName className) {
-			messengerSender = null;
-		}
-	};
-
 	public InstallTask(
 		Php php, InstallServer installServer, Preferences preferences, Network network,
-		Context context
+		Activity activity
 	) {
 		this.php = php;
-		this.context = context;
+		this.activity = activity;
 		this.network = network;
 		this.preferences = preferences;
 		this.installServer = installServer;
@@ -89,7 +73,7 @@ class InstallTask extends AsyncTask<Void, Void, Boolean> {
 				canStartInstall = true;
 			}
 		};
-		context.registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
+		activity.registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
 		canStartInstall = false;
 		php.requestStop();
 		while (!canStartInstall) {
@@ -97,13 +81,14 @@ class InstallTask extends AsyncTask<Void, Void, Boolean> {
 				Thread.sleep(250);
 			} catch (InterruptedException ignored) {}
 		}
-		context.unregisterReceiver(receiver);
-		bindMessenger(context);
+		activity.unregisterReceiver(receiver);
+		InstallTaskConnection connection = new InstallTaskConnection(activity);
 		try {
-			Message message = Message.obtain(null, InstallService.ACTION_INSTALL);
+			final Message message = Message.obtain(null, InstallService.ACTION_INSTALL);
+			final Messenger messenger = connection.connect();
 			message.replyTo = messengerReceiver;
 			synchronized (lock) {
-				messengerSender.send(message);
+				messenger.send(message);
 				try {
 					lock.wait();
 				} catch (InterruptedException ignored) {}
@@ -116,24 +101,24 @@ class InstallTask extends AsyncTask<Void, Void, Boolean> {
 		} catch (RemoteException e) {
 			return false;
 		} finally {
-			context.unbindService(connection);
+			connection.disconnect();
 		}
 	}
 
 	private void initializePreferences() {
-		if (!preferences.contains(context, Preferences.PORT)) {
-			preferences.set(context, Preferences.PORT, "8080");
+		if (!preferences.contains(activity, Preferences.PORT)) {
+			preferences.set(activity, Preferences.PORT, "8080");
 		}
-		if (!preferences.contains(context, Preferences.ADDRESS)) {
-			preferences.set(context, Preferences.ADDRESS, network.get(0).name);
+		if (!preferences.contains(activity, Preferences.ADDRESS)) {
+			preferences.set(activity, Preferences.ADDRESS, network.get(0).name);
 		}
-		if (!preferences.contains(context, Preferences.DOCUMENT_ROOT)) {
+		if (!preferences.contains(activity, Preferences.DOCUMENT_ROOT)) {
 			preferences.set(
-				context, Preferences.DOCUMENT_ROOT,
+				activity, Preferences.DOCUMENT_ROOT,
 				preferences.getDefaultDocumentRoot().getAbsolutePath()
 			);
 		}
-		preferences.set(context, Preferences.PHP_BUILD, preferences.getPhpBuild(context));
+		preferences.set(activity, Preferences.PHP_BUILD, preferences.getPhpBuild(activity));
 	}
 
 	@Override
@@ -144,17 +129,6 @@ class InstallTask extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected void onPostExecute(Boolean result) {
 		installServer.finish(result);
-	}
-
-	private void bindMessenger(Context context) {
-		synchronized (lock) {
-			context.bindService(
-				new Intent(context, InstallService.class), connection, Context.BIND_AUTO_CREATE
-			);
-			try {
-				lock.wait();
-			} catch (InterruptedException ignored) {}
-		}
 	}
 
 }

@@ -15,7 +15,7 @@
  */
 package com.esminis.server.php.service.install;
 
-import android.content.Context;
+import android.app.Activity;
 import android.os.AsyncTask;
 
 import com.esminis.model.manager.Network;
@@ -32,9 +32,9 @@ public class InstallServer {
 
 	public interface OnInstallListener {
 
-		public void OnInstallNewVersionRequest(InstallServer installer);
+		void OnInstallNewVersionRequest(InstallServer installer);
 
-		public void OnInstallEnd(boolean success);
+		void OnInstallEnd(boolean success);
 		
 	}
 
@@ -51,7 +51,7 @@ public class InstallServer {
 	private InstallTask installTask = null;
 	private final Object lock = new Object();
 
-	public void installIfNeeded(OnInstallListener listener, Context context) {
+	public void installIfNeeded(OnInstallListener listener, Activity activity) {
 		synchronized (lock) {
 			this.listener = listener;
 			if (installTask != null) {
@@ -60,7 +60,7 @@ public class InstallServer {
 		}
 		File file = php.getPhp();
 		if (file.isFile()) {
-			if (!preferences.getIsSameBuild(context)) {
+			if (!preferences.getIsSameBuild(activity)) {
 				if (listener != null) {
 					listener.OnInstallNewVersionRequest(this);
 				}
@@ -68,22 +68,22 @@ public class InstallServer {
 				finish(true);
 			}
 		} else {
-			start(context);
+			start(activity);
 		}
 	}
 
-	public void continueInstall(Context context, boolean confirm) {
+	public void continueInstall(Activity activity, boolean confirm) {
 		if (confirm) {
-			start(context);
+			start(activity);
 		} else {
 			finish(true);
 		}
 	}
 
-	void start(Context context) {
+	void start(Activity activity) {
 		synchronized (lock) {
 			if (installTask == null) {
-				installTask = new InstallTask(php, this, preferences, network, context);
+				installTask = new InstallTask(php, this, preferences, network, activity);
 				installTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			}
 		}
