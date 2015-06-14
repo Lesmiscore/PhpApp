@@ -25,7 +25,9 @@ import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.*;
 import android.text.Editable;
@@ -56,7 +58,7 @@ import java.io.File;
 
 import javax.inject.Inject;
 
-public class MainActivity extends ActionBarActivity implements InstallServer.OnInstallListener {
+public class MainActivity extends AppCompatActivity implements InstallServer.OnInstallListener {
 	
 	private BroadcastReceiver receiver = null;
 	private BroadcastReceiver receiverNetwork = null;
@@ -209,6 +211,9 @@ public class MainActivity extends ActionBarActivity implements InstallServer.OnI
 	
 	private void startup() {
 		DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+		}
 		drawerLayout.setDrawerListener(
 			drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close) {
 
