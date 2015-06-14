@@ -10,4 +10,11 @@
 	<style name="TextAppearanceMedium" parent="android:TextAppearance.Medium">
 		<item name="android:textColor">?android:attr/textColorPrimary</item>
 	</style>
+	<style name="Toolbar" parent="Toolbar.Base" />
+	<style name="Toolbar.Base" parent="@style/ThemeApplication">
+		<item name="drawerArrowStyle">@style/Toolbar.DrawerArrowToggle</item>
+	</style>
+	<style name="Toolbar.DrawerArrowToggle" parent="Widget.AppCompat.DrawerArrowToggle">
+		<item name="color">?android:attr/textColorPrimary</item>
+	</style>
 </resources>

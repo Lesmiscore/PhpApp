@@ -116,7 +116,7 @@ public class DrawerFragment extends PreferenceFragment {
 		((ViewGroup)list.getParent()).removeView(list);
 		list.setPadding(0, 0, 0, 0);
 		dialog.setContentView(R.layout.preference_modules);
-		Toolbar toolbar = activityHelper.createToolbar(dialog);
+		Toolbar toolbar = activityHelper.createToolbar(dialog, getActivity());
 		toolbar.setTitle(screen.getTitle());
 		((ViewGroup)dialog.findViewById(R.id.content)).addView(
 			list, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
