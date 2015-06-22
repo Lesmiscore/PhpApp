@@ -49,6 +49,8 @@
 		There are 2 ODBC drivers included in this application: PostgreSQL and SQLite3. If you want to use ODBC with them then do something like this:<br /><br />
 		odbc_connect(\'Driver=SQLite3;Database=\' . $path_to_file, \'\', \'\'); // SQLite3<br /><br />
 		odbc_connect(\'Driver=PostgreSQL;Database=\' . $database_name . \';Server=\' . $server, \'\', \'\'); // PostgreSQL<br />]]></string>
+	<string name="enable_all">Enable all</string>
+	<string name="disable_all">Disable all</string>
 
 	<string name="php_version" translatable="false">5.6.9</string>
 	<string name="php_build" translatable="false">0</string>

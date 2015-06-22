@@ -49,4 +49,6 @@
 		Die Anwendung hat 2 ODBC Treiber. Wenn Sie diese Treiber verwenden wollen, können Sie es ähnlich machen:<br /><br />
 		odbc_connect(\'Driver=SQLite3;Database=\' . $path_to_file, \'\', \'\'); // SQLite3<br /><br />
 		odbc_connect(\'Driver=PostgreSQL;Database=\' . $database_name . \';Server=\' . $server, \'\', \'\'); // PostgreSQL<br />]]></string>
+	<string name="disable_all">Alle deaktivieren</string>
+	<string name="enable_all">Alle aktivieren</string>
 </resources>
