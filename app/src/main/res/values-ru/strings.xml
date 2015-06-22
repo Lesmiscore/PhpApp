@@ -49,4 +49,6 @@
 		2 ODBC драйверы встроенны в приложение. Чтобы начать их использовать введите:<br /><br />
 		odbc_connect(\'Driver=SQLite3;Database=\' . $path_to_file, \'\', \'\'); // SQLite3<br /><br />
 		odbc_connect(\'Driver=PostgreSQL;Database=\' . $database_name . \';Server=\' . $server, \'\', \'\'); // PostgreSQL<br />]]></string>
+	<string name="disable_all">Отключить все</string>
+	<string name="enable_all">Включить все</string>
 </resources>

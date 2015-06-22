@@ -38,7 +38,7 @@ public class DirectoryChooser extends AlertDialog {
 
 	public interface OnDirectoryChooserListener {
 		
-		public void OnDirectoryChosen(File directory);
+		void OnDirectoryChosen(File directory);
 		
 	}
 

@@ -10,11 +10,23 @@
 	<style name="TextAppearanceMedium" parent="android:TextAppearance.Medium">
 		<item name="android:textColor">?android:attr/textColorPrimary</item>
 	</style>
+	<style name="TextAppearanceSmall" parent="android:TextAppearance.Small">
+		<item name="android:textColor">?android:attr/textColorPrimary</item>
+	</style>
 	<style name="Toolbar" parent="Toolbar.Base" />
 	<style name="Toolbar.Base" parent="@style/ThemeApplication">
 		<item name="drawerArrowStyle">@style/Toolbar.DrawerArrowToggle</item>
 	</style>
 	<style name="Toolbar.DrawerArrowToggle" parent="Widget.AppCompat.DrawerArrowToggle">
 		<item name="color">?android:attr/textColorPrimary</item>
+	</style>
+	<style name="SettingsModules" />
+	<style name="SettingsModules.SelectAll" />
+	<style name="SettingsModules.SelectAll.CheckboxContainer">
+		<item name="android:layout_width">@dimen/preference_widget_width</item>
+		<item name="android:layout_marginRight">?android:scrollbarSize</item>
+	</style>
+	<style name="SettingsModules.SelectAll.Checkbox">
+		<item name="android:layout_gravity">center</item>
 	</style>
 </resources>

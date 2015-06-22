@@ -14,19 +14,23 @@ import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 
 import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.server.Php;
+import com.esminis.server.php.view.CheckboxRight;
 
 import javax.inject.Inject;
 
 public class DrawerFragment extends PreferenceFragment {
 
 	static private final String KEY_MODULES = "modules";
+	static private final String PREFIX_BUILT_IN = "builtin_";
 
 	@Inject
 	protected Preferences preferences;
@@ -36,6 +40,8 @@ public class DrawerFragment extends PreferenceFragment {
 
 	@Inject
 	protected ActivityHelper activityHelper;
+
+	private CheckboxRight checkboxSelectAll = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -94,8 +100,8 @@ public class DrawerFragment extends PreferenceFragment {
 		list = resources.getStringArray(R.array.modules_builtin);
 		for (int i = 0; i < list.length; i += 2) {
 			addPreference(
-				"builtin_" + i, resources.getString(R.string.modules_title_builtin, list[i]), list[i + 1],
-				screen, context, false
+				PREFIX_BUILT_IN + i, resources.getString(R.string.modules_title_builtin, list[i]),
+				list[i + 1], screen, context, false
 			);
 		}
 	}
@@ -116,11 +122,58 @@ public class DrawerFragment extends PreferenceFragment {
 		((ViewGroup)list.getParent()).removeView(list);
 		list.setPadding(0, 0, 0, 0);
 		dialog.setContentView(R.layout.preference_modules);
-		Toolbar toolbar = activityHelper.createToolbar(dialog, getActivity());
+		final Toolbar toolbar = activityHelper.createToolbar(dialog, getActivity());
+		toolbar.setLogo(null);
 		toolbar.setTitle(screen.getTitle());
+		initializeToolbarMenu(toolbar);
 		((ViewGroup)dialog.findViewById(R.id.content)).addView(
 			list, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
 		);
+	}
+
+	private void setModulesSelected(boolean selected) {
+		PreferenceScreen preferencesModules =
+			(PreferenceScreen)getPreferenceManager().findPreference(KEY_MODULES);
+		for (int i = 0; i < preferencesModules.getPreferenceCount(); i++) {
+			CheckBoxPreference preference = (CheckBoxPreference)preferencesModules.getPreference(i);
+			if (!preference.getKey().startsWith(PREFIX_BUILT_IN)) {
+				preference.setChecked(selected);
+			}
+		}
+		php.requestRestartIfRunning();
+		resetSelectAll();
+	}
+
+	private void initializeToolbarMenu(Toolbar toolbar) {
+		checkboxSelectAll = new CheckboxRight(toolbar.getContext());
+		toolbar.getMenu().add("").setActionView(checkboxSelectAll)
+			.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		resetSelectAll();
+	}
+
+	private void resetSelectAll() {
+		if (checkboxSelectAll == null) {
+			return;
+		}
+		PreferenceScreen preferencesModules =
+			(PreferenceScreen)getPreferenceManager().findPreference(KEY_MODULES);
+		boolean allChecked = true;
+		for (int i = 0; i < preferencesModules.getPreferenceCount(); i++) {
+			CheckBoxPreference preference = (CheckBoxPreference)preferencesModules.getPreference(i);
+			if (!preference.getKey().startsWith(PREFIX_BUILT_IN) && !preference.isChecked()) {
+				allChecked = false;
+				break;
+			}
+		}
+		checkboxSelectAll.setOnCheckedChangeListener(null);
+		checkboxSelectAll.setTitle(allChecked ? R.string.disable_all : R.string.enable_all);
+		checkboxSelectAll.setChecked(allChecked);
+		checkboxSelectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+				setModulesSelected(checked);
+			}
+		});
 	}
 
 	@Override
@@ -179,6 +232,13 @@ public class DrawerFragment extends PreferenceFragment {
 				onPreferenceChanged(preference, newValue);
 				php.requestRestartIfRunning();
 				return true;
+			}
+		});
+		preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				resetSelectAll();
+				return false;
 			}
 		});
 	}

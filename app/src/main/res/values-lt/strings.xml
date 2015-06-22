@@ -49,4 +49,6 @@
 		Aplikacija turi 2 ODBC draiver`ius: PostgreSQL ir SQLite3. Jei norite naudoti šiuos draiver`ius, tai galite padaryti panašiai:<br /><br />
 		odbc_connect(\'Driver=SQLite3;Database=\' . $path_to_file, \'\', \'\'); // SQLite3<br /><br />
 		odbc_connect(\'Driver=PostgreSQL;Database=\' . $database_name . \';Server=\' . $server, \'\', \'\'); // PostgreSQL<br />]]></string>
+	<string name="disable_all">Išjungti visus</string>
+	<string name="enable_all">Įjungti visus</string>
 </resources>
