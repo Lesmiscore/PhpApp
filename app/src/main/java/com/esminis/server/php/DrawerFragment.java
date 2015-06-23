@@ -30,6 +30,7 @@ import javax.inject.Inject;
 public class DrawerFragment extends PreferenceFragment {
 
 	static private final String KEY_MODULES = "modules";
+	static private final String PREFIX_MODULE = "module_";
 	static private final String PREFIX_BUILT_IN = "builtin_";
 
 	@Inject
@@ -136,7 +137,7 @@ public class DrawerFragment extends PreferenceFragment {
 			(PreferenceScreen)getPreferenceManager().findPreference(KEY_MODULES);
 		for (int i = 0; i < preferencesModules.getPreferenceCount(); i++) {
 			CheckBoxPreference preference = (CheckBoxPreference)preferencesModules.getPreference(i);
-			if (!preference.getKey().startsWith(PREFIX_BUILT_IN)) {
+			if (!getIsForBuiltIn(preference)) {
 				preference.setChecked(selected);
 			}
 		}
@@ -160,7 +161,7 @@ public class DrawerFragment extends PreferenceFragment {
 		boolean allChecked = true;
 		for (int i = 0; i < preferencesModules.getPreferenceCount(); i++) {
 			CheckBoxPreference preference = (CheckBoxPreference)preferencesModules.getPreference(i);
-			if (!preference.getKey().startsWith(PREFIX_BUILT_IN) && !preference.isChecked()) {
+			if (!getIsForBuiltIn(preference) && !preference.isChecked()) {
 				allChecked = false;
 				break;
 			}
@@ -174,6 +175,10 @@ public class DrawerFragment extends PreferenceFragment {
 				setModulesSelected(checked);
 			}
 		});
+	}
+
+	private boolean getIsForBuiltIn(Preference preference) {
+		return preference.getKey().startsWith(PREFIX_MODULE + PREFIX_BUILT_IN);
 	}
 
 	@Override
@@ -248,7 +253,7 @@ public class DrawerFragment extends PreferenceFragment {
 		boolean enabled
 	) {
 		CheckBoxPreference preference = new CheckBoxPreference(context);
-		preference.setKey("module_" + name);
+		preference.setKey(PREFIX_MODULE + name);
 		preference.setTitle(title);
 		preference.setSummary(summary);
 		preference.setDefaultValue(true);
