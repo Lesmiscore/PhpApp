@@ -12,8 +12,6 @@ Server document root by default(it can be changed) is sdcard/www so put files th
 
 You can download app here: https://play.google.com/store/apps/details?id=com.esminis.server.php
 
-You can find source code here: https://bitbucket.org/esminis/server.php/
-
 ## Author ##
 
 Tautvydas Andrikys http://esminis.com
