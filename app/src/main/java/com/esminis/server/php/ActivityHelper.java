@@ -7,6 +7,7 @@ import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,10 @@ import android.view.ContextThemeWrapper;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 
 import javax.inject.Inject;
@@ -25,7 +30,9 @@ import javax.inject.Singleton;
 public class ActivityHelper {
 
 	@Inject
-	public ActivityHelper() {}
+	protected Bus bus;
+
+	private WeakReference<Activity> activity;
 
 	public Toolbar createToolbar(@NonNull AppCompatActivity activity) {
 		Toolbar toolbar = createToolbar((Toolbar)activity.findViewById(R.id.toolbar));
@@ -88,6 +95,39 @@ public class ActivityHelper {
 			attribute.recycle();
 			return drawable;
 		}
+	}
+
+	void onResume(Activity activity) {
+		this.activity = new WeakReference<>(activity);
+		bus.register(this);
+	}
+
+	void onPause() {
+		activity = null;
+		bus.unregister(this);
+	}
+
+	@Subscribe
+	public void onEventMessage(EventMessage event) {
+		Activity activity = this.activity.get();
+		if (activity == null) {
+			return;
+		}
+		View view = activity.findViewById(R.id.container);
+		if (view == null) {
+			return;
+		}
+		final Snackbar snackbar = Snackbar.make(view, event.message, Snackbar.LENGTH_LONG);
+		snackbar.setAction(R.string.dismiss, new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				snackbar.dismiss();
+			}
+		});
+		snackbar.setActionTextColor(
+			view.getResources().getColor(event.error ? R.color.error : R.color.main)
+		);
+		snackbar.show();
 	}
 
 }

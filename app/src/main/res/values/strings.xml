@@ -51,4 +51,11 @@
 		odbc_connect(\'Driver=PostgreSQL;Database=\' . $database_name . \';Server=\' . $server, \'\', \'\'); // PostgreSQL<br />]]></string>
 	<string name="enable_all">Enable all</string>
 	<string name="disable_all">Disable all</string>
+	<string name="dismiss">Dismiss</string>
+	<string name="reinstall_files">Reinstall files</string>
+	<string name="reinstall_files_summary">Install default files (index.php, config.ini, …) to document root</string>
+	<string name="reinstall_files_complete">Reinstall of files complete</string>
+	<string name="error_operation_failed">Error: operation failed</string>
+	<string name="error_document_root_not_empty">Error: document root not empty</string>
+	<string name="error_document_root_cannot_create_directory">Error: cannot create directory in document root</string>
 </resources>

@@ -160,6 +160,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 	@Override
 	protected void onResume() {
 		super.onResume();
+		activityHelper.onResume(this);
 		paused = false;
 		if (requestResultView) {
 			requestResultView = false;
@@ -180,6 +181,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 	@Override
 	protected void onPause() {
 		super.onPause();
+		activityHelper.onPause();
 		paused = true;
 		if (receiver != null) {
 			unregisterReceiver(receiver);

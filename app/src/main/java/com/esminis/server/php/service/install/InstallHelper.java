@@ -16,6 +16,10 @@
 package com.esminis.server.php.service.install;
 
 import android.content.Context;
+
+import com.esminis.server.php.ErrorWithMessage;
+import com.esminis.server.php.R;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -64,8 +68,15 @@ class InstallHelper {
 		input.close();
 		output.close();
 	}
+
+	public void fromAssetDirectory(File target, String path, Context context) throws Exception {
+		fromAssetDirectory(target, path, context, true);
+		fromAssetDirectory(target, path, context, false);
+	}
 	
-	public void fromAssetDirectory(File target, String path, Context context) throws IOException {
+	public void fromAssetDirectory(
+		File target, String path, Context context, boolean dryRun
+	) throws Exception {
 		if (!target.isDirectory() || !target.canWrite()) {
 			return;
 		}
@@ -74,11 +85,17 @@ class InstallHelper {
 			String filePath = path + File.separator + file;
 			File targetFile = new File(target + File.separator + file);
 			if (context.getAssets().list(filePath).length > 0) {
-				if (targetFile.isDirectory() || targetFile.mkdir()) {
-					fromAssetDirectory(targetFile, filePath, context);
+				if (!targetFile.isDirectory() && targetFile.mkdir()) {
+					throw new ErrorWithMessage(R.string.error_document_root_cannot_create_directory);
 				}
+				fromAssetDirectory(targetFile, filePath, context);
 			} else {
-				fromAssetFile(targetFile, filePath, context);
+				if (targetFile.exists()) {
+					throw new ErrorWithMessage(R.string.error_document_root_not_empty);
+				}
+				if (!dryRun) {
+					fromAssetFile(targetFile, filePath, context);
+				}
 			}
 		}
 	}
