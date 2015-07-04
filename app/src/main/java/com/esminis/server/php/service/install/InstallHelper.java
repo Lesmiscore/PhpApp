@@ -86,7 +86,7 @@ class InstallHelper {
 			File targetFile = new File(target + File.separator + file);
 			if (context.getAssets().list(filePath).length > 0) {
 				if (!targetFile.isDirectory() && targetFile.mkdir()) {
-					throw new ErrorWithMessage(R.string.error_document_root_cannot_create_directory);
+					throw new ErrorWithMessage(R.string.error_cannot_create_directory);
 				}
 				fromAssetDirectory(targetFile, filePath, context);
 			} else {

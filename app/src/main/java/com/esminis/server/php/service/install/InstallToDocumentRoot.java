@@ -3,12 +3,10 @@ package com.esminis.server.php.service.install;
 import android.content.Context;
 
 import com.esminis.server.php.ErrorWithMessage;
-import com.esminis.server.php.EventMessage;
 import com.esminis.server.php.R;
 import com.esminis.server.php.model.manager.Preferences;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -39,7 +37,7 @@ public class InstallToDocumentRoot {
 			return;
 		}
 		if (!file.isDirectory() && !file.mkdir()) {
-			throw new ErrorWithMessage(R.string.error_document_root_cannot_create_directory);
+			throw new ErrorWithMessage(R.string.error_cannot_create_directory);
 		}
 		helper.fromAssetDirectory(file, "www", context);
 		HashMap<String, String> variables = new HashMap<>();
