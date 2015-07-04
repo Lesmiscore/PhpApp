@@ -22,10 +22,14 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 
 import com.esminis.server.php.model.manager.Preferences;
+import com.esminis.server.php.service.install.InstallToDocumentRoot;
 import com.esminis.server.php.service.server.Php;
 import com.esminis.server.php.view.CheckboxRight;
+import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
+
+import rx.Subscriber;
 
 public class DrawerFragment extends PreferenceFragment {
 
@@ -41,6 +45,12 @@ public class DrawerFragment extends PreferenceFragment {
 
 	@Inject
 	protected ActivityHelper activityHelper;
+
+	@Inject
+	protected InstallToDocumentRoot installToDocumentRoot;
+
+	@Inject
+	protected Bus bus;
 
 	private CheckboxRight checkboxSelectAll = null;
 
@@ -83,6 +93,32 @@ public class DrawerFragment extends PreferenceFragment {
 		preference.setKey(Preferences.KEEP_RUNNING);
 		screen.addPreference(preference);
 		restartOnChange(preference);
+		Preference preferenceInstall = new Preference(context);
+		preferenceInstall.setTitle(R.string.reinstall_files);
+		preferenceInstall.setSummary(R.string.reinstall_files_summary);
+		preferenceInstall.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				installToDocumentRoot.installOnBackground(preference.getContext()).subscribe(
+					new Subscriber<Void>() {
+						@Override
+						public void onCompleted() {
+							EventMessage.post(bus, R.string.reinstall_files_complete);
+						}
+
+						@Override
+						public void onError(Throwable e) {
+							EventMessage.post(bus, e);
+						}
+
+						@Override
+						public void onNext(Void aVoid) {}
+					}
+				);
+				return false;
+			}
+		});
+		screen.addPreference(preferenceInstall);
 	}
 
 	private void setupPreferencesModules(PreferenceScreen screen, Context context) {

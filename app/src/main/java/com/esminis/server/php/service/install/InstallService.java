@@ -33,6 +33,9 @@ public class InstallService extends Service {
 	@Inject
 	protected Php php;
 
+	@Inject
+	protected InstallToDocumentRoot installToDocumentRoot;
+
 	private final Messenger messenger = new Messenger(
 		new Handler() {
 			@Override
@@ -69,19 +72,9 @@ public class InstallService extends Service {
 	private boolean install(Context context) {
 		InstallHelper helper = new InstallHelper();
 		if (!preferences.contains(context, Preferences.DOCUMENT_ROOT)) {
-			File file = preferences.getDefaultDocumentRoot();
-			File tempDirectory = new File(context.getExternalFilesDir(null), "tmp");
-			if (!tempDirectory.isDirectory() && !tempDirectory.mkdir()) {
-				tempDirectory = file;
-			}
-			if (!file.isDirectory() && file.mkdir() && file.isDirectory()) {
-				try {
-					helper.fromAssetDirectory(file, "www", context);
-					HashMap<String, String> variables = new HashMap<>();
-					variables.put("tempDirectory", tempDirectory.getAbsolutePath());
-					helper.preprocessFile(new File(file, "php.ini"), variables);
-				} catch (IOException ignored) {}
-			}
+			try {
+				installToDocumentRoot.install(context, true);
+			} catch (Exception ignored) {}
 		}
 		String[] list = preferences.getInstallPaths(context);
 		File moduleDirectory = php.getPhp().getParentFile();

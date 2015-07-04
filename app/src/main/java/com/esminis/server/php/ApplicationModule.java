@@ -6,6 +6,7 @@ import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.install.InstallService;
 import com.esminis.server.php.service.server.Php;
 import com.esminis.server.php.service.server.PhpStartup;
+import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
@@ -37,6 +38,12 @@ public class ApplicationModule {
 	@Singleton
 	public Preferences providePreferences() {
 		return new com.esminis.server.php.model.manager.Preferences();
+	}
+
+	@Provides
+	@Singleton
+	public Bus provideBus() {
+		return new Bus();
 	}
 
 }
