@@ -14,6 +14,10 @@ You can download app here: https://play.google.com/store/apps/details?id=com.esm
 
 You can find source code here: https://bitbucket.org/esminis/server.php/
 
+## Author ##
+
+Tautvydas Andrikys http://esminis.com
+
 ## License ##
 
 Source code is licensed under the Apache License, Version 2.0; You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0
