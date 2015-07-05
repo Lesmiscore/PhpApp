@@ -56,6 +56,6 @@
 	<string name="reinstall_files_summary">Install default files (index.php, config.ini, …) to document root</string>
 	<string name="reinstall_files_complete">Reinstall of files complete</string>
 	<string name="error_operation_failed">Error: operation failed</string>
-	<string name="error_document_root_not_empty">Error: document root not empty</string>
+	<string name="error_document_root_not_empty">Error: document root directory not empty</string>
 	<string name="error_cannot_create_directory">Error: cannot create directory</string>
 </resources>
