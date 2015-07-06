@@ -26,5 +26,6 @@
 			</intent-filter>
 		</activity>
 		<service android:name=".service.install.InstallService" android:process=":install" />
+		<service android:name=".service.ServerNotificationService" />
 	</application>
 </manifest>

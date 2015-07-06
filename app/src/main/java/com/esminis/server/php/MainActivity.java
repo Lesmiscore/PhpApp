@@ -29,9 +29,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.*;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.Html;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
@@ -51,6 +54,7 @@ import com.esminis.popup.About;
 import com.esminis.popup.DirectoryChooser;
 import com.esminis.model.manager.Network;
 import com.esminis.server.php.model.manager.Log;
+import com.esminis.server.php.service.ServerNotification;
 import com.esminis.server.php.service.server.Php;
 import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.install.InstallServer;
@@ -80,6 +84,9 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 
 	@Inject
 	protected ActivityHelper activityHelper;
+
+	@Inject
+	protected ServerNotification serverNotification;
 
 	private boolean requestResultView = false;
 	
@@ -325,14 +332,17 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 						findViewById(R.id.stop).setVisibility(View.GONE);
 						if (extras != null && extras.getBoolean("running")) {
 							findViewById(R.id.stop).setVisibility(View.VISIBLE);
-							setLabel(
-								Html.fromHtml(
-									String.format(getString(R.string.server_running), extras.getString("address"))
-								)
+							Spanned title = Html.fromHtml(
+								String.format(getString(R.string.server_running), extras.getString("address"))
+							);
+							setLabel(title);
+							serverNotification.show(
+								MainActivity.this, title.toString(), getString(R.string.server_running_public)
 							);
 						} else {
 							findViewById(R.id.start).setVisibility(View.VISIBLE);
 							setLabel(getString(R.string.server_stopped));
+							serverNotification.hide(MainActivity.this);
 						}
 					}					
 				}
