@@ -58,6 +58,7 @@ public class DrawerFragment extends PreferenceFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Context context = getActivity();
+		((Application)context.getApplicationContext()).getObjectGraph().inject(this);
 		PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(context);
 		setPreferenceScreen(screen);
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -93,6 +94,13 @@ public class DrawerFragment extends PreferenceFragment {
 		preference.setKey(Preferences.KEEP_RUNNING);
 		screen.addPreference(preference);
 		restartOnChange(preference);
+		preference = new CheckBoxPreference(context);
+		preference.setTitle(R.string.show_notification_server);
+		preference.setDefaultValue(!preferences.getBoolean(context, Preferences.KEEP_RUNNING));
+		preference.setSummary(R.string.show_notification_server_summary);
+		preference.setKey(Preferences.SHOW_NOTIFICATION_SERVER);
+		screen.addPreference(preference);
+		requestStatusOnChange(preference);
 		Preference preferenceInstall = new Preference(context);
 		preferenceInstall.setTitle(R.string.reinstall_files);
 		preferenceInstall.setSummary(R.string.reinstall_files_summary);
@@ -220,7 +228,6 @@ public class DrawerFragment extends PreferenceFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		((Application)getActivity().getApplication()).getObjectGraph().inject(this);
 		if (savedInstanceState != null) {
 			initializeModulesDialog();
 		}
@@ -261,6 +268,42 @@ public class DrawerFragment extends PreferenceFragment {
 			preferences.set(context, Preferences.KEEP_RUNNING, true);
 			((CheckBoxPreference)findPreference(Preferences.KEEP_RUNNING)).setChecked(true);
 		}
+		if (
+			Preferences.SHOW_NOTIFICATION_SERVER.equals(name) && value &&
+			preferences.getBoolean(context, Preferences.KEEP_RUNNING)
+		) {
+			((CheckBoxPreference)findPreference(Preferences.KEEP_RUNNING)).setChecked(false);
+			((CheckBoxPreference)findPreference(Preferences.START_ON_BOOT)).setChecked(false);
+			php.requestRestartIfRunning();
+		} else if (
+			(
+				preferences.getBoolean(context, Preferences.KEEP_RUNNING) ||
+				(Preferences.KEEP_RUNNING.equals(name) && value)
+			) && preferences.getBoolean(context, Preferences.SHOW_NOTIFICATION_SERVER)
+		) {
+			((CheckBoxPreference)findPreference(Preferences.SHOW_NOTIFICATION_SERVER)).setChecked(false);
+			php.requestStatus();
+		}
+	}
+
+	private void requestStatusOnChange(Preference preference) {
+		if (preference == null) {
+			return;
+		}
+		preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				onPreferenceChanged(preference, newValue);
+				return true;
+			}
+		});
+		preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				php.requestStatus();
+				return true;
+			}
+		});
 	}
 
 	private void restartOnChange(Preference preference) {
