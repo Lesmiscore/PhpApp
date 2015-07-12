@@ -50,14 +50,20 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.esminis.model.manager.Network;
 import com.esminis.popup.About;
 import com.esminis.popup.DirectoryChooser;
-import com.esminis.model.manager.Network;
 import com.esminis.server.php.model.manager.Log;
-import com.esminis.server.php.service.ServerNotification;
-import com.esminis.server.php.service.server.Php;
 import com.esminis.server.php.model.manager.Preferences;
+import com.esminis.server.php.service.ServerNotification;
+import com.esminis.server.php.service.background.BackgroundService;
 import com.esminis.server.php.service.background.install.InstallServer;
+import com.esminis.server.php.service.server.Php;
+import com.esminis.server.php.service.server.tasks.RestartIfRunningServerTaskProvider;
+import com.esminis.server.php.service.server.tasks.StartServerTaskProvider;
+import com.esminis.server.php.service.server.tasks.StatusServerTaskProvider;
+import com.esminis.server.php.service.server.tasks.StopServerTaskProvider;
+
 import java.io.File;
 
 import javax.inject.Inject;
@@ -75,9 +81,6 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 
 	@Inject
 	protected InstallServer installServer = null;
-
-	@Inject
-	protected Php php = null;
 
 	@Inject
 	protected Log log = null;
@@ -180,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 			registerReceiver(receiverNetwork, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 		}
 		resetNetwork();
-		php.requestStatus();
+		BackgroundService.execute(getApplication(), StatusServerTaskProvider.class).subscribe();
 		resetLog();
 		removeFocus();
 	}
@@ -273,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 							preferences.set(
 								MainActivity.this, Preferences.DOCUMENT_ROOT, directory.getAbsolutePath()
 							);
-							php.requestRestartIfRunning();
+							BackgroundService.execute(getApplication(), RestartIfRunningServerTaskProvider.class).subscribe();
 							((TextView) findViewById(R.id.server_root)).setText(
 								preferences.getString(MainActivity.this, Preferences.DOCUMENT_ROOT)
 							);
@@ -311,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 				boolean error = true;
 				if (port >= 1024 && port <= 65535) {
 					preferences.set(MainActivity.this, Preferences.PORT, String.valueOf(port));
-					php.requestRestartIfRunning();
+					BackgroundService.execute(getApplication(), RestartIfRunningServerTaskProvider.class).subscribe();
 					error = false;
 				}
 				((TextView)findViewById(R.id.server_port))
@@ -323,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				if (intent.getAction() != null && intent.getAction().equals(Php.INTENT_ACTION)) {
+				if (Php.INTENT_ACTION.equals(intent.getAction())) {
 					Bundle extras = intent.getExtras();
 					if (extras != null && extras.containsKey("errorLine")) {
 						resetLog();
@@ -361,20 +364,20 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 				((TextView)findViewById(R.id.error)).setText("");
 				log.clear(view.getContext());
 				resetLog();
-				php.requestStart();
+				BackgroundService.execute(getApplication(), StartServerTaskProvider.class).subscribe();
 			}
 		});
 
 		findViewById(R.id.stop).setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				php.requestStop();
+				BackgroundService.execute(getApplication(), StopServerTaskProvider.class).subscribe();
 				resetLog();
 			}
 		});
 		
 		registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
 		registerReceiver(receiverNetwork, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-		php.requestStatus();
+		BackgroundService.execute(getApplication(), StatusServerTaskProvider.class).subscribe();
 	}
 
 	private void resetLog() {
@@ -472,14 +475,15 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 					return;
 				}
 				preferences.set(MainActivity.this, Preferences.ADDRESS, newValue);
-				php.requestRestartIfRunning();
+				BackgroundService.execute(getApplication(), RestartIfRunningServerTaskProvider.class).subscribe();
+
 			}
 
 			public void onNothingSelected(AdapterView<?> parent) {}
 
 		});
 		if (changed) {
-			php.requestRestartIfRunning();
+			BackgroundService.execute(getApplication(), RestartIfRunningServerTaskProvider.class).subscribe();
 		}
 	}
 

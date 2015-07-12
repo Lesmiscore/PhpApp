@@ -20,6 +20,7 @@ public class Preferences extends com.esminis.model.manager.Preferences {
 	final static public String KEEP_RUNNING = "keepRunning";
 	final static public String SHOW_NOTIFICATION_SERVER = "showNotificationServer";
 	final static public String PHP_BUILD = "installedPhpBuild";
+	final static public String SERVER_STARTED = "serverStarted";
 
 	public String getPhpBuild(Context context) {
 		String build = context.getString(R.string.php_build);

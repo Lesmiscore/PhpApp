@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Message;
+import android.util.Pair;
 
 import com.esminis.model.manager.Process;
 import com.esminis.server.php.R;
@@ -49,7 +50,7 @@ public class Php {
 
 	protected Network network = null;
 
-	private PhpHandler handler = null;
+	private PhpHandler phpHandler = null;
 
 	private Context context = null;
 
@@ -74,7 +75,13 @@ public class Php {
 		modulesDirectory = context.getFilesDir();
 		php = new File(modulesDirectory, "php");
 		address = getIPAddress() + ":" + preferences.getString(context, Preferences.PORT);
-		handler = new PhpHandler(context, this, preferences);
+	}
+
+	private PhpHandler getPhpHandler() {
+		if (phpHandler == null) {
+			phpHandler = new PhpHandler(context, this, preferences);
+		}
+		return phpHandler;
 	}
 
 	public File getPhp() {
@@ -90,9 +97,12 @@ public class Php {
 		if (process != null) {
 			return;
 		}
+		if (getStatus().first) {
+			stop();
+		}
 		File fileRoot = new File(root);
 		if (!fileRoot.isDirectory()) {
-			handler.sendError(context.getString(R.string.error_document_root_does_not_exist));
+			getPhpHandler().sendError(context.getString(R.string.error_document_root_does_not_exist));
 		}
 		try {
 			process = startup.start(
@@ -100,16 +110,18 @@ public class Php {
 				preferences.getBoolean(context, Preferences.KEEP_RUNNING),
 				preferences.getEnabledModules(context), context
 			);
-			streamReader = new PhpStreamReader(this, handler);
+			streamReader = new PhpStreamReader(this, getPhpHandler());
 			streamReader.execute(process.getErrorStream());
+			preferences.set(context, Preferences.SERVER_STARTED, true);
 		} catch (IOException error) {
 			if (process == null) {
-				handler.sendError(error.getCause().getMessage());
+				getPhpHandler().sendError(error.getCause().getMessage());
 			}
 		}
 	}
 
 	private void stop() {
+		preferences.set(context, Preferences.SERVER_STARTED, false);
 		if (streamReader != null) {
 			streamReader.cancel(false);
 			streamReader = null;
@@ -120,8 +132,8 @@ public class Php {
 		}
 		managerProcess.kill(php);
 	}
-	
-	private void status() {
+
+	private Pair<Boolean, String> getStatus() {
 		boolean running = process != null;
 		String realAddress = address;
 		if (process == null) {
@@ -138,26 +150,31 @@ public class Php {
 				}
 				running = true;
 			}
-		}		
+		}
+		return new Pair<>(running, realAddress);
+	}
+
+	private void status() {
+		Pair<Boolean, String> status = getStatus();
 		Intent intent = new Intent(INTENT_ACTION);		
-		intent.putExtra("running", running);
-		if (running) {
-			intent.putExtra("address", realAddress);
+		intent.putExtra("running", status.first);
+		if (status.first) {
+			intent.putExtra("address", status.second);
 		}
 		context.sendBroadcast(intent);
 	}
 
 	public void requestStatus() {
-		handler.sendAction("status");
+		getPhpHandler().sendAction("status");
 	}
 
 	public void requestStop() {
-		handler.sendAction("stop");
+		getPhpHandler().sendAction("stop");
 	}
 
 	public void requestStart() {
-		if (handler.isReady()) {
-			handler.sendAction("start");
+		if (getPhpHandler().isReady()) {
+			getPhpHandler().sendAction("start");
 		} else {
 			start = true;
 		}
@@ -167,7 +184,7 @@ public class Php {
 		context.registerReceiver(new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				if (intent.getAction() != null && intent.getAction().equals(Php.INTENT_ACTION)) {
+				if (Php.INTENT_ACTION.equals(intent.getAction())) {
 					Bundle extra = intent.getExtras();
 					if (extra != null && !extra.containsKey("errorLine") && extra.getBoolean("running")) {
 						requestRestart();
@@ -186,7 +203,12 @@ public class Php {
 
 	protected void onHandlerReady() {
 		status();
-		if (start) {
+		if (
+			start || (
+				preferences.getBoolean(context, Preferences.SERVER_STARTED) &&
+				preferences.getBoolean(context, Preferences.KEEP_RUNNING)
+			)
+		) {
 			requestStart();
 		}
 	}
@@ -196,7 +218,8 @@ public class Php {
 		if (data == null) {
 			return;
 		}
-		if (data.get("action").equals("error")) {
+		Object action = data.get("action");
+		if ("error".equals(action)) {
 			String line = data.getString("message");
 			if (line != null) {
 				log.add(context, line);
@@ -206,10 +229,10 @@ public class Php {
 			}
 			return;
 		}
-		if (data.get("action").equals("start")) {
+		if ("start".equals(action)) {
 			address = getIPAddress() + ":" + data.getString("port");
 			start(data.getString("documentRoot"));
-		} else if (data.get("action").equals("stop")) {
+		} else if ("stop".equals(action)) {
 			stop();
 		}
 		status();
