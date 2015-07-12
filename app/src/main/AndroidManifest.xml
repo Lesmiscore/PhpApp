@@ -25,7 +25,7 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<service android:name=".service.install.InstallService" android:process=":install" />
+		<service android:name=".service.background.BackgroundService" android:process=":background" />
 		<service android:name=".service.ServerNotificationService" />
 	</application>
 </manifest>

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. 
  */
-package com.esminis.server.php.service.install;
+package com.esminis.server.php.service.background.install;
 
 import android.content.Context;
 

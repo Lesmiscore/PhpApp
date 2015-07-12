@@ -57,7 +57,7 @@ import com.esminis.server.php.model.manager.Log;
 import com.esminis.server.php.service.ServerNotification;
 import com.esminis.server.php.service.server.Php;
 import com.esminis.server.php.model.manager.Preferences;
-import com.esminis.server.php.service.install.InstallServer;
+import com.esminis.server.php.service.background.install.InstallServer;
 import java.io.File;
 
 import javax.inject.Inject;

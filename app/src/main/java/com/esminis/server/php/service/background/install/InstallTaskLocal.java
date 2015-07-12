@@ -1,4 +1,4 @@
-package com.esminis.server.php.service.install;
+package com.esminis.server.php.service.background.install;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -7,18 +7,16 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 
 import com.esminis.model.manager.Network;
 import com.esminis.server.php.model.manager.Preferences;
+import com.esminis.server.php.service.background.BackgroundService;
 import com.esminis.server.php.service.server.Php;
 
-class InstallTask extends AsyncTask<Void, Void, Boolean> {
+import rx.Subscriber;
+import rx.Subscription;
 
-	private final Object lock = new Object();
+class InstallTaskLocal extends AsyncTask<Void, Void, Boolean> {
 
 	private boolean installSuccess = false;
 	private boolean canStartInstall = false;
@@ -28,26 +26,7 @@ class InstallTask extends AsyncTask<Void, Void, Boolean> {
 	private Preferences preferences;
 	private Network network;
 
-	private Messenger messengerReceiver = new Messenger(new Handler() {
-
-		@Override
-		public void handleMessage(Message message) {
-			switch (message.what) {
-				case InstallService.ACTION_INSTALL_COMPLETE:
-				case InstallService.ACTION_INSTALL_ERROR:
-					synchronized (lock) {
-						installSuccess = message.what == InstallService.ACTION_INSTALL_COMPLETE;
-						lock.notify();
-					}
-					break;
-				default:
-					super.handleMessage(message);
-			}
-		}
-
-	});
-
-	public InstallTask(
+	public InstallTaskLocal(
 		Php php, InstallServer installServer, Preferences preferences, Network network,
 		Activity activity
 	) {
@@ -82,27 +61,31 @@ class InstallTask extends AsyncTask<Void, Void, Boolean> {
 			} catch (InterruptedException ignored) {}
 		}
 		activity.unregisterReceiver(receiver);
-		InstallTaskConnection connection = new InstallTaskConnection(activity);
-		try {
-			final Message message = Message.obtain(null, InstallService.ACTION_INSTALL);
-			final Messenger messenger = connection.connect();
-			message.replyTo = messengerReceiver;
-			synchronized (lock) {
-				messenger.send(message);
-				try {
-					lock.wait();
-				} catch (InterruptedException ignored) {}
-				if (!installSuccess) {
-					return false;
+
+		Subscription subscription = BackgroundService.execute(
+				activity.getApplication(), InstallTaskProvider.class
+			).subscribe(
+			new Subscriber<Void>() {
+				@Override
+				public void onCompleted() {
+					installSuccess = true;
 				}
-				initializePreferences();
-				return true;
+
+				@Override
+				public void onError(Throwable e) {}
+
+				@Override
+				public void onNext(Void dummy) {}
 			}
-		} catch (RemoteException e) {
-			return false;
-		} finally {
-			connection.disconnect();
+		);
+		while (!subscription.isUnsubscribed()) {
+			Thread.yield();
 		}
+		if (!installSuccess) {
+			return false;
+		}
+		initializePreferences();
+		return true;
 	}
 
 	private void initializePreferences() {
