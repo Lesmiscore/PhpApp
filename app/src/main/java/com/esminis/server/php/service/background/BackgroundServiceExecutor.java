@@ -1,97 +1,67 @@
 package com.esminis.server.php.service.background;
 
 import android.app.Application;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import rx.Subscriber;
 
 class BackgroundServiceExecutor {
 
-	static private final Object lock = new Object();
-	static private Map<Long, Boolean> results = new HashMap<>();
-	static private BackgroundServiceConnectionManager connectionManager = new BackgroundServiceConnectionManager();
-	static private Messenger messengerReceiver = null;
+	private final Object lock = new Object();
+	private Boolean result = null;
 	static private long nextMessageId = 0;
+	static final private BackgroundServiceLauncher launcher = new BackgroundServiceLauncher();
 
 	BackgroundServiceExecutor(
 		Application application, Class<? extends BackgroundServiceTaskProvider> provider,
 		Subscriber<? super Void> subscriber
 	) {
+		launcher.start(application);
 		final long messageId;
 		synchronized (lock) {
 			messageId = nextMessageId++;
 		}
-		try {
-			final Message message = Message.obtain(null, BackgroundService.ACTION_TASK);
-			final Messenger messenger = connectionManager.connect(application);
-			if (messenger == null) {
-				subscriber.onError(new Exception("Could not connect to background service"));
-				return;
-			}
-			final Bundle bundle = new Bundle();
-			bundle.putString(BackgroundService.FIELD_PROVIDER, provider.getName());
-			bundle.putLong(BackgroundService.FIELD_MESSAGE_ID, messageId);
-			message.replyTo = getMessengerReceiver();
-			message.setData(bundle);
-			synchronized (lock) {
-				messenger.send(message);
-				try {
-					lock.wait();
-				} catch (InterruptedException ignored) {}
+		BroadcastReceiver receiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				Bundle bundle = intent.getExtras();
+				if (
+					!BackgroundService.INTENT_ACTION.equals(intent.getAction()) || bundle == null ||
+					bundle.getLong(BackgroundService.FIELD_MESSAGE_ID) != messageId ||
+					!bundle.containsKey(BackgroundService.FIELD_ACTION)
+				) {
+					return;
+				}
 				synchronized (lock) {
-					if (results.containsKey(messageId) && results.get(messageId)) {
-						subscriber.onCompleted();
-					} else {
-						subscriber.onError(new Exception("Task failed"));
-					}
+					result = bundle.getInt(BackgroundService.FIELD_ACTION) ==
+						BackgroundService.ACTION_TASK_COMPLETE;
 				}
 			}
-		} catch (RemoteException e) {
-			subscriber.onError(e);
-		}
-		synchronized (lock) {
-			if (results.containsKey(messageId)) {
-				results.remove(messageId);
+		};
+		application.registerReceiver(receiver, new IntentFilter(BackgroundService.INTENT_ACTION));
+		Intent intent = new Intent(BackgroundService.INTENT_ACTION);
+		intent.putExtra(BackgroundService.FIELD_PROVIDER, provider.getName());
+		intent.putExtra(BackgroundService.FIELD_MESSAGE_ID, messageId);
+		application.sendBroadcast(intent);
+		for (;;) {
+			synchronized (lock) {
+				if (result != null) {
+					break;
+				}
 			}
+			Thread.yield();
 		}
-	}
-
-	static private Messenger getMessengerReceiver() {
+		application.unregisterReceiver(receiver);
 		synchronized (lock) {
-			if (messengerReceiver == null) {
-				HandlerThread handlerThread = new HandlerThread("backgroundServiceHelper");
-				handlerThread.start();
-				messengerReceiver = new Messenger(new Handler(handlerThread.getLooper()) {
-
-					@Override
-					public void handleMessage(Message message) {
-						switch (message.what) {
-							case BackgroundService.ACTION_TASK_COMPLETE:
-							case BackgroundService.ACTION_TASK_FAILED:
-								synchronized (lock) {
-									results.put(
-										message.getData().getLong(BackgroundService.FIELD_MESSAGE_ID),
-										message.what == BackgroundService.ACTION_TASK_COMPLETE
-									);
-									lock.notify();
-								}
-								break;
-							default:
-								super.handleMessage(message);
-						}
-					}
-
-				});
+			if (result) {
+				subscriber.onCompleted();
+			} else {
+				subscriber.onError(new Exception("Task failed"));
 			}
-			return messengerReceiver;
 		}
 	}
 

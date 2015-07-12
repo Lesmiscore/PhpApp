@@ -21,15 +21,20 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.esminis.server.php.model.manager.Preferences;
 
+@Singleton
 public class PhpHandler extends HandlerThread {
 
 	private Handler handler = null;
-	private Context context = null;
-	private Preferences preferences = null;
-	private Php php = null;
+	private final Context context;
+	private final Preferences preferences;
+	private final Php php;
 
+	@Inject
 	public PhpHandler(Context context, Php php, Preferences preferences) {
 		super("PhpServer");
 		this.preferences = preferences;
