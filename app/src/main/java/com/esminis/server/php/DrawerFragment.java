@@ -22,7 +22,7 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 
 import com.esminis.server.php.model.manager.Preferences;
-import com.esminis.server.php.service.install.InstallToDocumentRoot;
+import com.esminis.server.php.service.background.install.InstallToDocumentRoot;
 import com.esminis.server.php.service.server.Php;
 import com.esminis.server.php.view.CheckboxRight;
 import com.squareup.otto.Bus;

@@ -4,7 +4,7 @@ import com.esminis.model.manager.Network;
 import com.esminis.server.php.model.manager.Log;
 import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.ServerNotificationService;
-import com.esminis.server.php.service.install.InstallService;
+import com.esminis.server.php.service.background.install.InstallTaskProvider;
 import com.esminis.server.php.service.server.Php;
 import com.esminis.server.php.service.server.PhpStartup;
 import com.squareup.otto.Bus;
@@ -16,7 +16,7 @@ import dagger.Provides;
 
 @Module(injects = {
 	Application.class, MainActivity.class, Php.class, Preferences.class, DrawerFragment.class,
-	InstallService.class, ServerNotificationService.class
+	ServerNotificationService.class, InstallTaskProvider.class
 })
 public class ApplicationModule {
 

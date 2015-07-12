@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. 
  */
-package com.esminis.server.php.service.install;
+package com.esminis.server.php.service.background.install;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -48,7 +48,7 @@ public class InstallServer {
 	protected Network network;
 
 	private OnInstallListener listener = null;
-	private InstallTask installTask = null;
+	private InstallTaskLocal installTask = null;
 	private final Object lock = new Object();
 
 	public void installIfNeeded(OnInstallListener listener, Activity activity) {
@@ -83,7 +83,7 @@ public class InstallServer {
 	void start(Activity activity) {
 		synchronized (lock) {
 			if (installTask == null) {
-				installTask = new InstallTask(php, this, preferences, network, activity);
+				installTask = new InstallTaskLocal(php, this, preferences, network, activity);
 				installTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			}
 		}
