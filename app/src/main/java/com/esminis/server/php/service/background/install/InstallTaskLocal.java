@@ -78,8 +78,7 @@ class InstallTaskLocal extends AsyncTask<Void, Void, Boolean> {
 		activity.unregisterReceiver(receiver);
 
 		Subscription subscription = BackgroundService.execute(
-				activity.getApplication(), InstallTaskProvider.class
-			).subscribe(
+			activity.getApplication(), InstallTaskProvider.class,
 			new Subscriber<Void>() {
 				@Override
 				public void onCompleted() {
@@ -87,10 +86,12 @@ class InstallTaskLocal extends AsyncTask<Void, Void, Boolean> {
 				}
 
 				@Override
-				public void onError(Throwable e) {}
+				public void onError(Throwable e) {
+				}
 
 				@Override
-				public void onNext(Void dummy) {}
+				public void onNext(Void dummy) {
+				}
 			}
 		);
 		while (!subscription.isUnsubscribed()) {

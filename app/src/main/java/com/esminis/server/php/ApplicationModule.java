@@ -54,7 +54,10 @@ public class ApplicationModule {
 		Network network, com.esminis.model.manager.Process process, PhpStartup startup, Log log,
 		Preferences preferences
 	) {
-		return new Php(network, process, startup, preferences, log, application);
+		return new Php(
+			network, process, startup, preferences, log, application,
+			application.getIsMainApplicationProcess()
+		);
 	}
 
 	@Provides

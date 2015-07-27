@@ -62,9 +62,11 @@ public class Php {
 
 	private Log log = null;
 
+	private final boolean mainProcess;
+
 	public Php(
 		Network network, Process process, PhpStartup startup, Preferences preferences, Log log,
-		Context context
+		Context context, boolean mainProcess
 	) {
 		this.log = log;
 		this.preferences = preferences;
@@ -75,6 +77,7 @@ public class Php {
 		modulesDirectory = context.getFilesDir();
 		php = new File(modulesDirectory, "php");
 		address = getIPAddress() + ":" + preferences.getString(context, Preferences.PORT);
+		this.mainProcess = mainProcess;
 	}
 
 	private PhpHandler getPhpHandler() {
@@ -214,6 +217,9 @@ public class Php {
 	}
 
 	protected void onHandlerMessage(Message message) {
+		if (mainProcess) {
+			return;
+		}
 		Bundle data = message.getData();
 		if (data == null) {
 			return;

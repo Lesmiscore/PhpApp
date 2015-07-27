@@ -31,6 +31,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.ObjectGraph;
+import rx.Subscriber;
 
 public class Application extends android.app.Application {
 
@@ -66,14 +67,14 @@ public class Application extends android.app.Application {
 
 		};
 		registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
-		BackgroundService.execute(this, StatusServerTaskProvider.class).subscribe();
+		BackgroundService.execute(this, StatusServerTaskProvider.class);
 	}
 
 	public ObjectGraph getObjectGraph() {
 		return objectGraph;
 	}
 
-	private boolean getIsMainApplicationProcess() {
+	public boolean getIsMainApplicationProcess() {
 		ActivityManager man = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
 		List<ActivityManager.RunningAppProcessInfo> list =  man.getRunningAppProcesses();
 		for (ActivityManager.RunningAppProcessInfo item : list) {
