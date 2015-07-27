@@ -35,8 +35,6 @@ public class Log {
 	@Inject
 	protected Preferences manager;
 
-	private CharSequence text = null;
-
 	static private String KEY = "__log__";
 
 	public void clear(Context context) {
@@ -53,7 +51,6 @@ public class Log {
 		manager.set(
 			context, KEY, TextUtils.join("\n", list.subList(Math.max(list.size() - 36, 0), list.size()))
 		);
-		text = getText(context);
 	}
 
 	private CharSequence getText(Context context) {
@@ -78,8 +75,8 @@ public class Log {
 		return builder;
 	}
 
-	public CharSequence get() {
-		return text;
+	public CharSequence get(Context context) {
+		return getText(context);
 	}
 
 }

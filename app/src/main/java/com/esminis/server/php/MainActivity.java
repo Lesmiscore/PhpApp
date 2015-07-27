@@ -382,7 +382,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 
 	private void resetLog() {
 		TextView text = (TextView)findViewById(R.id.error);
-		text.setText(log.get());
+		text.setText(log.get(this));
 		text.scrollTo(0, Math.max((text.getLineHeight() * text.getLineCount()) - text.getHeight(), 0));
 	}
 
