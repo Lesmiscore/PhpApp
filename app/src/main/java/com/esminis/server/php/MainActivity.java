@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 			registerReceiver(receiverNetwork, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 		}
 		resetNetwork();
-		BackgroundService.execute(getApplication(), StatusServerTaskProvider.class).subscribe();
+		BackgroundService.execute(getApplication(), StatusServerTaskProvider.class);
 		resetLog();
 		removeFocus();
 	}
@@ -276,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 							preferences.set(
 								MainActivity.this, Preferences.DOCUMENT_ROOT, directory.getAbsolutePath()
 							);
-							BackgroundService.execute(getApplication(), RestartIfRunningServerTaskProvider.class).subscribe();
+							BackgroundService.execute(getApplication(), RestartIfRunningServerTaskProvider.class);
 							((TextView) findViewById(R.id.server_root)).setText(
 								preferences.getString(MainActivity.this, Preferences.DOCUMENT_ROOT)
 							);
@@ -314,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 				boolean error = true;
 				if (port >= 1024 && port <= 65535) {
 					preferences.set(MainActivity.this, Preferences.PORT, String.valueOf(port));
-					BackgroundService.execute(getApplication(), RestartIfRunningServerTaskProvider.class).subscribe();
+					BackgroundService.execute(getApplication(), RestartIfRunningServerTaskProvider.class);
 					error = false;
 				}
 				((TextView)findViewById(R.id.server_port))
@@ -364,20 +364,20 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 				((TextView)findViewById(R.id.error)).setText("");
 				log.clear(view.getContext());
 				resetLog();
-				BackgroundService.execute(getApplication(), StartServerTaskProvider.class).subscribe();
+				BackgroundService.execute(getApplication(), StartServerTaskProvider.class);
 			}
 		});
 
 		findViewById(R.id.stop).setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				BackgroundService.execute(getApplication(), StopServerTaskProvider.class).subscribe();
+				BackgroundService.execute(getApplication(), StopServerTaskProvider.class);
 				resetLog();
 			}
 		});
 		
 		registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
 		registerReceiver(receiverNetwork, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-		BackgroundService.execute(getApplication(), StatusServerTaskProvider.class).subscribe();
+		BackgroundService.execute(getApplication(), StatusServerTaskProvider.class);
 	}
 
 	private void resetLog() {
@@ -475,7 +475,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 					return;
 				}
 				preferences.set(MainActivity.this, Preferences.ADDRESS, newValue);
-				BackgroundService.execute(getApplication(), RestartIfRunningServerTaskProvider.class).subscribe();
+				BackgroundService.execute(getApplication(), RestartIfRunningServerTaskProvider.class);
 
 			}
 
@@ -483,7 +483,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 
 		});
 		if (changed) {
-			BackgroundService.execute(getApplication(), RestartIfRunningServerTaskProvider.class).subscribe();
+			BackgroundService.execute(getApplication(), RestartIfRunningServerTaskProvider.class);
 		}
 	}
 

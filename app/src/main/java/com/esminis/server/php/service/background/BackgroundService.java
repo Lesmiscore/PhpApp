@@ -24,8 +24,11 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.IBinder;
 
+import com.google.common.eventbus.Subscribe;
+
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -102,15 +105,34 @@ public class BackgroundService extends Service {
 		return null;
 	}
 
-	static public Observable<Void> execute(
-		final Application application, final Class<? extends BackgroundServiceTaskProvider> provider)
-	{
+	static public void execute(
+		final Application application, final Class<? extends BackgroundServiceTaskProvider> provider
+	) {
+		execute(
+			application, provider, new Subscriber<Void>() {
+				@Override
+				public void onCompleted() {}
+
+				@Override
+				public void onError(Throwable e) {}
+
+				@Override
+				public void onNext(Void aVoid) {}
+			}
+		);
+	}
+
+	static public Subscription execute(
+		final Application application, final Class<? extends BackgroundServiceTaskProvider> provider,
+		Subscriber<Void> subscriber
+	) {
 		return Observable.create(new Observable.OnSubscribe<Void>() {
 			@Override
 			public void call(Subscriber<? super Void> subscriber) {
 				new BackgroundServiceExecutor(application, provider, subscriber);
 			}
-		}).subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread());
+		}).subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread())
+			.subscribe(subscriber);
 	}
 
 	@Override
