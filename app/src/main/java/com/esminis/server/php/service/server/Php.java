@@ -24,10 +24,17 @@ import android.os.Message;
 import android.util.Pair;
 
 import com.esminis.model.manager.Process;
+import com.esminis.server.php.Application;
 import com.esminis.server.php.R;
 import com.esminis.model.manager.Network;
 import com.esminis.server.php.model.manager.Log;
 import com.esminis.server.php.model.manager.Preferences;
+import com.esminis.server.php.service.background.BackgroundService;
+import com.esminis.server.php.service.server.tasks.RestartIfRunningServerTaskProvider;
+import com.esminis.server.php.service.server.tasks.RestartServerTaskProvider;
+import com.esminis.server.php.service.server.tasks.StartServerTaskProvider;
+import com.esminis.server.php.service.server.tasks.StatusServerTaskProvider;
+import com.esminis.server.php.service.server.tasks.StopServerTaskProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,7 +59,7 @@ public class Php {
 
 	private PhpHandler phpHandler = null;
 
-	private Context context = null;
+	private Application context = null;
 
 	private PhpStartup startup = null;
 
@@ -66,14 +73,14 @@ public class Php {
 
 	public Php(
 		Network network, Process process, PhpStartup startup, Preferences preferences, Log log,
-		Context context, boolean mainProcess
+		Application application, boolean mainProcess
 	) {
 		this.log = log;
 		this.preferences = preferences;
 		this.startup = startup;
 		this.managerProcess = process;
 		this.network = network;
-		this.context = context.getApplicationContext();
+		this.context = application;
 		modulesDirectory = context.getFilesDir();
 		php = new File(modulesDirectory, "php");
 		address = getIPAddress() + ":" + preferences.getString(context, Preferences.PORT);
@@ -168,15 +175,25 @@ public class Php {
 	}
 
 	public void requestStatus() {
-		getPhpHandler().sendAction("status");
+		if (mainProcess) {
+			BackgroundService.execute(context, StatusServerTaskProvider.class);
+		} else {
+			getPhpHandler().sendAction("status");
+		}
 	}
 
 	public void requestStop() {
-		getPhpHandler().sendAction("stop");
+		if (mainProcess) {
+			BackgroundService.execute(context, StopServerTaskProvider.class);
+		} else {
+			getPhpHandler().sendAction("stop");
+		}
 	}
 
 	public void requestStart() {
-		if (getPhpHandler().isReady()) {
+		if (mainProcess) {
+			BackgroundService.execute(context, StartServerTaskProvider.class);
+		} else if (getPhpHandler().isReady()) {
 			getPhpHandler().sendAction("start");
 		} else {
 			start = true;
@@ -184,6 +201,10 @@ public class Php {
 	}
 
 	public void requestRestartIfRunning() {
+		if (mainProcess) {
+			BackgroundService.execute(context, RestartIfRunningServerTaskProvider.class);
+			return;
+		}
 		context.registerReceiver(new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
@@ -200,8 +221,12 @@ public class Php {
 	}
 
 	public void requestRestart() {
-		requestStop();
-		requestStart();
+		if (mainProcess) {
+			BackgroundService.execute(context, RestartServerTaskProvider.class);
+		} else {
+			requestStop();
+			requestStart();
+		}
 	}
 
 	protected void onHandlerReady() {
