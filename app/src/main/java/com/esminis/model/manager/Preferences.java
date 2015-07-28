@@ -17,80 +17,110 @@ package com.esminis.model.manager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.LocalServerSocket;
+import android.preference.PreferenceManager;
 
-import java.io.IOException;
+import com.esminis.server.php.BuildConfig;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class Preferences {
 
-	private LocalServerSocket lock = null;
+	interface PreferencesBackend {
+
+		String get(String name, String defaultVale);
+
+		Map<String, String> get();
+
+		void put(Map<String, String> values);
+
+		boolean contains(String name);
+
+	}
+
+	private PreferencesBackend preferences = null;
+	private final Object lock = new Object();
 
 	public void set(Context context, String name, boolean value) {
-		lock();
-		SharedPreferences.Editor editor = getPreferences(context).edit();
-		editor.putBoolean(name, value);
-		editor.commit();
-		unlock();
+		set(context, name, value ? "1" : "");
+	}
+
+	public void setBooleans(Context context, Map<String, Boolean> values) {
+		final Map<String, String> valuesNew = new HashMap<>();
+		final Set<String> keys = values.keySet();
+		for (String key : keys) {
+			valuesNew.put(key, values.get(key).equals(true) ? "1" : "");
+		}
+		setStrings(context, valuesNew);
 	}
 
 	public void set(Context context, String name, String value) {
-		lock();
-		SharedPreferences.Editor editor = getPreferences(context).edit();
-		editor.putString(name, value);
-		editor.commit();
-		unlock();
+		Map<String, String> values = new HashMap<>();
+		values.put(name, value);
+		setStrings(context, values);
+	}
+
+	public void setStrings(Context context, Map<String, String> values) {
+		if (!values.isEmpty()) {
+			getPreferences(context).put(values);
+		}
 	}
 
 	public String getString(Context context, String name) {
-		lock();
-		final String value = getPreferences(context).getString(name, "");
-		unlock();
-		return value;
+		return getPreferences(context).get(name, "");
 	}
 
 	public boolean getBoolean(Context context, String name) {
-		lock();
-		final boolean value = getPreferences(context).getBoolean(name, false);
-		unlock();
-		return value;
+		return "1".equals(getString(context, name));
+	}
+
+	public Map<String, String> getStrings(Context context) {
+		return getPreferences(context).get();
+	}
+
+	public Map<String, Boolean> getBooleans(Context context) {
+		final Map<String, String> values = getStrings(context);
+		final Map<String, Boolean> result = new HashMap<>();
+		final Set<String> keys = values.keySet();
+		for (String key : keys) {
+			result.put(key, "1".equals(values.get(key)));
+		}
+		return result;
 	}
 
 	public boolean contains(Context context, String name) {
-		lock();
-		final boolean value = getPreferences(context).contains(name);
-		unlock();
-		return value;
+		return getPreferences(context).contains(name);
 	}
 
-	private SharedPreferences getPreferences(Context context) {
-		return context
-			.getSharedPreferences(context.getPackageName() + "_preferences", Context.MODE_MULTI_PROCESS);
-	}
-
-	private void lock() {
-		final long timeout = System.currentTimeMillis() + 5000;
-		do {
-			try {
-				lock = new LocalServerSocket("lock");
-			} catch (IOException e) {
-				try {
-					Thread.sleep(25);
-				} catch (InterruptedException ignored) {}
-				if (System.currentTimeMillis() > timeout) {
-					break;
-				}
+	private PreferencesBackend getPreferences(Context context) {
+		synchronized (lock) {
+			if (preferences == null) {
+				preferences = new PreferencesBackendSqlite(context);
+				migrate(preferences, PreferenceManager.getDefaultSharedPreferences(context));
 			}
-		} while (lock == null);
+		}
+		return preferences;
 	}
 
-	public void unlock() {
-		if (lock == null) {
+	private void migrate(PreferencesBackend preferences, SharedPreferences sharedPreferences) {
+		final String keyMigrate = "__migrated__";
+		if (sharedPreferences.contains(keyMigrate)) {
 			return;
 		}
-		try {
-			lock.close();
-		} catch (IOException ignored) {}
-		lock = null;
+		final Map<String, ?> map = sharedPreferences.getAll();
+		final Set<String> keys = map.keySet();
+		final Map<String, String> mapNew = new HashMap<>();
+		for (String key : keys) {
+			Object object = map.get(key);
+			if (object instanceof Boolean) {
+				mapNew.put(key, object.equals(true) ? "1" : "");
+			} else {
+				mapNew.put(key, (String)object);
+			}
+		}
+		preferences.put(mapNew);
+		sharedPreferences.edit().putInt(keyMigrate, BuildConfig.VERSION_CODE).commit();
 	}
-	
+
 }

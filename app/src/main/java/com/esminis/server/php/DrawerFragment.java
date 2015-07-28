@@ -42,6 +42,9 @@ import com.esminis.server.php.service.server.Php;
 import com.esminis.server.php.view.CheckboxRight;
 import com.squareup.otto.Bus;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import rx.Subscriber;
@@ -142,6 +145,23 @@ public class DrawerFragment extends PreferenceFragment {
 			}
 		});
 		screen.addPreference(preferenceInstall);
+		setupPreferencesValues(screen, context);
+	}
+
+	private void setupPreferencesValues(PreferenceScreen screen, Context context) {
+		final Map<String, Boolean> values = preferences.getBooleans(context);
+		final Map<String, Boolean> valuesSave = new HashMap<>();
+		for (int i = 0; i < screen.getPreferenceCount(); i++) {
+			Preference preference = screen.getPreference(i);
+			if (preference instanceof CheckBoxPreference) {
+				if (values.containsKey(preference.getKey())) {
+					((CheckBoxPreference)preference).setChecked(values.get(preference.getKey()));
+				} else {
+					valuesSave.put(preference.getKey(), ((CheckBoxPreference)preference).isChecked());
+				}
+			}
+		}
+		preferences.setBooleans(context, valuesSave);
 	}
 
 	private void setupPreferencesModules(PreferenceScreen screen, Context context) {
@@ -164,6 +184,7 @@ public class DrawerFragment extends PreferenceFragment {
 				list[i + 1], screen, context, false
 			);
 		}
+		setupPreferencesValues(screen, context);
 	}
 
 	private void initializeModulesDialog() {
@@ -194,12 +215,15 @@ public class DrawerFragment extends PreferenceFragment {
 	private void setModulesSelected(boolean selected) {
 		PreferenceScreen preferencesModules =
 			(PreferenceScreen)getPreferenceManager().findPreference(KEY_MODULES);
+		final Map<String, Boolean> values = new HashMap<>();
 		for (int i = 0; i < preferencesModules.getPreferenceCount(); i++) {
 			CheckBoxPreference preference = (CheckBoxPreference)preferencesModules.getPreference(i);
 			if (!getIsForBuiltIn(preference)) {
 				preference.setChecked(selected);
+				values.put(preference.getKey(), selected);
 			}
 		}
+		preferences.setBooleans(getActivity(), values);
 		php.requestRestartIfRunning();
 		resetSelectAll();
 	}
@@ -268,27 +292,26 @@ public class DrawerFragment extends PreferenceFragment {
 		if (context == null) {
 			return;
 		}
-		String name = preference.getKey();
-		boolean value = (Boolean)newValueObject;
+		final String name = preference.getKey();
+		final boolean value = (Boolean)newValueObject;
+		preferences.set(context, name, value);
 		if (
 			Preferences.KEEP_RUNNING.equals(name) && !value &&
 			preferences.getBoolean(context, Preferences.START_ON_BOOT)
 		) {
-			preferences.set(context, Preferences.START_ON_BOOT, false);
-			((CheckBoxPreference)findPreference(Preferences.START_ON_BOOT)).setChecked(false);
+			setPreferenceValue(Preferences.START_ON_BOOT, false);
 		} else if (
 			Preferences.START_ON_BOOT.equals(name) && value &&
 			!preferences.getBoolean(context, Preferences.KEEP_RUNNING)
 		) {
-			preferences.set(context, Preferences.KEEP_RUNNING, true);
-			((CheckBoxPreference)findPreference(Preferences.KEEP_RUNNING)).setChecked(true);
+			setPreferenceValue(Preferences.KEEP_RUNNING, true);
 		}
 		if (
 			Preferences.SHOW_NOTIFICATION_SERVER.equals(name) && value &&
 			preferences.getBoolean(context, Preferences.KEEP_RUNNING)
 		) {
-			((CheckBoxPreference)findPreference(Preferences.KEEP_RUNNING)).setChecked(false);
-			((CheckBoxPreference)findPreference(Preferences.START_ON_BOOT)).setChecked(false);
+			setPreferenceValue(Preferences.START_ON_BOOT, false);
+			setPreferenceValue(Preferences.KEEP_RUNNING, false);
 			php.requestRestartIfRunning();
 		} else if (
 			(
@@ -296,9 +319,14 @@ public class DrawerFragment extends PreferenceFragment {
 				(Preferences.KEEP_RUNNING.equals(name) && value)
 			) && preferences.getBoolean(context, Preferences.SHOW_NOTIFICATION_SERVER)
 		) {
-			((CheckBoxPreference)findPreference(Preferences.SHOW_NOTIFICATION_SERVER)).setChecked(false);
+			setPreferenceValue(Preferences.SHOW_NOTIFICATION_SERVER, false);
 			php.requestStatus();
 		}
+	}
+
+	private void setPreferenceValue(String name, boolean checked) {
+		preferences.set(getActivity(), name, checked);
+		((CheckBoxPreference)findPreference(name)).setChecked(checked);
 	}
 
 	private void requestStatusOnChange(Preference preference) {
