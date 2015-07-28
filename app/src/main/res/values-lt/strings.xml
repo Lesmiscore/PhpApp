@@ -51,4 +51,15 @@
 		odbc_connect(\'Driver=PostgreSQL;Database=\' . $database_name . \';Server=\' . $server, \'\', \'\'); // PostgreSQL<br />]]></string>
 	<string name="disable_all">Išjungti visus</string>
 	<string name="enable_all">Įjungti visus</string>
+	<string name="reinstall_files">Iš naujo įdiegti failus</string>
+	<string name="reinstall_files_summary">
+		Iš naujo įdiegti standartinius failus (index.php, config.ini, …) į pagrindinį katalogą
+	</string>
+	<string name="reinstall_files_complete">Failų diegimas baigtas</string>
+	<string name="error_operation_failed">Klaida: operacija nepavyko</string>
+	<string name="error_document_root_not_empty">Klaida: pagrindinė direktorija netuščia</string>
+	<string name="error_cannot_create_directory">Klaida: nepavyko sukurti direktorijos</string>
+	<string name="server_running_public">Serveris veikia</string>
+	<string name="show_notification_server">Rodyti pranešimą</string>
+	<string name="show_notification_server_summary">Rodyti pranešimą kol serveris veikia</string>
 </resources>
