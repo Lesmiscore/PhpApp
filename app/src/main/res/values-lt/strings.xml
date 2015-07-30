@@ -51,6 +51,7 @@
 		odbc_connect(\'Driver=PostgreSQL;Database=\' . $database_name . \';Server=\' . $server, \'\', \'\'); // PostgreSQL<br />]]></string>
 	<string name="disable_all">Išjungti visus</string>
 	<string name="enable_all">Įjungti visus</string>
+	<string name="dismiss">Išjungti</string>
 	<string name="reinstall_files">Iš naujo įdiegti failus</string>
 	<string name="reinstall_files_summary">
 		Iš naujo įdiegti standartinius failus (index.php, config.ini, …) į pagrindinį katalogą
