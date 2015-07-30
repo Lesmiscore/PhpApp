@@ -51,4 +51,14 @@
 		odbc_connect(\'Driver=PostgreSQL;Database=\' . $database_name . \';Server=\' . $server, \'\', \'\'); // PostgreSQL<br />]]></string>
 	<string name="disable_all">Alle deaktivieren</string>
 	<string name="enable_all">Alle aktivieren</string>
+	<string name="dismiss">Schließen</string>
+	<string name="reinstall_files">Dateien erneut zu installieren</string>
+	<string name="reinstall_files_summary">Installieren Sie die Standarddateien (index.php, config.ini, …), zum Document Root</string>
+	<string name="reinstall_files_complete">Dateien sind installiert.</string>
+	<string name="error_operation_failed">Fehler: Operation fehlgeschlagen.</string>
+	<string name="error_document_root_not_empty">Fehler:Dokumentstammverzeichnis ist nicht leer</string>
+	<string name="error_cannot_create_directory">Fehler: das Verzeichnis lässt sich nicht erstellen.</string>
+	<string name="server_running_public">der Server läuft</string>
+	<string name="show_notification_server">Meldung anzeigen</string>
+	<string name="show_notification_server_summary">Meldung anzeigen solange Server läuft.</string>
 </resources>
