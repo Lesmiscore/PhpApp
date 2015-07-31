@@ -51,4 +51,14 @@
 		odbc_connect(\'Driver=PostgreSQL;Database=\' . $database_name . \';Server=\' . $server, \'\', \'\'); // PostgreSQL<br />]]></string>
 	<string name="disable_all">Отключить все</string>
 	<string name="enable_all">Включить все</string>
+	<string name="dismiss">Закрыть</string>
+	<string name="reinstall_files">Переустановить файлы</string>
+	<string name="reinstall_files_summary">Переустановить файлы по умолчанию (index.php, config.ini, …), на основной каталог</string>
+	<string name="reinstall_files_complete">Переустановление файлы закончено</string>
+	<string name="error_operation_failed">Ошибка: операция не удалось</string>
+	<string name="error_document_root_not_empty">Ошибка: основной каталог непустой</string>
+	<string name="error_cannot_create_directory">Ошибка: не удалось создать каталог</string>
+	<string name="server_running_public">Сервер работает</string>
+	<string name="show_notification_server">Показать уведомление</string>
+	<string name="show_notification_server_summary">Показать уведомление пока сервер работает</string>
 </resources>
