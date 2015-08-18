@@ -10,19 +10,19 @@ android {
         versionName "1.7.3"
         versionCode 36 // should increment by 2 since 20
     }
-
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     productFlavors {
+        int versionCodeId = android.defaultConfig.versionCode
         arm {
-            versionCode android.defaultConfig.versionCode - 1
+            versionCode versionCodeId - 1
         }
         x86 {
+            versionCode versionCodeId
         }
     }
     signingConfigs {
@@ -53,10 +53,12 @@ dependencies {
 android.applicationVariants.all { variant ->
     def ndkBuild = android.ndkDirectory.absolutePath + "/ndk-build"
     def jniDir = file("src/" + variant.properties.get('flavorName') + "/jni").absolutePath
-    variant.javaCompile.dependsOn project.tasks.create(name: "build_" + variant.name, type: Exec) {
+    variant.javaCompile.dependsOn project.tasks.create(
+        name: "build_" + (String)variant.name, type: Exec
+    ) {
         commandLine ndkBuild, '-C', jniDir
     }
-    clean.dependsOn project.tasks.create(name: "clean_" + variant.name, type: Exec) {
+    clean.dependsOn project.tasks.create(name: "clean_" + (String)variant.name, type: Exec) {
         commandLine ndkBuild, '-C', jniDir, 'clean'
     }
 }
