@@ -15,7 +15,8 @@
 	<application
 		android:theme="@style/ThemeApplication" android:icon="@drawable/ic_launcher"
 		android:label="@string/title" android:allowBackup="false" android:name="Application"
-		>
+	  android:fullBackupContent="false"
+	>
 		<receiver android:name=".service.AutoStart">
 			<intent-filter><action android:name="android.intent.action.BOOT_COMPLETED" /></intent-filter>
 		</receiver>
