@@ -21,13 +21,16 @@ import java.net.SocketException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import org.apache.http.conn.util.InetAddressUtils;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
 public class Network {
+
+	private static final Pattern PATTERN_IPV4 = Pattern.compile(
+			"^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$");
 
 	private List<com.esminis.model.Network> list = new LinkedList<>();
 
@@ -70,7 +73,7 @@ public class Network {
 
 	private void add(NetworkInterface item, InetAddress address) {
 		String host = address.getHostAddress().toUpperCase();
-		if (InetAddressUtils.isIPv4Address(host)) {
+		if (PATTERN_IPV4.matcher(host).matches()) {
 			add(host, item.getName(), host + "(" + item.getDisplayName() + ")");
 		}
 	}
