@@ -261,6 +261,7 @@ public class Php {
 			return;
 		}
 		if ("start".equals(action)) {
+			network.refresh();
 			address = getIPAddress() + ":" + data.getString("port");
 			start(data.getString("documentRoot"));
 		} else if ("stop".equals(action)) {
