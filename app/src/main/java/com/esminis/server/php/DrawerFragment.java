@@ -79,9 +79,7 @@ public class DrawerFragment extends PreferenceFragment {
 		((Application)context.getApplicationContext()).getObjectGraph().inject(this);
 		PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(context);
 		setPreferenceScreen(screen);
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-			context = new ContextThemeWrapper(getActivity(), R.style.Preference);
-		}
+		context = new ContextThemeWrapper(getActivity(), R.style.Preference);
 		setupPreferences(screen, context);
 	}
 
@@ -204,6 +202,9 @@ public class DrawerFragment extends PreferenceFragment {
 		list.setPadding(0, 0, 0, 0);
 		dialog.setContentView(R.layout.preference_modules);
 		final Toolbar toolbar = activityHelper.createToolbar(dialog, getActivity());
+		toolbar.setPadding(
+			toolbar.getPaddingLeft(), toolbar.getPaddingTop(), 0, toolbar.getPaddingBottom()
+		);
 		toolbar.setLogo(null);
 		toolbar.setTitle(screen.getTitle());
 		initializeToolbarMenu(toolbar);
