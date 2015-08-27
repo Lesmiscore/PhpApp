@@ -34,8 +34,11 @@ public class AutoStart extends BroadcastReceiver {
 			return;
 		}
 		ObjectGraph graph = ((Application)applicationContext).getObjectGraph();
+		Php php = graph.get(Php.class);
 		if (graph.get(Preferences.class).getBoolean(context, Preferences.START_ON_BOOT)) {
-			graph.get(Php.class).requestStart();
+			php.requestStart();
+		} else {
+			php.requestStop();
 		}
 	}
 	

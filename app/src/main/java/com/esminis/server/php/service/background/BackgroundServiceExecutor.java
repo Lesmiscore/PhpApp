@@ -75,7 +75,7 @@ class BackgroundServiceExecutor {
 			if (result) {
 				subscriber.onCompleted();
 			} else {
-				subscriber.onError(new Exception("Task failed"));
+				subscriber.onError(new Exception("Task failed: " + provider.getName()));
 			}
 		}
 	}
