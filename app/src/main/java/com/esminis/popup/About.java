@@ -20,6 +20,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
@@ -30,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -40,7 +42,9 @@ public class About extends AlertDialog {
 	public About(Context context) {
 		super(context);
 		setView(createView());
-		setButton(DialogInterface.BUTTON_NEGATIVE, getContext().getString(R.string.close), (Message)null);
+		setButton(
+			DialogInterface.BUTTON_NEGATIVE, getContext().getString(R.string.close), (Message) null
+		);
 	}
 
 	public View createView() {
@@ -56,7 +60,7 @@ public class About extends AlertDialog {
 			@Override
 			public View createTabContent(String tag) {
 				return createText(
-					(ViewGroup)view.findViewById(android.R.id.tabcontent), R.string.manual_content
+					(ViewGroup) view.findViewById(android.R.id.tabcontent), R.string.manual_content
 				);
 			}
 		});
@@ -67,7 +71,7 @@ public class About extends AlertDialog {
 			@Override
 			public View createTabContent(String tag) {
 				return createText(
-					(ViewGroup)view.findViewById(android.R.id.tabcontent), R.string.about_content
+					(ViewGroup) view.findViewById(android.R.id.tabcontent), R.string.about_content
 				);
 			}
 		});
@@ -89,6 +93,7 @@ public class About extends AlertDialog {
 				if (textView != null && textView instanceof TextView) {
 					((TextView)textView).setGravity(Gravity.CENTER);
 				}
+				viewTab.setBackgroundResource(R.drawable.tab_indicator);
 			}
 		}
 		return view;
@@ -145,4 +150,14 @@ public class About extends AlertDialog {
 		return view;
 	}
 
+	@Override
+	public void show() {
+		super.show();
+		final Button button = getButton(DialogInterface.BUTTON_NEGATIVE);
+		final ViewGroup.LayoutParams params = button.getLayoutParams();
+		button.setTextColor(Color.BLACK);
+		button.setGravity(Gravity.CENTER);
+		params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+		button.setLayoutParams(params);
+	}
 }
