@@ -24,6 +24,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.esminis.model.manager.Network;
+import com.esminis.server.php.Application;
 import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.background.BackgroundService;
 import com.esminis.server.php.service.server.Php;
@@ -36,7 +37,7 @@ class InstallTaskLocal extends AsyncTask<Void, Void, Boolean> {
 	private boolean installSuccess = false;
 	private boolean canStartInstall = false;
 	private Php php;
-	private Activity activity;
+	private Application application;
 	private InstallServer installServer;
 	private Preferences preferences;
 	private Network network;
@@ -46,7 +47,7 @@ class InstallTaskLocal extends AsyncTask<Void, Void, Boolean> {
 		Activity activity
 	) {
 		this.php = php;
-		this.activity = activity;
+		this.application = (Application)activity.getApplication();
 		this.network = network;
 		this.preferences = preferences;
 		this.installServer = installServer;
@@ -67,7 +68,7 @@ class InstallTaskLocal extends AsyncTask<Void, Void, Boolean> {
 				canStartInstall = true;
 			}
 		};
-		activity.registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
+		application.registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
 		canStartInstall = false;
 		php.requestStop();
 		while (!canStartInstall) {
@@ -75,10 +76,10 @@ class InstallTaskLocal extends AsyncTask<Void, Void, Boolean> {
 				Thread.sleep(250);
 			} catch (InterruptedException ignored) {}
 		}
-		activity.unregisterReceiver(receiver);
+		application.unregisterReceiver(receiver);
 
 		Subscription subscription = BackgroundService.execute(
-			activity.getApplication(), InstallTaskProvider.class,
+			application, InstallTaskProvider.class,
 			new Subscriber<Void>() {
 				@Override
 				public void onCompleted() {
@@ -105,19 +106,19 @@ class InstallTaskLocal extends AsyncTask<Void, Void, Boolean> {
 	}
 
 	private void initializePreferences() {
-		if (!preferences.contains(activity, Preferences.PORT)) {
-			preferences.set(activity, Preferences.PORT, "8080");
+		if (!preferences.contains(application, Preferences.PORT)) {
+			preferences.set(application, Preferences.PORT, "8080");
 		}
-		if (!preferences.contains(activity, Preferences.ADDRESS)) {
-			preferences.set(activity, Preferences.ADDRESS, network.get(0).name);
+		if (!preferences.contains(application, Preferences.ADDRESS)) {
+			preferences.set(application, Preferences.ADDRESS, network.get(0).name);
 		}
-		if (!preferences.contains(activity, Preferences.DOCUMENT_ROOT)) {
+		if (!preferences.contains(application, Preferences.DOCUMENT_ROOT)) {
 			preferences.set(
-				activity, Preferences.DOCUMENT_ROOT,
+				application, Preferences.DOCUMENT_ROOT,
 				preferences.getDefaultDocumentRoot().getAbsolutePath()
 			);
 		}
-		preferences.set(activity, Preferences.PHP_BUILD, preferences.getPhpBuild(activity));
+		preferences.set(application, Preferences.PHP_BUILD, preferences.getPhpBuild(application));
 	}
 
 	@Override
