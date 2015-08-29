@@ -8,9 +8,9 @@
 	<string name="server_status_updating">Aktualisieren Server status…</string>
 	<string name="server_port">Serverport</string>
 	<string name="server_document_root">Dokumentstamm</string>
-	<string name="server_start_on_boot_title">Starten beim booten</string>
-	<string name="server_start_on_boot_summary">Starten Server beim booten</string>
-	<string name="server_keep_running">Hör nicht auf Sie Server, wenn App wird gestoppt</string>
+	<string name="server_start_on_boot_title">Nach dem Booten starten</string>
+	<string name="server_start_on_boot_summary">Starten Sie den Server wenn das Gerät eingeschaltet ist</string>
+	<string name="server_keep_running">Wenn die Anwendung beendet ist, lassen Sie den Server laufen</string>
 	<string name="server_interface">Server Adresse</string>
 	<string name="server_installing">Installieren Server…</string>
 	<string name="loading_text">Text wird vorbereitet…</string>
@@ -19,23 +19,23 @@
 		Neu PHP(%1$s) ist verfügbar zu bauen - willst du es installieren?
 	</string>
 	<string name="error_document_root_does_not_exist">
-		Server kann nicht starten - Dokumentstamm existiert nicht
+		Kann nicht den Server zu starten - Document Root existiert nicht
 	</string>
 	<string name="choose">Auswählen</string>
 	<string name="cancel">Annullieren</string>
 	<string name="go_up">Steigen</string>
-	<string name="about">Über</string>
-	<string name="about_content"><![CDATA[<br />Es ist gesamt frei und offen app es arbeitet mit PHP intergrierten Server und kann automatisch beim booten gestartet werden.<br /><br />
-		PHP(version %1$s) hat diese Module: core, date, ereg, libxml, openssl, pcre, sqlite3, zlib, bcmath, bz2, calendar, ctype, curl, dom, hash, fileinfo, filter, ftp, gd, gettext, gmp, spl, iconv, intl, json, mbstring, mcrypt, session, standard, mysqlnd, mysqli, odbc, pdo, pdo_mysql, pdo_odbc, pdo_pgsql, pdo_sqlite, pgsql, phar, posix, pspell, recode, reflection, mysql, simplexml, soap, sockets, exif, tidy, tokenizer, wddx, xml, xmlreader, xmlrpc, xmlwriter, xsl, zip, cli_server, mhash, ssh2, opcache, phalcon, yaf, yar, id3, lzf, oauth, quickhash, bbcode, xmldiff, xdiff, rar, gender, stats, eio, judy, mailparse, rpmreader, spl_types, yaml<br /><br />
-		Empfehlung für verwendung: in der Entwicklung oder für sehr kleine Websites mit einer kleinen Menge von Besuchern, weil dieser Server unterstützt nur eine Anforderung zu einem Zeitpunkt. Zum Beispiel verwenden mit Android mini PC als Hauptentwicklungsserver von kleinen Projekten.<br /><br />
+	<string name="about">Über Anwendung</string>
+	<string name="about_content"><![CDATA[<br />Das ist völlig kostenlos und Open Source-Anwendung, die mit  PHP eingebauten Server arbeitet, und kann automatisch beim Booten gestartet werden<br /><br />
+		PHP (Version %1$s) hat diese Erweiterungen: core, date, ereg, libxml, openssl, pcre, sqlite3, zlib, bcmath, bz2, calendar, ctype, curl, dom, hash, fileinfo, filter, ftp, gd, gettext, gmp, spl, iconv, intl, json, mbstring, mcrypt, session, standard, mysqlnd, mysqli, odbc, pdo, pdo_mysql, pdo_odbc, pdo_pgsql, pdo_sqlite, pgsql, phar, posix, pspell, recode, reflection, mysql, simplexml, soap, sockets, exif, tidy, tokenizer, wddx, xml, xmlreader, xmlrpc, xmlwriter, xsl, zip, cli_server, mhash, ssh2, opcache, phalcon, yaf, yar, id3, lzf, oauth, quickhash, bbcode, xmldiff, xdiff, rar, gender, stats, eio, judy, mailparse, rpmreader, spl_types, yaml<br /><br />
+		Empfohlen für Nutzung: in der Entwicklung oder für sehr kleine Websites mit sehr wenigen Besuchern, weil dieser Server unterstützt nur eine Anfrage zu einer Zeit.<br /><br />
 		<b>Autor</b><br /><br />
 		Tautvydas Andrikys, esminis@esminis.lt<br /><br />
 		<b>Die Übersetzung auf russisch</b><br /><br />
 		Бондарев Дмитрий, fserg37@gmail.com<br />]]></string>
 	<string name="licenses">Lizenzen</string>
 	<string name="server_installation_failed">Mann kann nicht Server installieren.</string>
-	<string name="server_keep_running_title">Halten Server am Leben</string>
-	<string name="modules_title">PHP Module</string>
+	<string name="server_keep_running_title">Der Server läuft</string>
+	<string name="modules_title">PHP Erweiterungen</string>
 	<string name="modules_summary">Liste aller PHP Module, Teil von ihnen können Sie ein-oder ausschalten</string>
 	<string name="modules_title_builtin">%1$s (ist eingebaut)</string>
 	<string name="open">Öffnen</string>
