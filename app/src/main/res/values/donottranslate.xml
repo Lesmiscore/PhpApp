@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="php_version">5.6.9</string>
+	<string name="php_version">5.6.12</string>
 	<string name="php_build">0</string>
 	<string-array name="modules">
 		<item>bbcode</item><item>BBCode</item><item>Bulletin Board Code</item>
@@ -9,6 +9,7 @@
 		<item>calendar</item><item>Calendar</item><item>Functions to simplify converting between different calendar formats</item>
 		<item>ctype</item><item>Ctype</item><item>Character type checking</item>
 		<item>fileinfo</item><item>Fileinfo</item><item>File Information</item>
+		<item>eio</item><item>Eio</item><item>Asyncronous POSIX I/O</item>
 		<item>exif</item><item>EXIF</item><item>Exchangeable image information</item>
 		<item>ftp</item><item>FTP</item><item>File Transfer Protocol</item>
 		<item>gd</item><item>GD</item><item>Image Processing and GD</item>
@@ -18,7 +19,9 @@
 		<item>recode</item><item>GNU Recode</item><item>Interface to GNU Recode library</item>
 		<item>iconv</item><item>iconv</item><item>Interface to iconv character set conversion facility</item>
 		<item>id3</item><item>ID3</item><item>ID3 Tags</item>
+		<item>judy</item><item>Judy</item><item>Judy Arrays</item>
 		<item>lzf</item><item>LZF</item><item>LZF compression</item>
+		<item>mailparse</item><item>Mailparse</item><item>For parsing and working with email messages</item>
 		<item>mcrypt</item><item>Mcrypt</item><item>Interface to mcrypt library</item>
 		<item>mysql</item><item>Mysql</item><item>Original MySQL API</item>
 		<item>mysqli</item><item>Mysqli</item><item>MySQL Improved Extension</item>
@@ -35,7 +38,9 @@
 		<item>pspell</item><item>Pspell</item><item>Functions to check the spelling and offer suggestions</item>
 		<item>quickhash</item><item>Quickhash</item><item>Quickhash</item>
 		<item>rar</item><item>RAR</item><item>Rar Archiving</item>
+		<item>rpmreader</item><item>RPM Reader</item><item>RPM Header Reading</item>
 		<item>soap</item><item>SOAP</item><item>SOAP Server and Client</item>
+		<item>spl_types</item><item>SPL Types</item><item>SPL Type Handling</item>
 		<item>ssh2</item><item>SSH 2</item><item>Secure Shell 2</item>
 		<item>stats</item><item>Statistics</item><item>Functions useful for statistical computations</item>
 		<item>tidy</item><item>Tidy</item><item>Binding for the Tidy HTML clean and repair utility</item>
@@ -44,6 +49,7 @@
 		<item>xmldiff</item><item>XMLDiff</item><item>XML diff and merge</item>
 		<item>xsl</item><item>XSL</item><item>XSLT transformations using the libxslt library</item>
 		<item>yaf</item><item>Yet Another Framework</item><item>Web framework implemented as a C extension</item>
+		<item>yaml</item><item>YAML</item><item>YAML Data Serialization</item>
 		<item>zip</item><item>ZIP</item><item>Read or write ZIP compressed archives</item>
 		<item>zlib</item><item>Zlib</item><item>Zlib Compression</item>
 	</string-array>
