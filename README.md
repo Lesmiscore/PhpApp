@@ -1,12 +1,13 @@
 # Server for PHP (Android) #
 
-This is totally free app that works using PHP built-in server for Android and can be started automatically on Android boot.
+This is totally free PHP server for Android that works using PHP built-in server.
 
 ## Features ##
 
-* PHP 5.6.9
+* PHP 5.6.12
 * Start server on Android device boot(if needed)
 * Keep server running even if Server for PHP app is killed(if needed)
+* Show notification when server is running(if needed)
 * Configurable server port, network interface, document root
 * Most of PHP extensions can be enabled and disabled
 
@@ -17,8 +18,9 @@ This is totally free app that works using PHP built-in server for Android and ca
 * bz2 - Bzip 2
 * calendar - Calendar
 * ctype - Ctype
-* fileinfo - Fileinfo
+* eio - Eio
 * exif - EXIF
+* fileinfo - Fileinfo
 * ftp - FTP
 * gd - GD
 * gender - Gender
@@ -27,7 +29,9 @@ This is totally free app that works using PHP built-in server for Android and ca
 * recode - GNU Recode
 * iconv - iconv
 * id3 - ID3
+* judy - Judy Arrays
 * lzf - LZF
+* mailparse - Mailparse
 * mcrypt - Mcrypt
 * mysql - Mysql
 * mysqli - Mysqli
@@ -44,7 +48,9 @@ This is totally free app that works using PHP built-in server for Android and ca
 * pspell - Pspell
 * quickhash - Quickhash
 * rar - RAR
+* rpmreader - RPM Reader
 * soap - SOAP
+* spl_types - SPL Types
 * ssh2 - SSH 2
 * stats - Statistics
 * tidy - Tidy
@@ -53,6 +59,7 @@ This is totally free app that works using PHP built-in server for Android and ca
 * xmldiff - XMLDiff
 * xsl - XSL
 * yaf - Yet Another Framework
+* yaml - YAML
 * zip - ZIP
 * zlib - Zlib
 
