@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 	private Dialog dialog = null;
 
 	private ActionBarDrawerToggle drawerToggle = null;
+	private DrawerLayout drawerLayout = null;
 
 	private boolean syncedDrawerState = false;
 
@@ -124,6 +125,8 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 		if (actionBar != null) {
 			actionBar.setTitle(titleDefault);
 		}
+		drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+		drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 		installServer.installIfNeeded(this, this);
 		findViewById(R.id.container).setOnTouchListener(new View.OnTouchListener() {
 			@Override
@@ -222,7 +225,6 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 	}
 	
 	private void startup() {
-		DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 		}
@@ -417,6 +419,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 	public void OnInstallEnd(boolean success) {
 		requestResultViewSuccess = success;
 		requestResultView();
+		drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 	}
 	
 	@Override
