@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="php_version">5.6.12</string>
-	<string name="php_build">0</string>
-	<string-array name="modules">
+	<string name="php_version" translatable="false">5.6.12</string>
+	<string name="php_build" translatable="false">0</string>
+	<string-array name="modules" translatable="false">
 		<item>bbcode</item><item>BBCode</item><item>Bulletin Board Code</item>
 		<item>bcmath</item><item>BC Math</item><item>Arbitrary Precision Mathematics</item>
 		<item>bz2</item><item>Bzip 2</item><item>Bzip 2</item>
@@ -53,7 +53,7 @@
 		<item>zip</item><item>ZIP</item><item>Read or write ZIP compressed archives</item>
 		<item>zlib</item><item>Zlib</item><item>Zlib Compression</item>
 	</string-array>
-	<string-array name="modules_builtin">
+	<string-array name="modules_builtin" translatable="false">
 		<item>CLI SAPI</item><item>PHP Command Line SAPI</item>
 		<item>Core</item><item>PHP core</item>
 		<item>cURL</item><item>Client URL Library</item>
@@ -85,12 +85,12 @@
 		<item>XML Writer</item><item>Wrappper for libxml xmlWriter API</item>
 		<item>Yet another RPC framework</item><item>Light, concurrent RPC framework</item>
 	</string-array>
-	<string-array name="install_binaries">
+	<string-array name="install_binaries" translatable="false">
 		<item>php</item>
 		<item>libsqlite3odbc.so</item>
 		<item>libodbcpsql.so</item>
 	</string-array>
-	<string-array name="install_files">
+	<string-array name="install_files" translatable="false">
 		<item>odbcinst.ini</item>
 	</string-array>
 </resources>

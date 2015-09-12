@@ -63,4 +63,6 @@
 	<string name="server_running_public">Serveris veikia</string>
 	<string name="show_notification_server">Rodyti pranešimą</string>
 	<string name="show_notification_server_summary">Rodyti pranešimą kol serveris veikia</string>
+	<string name="server_index_as_router">Naudoti index.php kaip maršrutizavimo skriptą</string>
+	<string name="server_index_as_router_title">Maršrutizatorius index.php</string>
 </resources>
