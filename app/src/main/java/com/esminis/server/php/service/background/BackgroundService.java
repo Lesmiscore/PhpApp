@@ -24,8 +24,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.IBinder;
 
-import com.google.common.eventbus.Subscribe;
-
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;

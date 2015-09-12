@@ -95,15 +95,19 @@ public class PhpStartup {
 	}
 
 	private String[] createCommand(
-		File php, String address, String root, File moduleDirectory, File iniDirectory, String[] modules
+		File php, String address, String root, File moduleDirectory, File iniDirectory,
+		boolean indexPhpRouter, String[] modules
 	) {
-		List<String> options = new ArrayList<>();
+		final List<String> options = new ArrayList<>();
 		options.add(php.getAbsolutePath());
 		options.add("-S");
 		options.add(address);
 		options.add("-t");
 		options.add(root);
 		addStartupModules(options, moduleDirectory, iniDirectory, modules);
+		if (indexPhpRouter) {
+			options.add("index.php");
+		}
 		return options.toArray(new String[options.size()]);
 	}
 
@@ -119,10 +123,12 @@ public class PhpStartup {
 
 	public Process start(
 		File php, String address, String root, File moduleDirectory, File documentRoot,
-		boolean keepRunning, String[] modules, Context context
+		boolean keepRunning, boolean indexPhpRouter, String[] modules, Context context
 	) throws IOException {
 		Process process = Runtime.getRuntime().exec(
-			createCommand(php, address, root, moduleDirectory, documentRoot, modules),
+			createCommand(
+				php, address, root, moduleDirectory, documentRoot, indexPhpRouter, modules
+			),
 			getEnvironment(moduleDirectory), documentRoot
 		);
 		int pid = managerProcess.getPid(php);

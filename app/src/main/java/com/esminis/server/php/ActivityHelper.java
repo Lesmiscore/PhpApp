@@ -23,6 +23,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -59,7 +60,7 @@ public class ActivityHelper {
 				MenuItem item = toolbar.getMenu().findItem(R.id.menu_about);
 				Drawable icon = DrawableCompat.wrap(item.getIcon());
 				DrawableCompat.setTintMode(icon, PorterDuff.Mode.SRC_IN);
-				DrawableCompat.setTint(icon, activity.getResources().getColor(attribute.resourceId));
+				DrawableCompat.setTint(icon, ContextCompat.getColor(activity, attribute.resourceId));
 				item.setIcon(icon);
 			}
 			activity.setSupportActionBar(toolbar);

@@ -118,6 +118,7 @@ public class Php {
 			process = startup.start(
 				php, address, root, modulesDirectory, fileRoot,
 				preferences.getBoolean(context, Preferences.KEEP_RUNNING),
+				preferences.getBoolean(context, Preferences.INDEX_PHP_ROUTER),
 				preferences.getEnabledModules(context), context
 			);
 			streamReader = new PhpStreamReader(this, getPhpHandler());

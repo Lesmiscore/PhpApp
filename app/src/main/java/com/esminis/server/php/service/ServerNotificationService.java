@@ -23,7 +23,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.esminis.server.php.Application;
 import com.esminis.server.php.service.server.Php;

@@ -18,13 +18,14 @@ package com.esminis.server.php;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
@@ -84,17 +85,16 @@ public class DrawerFragment extends PreferenceFragment {
 	}
 
 	private void setupPreferences(PreferenceScreen screen, Context context) {
-		PreferenceScreen modules = getPreferenceManager().createPreferenceScreen(context);
+		final PreferenceScreen modules = getPreferenceManager().createPreferenceScreen(context);
 		modules.setTitle(R.string.modules_title);
 		modules.setSummary(R.string.modules_summary);
 		modules.setKey(KEY_MODULES);
 		screen.addPreference(modules);
 		setupPreferencesModules(modules, context);
-		CheckBoxPreference preference = new CheckBoxPreference(context);
-		preference.setTitle(R.string.server_start_on_boot_title);
-		preference.setDefaultValue(false);
-		preference.setSummary(R.string.server_start_on_boot_summary);
-		preference.setKey(Preferences.START_ON_BOOT);
+		final CheckBoxPreference preference = createPreferenceCheckbox(
+			context, Preferences.START_ON_BOOT, false,
+			R.string.server_start_on_boot_title, R.string.server_start_on_boot_summary
+		);
 		preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -103,24 +103,51 @@ public class DrawerFragment extends PreferenceFragment {
 			}
 		});
 		screen.addPreference(preference);
-		preference = new CheckBoxPreference(context);
-		preference.setTitle(R.string.server_keep_running_title);
-		preference.setDefaultValue(false);
-		preference.setSummary(R.string.server_keep_running);
-		preference.setKey(Preferences.KEEP_RUNNING);
-		screen.addPreference(preference);
-		restartOnChange(preference);
-		preference = new CheckBoxPreference(context);
-		preference.setTitle(R.string.show_notification_server);
-		preference.setDefaultValue(!preferences.getBoolean(context, Preferences.KEEP_RUNNING));
-		preference.setSummary(R.string.show_notification_server_summary);
-		preference.setKey(Preferences.SHOW_NOTIFICATION_SERVER);
-		screen.addPreference(preference);
-		requestStatusOnChange(preference);
-		Preference preferenceInstall = new Preference(context);
-		preferenceInstall.setTitle(R.string.reinstall_files);
-		preferenceInstall.setSummary(R.string.reinstall_files_summary);
-		preferenceInstall.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+		screen.addPreference(
+			restartOnChange(
+				createPreferenceCheckbox(
+					context, Preferences.KEEP_RUNNING, false,
+					R.string.server_keep_running_title, R.string.server_keep_running
+				)
+			)
+		);
+		screen.addPreference(
+			restartOnChange(
+				createPreferenceCheckbox(
+					context, Preferences.INDEX_PHP_ROUTER, false,
+					R.string.server_index_as_router_title, R.string.server_index_as_router
+				)
+			)
+		);
+		screen.addPreference(
+			requestStatusOnChange(
+				createPreferenceCheckbox(
+					context, Preferences.SHOW_NOTIFICATION_SERVER,
+					!preferences.getBoolean(context, Preferences.KEEP_RUNNING),
+					R.string.show_notification_server, R.string.show_notification_server_summary
+				)
+			)
+		);
+		screen.addPreference(createPreferenceInstall(context));
+		setupPreferencesValues(screen, context);
+	}
+
+	private CheckBoxPreference createPreferenceCheckbox(
+		Context context, String key, boolean defaultValue, @StringRes int title, @StringRes int summary
+	) {
+		final CheckBoxPreference preference = new CheckBoxPreference(context);
+		preference.setTitle(title);
+		preference.setDefaultValue(defaultValue);
+		preference.setSummary(summary);
+		preference.setKey(key);
+		return preference;
+	}
+
+	private Preference createPreferenceInstall(Context context) {
+		final Preference preference = new Preference(context);
+		preference.setTitle(R.string.reinstall_files);
+		preference.setSummary(R.string.reinstall_files_summary);
+		preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				installToDocumentRoot.installOnBackground(preference.getContext()).subscribe(
@@ -136,14 +163,14 @@ public class DrawerFragment extends PreferenceFragment {
 						}
 
 						@Override
-						public void onNext(Void aVoid) {}
+						public void onNext(Void aVoid) {
+						}
 					}
 				);
 				return false;
 			}
 		});
-		screen.addPreference(preferenceInstall);
-		setupPreferencesValues(screen, context);
+		return preference;
 	}
 
 	private void setupPreferencesValues(PreferenceScreen screen, Context context) {
@@ -281,7 +308,7 @@ public class DrawerFragment extends PreferenceFragment {
 		TypedValue attribute = new TypedValue();
 		getActivity().getTheme().resolveAttribute(android.R.attr.windowBackground, attribute, true);
 		if (attribute.resourceId > 0) {
-			view.setBackgroundColor(getResources().getColor(attribute.resourceId));
+			view.setBackgroundColor(ContextCompat.getColor(getActivity(), attribute.resourceId));
 		}
 	}
 
@@ -330,9 +357,9 @@ public class DrawerFragment extends PreferenceFragment {
 		((CheckBoxPreference)findPreference(name)).setChecked(checked);
 	}
 
-	private void requestStatusOnChange(Preference preference) {
+	private Preference requestStatusOnChange(Preference preference) {
 		if (preference == null) {
-			return;
+			return null;
 		}
 		preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
@@ -348,11 +375,12 @@ public class DrawerFragment extends PreferenceFragment {
 				return true;
 			}
 		});
+		return preference;
 	}
 
-	private void restartOnChange(Preference preference) {
+	private Preference restartOnChange(Preference preference) {
 		if (preference == null) {
-			return;
+			return null;
 		}
 		preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
@@ -369,6 +397,7 @@ public class DrawerFragment extends PreferenceFragment {
 				return false;
 			}
 		});
+		return preference;
 	}
 
 	private void addPreference(
