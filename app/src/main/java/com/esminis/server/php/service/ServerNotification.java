@@ -18,12 +18,12 @@ package com.esminis.server.php.service;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.NotificationCompat.Builder;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
 
 import com.esminis.server.php.MainActivity;
@@ -63,7 +63,7 @@ public class ServerNotification {
 			Builder builder = setupNotificationBuilder(context, title)
 				.setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
 				.setPublicVersion(setupNotificationBuilder(context, titlePublic).build());
-			Drawable drawable = context.getResources().getDrawable(R.drawable.ic_notification_large);
+			Drawable drawable = ContextCompat.getDrawable(context, R.drawable.ic_notification_large);
 			if (drawable != null && drawable instanceof BitmapDrawable) {
 				builder.setLargeIcon(((BitmapDrawable) drawable).getBitmap());
 			}
@@ -83,7 +83,7 @@ public class ServerNotification {
 			.setSmallIcon(R.drawable.ic_notification_small)
 			.setContentTitle(context.getString(R.string.title)).setContentText(title)
 			.setOnlyAlertOnce(true).setOngoing(true).setAutoCancel(false).setShowWhen(false);
-		Drawable drawable = context.getResources().getDrawable(R.drawable.ic_notification_large);
+		Drawable drawable = ContextCompat.getDrawable(context, R.drawable.ic_notification_large);
 		if (drawable != null && drawable instanceof BitmapDrawable) {
 			builder.setLargeIcon(((BitmapDrawable) drawable).getBitmap());
 		}

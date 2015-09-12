@@ -21,7 +21,6 @@ import com.esminis.server.php.service.server.Php;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import dagger.ObjectGraph;
 

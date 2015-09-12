@@ -31,7 +31,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.ObjectGraph;
-import rx.Subscriber;
 
 public class Application extends android.app.Application {
 
