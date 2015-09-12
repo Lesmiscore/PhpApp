@@ -61,4 +61,6 @@
 	<string name="server_running_public">der Server läuft</string>
 	<string name="show_notification_server">Meldung anzeigen</string>
 	<string name="show_notification_server_summary">Meldung anzeigen solange Server läuft.</string>
+	<string name="server_index_as_router_title">Router index.php</string>
+	<string name="server_index_as_router">Verwenden index.php wie Router Skript</string>
 </resources>

@@ -61,4 +61,6 @@
 	<string name="server_running_public">Сервер работает</string>
 	<string name="show_notification_server">Показать уведомление</string>
 	<string name="show_notification_server_summary">Показать уведомление пока сервер работает</string>
+	<string name="server_index_as_router_title">Маршрутизатор index.php</string>
+	<string name="server_index_as_router">Использовать index.php как маршрутизатор скрипт</string>
 </resources>
