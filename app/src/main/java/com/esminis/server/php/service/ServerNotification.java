@@ -39,6 +39,7 @@ public class ServerNotification {
 	static private final int NOTIFICATION_ID = 1;
 
 	private Notification notification = null;
+	private boolean serviceIsRunning = false;
 
 	@Inject
 	protected Preferences preferences;
@@ -50,7 +51,10 @@ public class ServerNotification {
 	public void hide(Context context) {
 		getManager(context).cancel(NOTIFICATION_ID);
 		notification = null;
-		context.stopService(new Intent(context, ServerNotificationService.class));
+		if (serviceIsRunning) {
+			serviceIsRunning = false;
+			context.stopService(new Intent(context, ServerNotificationService.class));
+		}
 	}
 
 	public void show(Context context, CharSequence title, CharSequence titlePublic) {
@@ -58,7 +62,10 @@ public class ServerNotification {
 			hide(context);
 			return;
 		}
-		context.startService(new Intent(context, ServerNotificationService.class));
+		if (!serviceIsRunning) {
+			serviceIsRunning = true;
+			context.startService(new Intent(context, ServerNotificationService.class));
+		}
 		if (notification == null) {
 			Builder builder = setupNotificationBuilder(context, title)
 				.setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
