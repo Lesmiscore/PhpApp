@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Preferences extends com.esminis.model.manager.Preferences {
+public class Preferences extends com.esminis.preferences.Preferences {
 
 	final static public String DOCUMENT_ROOT = "documentRoot";
 	final static public String ADDRESS = "address";

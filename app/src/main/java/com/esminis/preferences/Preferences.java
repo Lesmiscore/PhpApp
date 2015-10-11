@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.esminis.model.manager;
+package com.esminis.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -27,20 +27,9 @@ import java.util.Set;
 
 public class Preferences {
 
-	interface PreferencesBackend {
-
-		String get(String name, String defaultVale);
-
-		Map<String, String> get();
-
-		void put(Map<String, String> values);
-
-		boolean contains(String name);
-
-	}
-
-	private PreferencesBackend preferences = null;
+	private PreferencesBackend backend = null;
 	private final Object lock = new Object();
+
 
 	public void set(Context context, String name, boolean value) {
 		set(context, name, value ? "1" : "");
@@ -61,7 +50,7 @@ public class Preferences {
 		setStrings(context, values);
 	}
 
-	public void setStrings(Context context, Map<String, String> values) {
+	private void setStrings(final Context context, final Map<String, String> values) {
 		if (!values.isEmpty()) {
 			getPreferences(context).put(values);
 		}
@@ -95,15 +84,16 @@ public class Preferences {
 
 	private PreferencesBackend getPreferences(Context context) {
 		synchronized (lock) {
-			if (preferences == null) {
-				preferences = new PreferencesBackendSqlite(context);
-				migrate(preferences, PreferenceManager.getDefaultSharedPreferences(context));
+			if (backend == null) {
+				migrate(backend = new PreferencesBackendContentProvider(context), context);
 			}
 		}
-		return preferences;
+		return backend;
 	}
 
-	private void migrate(PreferencesBackend preferences, SharedPreferences sharedPreferences) {
+	private void migrate(PreferencesBackend preferences, Context context) {
+		final SharedPreferences sharedPreferences = PreferenceManager
+			.getDefaultSharedPreferences(context);
 		final String keyMigrate = "__migrated__";
 		if (sharedPreferences.contains(keyMigrate)) {
 			return;

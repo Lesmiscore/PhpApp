@@ -28,5 +28,11 @@
 		</activity>
 		<service android:name=".service.background.BackgroundService" android:process=":background" />
 		<service android:name=".service.ServerNotificationService" />
+		<provider
+			android:authorities="com.esminis.server.php.preferences.ContentProvider"
+			android:name="com.esminis.preferences.ContentProvider"
+			android:exported="false"
+			android:process=":preferences"
+		/>
 	</application>
 </manifest>
