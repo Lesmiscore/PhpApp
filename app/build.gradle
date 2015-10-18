@@ -18,6 +18,7 @@ android {
     }
     productFlavors {
         int versionCodeId = android.defaultConfig.versionCode
+        developmentNoJniLibs {}
         arm {
             versionCode versionCodeId - 1
         }
@@ -28,6 +29,9 @@ android {
     signingConfigs {
     }
     // Temporary while gradle does not fully support ndk
+    sourceSets.developmentNoJniLibs {
+        jni.srcDirs = []
+    }
     sourceSets.arm {
         jniLibs.srcDir 'src/arm/libs'
         jni.srcDirs = []
@@ -51,6 +55,9 @@ dependencies {
 
 // Temporary while gradle does not fully support ndk
 android.applicationVariants.all { variant ->
+    if (variant.properties.get('flavorName').equals("developmentNoJniLibs")) {
+        return;
+    }
     def ndkBuild = android.ndkDirectory.absolutePath + "/ndk-build"
     def jniDir = file("src/" + variant.properties.get('flavorName') + "/jni").absolutePath
     variant.javaCompile.dependsOn project.tasks.create(
