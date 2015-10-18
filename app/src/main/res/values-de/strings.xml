@@ -56,7 +56,7 @@
 	<string name="reinstall_files_summary">Installieren Sie die Standarddateien (index.php, config.ini, …), zum Document Root</string>
 	<string name="reinstall_files_complete">Dateien sind installiert.</string>
 	<string name="error_operation_failed">Fehler: Operation fehlgeschlagen.</string>
-	<string name="error_document_root_not_empty">Fehler:Dokumentstammverzeichnis ist nicht leer</string>
+	<string name="error_document_root_not_empty">Fehler: Dokumentstammverzeichnis ist nicht leer</string>
 	<string name="error_cannot_create_directory">Fehler: das Verzeichnis lässt sich nicht erstellen.</string>
 	<string name="server_running_public">der Server läuft</string>
 	<string name="show_notification_server">Meldung anzeigen</string>
