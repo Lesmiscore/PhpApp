@@ -30,7 +30,6 @@ public class Preferences {
 	private PreferencesBackend backend = null;
 	private final Object lock = new Object();
 
-
 	public void set(Context context, String name, boolean value) {
 		set(context, name, value ? "1" : "");
 	}
@@ -110,7 +109,7 @@ public class Preferences {
 			}
 		}
 		preferences.put(mapNew);
-		sharedPreferences.edit().putInt(keyMigrate, BuildConfig.VERSION_CODE).commit();
+		sharedPreferences.edit().putInt(keyMigrate, BuildConfig.VERSION_CODE).apply();
 	}
 
 }
