@@ -17,19 +17,17 @@ package com.esminis.server.php;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
-import android.view.ContextThemeWrapper;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -37,7 +35,6 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Constructor;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -71,7 +68,10 @@ public class ActivityHelper {
 	public Toolbar createToolbar(@NonNull final Dialog dialog, Activity activity) {
 		Toolbar toolbar = createToolbar((Toolbar)dialog.findViewById(R.id.toolbar));
 		if (toolbar != null) {
-			toolbar.setNavigationIcon(createNavigationIcon(activity));
+			final DrawerArrowDrawable drawable = new DrawerArrowDrawable(activity);
+			drawable.setProgress(1);
+			drawable.setColor(Color.BLACK);
+			toolbar.setNavigationIcon(drawable);
 			toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -85,32 +85,6 @@ public class ActivityHelper {
 	public Toolbar createToolbar(@NonNull Toolbar toolbar) {
 		toolbar.setLogo(R.drawable.ic_toolbar);
 		return toolbar;
-	}
-
-	private Drawable createNavigationIcon(Activity activity) {
-		try {
-			// @todo when possible remove this dirty hack
-			Class classArrow = Class.forName(
-				ActionBarDrawerToggle.class.getName() + "$DrawerArrowDrawableToggle"
-			);
-			Constructor constructor = classArrow.getDeclaredConstructor(Activity.class, Context.class);
-			constructor.setAccessible(true);
-			Drawable drawable = (Drawable)constructor.newInstance(
-				activity, new ContextThemeWrapper(activity, R.style.Toolbar)
-			);
-			classArrow.getDeclaredMethod("setPosition", float.class).invoke(drawable, 1);
-			return drawable;
-		} catch (Exception e) {
-			TypedArray attribute = activity.obtainStyledAttributes(
-				new int[] {android.support.v7.appcompat.R.attr.homeAsUpIndicator}
-			);
-			if (attribute == null) {
-				return null;
-			}
-			final Drawable drawable = attribute.getDrawable(0);
-			attribute.recycle();
-			return drawable;
-		}
 	}
 
 	void onResume(Activity activity) {
@@ -141,7 +115,7 @@ public class ActivityHelper {
 			}
 		});
 		snackbar.setActionTextColor(
-			view.getResources().getColor(event.error ? R.color.error : R.color.main)
+			ContextCompat.getColor(view.getContext(), event.error ? R.color.error : R.color.main)
 		);
 		snackbar.show();
 	}

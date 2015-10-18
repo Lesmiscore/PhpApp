@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "com.esminis.server.php"
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionName "1.7.6"
         versionCode 42 // should increment by 2 since 20
     }
@@ -42,9 +42,9 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.squareup.dagger:dagger:1.2.2'
     provided 'com.squareup.dagger:dagger-compiler:1.2.2'
-    compile 'com.android.support:support-v4:23.0.1'
-    compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.android.support:design:23.0.1'
+    compile 'com.android.support:support-v4:23.1.0'
+    compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.android.support:design:23.1.0'
     compile 'com.squareup:otto:1.3.8'
     compile 'io.reactivex:rxandroid:0.25.0'
 }
