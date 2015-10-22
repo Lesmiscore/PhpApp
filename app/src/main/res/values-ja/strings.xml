@@ -57,4 +57,6 @@ Tautvydas Andrikys, esminis@esminis.lt<br /><br />
     <string name="show_notification_server">通知を表示する</string>
     <string name="show_notification_server_summary">サーバーが稼働している間は通知を表示する</string>
     <string name="title">PHP 向けサーバー</string>
+    <string name="grant">許可する</string>
+    <string name="permission_files_needed">%1$s は動作にファイルへのアクセスを必要とします。ファイルへのアクセスを許可してください。</string>
 </resources>

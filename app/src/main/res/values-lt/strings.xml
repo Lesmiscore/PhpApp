@@ -65,4 +65,6 @@
 	<string name="show_notification_server_summary">Rodyti pranešimą kol serveris veikia</string>
 	<string name="server_index_as_router">Naudoti index.php kaip maršrutizavimo skriptą</string>
 	<string name="server_index_as_router_title">Maršrutizatorius index.php</string>
+	<string name="grant">Suteikti</string>
+	<string name="permission_files_needed">%1$s reikia priėjimo prie failų. Prašome suteikti priėjimą prie failų.</string>
 </resources>

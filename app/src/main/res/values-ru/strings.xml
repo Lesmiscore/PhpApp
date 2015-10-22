@@ -63,4 +63,6 @@
 	<string name="show_notification_server_summary">Показать уведомление пока сервер работает</string>
 	<string name="server_index_as_router_title">Маршрутизатор index.php</string>
 	<string name="server_index_as_router">Использовать index.php как маршрутизатор скрипт</string>
+	<string name="permission_files_needed">%1$s нужен доступ к файлам для работы. Пожалуйста, разрешите доступ к файлам.</string>
+	<string name="grant">Разрешить</string>
 </resources>
