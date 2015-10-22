@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.esminis.server.php;
+package com.esminis.server.php.helper;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -30,22 +30,21 @@ import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
+import com.esminis.server.php.EventMessage;
+import com.esminis.server.php.R;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
-import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class ActivityHelper {
+public class MainActivityHelper extends ActivityHelper {
 
 	@Inject
 	protected Bus bus;
-
-	private WeakReference<Activity> activity;
 
 	public Toolbar createToolbar(@NonNull AppCompatActivity activity) {
 		Toolbar toolbar = createToolbar((Toolbar)activity.findViewById(R.id.toolbar));
@@ -87,19 +86,19 @@ public class ActivityHelper {
 		return toolbar;
 	}
 
-	void onResume(Activity activity) {
-		this.activity = new WeakReference<>(activity);
+	public void onResume(Activity activity) {
+		super.onResume(activity);
 		bus.register(this);
 	}
 
-	void onPause() {
-		activity = null;
+	public void onPause() {
+		super.onPause();
 		bus.unregister(this);
 	}
 
 	@Subscribe
 	public void onEventMessage(EventMessage event) {
-		Activity activity = this.activity.get();
+		final Activity activity = getActivity();
 		if (activity == null) {
 			return;
 		}
@@ -118,6 +117,21 @@ public class ActivityHelper {
 			ContextCompat.getColor(view.getContext(), event.error ? R.color.error : R.color.main)
 		);
 		snackbar.show();
+	}
+
+	public void contentMessage(boolean containerVisible, boolean preloader, boolean button, String message) {
+		final Activity activity = getActivity();
+		if (activity == null) {
+			return;
+		}
+		activity.findViewById(R.id.preloader_container)
+			.setVisibility(containerVisible ? View.VISIBLE : View.GONE);
+		if (containerVisible) {
+			activity.findViewById(R.id.preloader).setVisibility(preloader ? View.VISIBLE : View.GONE);
+			activity.findViewById(R.id.preloader_button_ok)
+				.setVisibility(button ? View.VISIBLE : View.GONE);
+			((TextView)activity.findViewById(R.id.preloader_label)).setText(message);
+		}
 	}
 
 }

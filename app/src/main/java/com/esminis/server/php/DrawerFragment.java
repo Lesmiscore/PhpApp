@@ -37,6 +37,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 
+import com.esminis.server.php.helper.MainActivityHelper;
 import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.background.install.InstallToDocumentRoot;
 import com.esminis.server.php.service.server.Php;
@@ -63,7 +64,7 @@ public class DrawerFragment extends PreferenceFragment {
 	protected Php php;
 
 	@Inject
-	protected ActivityHelper activityHelper;
+	protected MainActivityHelper activityHelper;
 
 	@Inject
 	protected InstallToDocumentRoot installToDocumentRoot;

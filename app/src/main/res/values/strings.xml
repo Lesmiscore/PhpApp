@@ -65,4 +65,6 @@
 	<string name="show_notification_server_summary">Show notification while server is running</string>
 	<string name="server_index_as_router_title">Router index.php</string>
 	<string name="server_index_as_router">Use index.php as router script</string>
+	<string name="permission_files_needed">%1$s needs access to files to work. Please grant access to files.</string>
+	<string name="grant">Grant</string>
 </resources>
