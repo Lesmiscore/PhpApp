@@ -63,4 +63,6 @@
 	<string name="show_notification_server_summary">Meldung anzeigen solange Server läuft.</string>
 	<string name="server_index_as_router_title">Router index.php</string>
 	<string name="server_index_as_router">Verwenden index.php wie Router Skript</string>
+	<string name="permission_files_needed">%1$s benötigt Zugriff auf die Dateien. Bitte lassen Sie den Zugriff auf die Dateien zu.</string>
+	<string name="grant">Zulassen</string>
 </resources>
