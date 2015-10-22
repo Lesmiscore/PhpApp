@@ -15,6 +15,7 @@
  */
 package com.esminis.server.php;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -27,6 +28,7 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -53,6 +55,8 @@ import android.widget.TextView;
 import com.esminis.model.manager.Network;
 import com.esminis.popup.About;
 import com.esminis.popup.DirectoryChooser;
+import com.esminis.server.php.helper.MainActivityHelper;
+import com.esminis.server.php.helper.MainActivityPermissionHelper;
 import com.esminis.server.php.model.manager.Log;
 import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.ServerNotification;
@@ -67,6 +71,8 @@ import com.esminis.server.php.service.server.tasks.StopServerTaskProvider;
 import java.io.File;
 
 import javax.inject.Inject;
+
+import rx.functions.Action1;
 
 public class MainActivity extends AppCompatActivity implements InstallServer.OnInstallListener {
 	
@@ -86,10 +92,12 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 	protected Log log = null;
 
 	@Inject
-	protected ActivityHelper activityHelper;
+	protected MainActivityHelper activityHelper;
 
 	@Inject
 	protected ServerNotification serverNotification;
+
+	private MainActivityPermissionHelper activityPermissionHelper;
 
 	private boolean requestResultView = false;
 	
@@ -127,7 +135,16 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 		}
 		drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 		drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-		installServer.installIfNeeded(this, this);
+		activityPermissionHelper = new MainActivityPermissionHelper(activityHelper);
+		activityPermissionHelper.request(Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(
+			new Action1<Void>() {
+				@Override
+				public void call(Void aVoid) {
+					activityHelper.contentMessage(true, true, false, getString(R.string.server_installing));
+					installServer.installIfNeeded(MainActivity.this, MainActivity.this);
+				}
+			}
+		);
 		findViewById(R.id.container).setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View view, MotionEvent event) {
@@ -174,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 	protected void onResume() {
 		super.onResume();
 		activityHelper.onResume(this);
+		activityPermissionHelper.onResume(this);
 		paused = false;
 		if (requestResultView) {
 			requestResultView = false;
@@ -195,6 +213,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 	protected void onPause() {
 		super.onPause();
 		activityHelper.onPause();
+		activityPermissionHelper.onPause();
 		paused = true;
 		if (receiver != null) {
 			unregisterReceiver(receiver);
@@ -211,17 +230,23 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 			resultView();
 		}
 	}
-	
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		activityPermissionHelper.onDestroy();
+	}
+
 	private void resultView() {
 		if (requestResultViewSuccess) {
 			startup();
-			findViewById(R.id.preloader_container).setVisibility(View.GONE);
+			activityHelper.contentMessage(false, false, false, null);
 			findViewById(R.id.container).setVisibility(View.VISIBLE);
 			removeFocus();
 		} else {
-			((TextView)findViewById(R.id.preloader_label)).setText(R.string.server_installation_failed);
+			activityHelper
+				.contentMessage(true, false, false, getString(R.string.server_installation_failed));
 		}
-		findViewById(R.id.preloader).setVisibility(View.GONE);
 	}
 	
 	private void startup() {
@@ -490,4 +515,10 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 		}
 	}
 
+	@Override
+	public void onRequestPermissionsResult(
+		int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults
+	) {
+		activityPermissionHelper.onRequestPermissionsResult(requestCode, grantResults);
+	}
 }

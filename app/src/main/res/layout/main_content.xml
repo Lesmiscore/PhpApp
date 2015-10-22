@@ -6,16 +6,26 @@
 	<LinearLayout
 		android:layout_width="wrap_content" android:layout_height="wrap_content"
 		android:layout_centerInParent="true" android:id="@+id/preloader_container"
-		android:gravity="center_vertical"
+		android:gravity="center_vertical" android:orientation="horizontal"
 	>
 		<ProgressBar
 			android:id="@+id/preloader"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"			
 		/>
-		<TextView
-			android:id="@+id/preloader_label"
+		<LinearLayout
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
-		/>
+			android:orientation="vertical" android:gravity="center"
+		>
+			<TextView
+				android:id="@+id/preloader_label"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+			/>
+			<Button
+				android:id="@+id/preloader_button_ok" android:layout_marginTop="20dp"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:text="@string/grant" android:visibility="gone"
+			/>
+		</LinearLayout>
 	</LinearLayout>
 	<RelativeLayout 
 		android:id="@+id/container"
