@@ -15,27 +15,22 @@ import android.widget.TextView;
 
 import com.esminis.model.ProductLicense;
 import com.esminis.model.manager.ProductLicenseManager;
-import com.esminis.server.php.Application;
 import com.esminis.server.php.R;
-
-import javax.inject.Inject;
 
 import rx.functions.Action1;
 
-public class LicensesViewer extends FrameLayout {
+public class ProductLicensesViewer extends FrameLayout {
 
 	private final ListView list;
 	private final TextView viewer;
 	private final View viewerContainer;
 	private final Button buttonBack;
 	private final View preloader;
+	private final ProductLicenseManager productLicenseManager;
 
-	@Inject
-	protected ProductLicenseManager productLicenseManager;
-
-	public LicensesViewer(Context context) {
+	public ProductLicensesViewer(Context context, ProductLicenseManager productLicenseManager) {
 		super(context);
-		((Application)context.getApplicationContext()).getObjectGraph().inject(this);
+		this.productLicenseManager = productLicenseManager;
 		View.inflate(context, R.layout.view_licenses_viewer, this);
 		list = (ListView)findViewById(R.id.list_licenses);
 		viewer = (TextView)findViewById(R.id.content_license);
