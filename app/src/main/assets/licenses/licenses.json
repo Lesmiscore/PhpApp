@@ -1,0 +1,37 @@
+{
+  "php" : {"title" : "PHP", "items" : ["PHP"]},
+  "gplv3" : {"title" : "GPL v3", "items" : ["Iconv", "GpgError", "Mcrypt", "GetText", "LibEio"]},
+  "lgplv21" : {
+    "title" : "LGPL v2.1", "items" : [
+      "Aspell", "LibRecode", "GnuTls", "GnuMp", "GnuIdn", "Nettle", "Mhash", "T1lib", "unixODBC",
+      "LibXDiff", "LibJudy"
+    ]
+  },
+  "pcre" : {"title" : "PCRE", "items" : ["PCRE"]},
+  "libxml2" : {"title" : "LibXml2", "items" : ["LibXml2"]},
+  "libxslt" : {"title" : "LibXslt", "items" : ["LibXslt"]},
+  "libexslt" : {"title" : "LibExslt", "items" : ["LibExslt"]},
+  "yaml" : {"title" : "LibYaml", "items" : ["PHP Yaml", "LibYaml"]},
+  "bbcode" : {"title" : "BBCode", "items" : ["BBCode"]},
+  "oauth" : {"title" : "OAuth", "items" : ["OAuth"]},
+  "xmldiff" : {"title" : "XmlDiff", "items" : ["XmlDiff"]},
+  "gender" : {"title" : "Gender", "items" : ["Gender"]},
+  "odbcsqlite" : {"title" : "ODBCSqlite", "items" : ["ODBCSqlite"]},
+  "postgresql" : {"title" : "PostgreSQL", "items" : ["PostgreSQL"]},
+  "glob" : {"title" : "Glob", "items" : ["Glob"]},
+  "phalcon" : {"title" : "Phalcon", "items" : ["Phalcon"]},
+  "libssh2" : {"title" : "LibSsh2", "items" : ["LibSsh2"]},
+  "libvpx" : {"title" : "LibVpx", "items" : ["LibVpx"]},
+  "curl" : {"title" : "Curl", "items" : ["Curl"]},
+  "zlib" : {"title" : "Zlib", "items" : ["Zlib"]},
+  "tidy" : {"title" : "Tidy", "items" : ["Tidy"]},
+  "ncurses" : {"title" : "Ncurses", "items" : ["Ncurses"]},
+  "expat" : {"title" : "Expat", "items" : ["Expat"]},
+  "libgcrypt" : {"title" : "LibGcrypt", "items" : ["LibGcrypt"]},
+  "icu" : {"title" : "ICU", "items" : ["ICU"]},
+  "openssl" : {"title" : "OpenSSL", "items" : ["OpenSSL"]},
+  "bzip2" : {"title" : "Bzip2", "items" : ["Bzip2"]},
+  "freetype" : {"title" : "FreeType", "items" : ["FreeType"]},
+  "libjpeg" : {"title" : "LibJpeg", "items" : ["LibJpeg"]},
+  "libpng" : {"title" : "LibPng", "items" : ["LibPng"]}
+}
