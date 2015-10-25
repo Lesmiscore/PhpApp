@@ -59,6 +59,7 @@ import com.esminis.server.php.helper.MainActivityHelper;
 import com.esminis.server.php.helper.MainActivityPermissionHelper;
 import com.esminis.server.php.model.manager.Log;
 import com.esminis.server.php.model.manager.Preferences;
+import com.esminis.server.php.permission.PermissionRequester;
 import com.esminis.server.php.service.ServerNotification;
 import com.esminis.server.php.service.background.BackgroundService;
 import com.esminis.server.php.service.background.install.InstallServer;
@@ -93,6 +94,9 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 
 	@Inject
 	protected MainActivityHelper activityHelper;
+
+	@Inject
+	protected PermissionRequester permissionRequester;
 
 	@Inject
 	protected ServerNotification serverNotification;
@@ -135,7 +139,9 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 		}
 		drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 		drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-		activityPermissionHelper = new MainActivityPermissionHelper(activityHelper);
+		activityPermissionHelper = new MainActivityPermissionHelper(
+			activityHelper, permissionRequester
+		);
 		activityPermissionHelper.request(Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(
 			new Action1<Void>() {
 				@Override
