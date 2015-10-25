@@ -59,4 +59,5 @@ Tautvydas Andrikys, esminis@esminis.lt<br /><br />
     <string name="title">PHP 向けサーバー</string>
     <string name="grant">許可する</string>
     <string name="permission_files_needed">%1$s は動作にファイルへのアクセスを必要とします。ファイルへのアクセスを許可してください。</string>
+    <string name="back_to_licenses">ライセンスリストへと戻る</string>
 </resources>

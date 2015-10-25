@@ -3,7 +3,6 @@ package com.esminis.popup;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +42,6 @@ public class LicensesViewer extends FrameLayout {
 		viewerContainer = findViewById(R.id.content_license_container);
 		buttonBack = (Button)findViewById(R.id.button_back);
 		preloader = findViewById(R.id.preloader_container);
-		viewer.setMovementMethod(new ScrollingMovementMethod());
 		DrawerArrowDrawable drawable = new DrawerArrowDrawable(getContext());
 		drawable.setProgress(1);
 		drawable.setColor(Color.BLACK);

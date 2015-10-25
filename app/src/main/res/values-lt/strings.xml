@@ -67,4 +67,5 @@
 	<string name="server_index_as_router_title">Maršrutizatorius index.php</string>
 	<string name="grant">Suteikti</string>
 	<string name="permission_files_needed">%1$s reikia priėjimo prie failų. Prašome suteikti priėjimą prie failų.</string>
+	<string name="back_to_licenses">Atgal į licenzijų sarašą</string>
 </resources>
