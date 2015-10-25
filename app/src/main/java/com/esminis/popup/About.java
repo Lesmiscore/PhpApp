@@ -81,7 +81,7 @@ public class About extends AlertDialog {
 		tab.setContent(new TabHost.TabContentFactory() {
 			@Override
 			public View createTabContent(String tag) {
-				return createLicenses((ViewGroup) view.findViewById(android.R.id.tabcontent));
+				return new LicensesViewer(getContext());
 			}
 		});
 		tabhost.addTab(tab);
@@ -107,46 +107,6 @@ public class About extends AlertDialog {
 			);
 			view.setMovementMethod(new ScrollingMovementMethod());
 		}
-		return view;
-	}
-
-	@SuppressLint("SetJavaScriptEnabled")
-	private View createLicenses(ViewGroup container) {
-		final View view = getLayoutInflater().inflate(R.layout.about_licenses, container, false);
-		if (view == null) {
-			return null;
-		}
-		WebView htmlView = (WebView)view.findViewById(R.id.text);
-		if (htmlView == null) {
-			return null;
-		}
-		final Handler handler = new Handler();
-		htmlView.getSettings().setJavaScriptEnabled(true);
-		htmlView.setWebViewClient(new WebViewClient() {
-
-			@Override
-			public void onPageFinished(WebView v, String url) {
-				handler.postDelayed(
-					new Runnable() {
-							public void run() {
-							view.findViewById(R.id.text).setVisibility(View.VISIBLE);
-							view.findViewById(R.id.preloader).setVisibility(View.GONE);
-							view.findViewById(R.id.preloader_container).setVisibility(View.GONE);
-						}
-						}, 1500
-				);
-			}
-
-			@Override
-			public boolean shouldOverrideUrlLoading(WebView v, String url) {
-				if (v == null || v.getContext() == null) {
-					return false;
-				}
-				v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-				return true;
-			}
-		});
-		htmlView.loadUrl("file:///android_asset/Licenses.html");
 		return view;
 	}
 
