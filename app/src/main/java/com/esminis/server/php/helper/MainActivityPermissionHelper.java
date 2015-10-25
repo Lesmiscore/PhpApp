@@ -1,9 +1,6 @@
 package com.esminis.server.php.helper;
 
 import android.app.Activity;
-import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import com.esminis.server.php.R;
@@ -30,10 +27,12 @@ public class MainActivityPermissionHelper extends ActivityHelper {
 	@Override
 	public void onResume(Activity activity) {
 		super.onResume(activity);
-		if (permissionMessage) {
-			permissionMessageSetVisible(true);
-		} else {
-			permissionRequest();
+		if (permission != null && permissionSubscriber != null) {
+			if (permissionMessage) {
+				permissionMessageSetVisible(true);
+			} else {
+				permissionRequest();
+			}
 		}
 	}
 
