@@ -15,22 +15,15 @@
  */
 package com.esminis.popup;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.Handler;
 import android.os.Message;
 import android.text.Html;
-import android.text.method.ScrollingMovementMethod;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -100,12 +93,11 @@ public class About extends AlertDialog {
 	}
 
 	private View createText(ViewGroup container, int content) {
-		TextView view = (TextView)getLayoutInflater().inflate(R.layout.about_main, container, false);
+		ViewGroup view = (ViewGroup)getLayoutInflater().inflate(R.layout.about_main, container, false);
 		if (view != null) {
-			view.setText(
+			((TextView)view.findViewById(R.id.content)).setText(
 				Html.fromHtml(getContext().getString(content, getContext().getString(R.string.php_version)))
 			);
-			view.setMovementMethod(new ScrollingMovementMethod());
 		}
 		return view;
 	}
