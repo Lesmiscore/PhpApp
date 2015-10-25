@@ -8,38 +8,26 @@ import android.support.v4.content.ContextCompat;
 import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 
-@Singleton
-public class PermissionRequester {
+class PermissionRequester {
 
 	static private final int REQUEST_CODE_PERMISSION = 1;
 
-	static public class RequestFailed extends Exception {
-
-		static public final int DENIED = 2;
-		static public final int DENIED_EXPLANATION_NEEDED = 3;
-		static public final int DENIED_ANOTHER_REQUEST_IN_PROGRESS = 4;
-		static public final int ACTIVITY_NOT_AVAILABLE = 5;
-
-		public final int code;
-
-		public RequestFailed(int code) {
-			this.code = code;
-		}
-
-	}
-
 	private final Object lock = new Object();
 	private Subscriber<? super Void> subscriberInProgress = null;
-	private boolean shouldShowRequestPermissionRationale = false;
+	private boolean showExplanation = false;
 
 	@Inject
 	public PermissionRequester() {}
+
+	public boolean hasPermission(Activity activity, String permission) {
+		return activity != null && ContextCompat.checkSelfPermission(activity, permission) ==
+			PackageManager.PERMISSION_GRANTED;
+	}
 
 	public Observable<Void> request(Activity activity, final String permission) {
 		final WeakReference<Activity> activityReference = new WeakReference<>(activity);
@@ -48,25 +36,27 @@ public class PermissionRequester {
 			public void call(Subscriber<? super Void> subscriber) {
 				final Activity activity = activityReference.get();
 				if (activity == null) {
-					subscriber.onError(new RequestFailed(RequestFailed.ACTIVITY_NOT_AVAILABLE));
-					subscriber.onCompleted();
-				} else if (
-					ContextCompat.checkSelfPermission(activity, permission) ==
-						PackageManager.PERMISSION_GRANTED
-				) {
+					subscriber.onError(
+						new PermissionRequestFailed(PermissionRequestFailed.ACTIVITY_NOT_AVAILABLE)
+					);
+				} else if (permission == null) {
+					subscriber.onError(
+						new PermissionRequestFailed(PermissionRequestFailed.DENIED_INVALID_PERMISSION)
+					);
+				} else if (hasPermission(activity, permission)) {
 					subscriber.onNext(null);
 					subscriber.onCompleted();
 				} else {
 					synchronized (lock) {
 						if (subscriberInProgress != null) {
 							subscriber.onError(
-								new RequestFailed(
-									RequestFailed.DENIED_ANOTHER_REQUEST_IN_PROGRESS
+								new PermissionRequestFailed(
+									PermissionRequestFailed.DENIED_ANOTHER_REQUEST_IN_PROGRESS
 								)
 							);
 							return;
 						}
-						shouldShowRequestPermissionRationale = ActivityCompat
+						showExplanation = ActivityCompat
 							.shouldShowRequestPermissionRationale(activity, permission);
 						subscriberInProgress = subscriber;
 					}
@@ -83,12 +73,12 @@ public class PermissionRequester {
 			return;
 		}
 		final Subscriber<? super Void> subscriber;
-		final boolean shouldShowRequestPermissionRationale;
+		final boolean showExplanation;
 		synchronized (lock) {
 			subscriber = subscriberInProgress;
-			shouldShowRequestPermissionRationale = this.shouldShowRequestPermissionRationale;
+			showExplanation = this.showExplanation;
 			subscriberInProgress = null;
-			this.shouldShowRequestPermissionRationale = false;
+			this.showExplanation = false;
 		}
 		if (subscriber == null) {
 			return;
@@ -100,9 +90,9 @@ public class PermissionRequester {
 			subscriber.onNext(null);
 		} else {
 			subscriber.onError(
-				new RequestFailed(
-					shouldShowRequestPermissionRationale ?
-						RequestFailed.DENIED_EXPLANATION_NEEDED : RequestFailed.DENIED
+				new PermissionRequestFailed(
+					showExplanation ?
+						PermissionRequestFailed.DENIED_EXPLANATION_NEEDED : PermissionRequestFailed.DENIED
 				)
 			);
 		}
@@ -112,7 +102,7 @@ public class PermissionRequester {
 	public void cleanup() {
 		synchronized (lock) {
 			subscriberInProgress = null;
-			shouldShowRequestPermissionRationale = false;
+			showExplanation = false;
 		}
 	}
 
