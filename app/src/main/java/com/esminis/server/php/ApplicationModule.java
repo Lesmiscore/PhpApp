@@ -17,7 +17,8 @@ package com.esminis.server.php;
 
 import com.esminis.model.manager.Network;
 import com.esminis.model.manager.ProductLicenseManager;
-import com.esminis.popup.LicensesViewer;
+import com.esminis.popup.About;
+import com.esminis.popup.ProductLicensesViewer;
 import com.esminis.server.php.model.manager.Log;
 import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.ServerNotificationService;
@@ -40,7 +41,7 @@ import dagger.Provides;
 	Application.class, MainActivity.class, Php.class, Preferences.class, DrawerFragment.class,
 	ServerNotificationService.class, InstallTaskProvider.class,
 	StartServerTaskProvider.class, StopServerTaskProvider.class, StatusServerTaskProvider.class,
-	RestartIfRunningServerTaskProvider.class, RestartServerTaskProvider.class, LicensesViewer.class
+	RestartIfRunningServerTaskProvider.class, RestartServerTaskProvider.class, About.class
 })
 public class ApplicationModule {
 

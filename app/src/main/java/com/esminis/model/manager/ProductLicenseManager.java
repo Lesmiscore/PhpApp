@@ -58,7 +58,7 @@ public class ProductLicenseManager {
 				subscriber.onNext(licenses);
 				subscriber.onCompleted();
 			}
-		}).delay(1, TimeUnit.SECONDS)
+		}).delay(500, TimeUnit.MILLISECONDS)
 			.subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread());
 	}
 

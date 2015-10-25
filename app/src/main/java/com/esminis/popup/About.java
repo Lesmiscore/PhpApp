@@ -15,29 +15,51 @@
  */
 package com.esminis.popup;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.Html;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.esminis.model.manager.ProductLicenseManager;
+import com.esminis.server.php.Application;
 import com.esminis.server.php.R;
+
+import javax.inject.Inject;
 
 public class About extends AlertDialog {
 
+	@Inject
+	protected ProductLicenseManager productLicenseManager;
+
 	public About(Context context) {
 		super(context);
+		((Application)context.getApplicationContext()).getObjectGraph().inject(this);
 		setView(createView());
 		setButton(
 			DialogInterface.BUTTON_NEGATIVE, getContext().getString(R.string.close), (Message) null
 		);
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		android.view.WindowManager.LayoutParams params = getWindow().getAttributes();
+		params.width = getContext().getResources().getDimensionPixelSize(R.dimen.about_dialog_width);
+		params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+		getWindow().setAttributes(params);
 	}
 
 	public View createView() {
@@ -74,7 +96,7 @@ public class About extends AlertDialog {
 		tab.setContent(new TabHost.TabContentFactory() {
 			@Override
 			public View createTabContent(String tag) {
-				return new LicensesViewer(getContext());
+				return new ProductLicensesViewer(getContext(), productLicenseManager);
 			}
 		});
 		tabhost.addTab(tab);
