@@ -37,14 +37,18 @@ import com.esminis.server.php.R;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
+import java.lang.ref.WeakReference;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class MainActivityHelper extends ActivityHelper {
+public class MainActivityHelper {
 
 	@Inject
 	protected Bus bus;
+
+	private WeakReference<Activity> activity = new WeakReference<>(null);
 
 	public Toolbar createToolbar(@NonNull AppCompatActivity activity) {
 		Toolbar toolbar = createToolbar((Toolbar)activity.findViewById(R.id.toolbar));
@@ -87,18 +91,21 @@ public class MainActivityHelper extends ActivityHelper {
 	}
 
 	public void onResume(Activity activity) {
-		super.onResume(activity);
-		bus.register(this);
+		final Activity activityOld = this.activity.get();
+		if (activityOld == null || activityOld != activity) {
+			this.activity = new WeakReference<>(activity);
+			bus.register(this);
+		}
 	}
 
 	public void onPause() {
-		super.onPause();
+		activity = new WeakReference<>(null);
 		bus.unregister(this);
 	}
 
 	@Subscribe
 	public void onEventMessage(EventMessage event) {
-		final Activity activity = getActivity();
+		final Activity activity = this.activity.get();
 		if (activity == null) {
 			return;
 		}
@@ -119,8 +126,10 @@ public class MainActivityHelper extends ActivityHelper {
 		snackbar.show();
 	}
 
-	public void contentMessage(boolean containerVisible, boolean preloader, boolean button, String message) {
-		final Activity activity = getActivity();
+	public void contentMessage(
+		boolean containerVisible, boolean preloader, boolean button, String message
+	) {
+		final Activity activity = this.activity.get();
 		if (activity == null) {
 			return;
 		}

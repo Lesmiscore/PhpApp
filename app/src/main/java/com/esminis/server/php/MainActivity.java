@@ -56,10 +56,10 @@ import com.esminis.model.manager.Network;
 import com.esminis.popup.About;
 import com.esminis.popup.DirectoryChooser;
 import com.esminis.server.php.helper.MainActivityHelper;
-import com.esminis.server.php.helper.MainActivityPermissionHelper;
+import com.esminis.server.php.permission.PermissionActivityHelper;
 import com.esminis.server.php.model.manager.Log;
 import com.esminis.server.php.model.manager.Preferences;
-import com.esminis.server.php.permission.PermissionRequester;
+import com.esminis.server.php.permission.PermissionListener;
 import com.esminis.server.php.service.ServerNotification;
 import com.esminis.server.php.service.background.BackgroundService;
 import com.esminis.server.php.service.background.install.InstallServer;
@@ -72,8 +72,6 @@ import com.esminis.server.php.service.server.tasks.StopServerTaskProvider;
 import java.io.File;
 
 import javax.inject.Inject;
-
-import rx.functions.Action1;
 
 public class MainActivity extends AppCompatActivity implements InstallServer.OnInstallListener {
 	
@@ -96,12 +94,10 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 	protected MainActivityHelper activityHelper;
 
 	@Inject
-	protected PermissionRequester permissionRequester;
-
-	@Inject
 	protected ServerNotification serverNotification;
 
-	private MainActivityPermissionHelper activityPermissionHelper;
+	@Inject
+	protected PermissionActivityHelper activityPermissionHelper;
 
 	private boolean requestResultView = false;
 	
@@ -131,26 +127,15 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 			text.setText(savedInstanceState.getCharSequence("errors"));
 		}
 		titleDefault = getString(R.string.title) + " " + getString(R.string.php_version);
+		activityHelper.onResume(this);
+		activityPermissionHelper.onResume(this);
 		activityHelper.createToolbar(this);
-
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
 			actionBar.setTitle(titleDefault);
 		}
 		drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 		drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-		activityPermissionHelper = new MainActivityPermissionHelper(
-			activityHelper, permissionRequester
-		);
-		activityPermissionHelper.request(Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(
-			new Action1<Void>() {
-				@Override
-				public void call(Void aVoid) {
-					activityHelper.contentMessage(true, true, false, getString(R.string.server_installing));
-					installServer.installIfNeeded(MainActivity.this, MainActivity.this);
-				}
-			}
-		);
 		findViewById(R.id.container).setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View view, MotionEvent event) {
@@ -158,6 +143,37 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 				return true;
 			}
 		});
+		startInstallAfterPermissionCheck();
+	}
+
+	private void startInstallAfterPermissionCheck() {
+		findViewById(R.id.preloader_button_ok).setOnClickListener(
+			new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					requestPermission();
+				}
+			}
+		);
+		activityHelper.contentMessage(
+			true, false, true, getString(R.string.permission_files_needed, getString(R.string.title))
+		);
+		requestPermission();
+	}
+
+	private void requestPermission() {
+		activityPermissionHelper.request(
+			Manifest.permission.WRITE_EXTERNAL_STORAGE, new PermissionListener() {
+				@Override
+				public void onGranted() {
+					activityHelper.contentMessage(true, true, false, getString(R.string.server_installing));
+					installServer.installIfNeeded(MainActivity.this, MainActivity.this);
+				}
+
+				@Override
+				public void onDenied() {}
+			}
+		);
 	}
 
 	@Override
