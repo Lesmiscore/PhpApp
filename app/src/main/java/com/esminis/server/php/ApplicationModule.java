@@ -17,8 +17,7 @@ package com.esminis.server.php;
 
 import com.esminis.model.manager.Network;
 import com.esminis.model.manager.ProductLicenseManager;
-import com.esminis.popup.About;
-import com.esminis.popup.ProductLicensesViewer;
+import com.esminis.dialog.About;
 import com.esminis.server.php.model.manager.Log;
 import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.ServerNotificationService;

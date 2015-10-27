@@ -41,7 +41,7 @@ import com.esminis.server.php.helper.MainActivityHelper;
 import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.background.install.InstallToDocumentRoot;
 import com.esminis.server.php.service.server.Php;
-import com.esminis.server.php.view.CheckboxRight;
+import com.esminis.widget.CheckboxRight;
 import com.squareup.otto.Bus;
 
 import java.util.HashMap;
