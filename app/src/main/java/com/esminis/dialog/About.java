@@ -13,31 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.esminis.popup;
+package com.esminis.dialog;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.text.Html;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.esminis.model.ProductLicense;
 import com.esminis.model.manager.ProductLicenseManager;
 import com.esminis.server.php.Application;
 import com.esminis.server.php.R;
+import com.esminis.widget.ProductLicensesViewer;
 
 import javax.inject.Inject;
+
+import rx.Observable;
 
 public class About extends AlertDialog {
 
@@ -63,7 +63,7 @@ public class About extends AlertDialog {
 	}
 
 	public View createView() {
-		final View view = getLayoutInflater().inflate(R.layout.about, null);
+		final View view = getLayoutInflater().inflate(R.layout.dialog_about, null);
 		if (view == null) {
 			return null;
 		}
@@ -96,7 +96,19 @@ public class About extends AlertDialog {
 		tab.setContent(new TabHost.TabContentFactory() {
 			@Override
 			public View createTabContent(String tag) {
-				return new ProductLicensesViewer(getContext(), productLicenseManager);
+				return new ProductLicensesViewer(getContext()).setProvider(
+					new ProductLicensesViewer.ProductLicenseProvider() {
+						@Override
+						public ProductLicense[] getList() {
+							return productLicenseManager.getLicenses();
+						}
+
+						@Override
+						public String getContent(ProductLicense model) {
+							return productLicenseManager.getProductLicenseContent(model);
+						}
+					}
+				);
 			}
 		});
 		tabhost.addTab(tab);
@@ -115,7 +127,7 @@ public class About extends AlertDialog {
 	}
 
 	private View createText(ViewGroup container, int content) {
-		ViewGroup view = (ViewGroup)getLayoutInflater().inflate(R.layout.about_main, container, false);
+		ViewGroup view = (ViewGroup)getLayoutInflater().inflate(R.layout.dialog_about_text, container, false);
 		if (view != null) {
 			((TextView)view.findViewById(R.id.content)).setText(
 				Html.fromHtml(getContext().getString(content, getContext().getString(R.string.php_version)))

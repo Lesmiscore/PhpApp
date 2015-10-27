@@ -53,8 +53,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.esminis.model.manager.Network;
-import com.esminis.popup.About;
-import com.esminis.popup.DirectoryChooser;
+import com.esminis.dialog.About;
+import com.esminis.dialog.DirectoryChooser;
 import com.esminis.server.php.helper.MainActivityHelper;
 import com.esminis.server.php.permission.PermissionActivityHelper;
 import com.esminis.server.php.model.manager.Log;
