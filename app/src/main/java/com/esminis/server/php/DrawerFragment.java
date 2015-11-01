@@ -37,11 +37,12 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 
-import com.esminis.server.php.helper.MainActivityHelper;
+import com.esminis.server.library.EventMessage;
+import com.esminis.server.library.service.server.ServerControl;
+import com.esminis.server.php.activity.helper.MainActivityHelper;
 import com.esminis.server.php.model.manager.Preferences;
-import com.esminis.server.php.service.background.install.InstallToDocumentRoot;
-import com.esminis.server.php.service.server.Php;
-import com.esminis.widget.CheckboxRight;
+import com.esminis.server.php.service.server.install.InstallToDocumentRoot;
+import com.esminis.server.library.widget.CheckboxRight;
 import com.squareup.otto.Bus;
 
 import java.util.HashMap;
@@ -61,7 +62,7 @@ public class DrawerFragment extends PreferenceFragment {
 	protected Preferences preferences;
 
 	@Inject
-	protected Php php;
+	protected ServerControl serverControl;
 
 	@Inject
 	protected MainActivityHelper activityHelper;
@@ -253,7 +254,7 @@ public class DrawerFragment extends PreferenceFragment {
 			}
 		}
 		preferences.setBooleans(getActivity(), values);
-		php.requestRestartIfRunning();
+		serverControl.requestRestartIfRunning();
 		resetSelectAll();
 	}
 
@@ -341,7 +342,7 @@ public class DrawerFragment extends PreferenceFragment {
 		) {
 			setPreferenceValue(Preferences.START_ON_BOOT, false);
 			setPreferenceValue(Preferences.KEEP_RUNNING, false);
-			php.requestRestartIfRunning();
+			serverControl.requestRestartIfRunning();
 		} else if (
 			(
 				preferences.getBoolean(context, Preferences.KEEP_RUNNING) ||
@@ -349,7 +350,7 @@ public class DrawerFragment extends PreferenceFragment {
 			) && preferences.getBoolean(context, Preferences.SHOW_NOTIFICATION_SERVER)
 		) {
 			setPreferenceValue(Preferences.SHOW_NOTIFICATION_SERVER, false);
-			php.requestStatus();
+			serverControl.requestStatus();
 		}
 	}
 
@@ -372,7 +373,7 @@ public class DrawerFragment extends PreferenceFragment {
 		preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				php.requestStatus();
+				serverControl.requestStatus();
 				return true;
 			}
 		});
@@ -387,7 +388,7 @@ public class DrawerFragment extends PreferenceFragment {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				onPreferenceChanged(preference, newValue);
-				php.requestRestartIfRunning();
+				serverControl.requestRestartIfRunning();
 				return true;
 			}
 		});

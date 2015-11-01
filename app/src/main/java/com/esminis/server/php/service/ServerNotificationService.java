@@ -25,7 +25,8 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.esminis.server.php.Application;
-import com.esminis.server.php.service.server.Php;
+import com.esminis.server.php.MainActivity;
+import com.esminis.server.library.service.server.ServerControl;
 
 import javax.inject.Inject;
 
@@ -35,13 +36,13 @@ public class ServerNotificationService extends Service {
 	protected ServerNotification serverNotification;
 
 	@Inject
-	protected Php php;
+	protected ServerControl serverControl;
 
 	private final BroadcastReceiver receiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-			if (action != null && action.equals(Php.INTENT_ACTION)) {
+			if (action != null && action.equals(MainActivity.INTENT_ACTION)) {
 				Bundle extras = intent.getExtras();
 				if (extras == null || (!extras.containsKey("errorLine") && !extras.getBoolean("running"))) {
 					serverNotification.hide(getApplicationContext());
@@ -54,8 +55,8 @@ public class ServerNotificationService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		((Application)getApplication()).getObjectGraph().inject(this);
-		registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
-		php.requestStatus();
+		registerReceiver(receiver, new IntentFilter(MainActivity.INTENT_ACTION));
+		serverControl.requestStatus();
 	}
 
 	@Nullable
