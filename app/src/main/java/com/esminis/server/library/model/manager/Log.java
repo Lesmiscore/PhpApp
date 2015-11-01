@@ -22,7 +22,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 
-import com.esminis.server.php.model.manager.Preferences;
+import com.esminis.server.library.preferences.Preferences;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,12 +1,13 @@
-package com.esminis.server.php;
+package com.esminis.server.library.activity;
 
 import android.content.Context;
 
-import com.esminis.server.php.model.manager.Preferences;
+import com.esminis.server.library.preferences.Preferences;
+import com.esminis.server.php.R;
 
 import javax.inject.Inject;
 
-public class MainPhpActivityControl {
+public class MainActivityControl {
 
 	@Inject
 	protected Preferences preferences;
@@ -37,7 +38,7 @@ public class MainPhpActivityControl {
 
 	public String getMessageNewVersion(Context context) {
 		return context.getString(
-			R.string.server_install_new_version_question, preferences.getPhpBuild(context)
+			R.string.server_install_new_version_question, preferences.getBuild(context)
 		);
 	}
 

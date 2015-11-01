@@ -25,16 +25,16 @@ import android.support.annotation.StringRes;
 import android.util.Pair;
 
 import com.esminis.server.library.model.manager.Process;
+import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.ServerHandler;
 import com.esminis.server.library.service.server.ServerStreamReader;
-import com.esminis.server.php.Application;
-import com.esminis.server.php.MainActivity;
+import com.esminis.server.library.application.Application;
+import com.esminis.server.library.activity.MainActivity;
 import com.esminis.server.php.R;
 import com.esminis.server.library.model.manager.Network;
 import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.model.manager.Log;
-import com.esminis.server.php.model.manager.Preferences;
-import com.esminis.server.php.service.background.BackgroundService;
+import com.esminis.server.library.service.background.BackgroundService;
 import com.esminis.server.library.service.server.tasks.RestartIfRunningServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.RestartServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.StartServerTaskProvider;
@@ -122,7 +122,7 @@ public class Php implements ServerControl {
 			getServerHandler().sendError(context.getString(R.string.error_document_root_does_not_exist));
 			return;
 		}
-		String[] modules = preferences.getEnabledModules(context);
+		String[] modules = getEnabledModules(context);
 		if (!fileRoot.canWrite()) {
 			final List<String> list = new ArrayList<>();
 			for (String module : modules) {
@@ -338,6 +338,17 @@ public class Php implements ServerControl {
 		getServerHandler().sendError(
 			context.getString(R.string.warning_message, context.getString(message, parameters))
 		);
+	}
+
+	public String[] getEnabledModules(Context context) {
+		List<String> modules = new ArrayList<>();
+		String[] list = context.getResources().getStringArray(R.array.modules);
+		for (int i = 0; i < list.length; i += 3) {
+			if (preferences.getBoolean(context, "module_" + list[i])) {
+				modules.add(list[i]);
+			}
+		}
+		return modules.toArray(new String[modules.size()]);
 	}
 
 }

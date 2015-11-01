@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.esminis.server.php.service;
+package com.esminis.server.library.service.server;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -26,9 +26,9 @@ import android.support.v4.app.NotificationCompat.Builder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
 
-import com.esminis.server.php.MainActivity;
+import com.esminis.server.library.activity.MainActivity;
+import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.php.R;
-import com.esminis.server.php.model.manager.Preferences;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

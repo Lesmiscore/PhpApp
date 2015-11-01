@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.esminis.server.php;
+package com.esminis.server.library.activity;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
@@ -26,23 +24,18 @@ import android.preference.PreferenceScreen;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.CompoundButton;
-import android.widget.ListView;
 
 import com.esminis.server.library.EventMessage;
+import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.ServerControl;
-import com.esminis.server.php.activity.helper.MainActivityHelper;
-import com.esminis.server.php.model.manager.Preferences;
+import com.esminis.server.library.application.Application;
+import com.esminis.server.php.R;
 import com.esminis.server.php.service.server.install.InstallToDocumentRoot;
-import com.esminis.server.library.widget.CheckboxRight;
 import com.squareup.otto.Bus;
 
 import java.util.HashMap;
@@ -53,10 +46,6 @@ import javax.inject.Inject;
 import rx.Subscriber;
 
 public class DrawerFragment extends PreferenceFragment {
-
-	static private final String KEY_MODULES = "modules";
-	static private final String PREFIX_MODULE = "module_";
-	static private final String PREFIX_BUILT_IN = "builtin_";
 
 	@Inject
 	protected Preferences preferences;
@@ -73,8 +62,6 @@ public class DrawerFragment extends PreferenceFragment {
 	@Inject
 	protected Bus bus;
 
-	private CheckboxRight checkboxSelectAll = null;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -84,15 +71,10 @@ public class DrawerFragment extends PreferenceFragment {
 		setPreferenceScreen(screen);
 		context = new ContextThemeWrapper(getActivity(), R.style.Preference);
 		setupPreferences(screen, context);
+		setupPreferencesValues(screen, context);
 	}
 
-	private void setupPreferences(PreferenceScreen screen, Context context) {
-		final PreferenceScreen modules = getPreferenceManager().createPreferenceScreen(context);
-		modules.setTitle(R.string.modules_title);
-		modules.setSummary(R.string.modules_summary);
-		modules.setKey(KEY_MODULES);
-		screen.addPreference(modules);
-		setupPreferencesModules(modules, context);
+	protected void setupPreferences(PreferenceScreen screen, Context context) {
 		final CheckBoxPreference preference = createPreferenceCheckbox(
 			context, Preferences.START_ON_BOOT, false,
 			R.string.server_start_on_boot_title, R.string.server_start_on_boot_summary
@@ -114,14 +96,6 @@ public class DrawerFragment extends PreferenceFragment {
 			)
 		);
 		screen.addPreference(
-			restartOnChange(
-				createPreferenceCheckbox(
-					context, Preferences.INDEX_PHP_ROUTER, false,
-					R.string.server_index_as_router_title, R.string.server_index_as_router
-				)
-			)
-		);
-		screen.addPreference(
 			requestStatusOnChange(
 				createPreferenceCheckbox(
 					context, Preferences.SHOW_NOTIFICATION_SERVER,
@@ -130,11 +104,9 @@ public class DrawerFragment extends PreferenceFragment {
 				)
 			)
 		);
-		screen.addPreference(createPreferenceInstall(context));
-		setupPreferencesValues(screen, context);
 	}
 
-	private CheckBoxPreference createPreferenceCheckbox(
+	protected CheckBoxPreference createPreferenceCheckbox(
 		Context context, String key, boolean defaultValue, @StringRes int title, @StringRes int summary
 	) {
 		final CheckBoxPreference preference = new CheckBoxPreference(context);
@@ -145,7 +117,7 @@ public class DrawerFragment extends PreferenceFragment {
 		return preference;
 	}
 
-	private Preference createPreferenceInstall(Context context) {
+	protected Preference createPreferenceInstall(Context context) {
 		final Preference preference = new Preference(context);
 		preference.setTitle(R.string.reinstall_files);
 		preference.setSummary(R.string.reinstall_files_summary);
@@ -175,7 +147,7 @@ public class DrawerFragment extends PreferenceFragment {
 		return preference;
 	}
 
-	private void setupPreferencesValues(PreferenceScreen screen, Context context) {
+	protected void setupPreferencesValues(PreferenceScreen screen, Context context) {
 		final Map<String, Boolean> values = preferences.getBooleans(context);
 		final Map<String, Boolean> valuesSave = new HashMap<>();
 		for (int i = 0; i < screen.getPreferenceCount(); i++) {
@@ -191,115 +163,9 @@ public class DrawerFragment extends PreferenceFragment {
 		preferences.setBooleans(context, valuesSave);
 	}
 
-	private void setupPreferencesModules(PreferenceScreen screen, Context context) {
-		screen.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				initializeModulesDialog();
-				return false;
-			}
-		});
-		Resources resources = getResources();
-		String[] list = resources.getStringArray(R.array.modules);
-		for (int i = 0; i < list.length; i += 3) {
-			addPreference(list[i], list[i + 1], list[i + 2], screen, context, true);
-		}
-		list = resources.getStringArray(R.array.modules_builtin);
-		for (int i = 0; i < list.length; i += 2) {
-			addPreference(
-				PREFIX_BUILT_IN + i, resources.getString(R.string.modules_title_builtin, list[i]),
-				list[i + 1], screen, context, false
-			);
-		}
-		setupPreferencesValues(screen, context);
-	}
-
-	private void initializeModulesDialog() {
-		PreferenceScreen screen = (PreferenceScreen)findPreference(KEY_MODULES);
-		if (screen == null) {
-			return;
-		}
-		final Dialog dialog = screen.getDialog();
-		if (dialog == null) {
-			return;
-		}
-		ListView list = (ListView)dialog.findViewById(android.R.id.list);
-		if (list == null || list.getParent() == null) {
-			return;
-		}
-		((ViewGroup)list.getParent()).removeView(list);
-		list.setPadding(0, 0, 0, 0);
-		dialog.setContentView(R.layout.preference_modules);
-		final Toolbar toolbar = activityHelper.createToolbar(dialog, getActivity());
-		toolbar.setPadding(
-			toolbar.getPaddingLeft(), toolbar.getPaddingTop(), 0, toolbar.getPaddingBottom()
-		);
-		toolbar.setLogo(null);
-		toolbar.setTitle(screen.getTitle());
-		initializeToolbarMenu(toolbar);
-		((ViewGroup)dialog.findViewById(R.id.content)).addView(
-			list, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-		);
-	}
-
-	private void setModulesSelected(boolean selected) {
-		PreferenceScreen preferencesModules =
-			(PreferenceScreen)getPreferenceManager().findPreference(KEY_MODULES);
-		final Map<String, Boolean> values = new HashMap<>();
-		for (int i = 0; i < preferencesModules.getPreferenceCount(); i++) {
-			CheckBoxPreference preference = (CheckBoxPreference)preferencesModules.getPreference(i);
-			if (!getIsForBuiltIn(preference)) {
-				preference.setChecked(selected);
-				values.put(preference.getKey(), selected);
-			}
-		}
-		preferences.setBooleans(getActivity(), values);
-		serverControl.requestRestartIfRunning();
-		resetSelectAll();
-	}
-
-	private void initializeToolbarMenu(Toolbar toolbar) {
-		checkboxSelectAll = new CheckboxRight(toolbar.getContext());
-		toolbar.getMenu().add("").setActionView(checkboxSelectAll)
-			.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-		resetSelectAll();
-	}
-
-	private void resetSelectAll() {
-		if (checkboxSelectAll == null) {
-			return;
-		}
-		PreferenceScreen preferencesModules =
-			(PreferenceScreen)getPreferenceManager().findPreference(KEY_MODULES);
-		boolean allChecked = true;
-		for (int i = 0; i < preferencesModules.getPreferenceCount(); i++) {
-			CheckBoxPreference preference = (CheckBoxPreference)preferencesModules.getPreference(i);
-			if (!getIsForBuiltIn(preference) && !preference.isChecked()) {
-				allChecked = false;
-				break;
-			}
-		}
-		checkboxSelectAll.setOnCheckedChangeListener(null);
-		checkboxSelectAll.setTitle(allChecked ? R.string.disable_all : R.string.enable_all);
-		checkboxSelectAll.setChecked(allChecked);
-		checkboxSelectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-				setModulesSelected(checked);
-			}
-		});
-	}
-
-	private boolean getIsForBuiltIn(Preference preference) {
-		return preference.getKey().startsWith(PREFIX_MODULE + PREFIX_BUILT_IN);
-	}
-
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		if (savedInstanceState != null) {
-			initializeModulesDialog();
-		}
 		if (getView() == null) {
 			return;
 		}
@@ -380,7 +246,7 @@ public class DrawerFragment extends PreferenceFragment {
 		return preference;
 	}
 
-	private Preference restartOnChange(Preference preference) {
+	protected Preference restartOnChange(Preference preference) {
 		if (preference == null) {
 			return null;
 		}
@@ -392,33 +258,7 @@ public class DrawerFragment extends PreferenceFragment {
 				return true;
 			}
 		});
-		preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				resetSelectAll();
-				return false;
-			}
-		});
 		return preference;
-	}
-
-	private void addPreference(
-		String name, String title, String summary, PreferenceScreen screen, Context context,
-		boolean enabled
-	) {
-		CheckBoxPreference preference = new CheckBoxPreference(context);
-		preference.setKey(PREFIX_MODULE + name);
-		preference.setTitle(title);
-		preference.setSummary(summary);
-		preference.setDefaultValue(true);
-		screen.addPreference(preference);
-		if (enabled) {
-			restartOnChange(preference);
-		} else {
-			preference.setEnabled(false);
-			preference.setChecked(true);
-			preference.setSelectable(false);
-		}
 	}
 
 	@Override
