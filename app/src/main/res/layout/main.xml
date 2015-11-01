@@ -15,7 +15,7 @@
 			<include layout="@layout/main_content" />
 			<fragment
 				android:id="@+id/drawer" android:layout_width="280dp" android:layout_height="match_parent"
-				android:layout_gravity="start" android:name="com.esminis.server.php.DrawerFragment"
+				android:layout_gravity="start" android:name="com.esminis.server.php.activity.DrawerPhpFragment"
 			/>
 		</android.support.v4.widget.DrawerLayout>
 	</LinearLayout>

@@ -15,9 +15,9 @@
  */
 package com.esminis.server.library.service;
 
-import com.esminis.server.php.Application;
+import com.esminis.server.library.preferences.Preferences;
+import com.esminis.server.library.application.Application;
 import com.esminis.server.library.service.server.ServerControl;
-import com.esminis.server.php.model.manager.Preferences;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

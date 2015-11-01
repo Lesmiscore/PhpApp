@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.esminis.server.php.service;
+package com.esminis.server.library.service.server;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -24,9 +24,8 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import com.esminis.server.php.Application;
-import com.esminis.server.php.MainActivity;
-import com.esminis.server.library.service.server.ServerControl;
+import com.esminis.server.library.application.Application;
+import com.esminis.server.library.activity.MainActivity;
 
 import javax.inject.Inject;
 

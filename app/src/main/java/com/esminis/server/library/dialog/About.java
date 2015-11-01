@@ -31,7 +31,7 @@ import android.widget.TextView;
 
 import com.esminis.server.library.model.ProductLicense;
 import com.esminis.server.library.model.manager.ProductLicenseManager;
-import com.esminis.server.php.Application;
+import com.esminis.server.library.application.Application;
 import com.esminis.server.php.R;
 import com.esminis.server.library.widget.ProductLicensesViewer;
 
@@ -128,7 +128,7 @@ public class About extends AlertDialog {
 		ViewGroup view = (ViewGroup)getLayoutInflater().inflate(R.layout.dialog_about_text, container, false);
 		if (view != null) {
 			((TextView)view.findViewById(R.id.content)).setText(
-				Html.fromHtml(getContext().getString(content, getContext().getString(R.string.php_version)))
+				Html.fromHtml(getContext().getString(content, getContext().getString(R.string.version)))
 			);
 		}
 		return view;

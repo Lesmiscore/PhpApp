@@ -22,13 +22,16 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 
 import com.esminis.server.library.model.manager.Network;
-import com.esminis.server.php.Application;
-import com.esminis.server.php.MainActivity;
+import com.esminis.server.library.preferences.Preferences;
+import com.esminis.server.library.application.Application;
+import com.esminis.server.library.activity.MainActivity;
 import com.esminis.server.library.service.server.ServerControl;
-import com.esminis.server.php.model.manager.Preferences;
-import com.esminis.server.php.service.background.BackgroundService;
+import com.esminis.server.library.service.background.BackgroundService;
+
+import java.io.File;
 
 import rx.Subscriber;
 import rx.Subscription;
@@ -116,10 +119,10 @@ class InstallTaskLocal extends AsyncTask<Void, Void, Boolean> {
 		if (!preferences.contains(application, Preferences.DOCUMENT_ROOT)) {
 			preferences.set(
 				application, Preferences.DOCUMENT_ROOT,
-				preferences.getDefaultDocumentRoot().getAbsolutePath()
+				getDefaultDocumentRoot().getAbsolutePath()
 			);
 		}
-		preferences.set(application, Preferences.PHP_BUILD, preferences.getPhpBuild(application));
+		preferences.set(application, Preferences.BUILD, preferences.getBuild(application));
 	}
 
 	@Override
@@ -130,6 +133,10 @@ class InstallTaskLocal extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected void onPostExecute(Boolean result) {
 		installServer.finish(result);
+	}
+
+	public File getDefaultDocumentRoot() {
+		return new File(Environment.getExternalStorageDirectory(), "www");
 	}
 
 }

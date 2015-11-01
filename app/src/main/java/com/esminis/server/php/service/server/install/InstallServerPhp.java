@@ -19,9 +19,9 @@ import android.app.Activity;
 import android.os.AsyncTask;
 
 import com.esminis.server.library.model.manager.Network;
+import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.ServerControl;
-import com.esminis.server.php.MainActivity;
-import com.esminis.server.php.model.manager.Preferences;
+import com.esminis.server.library.activity.MainActivity;
 import com.esminis.server.library.service.server.install.InstallServer;
 import com.esminis.server.library.service.server.install.OnInstallServerListener;
 

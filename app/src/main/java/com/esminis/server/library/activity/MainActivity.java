@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.esminis.server.php;
+package com.esminis.server.library.activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -55,18 +55,19 @@ import android.widget.TextView;
 import com.esminis.server.library.model.manager.Network;
 import com.esminis.server.library.dialog.About;
 import com.esminis.server.library.dialog.DirectoryChooser;
-import com.esminis.server.php.activity.helper.MainActivityHelper;
 import com.esminis.server.library.permission.PermissionActivityHelper;
 import com.esminis.server.library.model.manager.Log;
 import com.esminis.server.library.permission.PermissionListener;
-import com.esminis.server.php.service.ServerNotification;
-import com.esminis.server.php.service.background.BackgroundService;
+import com.esminis.server.library.service.server.ServerNotification;
+import com.esminis.server.library.service.background.BackgroundService;
 import com.esminis.server.library.service.server.install.InstallServer;
 import com.esminis.server.library.service.server.install.OnInstallServerListener;
 import com.esminis.server.library.service.server.tasks.RestartIfRunningServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.StartServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.StatusServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.StopServerTaskProvider;
+import com.esminis.server.library.application.Application;
+import com.esminis.server.php.R;
 
 import java.io.File;
 
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements OnInstallServerLi
 	protected PermissionActivityHelper activityPermissionHelper;
 
 	@Inject
-	protected MainPhpActivityControl settings;
+	protected MainActivityControl settings;
 
 	@Inject
 	protected InstallServer installServer;
@@ -122,11 +123,11 @@ public class MainActivity extends AppCompatActivity implements OnInstallServerLi
 		if (application instanceof Application) {
 			((Application)application).getObjectGraph().inject(this);
 		}
-		setContentView(R.layout.main);		
+		setContentView(R.layout.main);
 		if (savedInstanceState != null) {
 			((TextView)findViewById(R.id.error)).setText(savedInstanceState.getCharSequence("errors"));
 		}
-		titleDefault = getString(R.string.title) + " " + getString(R.string.php_version);
+		titleDefault = getString(R.string.title) + " " + getString(R.string.version);
 		activityHelper.onResume(this);
 		activityPermissionHelper.onResume(this);
 		activityHelper.createToolbar(this);

@@ -16,14 +16,19 @@
 package com.esminis.server.php.service.server.install;
 
 import android.content.Context;
+import android.os.Build;
 
-import com.esminis.server.php.Application;
+import com.esminis.server.library.preferences.Preferences;
+import com.esminis.server.library.application.Application;
 import com.esminis.server.library.service.server.ServerControl;
-import com.esminis.server.php.model.manager.Preferences;
-import com.esminis.server.php.service.background.BackgroundServiceTaskProvider;
+import com.esminis.server.library.service.background.BackgroundServiceTaskProvider;
+import com.esminis.server.php.R;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -53,7 +58,7 @@ public class InstallTaskProvider implements BackgroundServiceTaskProvider {
 						installToDocumentRoot.install(context, true);
 					} catch (Exception ignored) {}
 				}
-				String[] list = preferences.getInstallPaths(context);
+				String[] list = getInstallPaths(context);
 				final File moduleDirectory = serverControl.getBinary().getParentFile();
 				if (!helper.fromAssetFiles(moduleDirectory, list, context)) {
 					subscriber.onError(new Exception("Install failed"));
@@ -65,6 +70,29 @@ public class InstallTaskProvider implements BackgroundServiceTaskProvider {
 				subscriber.onCompleted();
 			}
 		});
+	}
+
+	public String[] getInstallPaths(Context context) {
+		List<String> list = new ArrayList<>();
+		Collections.addAll(list, context.getResources().getStringArray(R.array.install_binaries));
+		Collections.addAll(list, getInstallModules(context));
+		String pathBinaries = "bin/" + (Build.CPU_ABI.toLowerCase().startsWith("x86") ? "x86" : "arm")
+			+ "/";
+		for (int i = 0; i < list.size(); i++) {
+			list.set(i, pathBinaries + list.get(i));
+		}
+		Collections.addAll(list, context.getResources().getStringArray(R.array.install_files));
+		return list.toArray(new String[list.size()]);
+	}
+
+	private String[] getInstallModules(Context context) {
+		List<String> modules = new ArrayList<>();
+		String[] list = context.getResources().getStringArray(R.array.modules);
+		for (int i = 0; i < list.length; i += 3) {
+			String module = list[i];
+			modules.add((module.startsWith("zend_") ? module.substring(5) : module) + ".so");
+		}
+		return modules.toArray(new String[modules.size()]);
 	}
 
 }

@@ -13,23 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.esminis.server.php;
+package com.esminis.server.library.application;
 
-import com.esminis.server.library.model.manager.*;
+import com.esminis.server.library.activity.DrawerFragment;
+import com.esminis.server.library.activity.MainActivity;
 import com.esminis.server.library.dialog.About;
-import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.model.manager.Log;
+import com.esminis.server.library.model.manager.Network;
+import com.esminis.server.library.model.manager.ProductLicenseManager;
+import com.esminis.server.library.preferences.Preferences;
+import com.esminis.server.library.service.server.ServerControl;
+import com.esminis.server.library.service.server.ServerNotificationService;
 import com.esminis.server.library.service.server.install.InstallServer;
-import com.esminis.server.php.model.manager.Preferences;
-import com.esminis.server.php.service.ServerNotificationService;
-import com.esminis.server.php.service.server.install.InstallServerPhp;
-import com.esminis.server.php.service.server.install.InstallTaskProvider;
-import com.esminis.server.php.service.server.Php;
 import com.esminis.server.library.service.server.tasks.RestartIfRunningServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.RestartServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.StartServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.StatusServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.StopServerTaskProvider;
+import com.esminis.server.php.service.server.Php;
+import com.esminis.server.php.service.server.install.InstallServerPhp;
+import com.esminis.server.php.service.server.install.InstallTaskProvider;
 import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
@@ -38,34 +41,17 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module(injects = {
-	Application.class, MainActivity.class, Php.class, Preferences.class, DrawerFragment.class,
+	Application.class, MainActivity.class, DrawerFragment.class,
 	ServerNotificationService.class, InstallTaskProvider.class,
 	StartServerTaskProvider.class, StopServerTaskProvider.class, StatusServerTaskProvider.class,
 	RestartIfRunningServerTaskProvider.class, RestartServerTaskProvider.class, About.class
 })
 public class ApplicationModule {
 
-	private Application application;
+	protected final Application application;
 
 	public ApplicationModule(Application application) {
 		this.application = application;
-	}
-
-	@Provides
-	@Singleton
-	public ServerControl provideServerControl(
-		Network network, com.esminis.server.library.model.manager.Process process, Log log,
-		Preferences preferences
-	) {
-		return new Php(
-			network, process, preferences, log, application, application.getIsMainApplicationProcess()
-		);
-	}
-
-	@Provides
-	@Singleton
-	public Preferences providePreferences() {
-		return new com.esminis.server.php.model.manager.Preferences();
 	}
 
 	@Provides
@@ -78,6 +64,17 @@ public class ApplicationModule {
 	@Singleton
 	public ProductLicenseManager provideProductLicenseManager() {
 		return new ProductLicenseManager(application);
+	}
+
+	@Provides
+	@Singleton
+	public ServerControl provideServerControl(
+		Network network, com.esminis.server.library.model.manager.Process process, Log log,
+		Preferences preferences
+	) {
+		return new Php(
+			network, process, preferences, log, application, application.getIsMainApplicationProcess()
+		);
 	}
 
 	@Provides

@@ -20,15 +20,31 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.esminis.server.php.BuildConfig;
+import com.esminis.server.php.R;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 public class Preferences {
+
+	final static public String DOCUMENT_ROOT = "documentRoot";
+	final static public String ADDRESS = "address";
+	final static public String PORT = "port";
+	final static public String START_ON_BOOT = "startOnBoot";
+	final static public String KEEP_RUNNING = "keepRunning";
+	final static public String SHOW_NOTIFICATION_SERVER = "showNotificationServer";
+	final static public String SERVER_STARTED = "serverStarted";
+	final static public String BUILD = "installedPhpBuild";
+	final static public String INDEX_PHP_ROUTER = "indexPhpRouter";
 
 	private PreferencesBackend backend = null;
 	private final Object lock = new Object();
+
+	@Inject
+	public Preferences() {}
 
 	public void set(Context context, String name, boolean value) {
 		set(context, name, value ? "1" : "");
@@ -110,6 +126,16 @@ public class Preferences {
 		}
 		preferences.put(mapNew);
 		sharedPreferences.edit().putInt(keyMigrate, BuildConfig.VERSION_CODE).apply();
+	}
+
+	public boolean getIsSameBuild(Context context) {
+		return getString(context, Preferences.BUILD).equals(getBuild(context));
+	}
+
+	public String getBuild(Context context) {
+		String build = context.getString(R.string.build);
+		return context.getString(R.string.version) +
+			(build.isEmpty() || build.equals("0") ? "" : "_" + build);
 	}
 
 }

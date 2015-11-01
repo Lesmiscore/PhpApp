@@ -16,10 +16,11 @@
 package com.esminis.server.php.service.server.install;
 
 import android.content.Context;
+import android.os.Environment;
 
 import com.esminis.server.library.ErrorWithMessage;
+import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.php.R;
-import com.esminis.server.php.model.manager.Preferences;
 
 import java.io.File;
 import java.util.HashMap;
@@ -43,7 +44,7 @@ public class InstallToDocumentRoot {
 	private boolean installInProgress = false;
 
 	void install(Context context, boolean ifNoDirectory) throws Exception {
-		File file = preferences.getDefaultDocumentRoot();
+		File file = new File(Environment.getExternalStorageDirectory(), "www");
 		File tempDirectory = new File(context.getExternalFilesDir(null), "tmp");
 		if (!tempDirectory.isDirectory() && !tempDirectory.mkdir()) {
 			tempDirectory = file;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.esminis.server.php;
+package com.esminis.server.library.application;
 
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
@@ -22,8 +22,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 
+import com.esminis.server.library.activity.MainActivity;
 import com.esminis.server.library.service.server.ServerControl;
-import com.esminis.server.php.service.background.BackgroundService;
+import com.esminis.server.library.service.background.BackgroundService;
 import com.esminis.server.library.service.server.tasks.StatusServerTaskProvider;
 
 import java.util.List;
@@ -32,7 +33,7 @@ import javax.inject.Inject;
 
 import dagger.ObjectGraph;
 
-public class Application extends android.app.Application {
+abstract public class Application extends android.app.Application {
 
 	private ObjectGraph objectGraph;
 
@@ -42,6 +43,7 @@ public class Application extends android.app.Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+
 		objectGraph = ObjectGraph.create(new ApplicationModule(this));
 		objectGraph.inject(this);
 		if (!getIsMainApplicationProcess()) {

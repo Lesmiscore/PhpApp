@@ -17,8 +17,8 @@ package com.esminis.server.library.service.server.tasks;
 
 import android.content.Context;
 
-import com.esminis.server.php.Application;
-import com.esminis.server.php.service.background.BackgroundServiceTaskProvider;
+import com.esminis.server.library.application.Application;
+import com.esminis.server.library.service.background.BackgroundServiceTaskProvider;
 
 import rx.Observable;
 import rx.Subscriber;
