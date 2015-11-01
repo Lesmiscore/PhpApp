@@ -66,4 +66,9 @@
 	<string name="permission_files_needed">%1$s benötigt Zugriff auf die Dateien. Bitte lassen Sie den Zugriff auf die Dateien zu.</string>
 	<string name="grant">Zulassen</string>
 	<string name="back_to_licenses">Zurück zur Liste der Lizenzen</string>
+	<string name="warning_message">Warnung: %1$s</string>
+	<string name="warning_opcache_disabled">opcache wird deaktiviert, weil das Stammverzeichnis des Dokuments nicht beschreibbar ist</string>
+	<string name="warning_php_ini_directory_does_not_exist">Verzeichnis %1$s existiert nicht</string>
+	<string name="warning_php_ini_directory_not_writable">Verzeichnis %1$s ist nicht beschreibbar</string>
+	<string name="warning_php_ini_property_not_defined">%1$s ist nicht definiert in php.ini</string>
 </resources>
