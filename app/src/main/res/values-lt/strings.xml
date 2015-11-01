@@ -68,4 +68,9 @@
 	<string name="grant">Suteikti</string>
 	<string name="permission_files_needed">%1$s reikia priėjimo prie failų. Prašome suteikti priėjimą prie failų.</string>
 	<string name="back_to_licenses">Atgal į licenzijų sarašą</string>
+	<string name="warning_message">Įspėjimas: %1$s</string>
+	<string name="warning_opcache_disabled">Išjungta opcache nes nėra rašymo teisių į pagrindinį katalogą</string>
+	<string name="warning_php_ini_directory_does_not_exist">%1$s direktorija neegzistuoja</string>
+	<string name="warning_php_ini_directory_not_writable">nėra rašymo teisių į %1$ direktoriją</string>
+	<string name="warning_php_ini_property_not_defined">php.ini parametras %1$s nenustatytas </string>
 </resources>
