@@ -7,8 +7,8 @@ android {
         applicationId "com.esminis.server.php"
         minSdkVersion 16
         targetSdkVersion 23
-        versionName "1.7.7"
-        versionCode 44 // should increment by 2 since 20
+        versionName "1.7.8"
+        versionCode 46 // should increment by 2 since 20
     }
     buildTypes {
         release {
