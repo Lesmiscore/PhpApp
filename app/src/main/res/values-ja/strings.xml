@@ -60,4 +60,9 @@ Tautvydas Andrikys, esminis@esminis.lt<br /><br />
     <string name="grant">許可する</string>
     <string name="permission_files_needed">%1$s は動作にファイルへのアクセスを必要とします。ファイルへのアクセスを許可してください。</string>
     <string name="back_to_licenses">ライセンスリストへと戻る</string>
+    <string name="warning_message">警告：%1$s</string>
+    <string name="warning_opcache_disabled">ドキュメントルートが書き込み不可ですので、 opcache は無効になっています</string>
+    <string name="warning_php_ini_directory_does_not_exist">%1$ sのディレクトリは存在しません</string>
+    <string name="warning_php_ini_directory_not_writable">%1$s のディレクトリは書き込み不可です</string>
+    <string name="warning_php_ini_property_not_defined">php.ini で %1$s が定義されていません</string>
 </resources>
