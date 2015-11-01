@@ -17,7 +17,7 @@
 		android:label="@string/title" android:allowBackup="false" android:name="Application"
 	  android:fullBackupContent="false"
 	>
-		<receiver android:name=".service.AutoStart">
+		<receiver android:name="com.esminis.server.library.service.AutoStart">
 			<intent-filter><action android:name="android.intent.action.BOOT_COMPLETED" /></intent-filter>
 		</receiver>
 		<activity android:name="MainActivity" android:windowSoftInputMode="stateHidden">
@@ -30,7 +30,7 @@
 		<service android:name=".service.ServerNotificationService" />
 		<provider
 			android:authorities="com.esminis.server.php.preferences.ContentProvider"
-			android:name="com.esminis.preferences.ContentProvider"
+			android:name="com.esminis.server.library.preferences.ContentProvider"
 			android:exported="false"
 		/>
 	</application>

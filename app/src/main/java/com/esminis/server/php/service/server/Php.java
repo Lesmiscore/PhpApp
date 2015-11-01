@@ -24,18 +24,22 @@ import android.os.Message;
 import android.support.annotation.StringRes;
 import android.util.Pair;
 
-import com.esminis.model.manager.Process;
+import com.esminis.server.library.model.manager.Process;
+import com.esminis.server.library.service.server.ServerHandler;
+import com.esminis.server.library.service.server.ServerStreamReader;
 import com.esminis.server.php.Application;
+import com.esminis.server.php.MainActivity;
 import com.esminis.server.php.R;
-import com.esminis.model.manager.Network;
-import com.esminis.server.php.model.manager.Log;
+import com.esminis.server.library.model.manager.Network;
+import com.esminis.server.library.service.server.ServerControl;
+import com.esminis.server.library.model.manager.Log;
 import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.background.BackgroundService;
-import com.esminis.server.php.service.server.tasks.RestartIfRunningServerTaskProvider;
-import com.esminis.server.php.service.server.tasks.RestartServerTaskProvider;
-import com.esminis.server.php.service.server.tasks.StartServerTaskProvider;
-import com.esminis.server.php.service.server.tasks.StatusServerTaskProvider;
-import com.esminis.server.php.service.server.tasks.StopServerTaskProvider;
+import com.esminis.server.library.service.server.tasks.RestartIfRunningServerTaskProvider;
+import com.esminis.server.library.service.server.tasks.RestartServerTaskProvider;
+import com.esminis.server.library.service.server.tasks.StartServerTaskProvider;
+import com.esminis.server.library.service.server.tasks.StatusServerTaskProvider;
+import com.esminis.server.library.service.server.tasks.StopServerTaskProvider;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,9 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-public class Php {
-	
-	static public final String INTENT_ACTION = "STATUS_SERVER_CHANGED";
+public class Php implements ServerControl {
 
 	private java.lang.Process process = null;
 	
@@ -62,13 +64,13 @@ public class Php {
 
 	protected Network network = null;
 
-	private PhpHandler phpHandler = null;
+	private ServerHandler serverHandler = null;
 
 	private Application context = null;
 
 	private PhpStartup startup = null;
 
-	private PhpStreamReader streamReader = null;
+	private ServerStreamReader streamReader = null;
 
 	private Process managerProcess = null;
 
@@ -77,12 +79,12 @@ public class Php {
 	private final boolean mainProcess;
 
 	public Php(
-		Network network, Process process, PhpStartup startup, Preferences preferences, Log log,
-		Application application, boolean mainProcess
+		Network network, Process process, Preferences preferences, Log log, Application application,
+		boolean mainProcess
 	) {
 		this.log = log;
 		this.preferences = preferences;
-		this.startup = startup;
+		this.startup = new PhpStartup(process);
 		this.managerProcess = process;
 		this.network = network;
 		this.context = application;
@@ -92,14 +94,14 @@ public class Php {
 		this.mainProcess = mainProcess;
 	}
 
-	private PhpHandler getPhpHandler() {
-		if (phpHandler == null) {
-			phpHandler = new PhpHandler(context, this, preferences);
+	private ServerHandler getServerHandler() {
+		if (serverHandler == null) {
+			serverHandler = new ServerHandler(this);
 		}
-		return phpHandler;
+		return serverHandler;
 	}
 
-	public File getPhp() {
+	public File getBinary() {
 		return php;
 	}
 	
@@ -117,7 +119,7 @@ public class Php {
 		}
 		final File fileRoot = new File(root);
 		if (!fileRoot.isDirectory()) {
-			getPhpHandler().sendError(context.getString(R.string.error_document_root_does_not_exist));
+			getServerHandler().sendError(context.getString(R.string.error_document_root_does_not_exist));
 			return;
 		}
 		String[] modules = preferences.getEnabledModules(context);
@@ -139,12 +141,12 @@ public class Php {
 				preferences.getBoolean(context, Preferences.KEEP_RUNNING),
 				preferences.getBoolean(context, Preferences.INDEX_PHP_ROUTER), modules, context
 			);
-			streamReader = new PhpStreamReader(this, getPhpHandler());
+			streamReader = new ServerStreamReader(this, getServerHandler());
 			streamReader.execute(process.getErrorStream());
 			preferences.set(context, Preferences.SERVER_STARTED, true);
 		} catch (IOException error) {
 			if (process == null) {
-				getPhpHandler().sendError(error.getCause().getMessage());
+				getServerHandler().sendError(error.getCause().getMessage());
 			}
 		}
 	}
@@ -185,7 +187,7 @@ public class Php {
 
 	private void status() {
 		Pair<Boolean, String> status = getStatus();
-		Intent intent = new Intent(INTENT_ACTION);		
+		Intent intent = new Intent(MainActivity.INTENT_ACTION);
 		intent.putExtra("running", status.first);
 		if (status.first) {
 			intent.putExtra("address", status.second);
@@ -197,7 +199,7 @@ public class Php {
 		if (mainProcess) {
 			BackgroundService.execute(context, StatusServerTaskProvider.class);
 		} else {
-			getPhpHandler().sendAction("status");
+			sendAction("status");
 		}
 	}
 
@@ -205,18 +207,27 @@ public class Php {
 		if (mainProcess) {
 			BackgroundService.execute(context, StopServerTaskProvider.class);
 		} else {
-			getPhpHandler().sendAction("stop");
+			sendAction("stop");
 		}
 	}
 
 	public void requestStart() {
 		if (mainProcess) {
 			BackgroundService.execute(context, StartServerTaskProvider.class);
-		} else if (getPhpHandler().isReady()) {
-			getPhpHandler().sendAction("start");
+		} else if (getServerHandler().isReady()) {
+			sendAction("start");
 		} else {
 			start = true;
 		}
+	}
+
+	private void sendAction(String action) {
+		Bundle bundle = new Bundle();
+		bundle.putString(
+			Preferences.DOCUMENT_ROOT, preferences.getString(context, Preferences.DOCUMENT_ROOT)
+		);
+		bundle.putString(Preferences.PORT, preferences.getString(context, Preferences.PORT));
+		getServerHandler().sendAction(action, bundle);
 	}
 
 	public void requestRestartIfRunning() {
@@ -227,7 +238,7 @@ public class Php {
 		context.registerReceiver(new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				if (Php.INTENT_ACTION.equals(intent.getAction())) {
+				if (MainActivity.INTENT_ACTION.equals(intent.getAction())) {
 					Bundle extra = intent.getExtras();
 					if (extra != null && !extra.containsKey("errorLine") && extra.getBoolean("running")) {
 						requestRestart();
@@ -235,7 +246,7 @@ public class Php {
 					context.unregisterReceiver(this);
 				}
 			}
-		}, new IntentFilter(Php.INTENT_ACTION));
+		}, new IntentFilter(MainActivity.INTENT_ACTION));
 		requestStatus();
 	}
 
@@ -248,7 +259,7 @@ public class Php {
 		}
 	}
 
-	protected void onHandlerReady() {
+	public void onHandlerReady() {
 		status();
 		if (
 			start || (
@@ -260,7 +271,7 @@ public class Php {
 		}
 	}
 
-	protected void onHandlerMessage(Message message) {
+	public void onHandlerMessage(Message message) {
 		if (mainProcess) {
 			return;
 		}
@@ -273,7 +284,7 @@ public class Php {
 			String line = data.getString("message");
 			if (line != null) {
 				log.add(context, line);
-				Intent intent = new Intent(INTENT_ACTION);
+				Intent intent = new Intent(MainActivity.INTENT_ACTION);
 				intent.putExtra("errorLine", line);
 				context.sendBroadcast(intent);
 			}
@@ -324,7 +335,7 @@ public class Php {
 	}
 
 	private void sendWarning(@StringRes int message, String... parameters) {
-		getPhpHandler().sendError(
+		getServerHandler().sendError(
 			context.getString(R.string.warning_message, context.getString(message, parameters))
 		);
 	}

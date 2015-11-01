@@ -52,40 +52,35 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.esminis.model.manager.Network;
-import com.esminis.dialog.About;
-import com.esminis.dialog.DirectoryChooser;
-import com.esminis.server.php.helper.MainActivityHelper;
-import com.esminis.server.php.permission.PermissionActivityHelper;
-import com.esminis.server.php.model.manager.Log;
-import com.esminis.server.php.model.manager.Preferences;
-import com.esminis.server.php.permission.PermissionListener;
+import com.esminis.server.library.model.manager.Network;
+import com.esminis.server.library.dialog.About;
+import com.esminis.server.library.dialog.DirectoryChooser;
+import com.esminis.server.php.activity.helper.MainActivityHelper;
+import com.esminis.server.library.permission.PermissionActivityHelper;
+import com.esminis.server.library.model.manager.Log;
+import com.esminis.server.library.permission.PermissionListener;
 import com.esminis.server.php.service.ServerNotification;
 import com.esminis.server.php.service.background.BackgroundService;
-import com.esminis.server.php.service.background.install.InstallServer;
-import com.esminis.server.php.service.server.Php;
-import com.esminis.server.php.service.server.tasks.RestartIfRunningServerTaskProvider;
-import com.esminis.server.php.service.server.tasks.StartServerTaskProvider;
-import com.esminis.server.php.service.server.tasks.StatusServerTaskProvider;
-import com.esminis.server.php.service.server.tasks.StopServerTaskProvider;
+import com.esminis.server.library.service.server.install.InstallServer;
+import com.esminis.server.library.service.server.install.OnInstallServerListener;
+import com.esminis.server.library.service.server.tasks.RestartIfRunningServerTaskProvider;
+import com.esminis.server.library.service.server.tasks.StartServerTaskProvider;
+import com.esminis.server.library.service.server.tasks.StatusServerTaskProvider;
+import com.esminis.server.library.service.server.tasks.StopServerTaskProvider;
 
 import java.io.File;
 
 import javax.inject.Inject;
 
-public class MainActivity extends AppCompatActivity implements InstallServer.OnInstallListener {
-	
+public class MainActivity extends AppCompatActivity implements OnInstallServerListener {
+
+	static public final String INTENT_ACTION = "STATUS_SERVER_CHANGED";
+
 	private BroadcastReceiver receiver = null;
 	private BroadcastReceiver receiverNetwork = null;
 
 	@Inject
-	protected Preferences preferences = null;
-
-	@Inject
 	protected Network network = null;
-
-	@Inject
-	protected InstallServer installServer = null;
 
 	@Inject
 	protected Log log = null;
@@ -98,6 +93,12 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 
 	@Inject
 	protected PermissionActivityHelper activityPermissionHelper;
+
+	@Inject
+	protected MainPhpActivityControl settings;
+
+	@Inject
+	protected InstallServer installServer;
 
 	private boolean requestResultView = false;
 	
@@ -123,8 +124,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 		}
 		setContentView(R.layout.main);		
 		if (savedInstanceState != null) {
-			TextView text = (TextView)findViewById(R.id.error);
-			text.setText(savedInstanceState.getCharSequence("errors"));
+			((TextView)findViewById(R.id.error)).setText(savedInstanceState.getCharSequence("errors"));
 		}
 		titleDefault = getString(R.string.title) + " " + getString(R.string.php_version);
 		activityHelper.onResume(this);
@@ -164,14 +164,16 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 	private void requestPermission() {
 		activityPermissionHelper.request(
 			Manifest.permission.WRITE_EXTERNAL_STORAGE, new PermissionListener() {
+
 				@Override
 				public void onGranted() {
 					activityHelper.contentMessage(true, true, false, getString(R.string.server_installing));
-					installServer.installIfNeeded(MainActivity.this, MainActivity.this);
+					installServer.install(MainActivity.this);
 				}
 
 				@Override
 				public void onDenied() {}
+
 			}
 		);
 	}
@@ -220,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 			resultView();
 		}
 		if (receiver != null) {
-			registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
+			registerReceiver(receiver, new IntentFilter(INTENT_ACTION));
 		}
 		if (receiverNetwork != null) {
 			registerReceiver(receiverNetwork, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
@@ -311,24 +313,21 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 		resetNetwork();
 
 		TextView text = (TextView)findViewById(R.id.server_root);		
-		text.setText(preferences.getString(MainActivity.this, Preferences.DOCUMENT_ROOT));
+		text.setText(settings.getRootDirectory(MainActivity.this));
 		text.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View arg0) {
 				DirectoryChooser chooser = new DirectoryChooser(MainActivity.this);
 				chooser.setParent(
-					new File(preferences.getString(MainActivity.this, Preferences.DOCUMENT_ROOT))
+					new File(settings.getRootDirectory(MainActivity.this))
 				);
 				chooser.setOnDirectoryChooserListener(
 					new DirectoryChooser.OnDirectoryChooserListener() {
 						public void OnDirectoryChosen(File directory) {
-							preferences.set(
-								MainActivity.this, Preferences.DOCUMENT_ROOT, directory.getAbsolutePath()
-							);
+							settings.setRootDirectory(MainActivity.this, directory.getAbsolutePath());
 							BackgroundService.execute(getApplication(), RestartIfRunningServerTaskProvider.class);
-							((TextView) findViewById(R.id.server_root)).setText(
-								preferences.getString(MainActivity.this, Preferences.DOCUMENT_ROOT)
-							);
+							((TextView) findViewById(R.id.server_root))
+								.setText(settings.getRootDirectory(MainActivity.this));
 						}
 					}
 				);
@@ -346,7 +345,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 				return false;
 			}
 		});
-		text.setText(preferences.getString(MainActivity.this, Preferences.PORT));
+		text.setText(settings.getPort(MainActivity.this));
 		text.addTextChangedListener(new TextWatcher() {
 
 			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
@@ -354,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
 
 			public void afterTextChanged(Editable text) {
-				String portPreference = preferences.getString(MainActivity.this, Preferences.PORT);
+				String portPreference = settings.getPort(MainActivity.this);
 				int port = portPreference.isEmpty() ? 
 					8080 : Integer.parseInt(portPreference);
 				try {
@@ -362,7 +361,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 				} catch (NumberFormatException ignored) {}
 				boolean error = true;
 				if (port >= 1024 && port <= 65535) {
-					preferences.set(MainActivity.this, Preferences.PORT, String.valueOf(port));
+					settings.setPort(MainActivity.this, String.valueOf(port));
 					BackgroundService.execute(getApplication(), RestartIfRunningServerTaskProvider.class);
 					error = false;
 				}
@@ -375,7 +374,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				if (Php.INTENT_ACTION.equals(intent.getAction())) {
+				if (INTENT_ACTION.equals(intent.getAction())) {
 					Bundle extras = intent.getExtras();
 					if (extras != null && extras.containsKey("errorLine")) {
 						resetLog();
@@ -424,7 +423,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 			}
 		});
 		
-		registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
+		registerReceiver(receiver, new IntentFilter(INTENT_ACTION));
 		registerReceiver(receiverNetwork, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 		BackgroundService.execute(getApplication(), StatusServerTaskProvider.class);
 	}
@@ -438,9 +437,7 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 	@Override
 	public void OnInstallNewVersionRequest(final InstallServer installer) {
 		AlertDialog dialog = new AlertDialog.Builder(this)
-			.setMessage(
-				getString(R.string.server_install_new_version_question, preferences.getPhpBuild(this))
-			)
+			.setMessage(settings.getMessageNewVersion(this))
 			.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -513,23 +510,22 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 			new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, network.get())
 		);
 		spinner.setOnItemSelectedListener(null);
-		spinner.setSelection(
-			network.getPosition(preferences.getString(MainActivity.this, Preferences.ADDRESS))
-		);
+		spinner.setSelection(network.getPosition(settings.getAddress(this)));
 		spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				String value = preferences.getString(MainActivity.this, Preferences.ADDRESS);
+				String value = settings.getAddress(MainActivity.this);
 				String newValue = network.get(position).name;
 				if (value.equals(newValue)) {
 					return;
 				}
-				preferences.set(MainActivity.this, Preferences.ADDRESS, newValue);
+				settings.setAddress(MainActivity.this, newValue);
 				BackgroundService.execute(getApplication(), RestartIfRunningServerTaskProvider.class);
 
 			}
 
-			public void onNothingSelected(AdapterView<?> parent) {}
+			public void onNothingSelected(AdapterView<?> parent) {
+			}
 
 		});
 		if (changed) {
@@ -543,4 +539,5 @@ public class MainActivity extends AppCompatActivity implements InstallServer.OnI
 	) {
 		activityPermissionHelper.onRequestPermissionsResult(requestCode, grantResults);
 	}
+
 }

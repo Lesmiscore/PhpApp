@@ -29,10 +29,13 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-public class PhpStartup {
+class PhpStartup {
 
-	@Inject
-	protected com.esminis.model.manager.Process managerProcess;
+	private final com.esminis.server.library.model.manager.Process managerProcess;
+
+	PhpStartup(com.esminis.server.library.model.manager.Process managerProcess) {
+		this.managerProcess = managerProcess;
+	}
 
 	private List<String> getIniModules(File iniDirectory) {
 		List<String> list = new ArrayList<>();
@@ -121,7 +124,7 @@ public class PhpStartup {
 		return environment.toArray(new String[environment.size()]);
 	}
 
-	public Process start(
+	Process start(
 		File php, String address, String root, File moduleDirectory, File documentRoot,
 		boolean keepRunning, boolean indexPhpRouter, String[] modules, Context context
 	) throws IOException {

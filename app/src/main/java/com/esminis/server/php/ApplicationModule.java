@@ -15,20 +15,21 @@
  */
 package com.esminis.server.php;
 
-import com.esminis.model.manager.Network;
-import com.esminis.model.manager.ProductLicenseManager;
-import com.esminis.dialog.About;
-import com.esminis.server.php.model.manager.Log;
+import com.esminis.server.library.model.manager.*;
+import com.esminis.server.library.dialog.About;
+import com.esminis.server.library.service.server.ServerControl;
+import com.esminis.server.library.model.manager.Log;
+import com.esminis.server.library.service.server.install.InstallServer;
 import com.esminis.server.php.model.manager.Preferences;
 import com.esminis.server.php.service.ServerNotificationService;
-import com.esminis.server.php.service.background.install.InstallTaskProvider;
+import com.esminis.server.php.service.server.install.InstallServerPhp;
+import com.esminis.server.php.service.server.install.InstallTaskProvider;
 import com.esminis.server.php.service.server.Php;
-import com.esminis.server.php.service.server.PhpStartup;
-import com.esminis.server.php.service.server.tasks.RestartIfRunningServerTaskProvider;
-import com.esminis.server.php.service.server.tasks.RestartServerTaskProvider;
-import com.esminis.server.php.service.server.tasks.StartServerTaskProvider;
-import com.esminis.server.php.service.server.tasks.StatusServerTaskProvider;
-import com.esminis.server.php.service.server.tasks.StopServerTaskProvider;
+import com.esminis.server.library.service.server.tasks.RestartIfRunningServerTaskProvider;
+import com.esminis.server.library.service.server.tasks.RestartServerTaskProvider;
+import com.esminis.server.library.service.server.tasks.StartServerTaskProvider;
+import com.esminis.server.library.service.server.tasks.StatusServerTaskProvider;
+import com.esminis.server.library.service.server.tasks.StopServerTaskProvider;
 import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
@@ -52,13 +53,12 @@ public class ApplicationModule {
 
 	@Provides
 	@Singleton
-	public Php providePhp(
-		Network network, com.esminis.model.manager.Process process, PhpStartup startup, Log log,
+	public ServerControl provideServerControl(
+		Network network, com.esminis.server.library.model.manager.Process process, Log log,
 		Preferences preferences
 	) {
 		return new Php(
-			network, process, startup, preferences, log, application,
-			application.getIsMainApplicationProcess()
+			network, process, preferences, log, application, application.getIsMainApplicationProcess()
 		);
 	}
 
@@ -78,6 +78,12 @@ public class ApplicationModule {
 	@Singleton
 	public ProductLicenseManager provideProductLicenseManager() {
 		return new ProductLicenseManager(application);
+	}
+
+	@Provides
+	@Singleton
+	public InstallServer provideInstallServer(InstallServerPhp install) {
+		return install;
 	}
 
 }

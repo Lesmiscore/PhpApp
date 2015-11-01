@@ -22,9 +22,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 
+import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.php.service.background.BackgroundService;
-import com.esminis.server.php.service.server.Php;
-import com.esminis.server.php.service.server.tasks.StatusServerTaskProvider;
+import com.esminis.server.library.service.server.tasks.StatusServerTaskProvider;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class Application extends android.app.Application {
 	private ObjectGraph objectGraph;
 
 	@Inject
-	protected Php php;
+	protected ServerControl serverControl;
 
 	@Override
 	public void onCreate() {
@@ -45,27 +45,27 @@ public class Application extends android.app.Application {
 		objectGraph = ObjectGraph.create(new ApplicationModule(this));
 		objectGraph.inject(this);
 		if (!getIsMainApplicationProcess()) {
-			php.requestStatus();
+			serverControl.requestStatus();
 			return;
 		}
 		BroadcastReceiver receiver = new BroadcastReceiver() {
 
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				if (Php.INTENT_ACTION.equals(intent.getAction())) {
+				if (MainActivity.INTENT_ACTION.equals(intent.getAction())) {
 					Bundle extras = intent.getExtras();
 					if (extras != null && extras.containsKey("errorLine")) {
 						return;
 					}
 					if (extras != null && extras.getBoolean("running")) {
-						php.requestRestart();
+						serverControl.requestRestart();
 					}
 					unregisterReceiver(this);
 				}
 			}
 
 		};
-		registerReceiver(receiver, new IntentFilter(Php.INTENT_ACTION));
+		registerReceiver(receiver, new IntentFilter(MainActivity.INTENT_ACTION));
 		BackgroundService.execute(this, StatusServerTaskProvider.class);
 	}
 
