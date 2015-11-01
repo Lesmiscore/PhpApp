@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.annotation.StringRes;
 import android.util.Pair;
 
 import com.esminis.model.manager.Process;
@@ -37,7 +38,11 @@ import com.esminis.server.php.service.server.tasks.StatusServerTaskProvider;
 import com.esminis.server.php.service.server.tasks.StopServerTaskProvider;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 public class Php {
 	
@@ -110,16 +115,29 @@ public class Php {
 		if (getStatus().first) {
 			stop();
 		}
-		File fileRoot = new File(root);
+		final File fileRoot = new File(root);
 		if (!fileRoot.isDirectory()) {
 			getPhpHandler().sendError(context.getString(R.string.error_document_root_does_not_exist));
+			return;
 		}
+		String[] modules = preferences.getEnabledModules(context);
+		if (!fileRoot.canWrite()) {
+			final List<String> list = new ArrayList<>();
+			for (String module : modules) {
+				if ("zend_opcache".equals(module)) {
+					sendWarning(R.string.warning_opcache_disabled);
+				} else {
+					list.add(module);
+				}
+			}
+			modules = list.toArray(new String[list.size()]);
+		}
+		validatePhpIni(new File(fileRoot, "php.ini"));
 		try {
 			process = startup.start(
 				php, address, root, modulesDirectory, fileRoot,
 				preferences.getBoolean(context, Preferences.KEEP_RUNNING),
-				preferences.getBoolean(context, Preferences.INDEX_PHP_ROUTER),
-				preferences.getEnabledModules(context), context
+				preferences.getBoolean(context, Preferences.INDEX_PHP_ROUTER), modules, context
 			);
 			streamReader = new PhpStreamReader(this, getPhpHandler());
 			streamReader.execute(process.getErrorStream());
@@ -270,5 +288,45 @@ public class Php {
 		}
 		status();
 	}
-	
+
+	private void validatePhpIni(File file) {
+		FileInputStream inputStream = null;
+		Properties properties = new Properties();
+		try {
+			inputStream = new FileInputStream(file);
+			properties.load(inputStream);
+		} catch (IOException ignored) {
+		} finally {
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException ignored) {}
+			}
+		}
+		validateIsPhpIniDirectory(properties, "session.save_path");
+		validateIsPhpIniDirectory(properties, "upload_tmp_dir");
+	}
+
+	private void validateIsPhpIniDirectory(Properties properties, String property) {
+		final String path = properties.getProperty(property, null);
+		final File file = path == null ? null : new File(path);
+		Integer error = null;
+		if (file == null) {
+			error = R.string.warning_php_ini_property_not_defined;
+		} else if (!file.isDirectory()) {
+			error = R.string.warning_php_ini_directory_does_not_exist;
+		} else if (!file.canWrite()) {
+			error = R.string.warning_php_ini_directory_not_writable;
+		}
+		if (error != null) {
+			sendWarning(error, property);
+		}
+	}
+
+	private void sendWarning(@StringRes int message, String... parameters) {
+		getPhpHandler().sendError(
+			context.getString(R.string.warning_message, context.getString(message, parameters))
+		);
+	}
+
 }

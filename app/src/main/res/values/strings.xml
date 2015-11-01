@@ -68,4 +68,9 @@
 	<string name="permission_files_needed">%1$s needs access to files to work. Please grant access to files.</string>
 	<string name="grant">Grant</string>
 	<string name="back_to_licenses">Back to license list</string>
+	<string name="warning_message">Warning: %1$s</string>
+	<string name="warning_php_ini_property_not_defined">%1$s is not defined in php.ini</string>
+	<string name="warning_php_ini_directory_does_not_exist">%1$s directory does not exist</string>
+	<string name="warning_php_ini_directory_not_writable">%1$s directory is not writable</string>
+	<string name="warning_opcache_disabled">Disabling opcache because document root is not writable</string>
 </resources>
