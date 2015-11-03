@@ -81,7 +81,10 @@ public class ApplicationModule {
 	public InstallServer provideInstallServer(
 		Network network, Preferences preferences, ServerControl serverControl
 	) {
-		return serverFactory.createInstall(network, preferences, serverControl);
+		return new InstallServer(
+			preferences, serverControl,
+			serverFactory.createInstallTaskFactory(network, preferences, serverControl)
+		);
 	}
 
 }

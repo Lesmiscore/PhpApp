@@ -217,12 +217,12 @@ public class DrawerPhpFragment extends DrawerFragment {
 
 	@Override
 	protected void setupPreferences(PreferenceScreen screen, Context context) {
-		super.setupPreferences(screen, context);
 		final PreferenceScreen modules = getPreferenceManager().createPreferenceScreen(context);
 		modules.setTitle(R.string.modules_title);
 		modules.setSummary(R.string.modules_summary);
 		modules.setKey(KEY_MODULES);
 		screen.addPreference(modules);
+		super.setupPreferences(screen, context);
 		setupPreferencesModules(modules, context);
 		screen.addPreference(
 			restartOnChange(

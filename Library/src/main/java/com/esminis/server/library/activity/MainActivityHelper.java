@@ -17,6 +17,7 @@ package com.esminis.server.library.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -34,6 +35,7 @@ import android.widget.TextView;
 
 import com.esminis.server.library.EventMessage;
 import com.esminis.server.library.R;
+import com.esminis.server.library.preferences.Preferences;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -49,6 +51,39 @@ public class MainActivityHelper {
 	protected Bus bus;
 
 	private WeakReference<Activity> activity = new WeakReference<>(null);
+
+	@Inject
+	protected Preferences preferences;
+
+	public String getPort(Context context) {
+		return preferences.getString(context, Preferences.PORT);
+	}
+
+	public void setPort(Context context, String port) {
+		preferences.set(context, Preferences.PORT, port);
+	}
+
+	public String getAddress(Context context) {
+		return preferences.getString(context, Preferences.ADDRESS);
+	}
+
+	public void setAddress(Context context, String address) {
+		preferences.set(context, Preferences.ADDRESS, address);
+	}
+
+	public String getRootDirectory(Context context) {
+		return preferences.getString(context, Preferences.DOCUMENT_ROOT);
+	}
+
+	public void setRootDirectory(Context context, String root) {
+		preferences.set(context, Preferences.DOCUMENT_ROOT, root);
+	}
+
+	public String getMessageNewVersion(Context context) {
+		return context.getString(
+			R.string.server_install_new_version_question, preferences.getBuild(context)
+		);
+	}
 
 	public Toolbar createToolbar(@NonNull AppCompatActivity activity) {
 		Toolbar toolbar = createToolbar((Toolbar)activity.findViewById(R.id.toolbar));

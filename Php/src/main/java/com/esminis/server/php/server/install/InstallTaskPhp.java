@@ -20,7 +20,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 
@@ -30,31 +29,33 @@ import com.esminis.server.library.application.Application;
 import com.esminis.server.library.activity.MainActivity;
 import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.service.background.BackgroundService;
+import com.esminis.server.library.service.server.install.InstallServer;
+import com.esminis.server.library.service.server.install.InstallServerTask;
 
 import java.io.File;
 
 import rx.Subscriber;
 import rx.Subscription;
 
-class InstallTaskLocal extends AsyncTask<Void, Void, Boolean> {
+public class InstallTaskPhp extends InstallServerTask {
 
 	private boolean installSuccess = false;
 	private boolean canStartInstall = false;
 	private ServerControl serverControl;
 	private Application application;
-	private InstallServerPhp installServer;
+	private InstallServer.OnInstallListener listener;
 	private Preferences preferences;
 	private Network network;
 
-	public InstallTaskLocal(
-		ServerControl serverControl, InstallServerPhp installServer, Preferences preferences,
+	public InstallTaskPhp(
+		ServerControl serverControl, InstallServer.OnInstallListener listener, Preferences preferences,
 		Network network, Activity activity
 	) {
 		this.serverControl = serverControl;
 		this.application = (Application)activity.getApplication();
 		this.network = network;
 		this.preferences = preferences;
-		this.installServer = installServer;
+		this.listener = listener;
 	}
 
 	@Override
@@ -127,12 +128,12 @@ class InstallTaskLocal extends AsyncTask<Void, Void, Boolean> {
 
 	@Override
 	protected void onCancelled() {
-		installServer.finish(false);
+		listener.onFinished(false);
 	}
 
 	@Override
 	protected void onPostExecute(Boolean result) {
-		installServer.finish(result);
+		listener.onFinished(result);
 	}
 
 	public File getDefaultDocumentRoot() {
