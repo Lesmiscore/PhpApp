@@ -96,9 +96,6 @@ public class MainActivity extends AppCompatActivity implements OnInstallServerLi
 	protected PermissionActivityHelper activityPermissionHelper;
 
 	@Inject
-	protected MainActivityControl settings;
-
-	@Inject
 	protected InstallServer installServer;
 
 	private boolean requestResultView = false;
@@ -321,21 +318,21 @@ public class MainActivity extends AppCompatActivity implements OnInstallServerLi
 		resetNetwork();
 
 		TextView text = (TextView)findViewById(R.id.server_root);		
-		text.setText(settings.getRootDirectory(MainActivity.this));
+		text.setText(activityHelper.getRootDirectory(MainActivity.this));
 		text.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View arg0) {
 				DirectoryChooser chooser = new DirectoryChooser(MainActivity.this);
 				chooser.setParent(
-					new File(settings.getRootDirectory(MainActivity.this))
+					new File(activityHelper.getRootDirectory(MainActivity.this))
 				);
 				chooser.setOnDirectoryChooserListener(
 					new DirectoryChooser.OnDirectoryChooserListener() {
 						public void OnDirectoryChosen(File directory) {
-							settings.setRootDirectory(MainActivity.this, directory.getAbsolutePath());
+							activityHelper.setRootDirectory(MainActivity.this, directory.getAbsolutePath());
 							BackgroundService.execute(getApplication(), RestartIfRunningServerTaskProvider.class);
 							((TextView) findViewById(R.id.server_root))
-								.setText(settings.getRootDirectory(MainActivity.this));
+								.setText(activityHelper.getRootDirectory(MainActivity.this));
 						}
 					}
 				);
@@ -353,7 +350,7 @@ public class MainActivity extends AppCompatActivity implements OnInstallServerLi
 				return false;
 			}
 		});
-		text.setText(settings.getPort(MainActivity.this));
+		text.setText(activityHelper.getPort(MainActivity.this));
 		text.addTextChangedListener(new TextWatcher() {
 
 			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
@@ -361,7 +358,7 @@ public class MainActivity extends AppCompatActivity implements OnInstallServerLi
 			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {}
 
 			public void afterTextChanged(Editable text) {
-				String portPreference = settings.getPort(MainActivity.this);
+				String portPreference = activityHelper.getPort(MainActivity.this);
 				int port = portPreference.isEmpty() ? 
 					8080 : Integer.parseInt(portPreference);
 				try {
@@ -369,7 +366,7 @@ public class MainActivity extends AppCompatActivity implements OnInstallServerLi
 				} catch (NumberFormatException ignored) {}
 				boolean error = true;
 				if (port >= 1024 && port <= 65535) {
-					settings.setPort(MainActivity.this, String.valueOf(port));
+					activityHelper.setPort(MainActivity.this, String.valueOf(port));
 					BackgroundService.execute(getApplication(), RestartIfRunningServerTaskProvider.class);
 					error = false;
 				}
@@ -445,25 +442,25 @@ public class MainActivity extends AppCompatActivity implements OnInstallServerLi
 	@Override
 	public void OnInstallNewVersionRequest(final InstallServer installer) {
 		AlertDialog dialog = new AlertDialog.Builder(this)
-			.setMessage(settings.getMessageNewVersion(this))
+			.setMessage(activityHelper.getMessageNewVersion(this))
 			.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					((AlertDialog) dialog).setOnDismissListener(null);
-					installer.continueInstall(MainActivity.this, true);
+					installer.installNewVersionConfirmed(MainActivity.this);
 				}
 			})
 			.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					((AlertDialog)dialog).setOnDismissListener(null);
-					installer.continueInstall(MainActivity.this, false);
+					installer.installFinish();
 				}
 			}).show();
 		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
 			@Override
 			public void onDismiss(DialogInterface dialog) {
-				installer.continueInstall(MainActivity.this, false);
+				installer.installFinish();
 			}
 		});
 	}
@@ -518,18 +515,17 @@ public class MainActivity extends AppCompatActivity implements OnInstallServerLi
 			new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, network.get())
 		);
 		spinner.setOnItemSelectedListener(null);
-		spinner.setSelection(network.getPosition(settings.getAddress(this)));
+		spinner.setSelection(network.getPosition(activityHelper.getAddress(this)));
 		spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				String value = settings.getAddress(MainActivity.this);
+				String value = activityHelper.getAddress(MainActivity.this);
 				String newValue = network.get(position).name;
 				if (value.equals(newValue)) {
 					return;
 				}
-				settings.setAddress(MainActivity.this, newValue);
+				activityHelper.setAddress(MainActivity.this, newValue);
 				BackgroundService.execute(getApplication(), RestartIfRunningServerTaskProvider.class);
-
 			}
 
 			public void onNothingSelected(AdapterView<?> parent) {

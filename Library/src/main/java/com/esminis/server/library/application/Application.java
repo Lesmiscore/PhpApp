@@ -101,7 +101,7 @@ abstract public class Application extends android.app.Application {
 			Preferences preferences
 		);
 
-		InstallServer createInstall(
+		InstallServer.InstallTaskFactory createInstallTaskFactory(
 			Network network, Preferences preferences, ServerControl serverControl
 		);
 

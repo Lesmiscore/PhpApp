@@ -1,14 +1,16 @@
 package com.esminis.server.php.application;
 
+import android.app.Activity;
 import android.app.Fragment;
 
 import com.esminis.server.library.model.manager.*;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.service.server.install.InstallServer;
+import com.esminis.server.library.service.server.install.InstallServerTask;
 import com.esminis.server.php.activity.DrawerPhpFragment;
 import com.esminis.server.php.server.Php;
-import com.esminis.server.php.server.install.InstallServerPhp;
+import com.esminis.server.php.server.install.InstallTaskPhp;
 
 public class Application extends com.esminis.server.library.application.Application {
 
@@ -26,10 +28,17 @@ public class Application extends com.esminis.server.library.application.Applicat
 			}
 
 			@Override
-			public InstallServer createInstall(
-				Network network, Preferences preferences, ServerControl serverControl
+			public InstallServer.InstallTaskFactory createInstallTaskFactory(
+				final Network network, final Preferences preferences, final ServerControl serverControl
 			) {
-				return new InstallServerPhp(network, preferences, serverControl);
+				return new InstallServer.InstallTaskFactory() {
+					@Override
+					public InstallServerTask create(
+						Activity activity, InstallServer.OnInstallListener listener
+					) {
+						return new InstallTaskPhp(serverControl, listener, preferences, network, activity);
+					}
+				};
 			}
 
 		};
