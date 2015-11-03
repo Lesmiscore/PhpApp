@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+	xmlns:android="http://schemas.android.com/apk/res/android" package="com.esminis.server.php"
+>
+
+	<application android:name=".application.Application">
+		<provider
+			android:authorities="com.esminis.server.php.preferences.ContentProvider"
+			android:name="com.esminis.server.library.preferences.ContentProvider"
+			android:exported="false"
+		/>
+	</application>
+</manifest>

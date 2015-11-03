@@ -1,0 +1,31 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.esminis.server.library">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-feature android:name="android.hardware.telephony" android:required="false" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.front" android:required="false" />
+    <supports-screens
+        android:smallScreens="true" android:normalScreens="true"
+        android:largeScreens="true" android:xlargeScreens="true" android:anyDensity="true"
+        />
+    <application
+        android:allowBackup="false" android:supportsRtl="false" android:fullBackupContent="false" android:theme="@style/ThemeApplication" android:icon="@drawable/ic_launcher"
+        android:label="@string/title"
+    >
+        <receiver android:name="com.esminis.server.library.service.AutoStart">
+            <intent-filter><action android:name="android.intent.action.BOOT_COMPLETED" /></intent-filter>
+        </receiver>
+        <activity android:name="com.esminis.server.library.activity.MainActivity" android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <service android:name="com.esminis.server.library.service.background.BackgroundService" android:process=":background" />
+        <service android:name="com.esminis.server.library.service.server.ServerNotificationService" />
+
+    </application>
+
+</manifest>
