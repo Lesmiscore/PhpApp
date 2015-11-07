@@ -27,11 +27,11 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class ApplicationModule {
+public class LibraryApplicationModule {
 
 	protected final LibraryApplication application;
 
-	public ApplicationModule(LibraryApplication application) {
+	public LibraryApplicationModule(LibraryApplication application) {
 		this.application = application;
 	}
 
