@@ -27,11 +27,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-class PhpStartup {
+class PhpLauncher {
 
 	private final com.esminis.server.library.model.manager.Process managerProcess;
 
-	PhpStartup(com.esminis.server.library.model.manager.Process managerProcess) {
+	PhpLauncher(com.esminis.server.library.model.manager.Process managerProcess) {
 		this.managerProcess = managerProcess;
 	}
 

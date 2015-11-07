@@ -21,6 +21,7 @@ import android.os.Build;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.service.background.BackgroundServiceTaskProvider;
+import com.esminis.server.library.service.server.install.InstallHelper;
 import com.esminis.server.php.R;
 import com.esminis.server.php.application.PhpApplication;
 

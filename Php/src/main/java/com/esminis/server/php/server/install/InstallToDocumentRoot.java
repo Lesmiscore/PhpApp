@@ -19,6 +19,7 @@ import android.content.Context;
 import android.os.Environment;
 
 import com.esminis.server.library.ErrorWithMessage;
+import com.esminis.server.library.service.server.install.InstallHelper;
 import com.esminis.server.php.R;
 
 import java.io.File;

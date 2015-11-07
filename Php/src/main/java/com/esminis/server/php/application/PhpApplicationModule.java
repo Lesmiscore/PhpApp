@@ -12,7 +12,7 @@ import com.esminis.server.library.service.server.install.InstallServer;
 import com.esminis.server.library.service.server.install.InstallServerTask;
 import com.esminis.server.php.activity.DrawerPhpFragment;
 import com.esminis.server.php.server.Php;
-import com.esminis.server.php.server.install.InstallTaskPhp;
+import com.esminis.server.php.server.install.InstallServerTaskPhp;
 
 import javax.inject.Singleton;
 
@@ -49,7 +49,7 @@ public class PhpApplicationModule {
 			public InstallServerTask create(
 				Activity activity, InstallServer.OnInstallListener listener
 			) {
-				return new InstallTaskPhp(serverControl, listener, preferences, network, activity);
+				return new InstallServerTaskPhp(serverControl, listener, preferences, network, activity);
 			}
 		};
 	}

@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.esminis.server.php.server.install;
+package com.esminis.server.library.service.server.install;
 
 import android.content.Context;
 
 import com.esminis.server.library.ErrorWithMessage;
-import com.esminis.server.php.R;
+import com.esminis.server.library.R;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,7 +32,7 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Set;
 
-class InstallHelper {
+public class InstallHelper {
 
 	public boolean fromAssetFiles(File directory, String[] paths, Context context) {
 		try {
