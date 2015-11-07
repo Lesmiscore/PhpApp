@@ -16,3 +16,78 @@ allprojects {
         }
     }
 }
+
+def setupServerProject(plugin, int versionCodeId, String versionNameValue, String packageName) {
+    plugin.apply plugin: 'com.android.application'
+    plugin.apply plugin: 'com.neenbedankt.android-apt'
+    plugin.android {
+        compileSdkVersion 23
+        buildToolsVersion "23.0.1"
+        defaultConfig {
+            applicationId packageName
+            minSdkVersion 16
+            targetSdkVersion 23
+            versionName versionNameValue
+            versionCode versionCodeId // should increment by 2 since 20
+        }
+        buildTypes {
+            release {
+                minifyEnabled true
+                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            }
+        }
+        productFlavors {
+
+            developmentNoJniLibs {
+                versionCode versionCodeId - 1
+            }
+            arm {
+                versionCode versionCodeId - 1
+            }
+            x86 {
+                versionCode versionCodeId
+            }
+        }
+        // Temporary while gradle does not fully support ndk
+        sourceSets.developmentNoJniLibs {
+            jni.srcDirs = []
+        }
+        sourceSets.arm {
+            jniLibs.srcDir 'src/arm/libs'
+            jni.srcDirs = []
+        }
+        sourceSets.x86 {
+            jniLibs.srcDir 'src/x86/libs'
+            jni.srcDirs = []
+        }
+        plugin.android {
+            packagingOptions {
+                exclude 'META-INF/LICENSE.txt'
+            }
+        }
+    }
+    plugin.dependencies {
+        compile plugin.fileTree(include: ['*.jar'], dir: 'libs')
+        apt 'com.google.dagger:dagger-compiler:2.0'
+        compile 'javax.inject:javax.inject:1'
+        compile 'javax.annotation:javax.annotation-api:1.2'
+        compile 'com.google.dagger:dagger:2.0'
+        compile plugin.project(':Library')
+    }
+    // Temporary while gradle does not fully support ndk
+    plugin.android.applicationVariants.all { variant ->
+        if (variant.properties.get('flavorName').equals("developmentNoJniLibs")) {
+            return;
+        }
+        def ndkBuild = plugin.android.ndkDirectory.absolutePath + "/ndk-build"
+        def jniDir = plugin.file("src/" + variant.properties.get('flavorName') + "/jni").absolutePath
+        variant.javaCompile.dependsOn plugin.tasks.create(
+                name: "build_" + (String)variant.name, type: Exec
+        ) {
+            commandLine ndkBuild, '-C', jniDir
+        }
+        plugin.clean.dependsOn plugin.tasks.create(name: "clean_" + (String)variant.name, type: Exec) {
+            commandLine ndkBuild, '-C', jniDir, 'clean'
+        }
+    }
+}
