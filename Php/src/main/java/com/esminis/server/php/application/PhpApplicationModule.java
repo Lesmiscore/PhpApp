@@ -20,10 +20,12 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class PhpApplicationModule extends ApplicationModule {
+public class PhpApplicationModule {
+
+	private final LibraryApplication application;
 
 	public PhpApplicationModule(LibraryApplication application) {
-		super(application);
+		this.application = application;
 	}
 
 	@Provides

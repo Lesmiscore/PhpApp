@@ -14,8 +14,8 @@ import javax.inject.Singleton;
 import dagger.Component;
 
 @Singleton
-@Component(modules = {ApplicationModule.class, ServerModule.class})
-public interface ApplicationComponent {
+@Component(modules = {LibraryApplicationModule.class, LibraryApplicationServerModule.class})
+public interface LibraryApplicationComponent {
 
 	void inject(AutoStart receiver);
 

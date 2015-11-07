@@ -30,7 +30,7 @@ import com.esminis.server.library.service.server.tasks.StatusServerTaskProvider;
 
 import java.util.List;
 
-abstract public class LibraryApplication<T extends ApplicationComponent> extends Application {
+abstract public class LibraryApplication<T extends LibraryApplicationComponent> extends Application {
 
 	private T component;
 
@@ -64,10 +64,7 @@ abstract public class LibraryApplication<T extends ApplicationComponent> extends
 		BackgroundService.execute(this, StatusServerTaskProvider.class);
 	}
 
-	protected T createComponent() {
-		return (T)DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(this))
-			.build();
-	}
+	abstract protected T createComponent();
 
 	public T getComponent() {
 		return component;
