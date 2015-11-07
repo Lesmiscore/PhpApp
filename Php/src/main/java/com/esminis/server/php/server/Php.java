@@ -46,24 +46,28 @@ public class Php extends ServerControl {
 
 	@Override
 	protected java.lang.Process start(File root, String address) throws IOException {
-		String[] modules = getEnabledModules(context);
-		if (!root.canWrite()) {
-			final List<String> list = new ArrayList<>();
-			for (String module : modules) {
-				if ("zend_opcache".equals(module)) {
-					sendWarning(com.esminis.server.library.R.string.warning_opcache_disabled);
-				} else {
-					list.add(module);
-				}
-			}
-			modules = list.toArray(new String[list.size()]);
-		}
 		validatePhpIni(new File(root, "php.ini"));
 		return startup.start(
 			getBinary(), address, root.getAbsolutePath(), getBinary().getParentFile(), root,
-			isKeepRunning(),
-			preferences.getBoolean(context, Preferences.INDEX_PHP_ROUTER), modules, context
+			isKeepRunning(), preferences.getBoolean(context, Preferences.INDEX_PHP_ROUTER),
+			getEnabledModules(context, root), context
 		);
+	}
+
+	private String[] getEnabledModules(Context context, File root) {
+		List<String> modules = new ArrayList<>();
+		String[] list = context.getResources().getStringArray(R.array.modules);
+		for (int i = 0; i < list.length; i += 3) {
+			final String module = list[i];
+			if (preferences.getBoolean(context, "module_" + module)) {
+				if ("zend_opcache".equals(module) && !root.canWrite()) {
+					sendWarning(R.string.warning_opcache_disabled);
+				} else {
+					modules.add(module);
+				}
+			}
+		}
+		return modules.toArray(new String[modules.size()]);
 	}
 
 	private void validatePhpIni(File file) {
@@ -98,17 +102,6 @@ public class Php extends ServerControl {
 		if (error != null) {
 			sendWarning(error, property);
 		}
-	}
-
-	public String[] getEnabledModules(Context context) {
-		List<String> modules = new ArrayList<>();
-		String[] list = context.getResources().getStringArray(R.array.modules);
-		for (int i = 0; i < list.length; i += 3) {
-			if (preferences.getBoolean(context, "module_" + list[i])) {
-				modules.add(list[i]);
-			}
-		}
-		return modules.toArray(new String[modules.size()]);
 	}
 
 }
