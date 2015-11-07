@@ -52,6 +52,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.esminis.server.library.application.LibraryApplication;
 import com.esminis.server.library.model.manager.Network;
 import com.esminis.server.library.dialog.About;
 import com.esminis.server.library.dialog.DirectoryChooser;
@@ -66,7 +67,6 @@ import com.esminis.server.library.service.server.tasks.RestartIfRunningServerTas
 import com.esminis.server.library.service.server.tasks.StartServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.StatusServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.StopServerTaskProvider;
-import com.esminis.server.library.application.Application;
 import com.esminis.server.library.R;
 
 import java.io.File;
@@ -117,8 +117,8 @@ public class MainActivity extends AppCompatActivity implements OnInstallServerLi
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		android.app.Application application = getApplication();
-		if (application instanceof Application) {
-			((Application)application).getObjectGraph().inject(this);
+		if (application instanceof LibraryApplication) {
+			((LibraryApplication)application).getComponent().inject(this);
 		}
 		setContentView(R.layout.main);
 		if (savedInstanceState != null) {
@@ -141,11 +141,12 @@ public class MainActivity extends AppCompatActivity implements OnInstallServerLi
 				return true;
 			}
 		});
-		if (savedInstanceState == null && application instanceof Application) {
+		if (savedInstanceState == null && application instanceof LibraryApplication) {
 			try {
 				getFragmentManager().beginTransaction()
-					.replace(R.id.drawer, ((Application)application).getMenuFragmentClass().newInstance())
-					.commit();
+					.replace(R.id.drawer, ((LibraryApplication)application).getComponent()
+							.getDrawerFragment()
+					).commit();
 			} catch (Exception ignored) {}
 		}
 		startInstallAfterPermissionCheck();

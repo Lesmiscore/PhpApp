@@ -55,6 +55,9 @@ public class MainActivityHelper {
 	@Inject
 	protected Preferences preferences;
 
+	@Inject
+	public MainActivityHelper() {}
+
 	public String getPort(Context context) {
 		return preferences.getString(context, Preferences.PORT);
 	}

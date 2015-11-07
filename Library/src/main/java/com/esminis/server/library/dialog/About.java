@@ -29,9 +29,9 @@ import android.widget.Button;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.esminis.server.library.application.LibraryApplication;
 import com.esminis.server.library.model.ProductLicense;
 import com.esminis.server.library.model.manager.ProductLicenseManager;
-import com.esminis.server.library.application.Application;
 import com.esminis.server.library.R;
 import com.esminis.server.library.widget.ProductLicensesViewer;
 
@@ -44,7 +44,7 @@ public class About extends AlertDialog {
 
 	public About(Context context) {
 		super(context);
-		((Application)context.getApplicationContext()).getObjectGraph().inject(this);
+		((LibraryApplication)context.getApplicationContext()).getComponent().inject(this);
 		setView(createView());
 		setButton(
 			DialogInterface.BUTTON_NEGATIVE, getContext().getString(R.string.close), (Message) null

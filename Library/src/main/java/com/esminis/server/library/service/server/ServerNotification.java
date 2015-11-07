@@ -44,6 +44,9 @@ public class ServerNotification {
 	@Inject
 	protected Preferences preferences;
 
+	@Inject
+	public ServerNotification() {}
+
 	private NotificationManager getManager(Context context) {
 		return (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 	}

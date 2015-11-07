@@ -25,7 +25,7 @@ import android.os.Environment;
 
 import com.esminis.server.library.model.manager.Network;
 import com.esminis.server.library.preferences.Preferences;
-import com.esminis.server.library.application.Application;
+import com.esminis.server.library.application.LibraryApplication;
 import com.esminis.server.library.activity.MainActivity;
 import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.service.background.BackgroundService;
@@ -42,7 +42,7 @@ public class InstallTaskPhp extends InstallServerTask {
 	private boolean installSuccess = false;
 	private boolean canStartInstall = false;
 	private ServerControl serverControl;
-	private Application application;
+	private LibraryApplication application;
 	private InstallServer.OnInstallListener listener;
 	private Preferences preferences;
 	private Network network;
@@ -52,7 +52,7 @@ public class InstallTaskPhp extends InstallServerTask {
 		Network network, Activity activity
 	) {
 		this.serverControl = serverControl;
-		this.application = (Application)activity.getApplication();
+		this.application = (LibraryApplication)activity.getApplication();
 		this.network = network;
 		this.preferences = preferences;
 		this.listener = listener;

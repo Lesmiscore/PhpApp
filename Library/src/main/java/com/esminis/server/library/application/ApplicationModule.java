@@ -15,22 +15,10 @@
  */
 package com.esminis.server.library.application;
 
-import com.esminis.server.library.activity.DrawerFragment;
-import com.esminis.server.library.activity.DrawerFragmentHelper;
-import com.esminis.server.library.activity.MainActivity;
-import com.esminis.server.library.dialog.About;
-import com.esminis.server.library.model.manager.Log;
-import com.esminis.server.library.model.manager.Network;
 import com.esminis.server.library.model.manager.ProductLicenseManager;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.ServerControl;
-import com.esminis.server.library.service.server.ServerNotificationService;
 import com.esminis.server.library.service.server.install.InstallServer;
-import com.esminis.server.library.service.server.tasks.RestartIfRunningServerTaskProvider;
-import com.esminis.server.library.service.server.tasks.RestartServerTaskProvider;
-import com.esminis.server.library.service.server.tasks.StartServerTaskProvider;
-import com.esminis.server.library.service.server.tasks.StatusServerTaskProvider;
-import com.esminis.server.library.service.server.tasks.StopServerTaskProvider;
 import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
@@ -38,21 +26,13 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
-@Module(injects = {
-	Application.class, MainActivity.class, DrawerFragment.class,
-	ServerNotificationService.class,
-	StartServerTaskProvider.class, StopServerTaskProvider.class, StatusServerTaskProvider.class,
-	RestartIfRunningServerTaskProvider.class, RestartServerTaskProvider.class, About.class,
-	ServerControl.class, DrawerFragmentHelper.class
-})
+@Module
 public class ApplicationModule {
 
-	private final Application application;
-	private final Application.ServerFactory serverFactory;
+	protected final LibraryApplication application;
 
-	public ApplicationModule(Application application) {
+	public ApplicationModule(LibraryApplication application) {
 		this.application = application;
-		this.serverFactory = application.createServerFactory();
 	}
 
 	@Provides
@@ -69,22 +49,11 @@ public class ApplicationModule {
 
 	@Provides
 	@Singleton
-	public ServerControl provideServerControl(
-		Network network, com.esminis.server.library.model.manager.Process process, Log log,
-		Preferences preferences
-	) {
-		return serverFactory.createControl(network, process, log, preferences);
-	}
-
-	@Provides
-	@Singleton
 	public InstallServer provideInstallServer(
-		Network network, Preferences preferences, ServerControl serverControl
+		Preferences preferences, ServerControl serverControl,
+		InstallServer.InstallTaskFactory installTaskFactory
 	) {
-		return new InstallServer(
-			preferences, serverControl,
-			serverFactory.createInstallTaskFactory(network, preferences, serverControl)
-		);
+		return new InstallServer(preferences, serverControl, installTaskFactory);
 	}
 
 }

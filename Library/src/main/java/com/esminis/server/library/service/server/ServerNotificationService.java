@@ -24,7 +24,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import com.esminis.server.library.application.Application;
+import com.esminis.server.library.application.LibraryApplication;
 import com.esminis.server.library.activity.MainActivity;
 
 import javax.inject.Inject;
@@ -53,7 +53,7 @@ public class ServerNotificationService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		((Application)getApplication()).getObjectGraph().inject(this);
+		((LibraryApplication)getApplication()).getComponent().inject(this);
 		registerReceiver(receiver, new IntentFilter(MainActivity.INTENT_ACTION));
 		serverControl.requestStatus();
 	}

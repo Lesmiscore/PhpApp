@@ -23,6 +23,9 @@ public class PermissionActivityHelper {
 	private Subscriber<? super Boolean> permissionSubscriber = null;
 	private Boolean onResumeGranted = null;
 
+	@Inject
+	public PermissionActivityHelper() {}
+
 	public void onDestroy() {
 		permissionSubscriber = null;
 		permissionRequester.cleanup();
