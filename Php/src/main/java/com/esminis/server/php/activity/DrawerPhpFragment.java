@@ -15,10 +15,10 @@ import android.widget.ListView;
 
 import com.esminis.server.library.EventMessage;
 import com.esminis.server.library.activity.DrawerFragment;
-import com.esminis.server.library.application.LibraryApplication;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.widget.CheckboxRight;
 import com.esminis.server.php.R;
+import com.esminis.server.php.application.PhpApplication;
 import com.esminis.server.php.server.install.InstallToDocumentRoot;
 
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public class DrawerPhpFragment extends DrawerFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		((LibraryApplication)getActivity().getApplicationContext()).getComponent().inject(this);
+		((PhpApplication)getActivity().getApplicationContext()).getComponent().inject(this);
 		if (savedInstanceState != null) {
 			initializeModulesDialog();
 		}
