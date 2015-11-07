@@ -15,8 +15,9 @@
  */
 package com.esminis.server.php.server;
 
-import android.app.ActivityManager;
 import android.content.Context;
+
+import com.esminis.server.library.service.server.ServerLauncher;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,14 +26,11 @@ import java.io.IOException;
 import java.lang.Process;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-class PhpLauncher {
+class PhpServerLauncher extends ServerLauncher {
 
-	private final com.esminis.server.library.model.manager.Process managerProcess;
-
-	PhpLauncher(com.esminis.server.library.model.manager.Process managerProcess) {
-		this.managerProcess = managerProcess;
+	PhpServerLauncher(com.esminis.server.library.model.manager.Process managerProcess) {
+		super(managerProcess);
 	}
 
 	private List<String> getIniModules(File iniDirectory) {
@@ -95,7 +93,7 @@ class PhpLauncher {
 		}
 	}
 
-	private String[] createCommand(
+	private List<String> createCommand(
 		File php, String address, String root, File moduleDirectory, File iniDirectory,
 		boolean indexPhpRouter, String[] modules
 	) {
@@ -109,56 +107,24 @@ class PhpLauncher {
 		if (indexPhpRouter) {
 			options.add("index.php");
 		}
-		return options.toArray(new String[options.size()]);
+		return options;
 	}
 
-	private String[] getEnvironment(File moduleDirectory) {
-		Map<String, String> map = System.getenv();
-		List<String> environment = new ArrayList<>();
-		for (String key : map.keySet()) {
-			environment.add(key + "=" + map.get(key));
-		}
+	private List<String> getEnvironment(File moduleDirectory) {
+		List<String> environment = getEnvironment();
 		environment.add("ODBCSYSINI=" + moduleDirectory.getAbsolutePath());
-		return environment.toArray(new String[environment.size()]);
+		return environment;
 	}
 
 	Process start(
 		File php, String address, String root, File moduleDirectory, File documentRoot,
 		boolean keepRunning, boolean indexPhpRouter, String[] modules, Context context
 	) throws IOException {
-		Process process = Runtime.getRuntime().exec(
-			createCommand(
+		return start(
+			php, createCommand(
 				php, address, root, moduleDirectory, documentRoot, indexPhpRouter, modules
-			),
-			getEnvironment(moduleDirectory), documentRoot
+			), context, getEnvironment(moduleDirectory), documentRoot, keepRunning
 		);
-		int pid = managerProcess.getPid(php);
-		if (pid > 0) {
-			String command;
-			if (!keepRunning) {
-				List<ActivityManager.RunningAppProcessInfo> processes =
-					((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE))
-						.getRunningAppProcesses();
-				int pidMe = 0;
-				if (processes != null) {
-					for (ActivityManager.RunningAppProcessInfo info : processes) {
-						if (info.processName.equalsIgnoreCase(context.getPackageName())) {
-							pidMe = info.pid;
-						}
-					}
-				}
-				command = "ls /proc/" + pidMe + " > /dev/null 2>&1 && " +
-					"ls /proc/" + pid + " > /dev/null 2>&1";
-			} else {
-				command = "ls " + php.getAbsolutePath() + " > /dev/null";
-			}
-			Runtime.getRuntime().exec(
-				new String[] {
-					"/system/bin/sh", "-c", "while " + command + ";do sleep 5;done; kill -9 " + pid
-				}
-			);
-		}
-		return process;
 	}
 
 }
