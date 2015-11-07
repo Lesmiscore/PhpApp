@@ -16,7 +16,7 @@
 package com.esminis.server.library.application;
 
 import android.app.ActivityManager;
-import android.app.Fragment;
+import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,29 +24,21 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 
 import com.esminis.server.library.activity.MainActivity;
-import com.esminis.server.library.model.manager.Log;
-import com.esminis.server.library.model.manager.Network;
-import com.esminis.server.library.preferences.Preferences;
-import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.service.background.BackgroundService;
-import com.esminis.server.library.service.server.install.InstallServer;
+import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.service.server.tasks.StatusServerTaskProvider;
 
 import java.util.List;
 
-import dagger.ObjectGraph;
+abstract public class LibraryApplication<T extends ApplicationComponent> extends Application {
 
-abstract public class Application extends android.app.Application {
-
-	private ObjectGraph objectGraph;
-
-	private ServerControl serverControl;
+	private T component;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		objectGraph = ObjectGraph.create(new ApplicationModule(this), createApplicationModule());
-		serverControl = objectGraph.get(ServerControl.class);
+		component = createComponent();
+		final ServerControl serverControl = component.getServerControl();
 		if (!getIsMainApplicationProcess()) {
 			serverControl.requestStatus();
 			return;
@@ -72,8 +64,13 @@ abstract public class Application extends android.app.Application {
 		BackgroundService.execute(this, StatusServerTaskProvider.class);
 	}
 
-	public ObjectGraph getObjectGraph() {
-		return objectGraph;
+	protected T createComponent() {
+		return (T)DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(this))
+			.build();
+	}
+
+	public T getComponent() {
+		return component;
 	}
 
 	public boolean getIsMainApplicationProcess() {
@@ -89,24 +86,5 @@ abstract public class Application extends android.app.Application {
 		}
 		return false;
 	}
-
-	abstract protected Object createApplicationModule();
-
-	abstract protected ServerFactory createServerFactory();
-
-	public interface ServerFactory {
-
-		ServerControl createControl(
-			Network network, com.esminis.server.library.model.manager.Process process, Log log,
-			Preferences preferences
-		);
-
-		InstallServer.InstallTaskFactory createInstallTaskFactory(
-			Network network, Preferences preferences, ServerControl serverControl
-		);
-
-	}
-
-	abstract public Class<? extends Fragment> getMenuFragmentClass();
 
 }

@@ -17,17 +17,23 @@ package com.esminis.server.library.service.server.tasks;
 
 import android.content.Context;
 
-import com.esminis.server.library.application.Application;
+import com.esminis.server.library.application.LibraryApplication;
 import com.esminis.server.library.service.background.BackgroundServiceTaskProvider;
+import com.esminis.server.library.service.server.ServerControl;
+
+import javax.inject.Inject;
 
 import rx.Observable;
 import rx.Subscriber;
 
-abstract class ServerTaskProvider implements BackgroundServiceTaskProvider {
+abstract public class ServerTaskProvider implements BackgroundServiceTaskProvider {
+
+	@Inject
+	protected ServerControl serverControl;
 
 	@Override
 	public Observable<Void> createTask(Context context) {
-		((Application)context.getApplicationContext()).getObjectGraph().inject(this);
+		((LibraryApplication)context.getApplicationContext()).getComponent().inject(this);
 		return Observable.create(new Observable.OnSubscribe<Void>() {
 			@Override
 			public void call(Subscriber<? super Void> subscriber) {

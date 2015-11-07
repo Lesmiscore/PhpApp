@@ -35,6 +35,9 @@ import javax.inject.Singleton;
 public class Log {
 
 	@Inject
+	public Log() {}
+
+	@Inject
 	protected Preferences manager;
 
 	static private String KEY = "__log__";

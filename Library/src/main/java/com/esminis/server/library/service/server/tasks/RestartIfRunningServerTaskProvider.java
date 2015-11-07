@@ -15,14 +15,7 @@
  */
 package com.esminis.server.library.service.server.tasks;
 
-import com.esminis.server.library.service.server.ServerControl;
-
-import javax.inject.Inject;
-
 public class RestartIfRunningServerTaskProvider extends ServerTaskProvider {
-
-	@Inject
-	protected ServerControl serverControl;
 
 	@Override
 	protected void execute() {

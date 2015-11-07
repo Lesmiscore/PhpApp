@@ -20,4 +20,7 @@ public class DrawerFragmentHelper {
 	@Inject
 	Bus bus;
 
+	@Inject
+	public DrawerFragmentHelper() {}
+
 }

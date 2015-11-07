@@ -3,7 +3,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android" package="com.esminis.server.php"
 >
 
-	<application android:name=".application.Application">
+	<application android:name=".application.PhpApplication">
 		<provider
 			android:authorities="com.esminis.server.php.preferences.ContentProvider"
 			android:name="com.esminis.server.library.preferences.ContentProvider"

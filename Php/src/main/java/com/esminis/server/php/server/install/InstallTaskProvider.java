@@ -19,10 +19,10 @@ import android.content.Context;
 import android.os.Build;
 
 import com.esminis.server.library.preferences.Preferences;
-import com.esminis.server.library.application.Application;
 import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.service.background.BackgroundServiceTaskProvider;
 import com.esminis.server.php.R;
+import com.esminis.server.php.application.PhpApplication;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ public class InstallTaskProvider implements BackgroundServiceTaskProvider {
 
 	@Override
 	public Observable<Void> createTask(final Context context) {
-		((Application)context.getApplicationContext()).getObjectGraph().inject(this);
+		((PhpApplication)context.getApplicationContext()).getComponent().inject(this);
 		return Observable.create(new Observable.OnSubscribe<Void>() {
 			@Override
 			public void call(Subscriber<? super Void> subscriber) {

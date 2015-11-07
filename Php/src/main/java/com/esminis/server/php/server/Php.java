@@ -28,7 +28,7 @@ import com.esminis.server.library.model.manager.Process;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.ServerHandler;
 import com.esminis.server.library.service.server.ServerStreamReader;
-import com.esminis.server.library.application.Application;
+import com.esminis.server.library.application.LibraryApplication;
 import com.esminis.server.library.activity.MainActivity;
 import com.esminis.server.php.R;
 import com.esminis.server.library.model.manager.Network;
@@ -66,7 +66,7 @@ public class Php implements ServerControl {
 
 	private ServerHandler serverHandler = null;
 
-	private Application context = null;
+	private LibraryApplication context = null;
 
 	private PhpStartup startup = null;
 
@@ -79,7 +79,7 @@ public class Php implements ServerControl {
 	private final boolean mainProcess;
 
 	public Php(
-		Network network, Process process, Preferences preferences, Log log, Application application,
+		Network network, Process process, Preferences preferences, Log log, LibraryApplication application,
 		boolean mainProcess
 	) {
 		this.log = log;

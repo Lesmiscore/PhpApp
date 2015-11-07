@@ -16,25 +16,32 @@
 package com.esminis.server.library.service;
 
 import com.esminis.server.library.preferences.Preferences;
-import com.esminis.server.library.application.Application;
+import com.esminis.server.library.application.LibraryApplication;
 import com.esminis.server.library.service.server.ServerControl;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import dagger.ObjectGraph;
+import javax.inject.Inject;
 
 public class AutoStart extends BroadcastReceiver {
+
+	@Inject
+	protected ServerControl serverControl;
+
+	@Inject
+	protected Preferences preferences;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Context applicationContext = context.getApplicationContext();
-		if (!(applicationContext instanceof Application)) {
+		if (!(applicationContext instanceof LibraryApplication)) {
 			return;
 		}
-		ObjectGraph graph = ((Application)applicationContext).getObjectGraph();
-		final ServerControl serverControl = graph.get(ServerControl.class);
-		if (graph.get(Preferences.class).getBoolean(context, Preferences.START_ON_BOOT)) {
+		if (serverControl == null) {
+			((LibraryApplication)applicationContext).getComponent().inject(this);
+		}
+		if (preferences.getBoolean(context, Preferences.START_ON_BOOT)) {
 			serverControl.requestStart();
 		} else {
 			serverControl.requestStop();

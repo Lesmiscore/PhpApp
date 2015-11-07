@@ -32,7 +32,7 @@ import android.view.ViewGroup;
 
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.ServerControl;
-import com.esminis.server.library.application.Application;
+import com.esminis.server.library.application.LibraryApplication;
 import com.esminis.server.library.R;
 import com.squareup.otto.Bus;
 
@@ -53,8 +53,8 @@ public class DrawerFragment extends PreferenceFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Context context = getActivity();
-		DrawerFragmentHelper helper = ((Application)context.getApplicationContext()).getObjectGraph()
-			.get(DrawerFragmentHelper.class);
+		DrawerFragmentHelper helper = ((LibraryApplication)context.getApplicationContext())
+			.getComponent().getDrawerFragmentHelper();
 		preferences = helper.preferences;
 		serverControl = helper.serverControl;
 		activityHelper = helper.activityHelper;
