@@ -68,7 +68,7 @@ public class Php implements ServerControl {
 
 	private LibraryApplication context = null;
 
-	private PhpStartup startup = null;
+	private PhpLauncher startup = null;
 
 	private ServerStreamReader streamReader = null;
 
@@ -84,7 +84,7 @@ public class Php implements ServerControl {
 	) {
 		this.log = log;
 		this.preferences = preferences;
-		this.startup = new PhpStartup(process);
+		this.startup = new PhpLauncher(process);
 		this.managerProcess = process;
 		this.network = network;
 		this.context = application;

@@ -37,7 +37,7 @@ import java.io.File;
 import rx.Subscriber;
 import rx.Subscription;
 
-public class InstallTaskPhp extends InstallServerTask {
+public class InstallServerTaskPhp extends InstallServerTask {
 
 	private boolean installSuccess = false;
 	private boolean canStartInstall = false;
@@ -47,7 +47,7 @@ public class InstallTaskPhp extends InstallServerTask {
 	private Preferences preferences;
 	private Network network;
 
-	public InstallTaskPhp(
+	public InstallServerTaskPhp(
 		ServerControl serverControl, InstallServer.OnInstallListener listener, Preferences preferences,
 		Network network, Activity activity
 	) {
