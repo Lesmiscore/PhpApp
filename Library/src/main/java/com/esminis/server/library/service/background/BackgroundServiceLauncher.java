@@ -33,7 +33,7 @@ class BackgroundServiceLauncher {
 		public void onReceive(Context context, Intent intent) {
 			Bundle bundle = intent.getExtras();
 			if (
-				BackgroundService.INTENT_ACTION.equals(intent.getAction()) && bundle != null &&
+				BackgroundService.getIntentAction(context).equals(intent.getAction()) && bundle != null &&
 				bundle.containsKey(BackgroundService.FIELD_ACTION) &&
 				bundle.getInt(BackgroundService.FIELD_ACTION) == BackgroundService.ACTION_PING_BACK
 			) {
@@ -55,14 +55,17 @@ class BackgroundServiceLauncher {
 			onlyWait = starting;
 			starting = true;
 		}
+		final String intentAction = BackgroundService.getIntentAction(application);
 		if (!onlyWait) {
-			application.registerReceiver(receiver, new IntentFilter(BackgroundService.INTENT_ACTION));
+			application.registerReceiver(
+				receiver, new IntentFilter(intentAction)
+			);
 			application.startService(new Intent(application, BackgroundService.class));
 		}
 		for (;;) {
 			synchronized (lock) {
 				if (!onlyWait) {
-					Intent intent = new Intent(BackgroundService.INTENT_ACTION);
+					Intent intent = new Intent(intentAction);
 					intent.putExtra(BackgroundService.FIELD_ACTION, BackgroundService.ACTION_PING);
 					application.sendBroadcast(intent);
 				}

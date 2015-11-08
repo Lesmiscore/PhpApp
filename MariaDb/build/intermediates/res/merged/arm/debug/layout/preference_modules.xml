@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent" android:layout_height="match_parent"
+  android:orientation="vertical"
+>
+	<include layout="@layout/main_toolbar" />
+	<FrameLayout
+		android:layout_width="match_parent" android:layout_height="match_parent"
+		android:id="@+id/content"
+	/>
+</LinearLayout><!-- From: file:/home/tautvydas/Documents/Development/Java/ServerForPhp/Library/src/main/res/layout/preference_modules.xml --><!-- From: file:/home/tautvydas/Documents/Development/Java/ServerForPhp/MariaDb/build/intermediates/exploded-aar/ServerForPhp/Library/unspecified/res/layout/preference_modules.xml -->

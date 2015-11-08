@@ -23,8 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name="com.esminis.server.library.service.background.BackgroundService" android:process=":background" />
-        <service android:name="com.esminis.server.library.service.server.ServerNotificationService" />
+        <service android:name=".service.background.BackgroundService" android:process=":background" />
+        <service android:name=".service.server.ServerNotificationService" />
 
     </application>
 

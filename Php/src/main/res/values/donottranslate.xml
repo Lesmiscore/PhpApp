@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="install_binaries" translatable="false">
+		<item>php</item>
+		<item>libsqlite3odbc.so</item>
+		<item>libodbcpsql.so</item>
+	</string-array>
+	<string-array name="install_files" translatable="false">
+		<item>odbcinst.ini</item>
+	</string-array>
+</resources>

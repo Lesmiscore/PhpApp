@@ -3,7 +3,7 @@ package com.esminis.server.php.application;
 import com.esminis.server.library.application.LibraryApplicationComponent;
 import com.esminis.server.library.application.LibraryApplicationModule;
 import com.esminis.server.php.activity.DrawerPhpFragment;
-import com.esminis.server.php.server.install.InstallTaskProvider;
+import com.esminis.server.php.server.install.InstallServerPhpTaskProvider;
 
 import javax.inject.Singleton;
 
@@ -15,6 +15,6 @@ public interface PhpApplicationComponent extends LibraryApplicationComponent {
 
 	void inject(DrawerPhpFragment fragment);
 
-	void inject(InstallTaskProvider provider);
+	void inject(InstallServerPhpTaskProvider provider);
 
 }

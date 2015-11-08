@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="install_binaries" translatable="false">
+		<item>mysqld</item>
+	</string-array>
+	<string-array name="install_files" translatable="false">
+	</string-array>
+</resources>
