@@ -1,7 +1,7 @@
 syntax: regexp
-^((Php|Library)/build|build/intermediates|\.gradle|\.idea)/.+$
+^((MariaDb|Php|Library)/build|build/intermediates|\.gradle|\.idea)/.+$
 ^(local\.properties|app/manifest\-merger\-release\-report\.txt|app/app-release\.apk|.+\.iml)$
-^(Php|Library)/src/(x86|arm)/libs/.+/.+\.so$
-^(Php|Library)/src/(x86|arm)/obj/.+$
-^(Php|Library)/.+\.apk$
-^(Php|Library)/manifest\-.+\.txt$
+^(MariaDb|Php|Library)/src/(x86|arm)/libs/.+/.+\.so$
+^(MariaDb|Php|Library)/src/(x86|arm)/obj/.+$
+^(MariaDb|Php|Library)/.+\.apk$
+^(MariaDb|Php|Library)/manifest\-.+\.txt$
