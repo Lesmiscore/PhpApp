@@ -12,17 +12,16 @@ import java.util.Set;
 class PreferencesBackendContentProvider implements PreferencesBackend {
 
 	private final Context context;
-	static private final Uri URI = Uri.parse(
-		"content://com.esminis.server.php.preferences.ContentProvider"
-	);
+	private final Uri uri;
 
 	PreferencesBackendContentProvider(Context context) {
 		this.context = context;
+		uri = Uri.parse("content://" + context.getPackageName() + ".preferences.ContentProvider");
 	}
 
 	@Override
 	public String get(String name, String defaultVale) {
-		final Cursor cursor = context.getContentResolver().query(URI, null, name, null, null);
+		final Cursor cursor = context.getContentResolver().query(uri, null, name, null, null);
 		String value = defaultVale;
 		if (cursor != null) {
 			if (cursor.moveToNext()) {
@@ -35,7 +34,7 @@ class PreferencesBackendContentProvider implements PreferencesBackend {
 
 	@Override
 	public Map<String, String> get() {
-		final Cursor cursor = context.getContentResolver().query(URI, null, null, null, null);
+		final Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
 		final Map<String, String> result = new HashMap<>();
 		if (cursor != null) {
 			while (cursor.moveToNext()) {
@@ -56,12 +55,12 @@ class PreferencesBackendContentProvider implements PreferencesBackend {
 		for (String key : keys) {
 			contentValues.put(key, values.get(key));
 		}
-		context.getContentResolver().update(URI, contentValues, null, null);
+		context.getContentResolver().update(uri, contentValues, null, null);
 	}
 
 	@Override
 	public boolean contains(String name) {
-		final Cursor cursor = context.getContentResolver().query(URI, null, name, null, null);
+		final Cursor cursor = context.getContentResolver().query(uri, null, name, null, null);
 		boolean contains = false;
 		if (cursor != null) {
 			contains = cursor.moveToNext();

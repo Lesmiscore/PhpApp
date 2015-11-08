@@ -40,13 +40,14 @@ class BackgroundServiceExecutor {
 		synchronized (lock) {
 			messageId = nextMessageId++;
 		}
+		final String intentAction = BackgroundService.getIntentAction(application);
 		BroadcastReceiver receiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				Bundle bundle = intent.getExtras();
 				if (
-					!BackgroundService.INTENT_ACTION.equals(intent.getAction()) || bundle == null ||
-					bundle.getLong(BackgroundService.FIELD_MESSAGE_ID) != messageId ||
+					!intentAction.equals(intent.getAction()) ||
+					bundle == null || bundle.getLong(BackgroundService.FIELD_MESSAGE_ID) != messageId ||
 					!bundle.containsKey(BackgroundService.FIELD_ACTION)
 				) {
 					return;
@@ -57,8 +58,8 @@ class BackgroundServiceExecutor {
 				}
 			}
 		};
-		application.registerReceiver(receiver, new IntentFilter(BackgroundService.INTENT_ACTION));
-		Intent intent = new Intent(BackgroundService.INTENT_ACTION);
+		application.registerReceiver(receiver, new IntentFilter(intentAction));
+		Intent intent = new Intent(intentAction);
 		intent.putExtra(BackgroundService.FIELD_PROVIDER, provider.getName());
 		intent.putExtra(BackgroundService.FIELD_MESSAGE_ID, messageId);
 		application.sendBroadcast(intent);

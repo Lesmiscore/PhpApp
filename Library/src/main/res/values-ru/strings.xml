@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="title">Сервер для PHP</string>
+	<string name="title"></string>
 	<string name="server_running"><![CDATA[Сервер работает по адресу <a href="http://%1$s">%1$s</a>]]></string>
 	<string name="server_stopped">Сервер oстановлeн</string>
 	<string name="server_start">Запуск cервера</string>

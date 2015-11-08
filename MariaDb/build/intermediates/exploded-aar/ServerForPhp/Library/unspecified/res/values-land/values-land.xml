@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/home/tautvydas/Documents/Development/Java/ServerForPhp/Library/src/main/res/values-land/dimen.xml -->
+    <eat-comment/>
+    <dimen name="preference_widget_width">72dp</dimen>
+</resources>

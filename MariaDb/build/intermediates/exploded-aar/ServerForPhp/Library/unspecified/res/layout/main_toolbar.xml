@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/toolbar"
+	android:layout_height="?attr/actionBarSize" android:layout_width="match_parent"
+	android:background="#CFCFCF"
+	app:theme="@style/Toolbar"
+/><!-- From: file:/home/tautvydas/Documents/Development/Java/ServerForPhp/Library/src/main/res/layout/main_toolbar.xml -->

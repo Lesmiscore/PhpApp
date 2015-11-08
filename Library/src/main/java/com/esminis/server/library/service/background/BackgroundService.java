@@ -41,14 +41,16 @@ public class BackgroundService extends Service {
 	static final String FIELD_MESSAGE_ID = "id";
 	static final String FIELD_ACTION = "action";
 
-	static final String INTENT_ACTION = "__BACKGROUND_SERVICE_TASK__";
+	static public String getIntentAction(Context context) {
+		return "__BACKGROUND_SERVICE_TASK_" + context.getPackageName() + "__";
+	}
 
 	private final BroadcastReceiver receiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, final Intent intent) {
 			try {
 				Bundle data = intent.getExtras();
-				if (!INTENT_ACTION.equals(intent.getAction()) || data == null) {
+				if (!getIntentAction(context).equals(intent.getAction()) || data == null) {
 					return;
 				}
 				if (data.containsKey(FIELD_ACTION)) {
@@ -86,7 +88,7 @@ public class BackgroundService extends Service {
 	};
 
 	private void sendMessageForSender(Intent intent, int action) {
-		Intent intentSend = new Intent(INTENT_ACTION);
+		Intent intentSend = new Intent(getIntentAction(getApplicationContext()));
 		intentSend.putExtra(FIELD_ACTION, action);
 		intentSend.putExtra(FIELD_MESSAGE_ID, intent.getExtras().getLong(FIELD_MESSAGE_ID));
 		sendBroadcast(intentSend);
@@ -95,7 +97,7 @@ public class BackgroundService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		registerReceiver(receiver, new IntentFilter(INTENT_ACTION));
+		registerReceiver(receiver, new IntentFilter(getIntentAction(getApplicationContext())));
 	}
 
 	@Override

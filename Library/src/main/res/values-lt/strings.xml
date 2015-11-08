@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="title">Serveris skirtas PHP</string>
+	<string name="title"></string>
 	<string name="server_running"><![CDATA[Serveris veikia adresu <a href="http://%1$s">%1$s</a>]]></string>
 	<string name="server_stopped">Serveris sustabdytas</string>
 	<string name="server_start">Paleisti serverį</string>

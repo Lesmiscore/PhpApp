@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent" android:layout_height="match_parent"
+>
+	<LinearLayout
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:layout_centerInParent="true" android:id="@+id/preloader_container"
+		android:gravity="center_vertical" android:orientation="horizontal"
+	>
+		<ProgressBar
+			android:id="@+id/preloader"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"			
+		/>
+		<LinearLayout
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:orientation="vertical" android:gravity="center"
+		>
+			<TextView
+				android:id="@+id/preloader_label"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+			/>
+			<Button
+				android:id="@+id/preloader_button_ok" android:layout_marginTop="20dp"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:text="@string/grant" android:visibility="gone"
+			/>
+		</LinearLayout>
+	</LinearLayout>
+	<RelativeLayout 
+		android:id="@+id/container"
+		android:layout_width="match_parent" android:layout_height="match_parent"
+		android:focusable="true" android:focusableInTouchMode="true"
+		android:descendantFocusability="beforeDescendants" android:visibility="gone">
+		<LinearLayout
+			android:layout_width="match_parent" android:layout_height="wrap_content"
+			android:orientation="vertical" android:padding="10dp"
+			android:id="@+id/linearLayout2">
+			<RelativeLayout 
+				android:layout_width="match_parent" android:layout_height="wrap_content"
+			>
+				<TextView 
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="@string/server_interface"
+				/>
+				<TextView 
+					android:layout_width="80dp" android:layout_height="wrap_content"
+					android:text="@string/server_port" android:layout_alignParentRight="true"
+				/>
+			</RelativeLayout>
+			<RelativeLayout 
+				android:layout_width="match_parent" android:layout_height="wrap_content"
+			>
+				<Spinner
+					android:id="@+id/server_interface" 
+					android:layout_width="match_parent" android:layout_height="wrap_content"
+					android:layout_toLeftOf="@+id/server_port"
+					android:layout_alignBottom="@+id/server_port"
+				/>					
+				<EditText 
+					android:id="@+id/server_port"
+					android:layout_width="80dp" android:layout_height="wrap_content"
+					android:layout_alignParentRight="true" 
+					android:imeOptions="actionDone"
+					android:inputType="number" android:digits="0123456789"
+					android:maxLength="5" android:singleLine="true"
+				/>			
+			</RelativeLayout>
+			<TextView 
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:text="@string/server_document_root"
+			/>
+			<EditText 
+				android:id="@+id/server_root"
+				android:layout_width="match_parent" android:layout_height="wrap_content"
+				android:inputType="none" 
+				android:focusable="false" android:focusableInTouchMode="false"
+			/>
+		</LinearLayout>
+		<TextView
+			android:id="@+id/error"
+			android:layout_width="match_parent" android:layout_height="wrap_content"
+			android:textSize="12sp"
+			android:layout_above="@+id/linearLayout" android:layout_below="@+id/linearLayout2"
+			android:layout_margin="10dp" android:gravity="bottom"/>
+		<LinearLayout
+			android:layout_width="match_parent" android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:layout_marginTop="10dp" android:layout_alignParentBottom="true"
+			android:id="@+id/linearLayout">
+			<TextView
+				android:id="@+id/label"
+				android:layout_width="match_parent" android:layout_height="wrap_content"
+				android:text="@string/server_status_updating" android:gravity="center"
+				android:layout_marginBottom="10dp"
+				android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+			/>
+			<Button 
+				android:id="@+id/start"
+				android:layout_width="match_parent" android:layout_height="wrap_content"
+				android:text="@string/server_start" android:visibility="gone"
+				android:layout_marginBottom="10dp"
+				android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+			/>	
+			<Button 
+				android:id="@+id/stop"
+				android:layout_width="match_parent" android:layout_height="wrap_content"
+				android:text="@string/server_stop" android:visibility="gone"
+				android:layout_marginBottom="10dp"
+				android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+			/>	
+		</LinearLayout>
+	</RelativeLayout>
+</RelativeLayout><!-- From: file:/home/tautvydas/Documents/Development/Java/ServerForPhp/Library/src/main/res/layout/main_content.xml -->

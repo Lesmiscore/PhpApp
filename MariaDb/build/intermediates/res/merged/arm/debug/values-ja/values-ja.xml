@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/home/tautvydas/Documents/Development/Java/ServerForPhp/MariaDb/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values-ja/values-ja.xml -->
+    <eat-comment/>
+    <string msgid="4600421777120114993" name="abc_action_bar_home_description">"ホームへ移動"</string>
+    <string msgid="1397052879051804371" name="abc_action_bar_home_description_format">"%1$s、%2$s"</string>
+    <string msgid="6623331958280229229" name="abc_action_bar_home_subtitle_description_format">"%1$s、%2$s、%3$s"</string>
+    <string msgid="1594238315039666878" name="abc_action_bar_up_description">"上へ移動"</string>
+    <string msgid="3588849162933574182" name="abc_action_menu_overflow_description">"その他のオプション"</string>
+    <string msgid="4076576682505996667" name="abc_action_mode_done">"完了"</string>
+    <string msgid="7468859129482906941" name="abc_activity_chooser_view_see_all">"すべて表示"</string>
+    <string msgid="2031811694353399454" name="abc_activitychooserview_choose_application">"アプリの選択"</string>
+    <string msgid="121134116657445385" name="abc_capital_off">"OFF"</string>
+    <string msgid="3405795526292276155" name="abc_capital_on">"ON"</string>
+    <string msgid="7723749260725869598" name="abc_search_hint">"検索…"</string>
+    <string msgid="3691816814315814921" name="abc_searchview_description_clear">"検索キーワードを削除"</string>
+    <string msgid="2550479030709304392" name="abc_searchview_description_query">"検索キーワード"</string>
+    <string msgid="8264924765203268293" name="abc_searchview_description_search">"検索"</string>
+    <string msgid="8928215447528550784" name="abc_searchview_description_submit">"検索キーワードを送信"</string>
+    <string msgid="893419373245838918" name="abc_searchview_description_voice">"音声検索"</string>
+    <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"共有"</string>
+    <string msgid="7165123711973476752" name="abc_shareactionprovider_share_with_application">"%sと共有"</string>
+    <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"折りたたむ"</string>
+    <!-- From: file:/home/tautvydas/Documents/Development/Java/ServerForPhp/MariaDb/build/intermediates/exploded-aar/ServerForPhp/Library/unspecified/res/values-ja/values-ja.xml -->
+    <eat-comment/>
+    <string name="about">詳細</string>
+    <string name="about_content"><![CDATA[<br />こちらは完全無料でPHPビルトインサーバーを使用して機能するオープンソースアプリで、起動時に自動的に開始する事ができます。<br /><br />
+PHP(バージョン %1$s)には次のエクステンションがあります：core, date, ereg, libxml, openssl, pcre, sqlite3, zlib, bcmath, bz2, calendar, ctype, curl, dom, hash, fileinfo, filter, ftp, gd, gettext, gmp, spl, iconv, intl, json, mbstring, mcrypt, session, standard, mysqlnd, mysqli, odbc, pdo, pdo_mysql, pdo_odbc, pdo_pgsql, pdo_sqlite, pgsql, phar, posix, pspell, recode, reflection, mysql, simplexml, soap, sockets, exif, tidy, tokenizer, wddx, xml, xmlreader, xmlrpc, xmlwriter, xsl, zip, cli_server, mhash, ssh2, opcache, phalcon, yaf, yar, id3, lzf, oauth, quickhash, bbcode, xmldiff, xdiff, rar, gender, stats, eio, judy, mailparse, rpmreader, spl_types, yaml。<br /><br />
+推奨される使い方：こちらのサーバーは、訪問者数がとても少数でとても小規模なウェブサイト向けに、またはその開発においては、一度に1つのリクエストのみのサポートになります。<br /><br />
+<b>作者</b><br /><br />
+Tautvydas Andrikys, esminis@esminis.lt<br /><br />
+<b>ロシア語翻訳</b><br /><br />
+Бондарев Дмитрий, fserg37@gmail.com<br />]]></string>
+    <string name="back_to_licenses">ライセンスリストへと戻る</string>
+    <string name="cancel">キャンセル</string>
+    <string name="choose">選択する</string>
+    <string name="close">閉じる</string>
+    <string name="disable_all">全て無効にする</string>
+    <string name="dismiss">終了</string>
+    <string name="enable_all">全て有効にする</string>
+    <string name="error_cannot_create_directory">エラー：ディレクトリを作成できません</string>
+    <string name="error_document_root_does_not_exist">サーバーを開始できません - ドキュメントのルートディレクトリが存在しません</string>
+    <string name="error_document_root_not_empty">エラー：ドキュメントのルートディレクトリに空きがありません</string>
+    <string name="error_operation_failed">エラー：オペレーションは失敗しました</string>
+    <string name="go_up">上がります</string>
+    <string name="grant">許可する</string>
+    <string name="licenses">ライセンス</string>
+    <string name="loading_text">テキストをロード中…</string>
+    <string name="manual">マニュアル</string>
+    <string name="manual_content"><![CDATA[<br />
+		こちらはアプリケーションの一部の重要な部分の簡略化されたマニュアルです：<br /><br/>
+		サーバードキュメントのデフォルトのルートはsdcard/wwwですのでファイルはこちらに置いて下さい。<br /><br />
+		PHP の構成はドキュメントルートからロードされている php.ini ファイルにあり、必要に応じて編集できます(ですが、変更を加えるときは session.save_path と upload_tmp_dir を忘れないようにして下さい)。<br /><br />
+		PHP ローカルが機能しなくなります - setlocale など。<br /><br />
+		こちらのアプリケーションには 2 ODBCドライバが含まれます：PostgreSQL とSQLite3。もしそれらと一緒に ODBC を使われる場合は、この様に実行してください：<br /><br />
+		odbc_connect(\'Driver=SQLite3;Database=\' . $path_to_file, \'\', \'\'); // SQLite3<br /><br />
+		odbc_connect(\'Driver=PostgreSQL;Database=\' . $database_name . \';Server=\' . $server, \'\', \'\'); // PostgreSQL<br />]]></string>
+    <string name="modules_summary">リストにある全ての PHP エクステンションやその一部は、有効にすることや無効にすることができます</string>
+    <string name="modules_title">PHPエクステンション</string>
+    <string name="modules_title_builtin">%1$s (ビルトイン)</string>
+    <string name="open">開く</string>
+    <string name="permission_files_needed">%1$s は動作にファイルへのアクセスを必要とします。ファイルへのアクセスを許可してください。</string>
+    <string name="reinstall_files">ファイルを再インストール</string>
+    <string name="reinstall_files_complete">ファイルの再インストールは完了しました</string>
+    <string name="reinstall_files_summary">デフォルトのファイル (index.php, config.ini, …) をドキュメントルートにインストールして下さい</string>
+    <string name="server_document_root">ドキュメントルート</string>
+    <string name="server_index_as_router">ルータースクリプトにあるように index.php をお使い下さい</string>
+    <string name="server_index_as_router_title">ルーター index.php</string>
+    <string name="server_install_new_version_question">PHP(%1$s) の新しいバージョンがご利用になれます、インストールされますか？</string>
+    <string name="server_installation_failed">サーバーのインストールに失敗しました。</string>
+    <string name="server_installing">サーバーをインストール中…</string>
+    <string name="server_interface">サーバーアドレス</string>
+    <string name="server_keep_running">アプリが終了してもサーバーの稼働を続ける</string>
+    <string name="server_keep_running_title">サーバーの稼働を続ける</string>
+    <string name="server_port">サーバーポート</string>
+    <string name="server_running"><![CDATA[サーバーは <a href="http://%1$s">%1$s</a> で稼働しています]]></string>
+    <string name="server_running_public">サーバーは稼働中です</string>
+    <string name="server_start">サーバーを開始する</string>
+    <string name="server_start_on_boot_summary">デバイスを起動した時にサーバーを開始する</string>
+    <string name="server_start_on_boot_title">起動時に開始する</string>
+    <string name="server_status_updating">サーバーステータスの更新中…</string>
+    <string name="server_stop">サーバーを停止する</string>
+    <string name="server_stopped">サーバーは停止しました</string>
+    <string name="settings">設定</string>
+    <string name="show_notification_server">通知を表示する</string>
+    <string name="show_notification_server_summary">サーバーが稼働している間は通知を表示する</string>
+    <!-- From: file:/home/tautvydas/Documents/Development/Java/ServerForPhp/MariaDb/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values-ja/values-ja.xml -->
+    <eat-comment/>
+    <string msgid="2869576371154716097" name="status_bar_notification_info_overflow">"999+"</string>
+    <!-- From: file:/home/tautvydas/Documents/Development/Java/ServerForPhp/MariaDb/build/intermediates/exploded-aar/ServerForPhp/Library/unspecified/res/values-ja/values-ja.xml -->
+    <eat-comment/>
+    <string name="title"/>
+    <string name="warning_message">警告：%1$s</string>
+    <string name="warning_opcache_disabled">ドキュメントルートが書き込み不可ですので、 opcache は無効になっています</string>
+    <string name="warning_php_ini_directory_does_not_exist">%1$ sのディレクトリは存在しません</string>
+    <string name="warning_php_ini_directory_not_writable">%1$s のディレクトリは書き込み不可です</string>
+    <string name="warning_php_ini_property_not_defined">php.ini で %1$s が定義されていません</string>
+</resources>

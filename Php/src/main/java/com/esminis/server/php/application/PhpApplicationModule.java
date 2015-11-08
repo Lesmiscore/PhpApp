@@ -1,6 +1,7 @@
 package com.esminis.server.php.application;
 
 import android.app.Activity;
+import android.os.Environment;
 
 import com.esminis.server.library.activity.DrawerFragment;
 import com.esminis.server.library.application.*;
@@ -9,10 +10,12 @@ import com.esminis.server.library.model.manager.Network;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.service.server.install.InstallServer;
-import com.esminis.server.library.service.server.install.InstallServerTask;
 import com.esminis.server.php.activity.DrawerPhpFragment;
 import com.esminis.server.php.server.Php;
-import com.esminis.server.php.server.install.InstallServerTaskPhp;
+import com.esminis.server.library.service.server.install.InstallServerTask;
+import com.esminis.server.php.server.install.InstallServerPhpTaskProvider;
+
+import java.io.File;
 
 import javax.inject.Singleton;
 
@@ -46,10 +49,13 @@ public class PhpApplicationModule {
 	) {
 		return new InstallServer.InstallTaskFactory() {
 			@Override
-			public InstallServerTask create(
+			public com.esminis.server.library.service.server.install.InstallServerTask create(
 				Activity activity, InstallServer.OnInstallListener listener
 			) {
-				return new InstallServerTaskPhp(serverControl, listener, preferences, network, activity);
+				return new InstallServerTask(
+					serverControl, listener, preferences, network, activity, InstallServerPhpTaskProvider.class,
+					new File(Environment.getExternalStorageDirectory(), "www")
+				);
 			}
 		};
 	}
