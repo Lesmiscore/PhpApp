@@ -4,5 +4,6 @@
 		<item>mysqld</item>
 	</string-array>
 	<string-array name="install_files" translatable="false">
+		<item>share/english/errmsg.sys</item>
 	</string-array>
 </resources>
