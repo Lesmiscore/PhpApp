@@ -19,26 +19,86 @@ import android.content.Context;
 
 import com.esminis.server.library.service.server.ServerLauncher;
 
-import java.io.BufferedReader;
+import org.apache.commons.io.IOUtils;
+
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 class MariaDbServerLauncher extends ServerLauncher {
+
+	private final Object lock = new Object();
 
 	MariaDbServerLauncher(com.esminis.server.library.model.manager.Process managerProcess) {
 		super(managerProcess);
 	}
 
-	private List<String> createCommand(File binary, String address, String root) {
+	private void install(Context context, File fileSocket, File binary, File documentRoot, File directoryTemp) throws IOException {
+		List<String> environment = getEnvironment();
+		// setup_database.sql
+		// mysql_system_tables.sql
+		// mysql_performance_tables.sql
+		// mysql_system_tables_data.sql
+		// fill_help_tables.sql
+		directoryTemp.setWritable(true);
+		File directoryData = new File(documentRoot, "data");
+		File directoryDataMysql = new File(directoryData, "mysql");
+		File directoryDataTest = new File(directoryData, "test");
+		Process process = Runtime.getRuntime().exec(
+			new String[] {
+				binary.getAbsolutePath(),
+				"--bootstrap", //"--skip-innodb", "--default-storage-engine=myisam",
+				"--lc-messages-dir=" + binary.getParentFile().getAbsolutePath(),
+				"--socket=" + fileSocket,
+				"--tmpdir=" + directoryTemp.getAbsolutePath(),
+				"--basedir=" + documentRoot.getAbsolutePath(),
+				"--datadir=" + directoryData.getAbsolutePath(),
+				"--log-warnings=0", "--loose-skip-ndbcluster", "--max_allowed_packet=8M",
+				"--net_buffer_length=16K"
+			}, environment.toArray(new String[environment.size()]), documentRoot
+		);
+
+		if (!directoryDataMysql.isDirectory()) {
+			directoryDataMysql.mkdirs();
+		}
+		if (!directoryDataTest.isDirectory()) {
+			directoryDataTest.mkdirs();
+		}
+		process.getOutputStream().write("use mysql;\n".getBytes());
+		process.getOutputStream().write(((IOUtils.toString(context.getAssets().open("sql/mysql_system_tables.sql")))).getBytes());
+		process.getOutputStream().write(((IOUtils.toString(context.getAssets().open("sql/mysql_performance_tables.sql")))).getBytes());
+		process.getOutputStream().write(((IOUtils.toString(context.getAssets().open("sql/mysql_system_tables_data.sql")))).getBytes());
+		process.getOutputStream().write(((IOUtils.toString(context.getAssets().open("sql/fill_help_tables.sql")))).getBytes());
+		process.getOutputStream().write("\nexit;\n".getBytes());
+		try {
+			process.waitFor();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private List<String> createCommand(Context context, File binary, String address, String root) throws IOException {
 		final List<String> options = new ArrayList<>();
+		final String[] addressParts = address.split(":");
+		final File directoryTemp = new File(binary.getParentFile(), "temp");
+		final File fileSocket = new File(binary.getParentFile(), "mysql.sock");
+		directoryTemp.mkdirs();
+
+		synchronized (lock) {
+			install(context, fileSocket, binary, new File(root), directoryTemp);
+		}
+
 		options.add(binary.getAbsolutePath());
-		options.add("-S");
-		options.add(address);
-		options.add("-t");
-		options.add(root);
+		options.add("--lc-messages-dir=" + binary.getParentFile().getAbsolutePath());
+		options.add("--tmpdir=" + directoryTemp.getAbsolutePath());
+		options.add("--socket=" + fileSocket);
+		options.add("--bind-address=" + addressParts[0]);
+		options.add("--port=" + addressParts[1]);
+		options.add("--basedir=" + root);
+		options.add("--datadir=" + new File(new File(root), "data").getAbsolutePath());
 		return options;
 	}
 
@@ -47,7 +107,7 @@ class MariaDbServerLauncher extends ServerLauncher {
 		Context context
 	) throws IOException {
 		return start(
-			binary, createCommand(binary, address, root), context, getEnvironment(), documentRoot,
+			binary, createCommand(context, binary, address, root), context, getEnvironment(), documentRoot,
 			keepRunning
 		);
 	}
