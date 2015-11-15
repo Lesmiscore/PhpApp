@@ -1,0 +1,31 @@
+{
+  "gplv2" : {"title" : "GPL v2", "items" : ["MariaDB", "GNU Readline", "innochecksum.c"]},
+  "lgplv21" : {"title" : "LGPL v2.1", "items" : ["LibJudy"]},
+  "libxml2" : {"title" : "LibXml2", "items" : ["LibXml2"]},
+  "ncurses" : {"title" : "Ncurses", "items" : ["Ncurses"]},
+  "zlib" : {"title" : "Zlib", "items" : ["Zlib"]},
+  "libevent" : {"title" : "Libevent", "items" : ["Libevent"]},
+  "pcre" : {"title" : "PCRE", "items" : ["PCRE"]},
+  "cmake" : {"title" : "CMake", "items" : ["CMake"]},
+  "curl" : {"title" : "Curl", "items" : ["Curl"]},
+  "ffdl" : {"title" : "Fred Fish's Dbug Library", "items" : ["Fred Fish's Dbug Library"]},
+  "lib_sql_cc" : {"title" : "lib_sql.cc", "items" : ["lib_sql.cc"]},
+  "t_ctype_h" : {"title" : "t_ctype.h", "items" : ["t_ctype.h"]},
+  "public_domain" : {
+    "title" : "Public Domain", "items" : ["SHA-1 in C", "nt_servc.cc, nt_servc.h"]
+  },
+  "raoksp" : {
+    "title" : "Richard A. O'Keefe strings package", "items" : ["Richard A. O'Keefe strings package"]
+  },
+  "tz_database" : {"title" : "The tz database", "items" : ["The tz database"]},
+  "unicode_data" : {"title" : "UnicodeData.txt", "items" : ["UnicodeData.txt"]},
+  "dtoa_c" : {"title" : "dtoa.c", "items" : ["dtoa.c"]},
+  "getarg" : {"title" : "getarg.c, getarg.h", "items" : ["getarg.c, getarg.h"]},
+  "md5" : {"title" : "MD5", "items" : ["MD5 message-digest algorithm (md5_hash.cpp)"]},
+  "handler_socket_mysql" : {
+    "title" : "HandlerSocket plugin for MySQL", "items" : ["HandlerSocket plugin for MySQL"]
+  },
+  "documentation_mariadb" : {
+    "title" : "MariaDB Reference Manual", "items" : ["innochecksum.c documentation"]
+  }
+}

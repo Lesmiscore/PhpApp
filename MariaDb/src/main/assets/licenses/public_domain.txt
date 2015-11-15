@@ -1,0 +1,27 @@
+SHA-1 in C
+
+Use of any of this software is governed by the terms of the license below:
+
+	  SHA-1 in C
+	  By Steve Reid
+	  100% Public Domain
+
+Additional License(s)
+
+100% Public Domain
+
+***************************************************************************
+
+nt_servc.{cc,h}
+
+Use of any of this software is governed by the terms of the license below:
+
+/**
+  @file
+
+  @brief
+  Windows NT Service class library.
+
+  Copyright Abandoned 1998 Irena Pancirov - Irnet Snc
+  This file is public domain and comes with NO WARRANTY of any kind
+*/
