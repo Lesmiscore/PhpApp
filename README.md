@@ -1,9 +1,9 @@
 # Servers (Android) #
 
-* [Server for PHP][test]
-* MariaDB Server
+* [Server for PHP](#markdown-header-test-server-for-php)
+* MariaDB Server(#markdown-header-mariadb-server)
 
-# [test][] Server for PHP #
+# Server for PHP #
 
 This is totally free PHP server for Android that works using PHP built-in server.
 
