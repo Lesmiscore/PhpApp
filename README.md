@@ -6,7 +6,7 @@ This is totally free PHP server for Android that works using PHP built-in server
 
 * PHP 5.6.12
 * Start server on Android device boot(if needed)
-* Keep server running even if Server for PHP app is killed(if needed)
+* Keep server running even if app is killed(if needed)
 * Show notification when server is running(if needed)
 * Configurable server port, network interface, document root
 * Most of PHP extensions can be enabled and disabled
@@ -100,11 +100,23 @@ This is totally free PHP server for Android that works using PHP built-in server
 
 You can download app here: https://play.google.com/store/apps/details?id=com.esminis.server.php
 
-## Author ##
+# MariaDB server #
+
+This is totally free MariaDB server for Android.
+
+## Features ##
+
+* MariaDB 10.1.8
+* Start server on Android device boot(if needed)
+* Keep server running even if app is killed(if needed)
+* Show notification when server is running(if needed)
+* Configurable server port, network interface, data directory
+
+# Author #
 
 Tautvydas Andrikys http://esminis.com
 
-## License ##
+# License #
 
 Source code is licensed under the Apache License, Version 2.0
 You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0
