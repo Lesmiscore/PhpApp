@@ -22,11 +22,9 @@ import com.esminis.server.library.service.server.ServerLauncher;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 class MariaDbServerLauncher extends ServerLauncher {
 
@@ -38,19 +36,13 @@ class MariaDbServerLauncher extends ServerLauncher {
 
 	private void install(Context context, File fileSocket, File binary, File documentRoot, File directoryTemp) throws IOException {
 		List<String> environment = getEnvironment();
-		// setup_database.sql
-		// mysql_system_tables.sql
-		// mysql_performance_tables.sql
-		// mysql_system_tables_data.sql
-		// fill_help_tables.sql
-		directoryTemp.setWritable(true);
 		File directoryData = new File(documentRoot, "data");
 		File directoryDataMysql = new File(directoryData, "mysql");
 		File directoryDataTest = new File(directoryData, "test");
 		Process process = Runtime.getRuntime().exec(
 			new String[] {
 				binary.getAbsolutePath(),
-				"--bootstrap", //"--skip-innodb", "--default-storage-engine=myisam",
+				"--bootstrap",
 				"--lc-messages-dir=" + binary.getParentFile().getAbsolutePath(),
 				"--socket=" + fileSocket,
 				"--tmpdir=" + directoryTemp.getAbsolutePath(),
@@ -86,11 +78,9 @@ class MariaDbServerLauncher extends ServerLauncher {
 		final File directoryTemp = new File(binary.getParentFile(), "temp");
 		final File fileSocket = new File(binary.getParentFile(), "mysql.sock");
 		directoryTemp.mkdirs();
-
 		synchronized (lock) {
 			install(context, fileSocket, binary, new File(root), directoryTemp);
 		}
-
 		options.add(binary.getAbsolutePath());
 		options.add("--lc-messages-dir=" + binary.getParentFile().getAbsolutePath());
 		options.add("--tmpdir=" + directoryTemp.getAbsolutePath());

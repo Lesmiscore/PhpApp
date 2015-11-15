@@ -1,0 +1,47 @@
+The tz database
+
+Use of any of this software is governed by the terms of the license below:
+
+Sources for Time Zone and Daylight Saving Time Data
+@(#)tz-link.htm 7.54
+
+Please send corrections to this web page to the time zone mailing list.
+The tz database
+
+The public-domain time zone database contains code and data that represent the
+history of local time for many representative locations around the globe. It is
+updated periodically to reflect changes made by political bodies to time zone
+boundaries, UTC offsets, and daylight-saving rules. This database (often called
+tz or zoneinfo) is used by several implementations, including the GNU C Library
+used in GNU/Linux, FreeBSD, NetBSD, OpenBSD, Cygwin, DJGPP, HP-UX, IRIX, Mac OS
+X, OpenVMS, Solaris, Tru64, and UnixWare.
+
+Each location in the database represents a national region where all clocks
+keeping local time have agreed since 1970. Locations are identified by continent
+or ocean and then by the name of the location, which is typically the largest
+city within the region. For example, America/New_York represents most of the US
+eastern time zone; America/Phoenix represents most of Arizona, which uses
+mountain time without daylight saving time (DST); America/Detroit represents
+most of Michigan, which uses eastern time but with different DST rules in 1975;
+and other entries represent smaller regions like Starke County, Indiana, which
+switched from central to eastern time in 1991 and switched back in 2006. To use
+the database on an extended POSIX implementation set the TZ environment variable
+to the location's full name, e.g., TZ="America/New_York".
+
+In the tz database's FTP distribution the code is in the file tzcodeC.tar.gz,
+where C is the code's version; similarly, the data are in tzdataD.tar.gz, where
+D is the data's version. The following shell commands download these files to a
+GNU/Linux or similar host; see the downloaded README file for what to do next.
+
+wget 'ftp://elsie.nci.nih.gov/pub/tz*.tar.gz'
+gzip -dc tzcode*.tar.gz | tar -xf -
+gzip -dc tzdata*.tar.gz | tar -xf -
+
+The code lets you compile the tz source files into machine-readable binary
+files, one for each location. It also lets you read a tz binary file and
+interpret time stamps for that location.
+
+The data are by no means authoritative. If you find errors, please send changes
+to the time zone mailing list. You can also subscribe to the mailing list,
+retrieve the archive of old messages (in gzip compressed format), or retrieve
+archived older versions of code and data; there is also a smaller HTTP mirror.

@@ -1,0 +1,7 @@
+Additional Documentation License(s)
+
+innochecksum.c is documented in the MySQL Reference
+Manual at http://dev.mysql.com/doc/refman/5.1/en/innochecksum.html
+The Reference Manual is not licensed under the GPL; rather, it
+is offered under normal copyright, but with permission to
+copy/redistribute electronically.
