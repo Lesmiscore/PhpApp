@@ -1,4 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="title">Server for PHP</string>
+	<string name="modules_title">PHP extensions</string>
+	<string name="modules_summary">List of all PHP extensions, part of them can be enabled or disabled</string>
+	<string name="modules_title_builtin">%1$s (built-in)</string>
+	<string name="reinstall_files">Reinstall files</string>
+	<string name="reinstall_files_summary">Install default files (index.php, config.ini, …) to document root</string>
+	<string name="reinstall_files_complete">Reinstall of files complete</string>
+	<string name="error_document_root_not_empty">Error: document root directory not empty</string>
+	<string name="server_index_as_router_title">Router index.php</string>
+	<string name="server_index_as_router">Use index.php as router script</string>
+	<string name="warning_php_ini_property_not_defined">%1$s is not defined in php.ini</string>
+	<string name="warning_php_ini_directory_does_not_exist">%1$s directory does not exist</string>
+	<string name="warning_php_ini_directory_not_writable">%1$s directory is not writable</string>
+	<string name="warning_opcache_disabled">Disabling opcache because document root is not writable</string>
+	<string name="server_document_root">Document root</string>
+	<string name="server_install_new_version_question">New version of PHP(%1$s) is available, do you want to install it?</string>
+	<string name="error_document_root_does_not_exist">Cannot start server - document root directory does not exist</string>
+	<string name="about_content"><![CDATA[<br />This is totally free and open source app that works using PHP built-in server and can be started automatically on boot.<br /><br />
+		PHP(version %1$s) has these extensions: core, date, ereg, libxml, openssl, pcre, sqlite3, zlib, bcmath, bz2, calendar, ctype, curl, dom, hash, fileinfo, filter, ftp, gd, gettext, gmp, spl, iconv, intl, json, mbstring, mcrypt, session, standard, mysqlnd, mysqli, odbc, pdo, pdo_mysql, pdo_odbc, pdo_pgsql, pdo_sqlite, pgsql, phar, posix, pspell, recode, reflection, mysql, simplexml, soap, sockets, exif, tidy, tokenizer, wddx, xml, xmlreader, xmlrpc, xmlwriter, xsl, zip, cli_server, mhash, ssh2, opcache, phalcon, yaf, yar, id3, lzf, oauth, quickhash, bbcode, xmldiff, xdiff, rar, gender, stats, eio, judy, mailparse, rpmreader, spl_types, yaml<br /><br />
+		Recommended for usage: in development or for very small websites with very small amount of visitors, cause this server supports only one request at a time.<br /><br />
+		<b>Author</b><br /><br />
+		Tautvydas Andrikys, esminis@esminis.lt<br /><br />
+		<b>Russian translation</b><br /><br />
+		Бондарев Дмитрий, fserg37@gmail.com<br />]]></string>
+	<string name="manual_content"><![CDATA[<br />
+		This is short manual of some important parts of application:<br /><br />
+		Server document root by default is sdcard/www so put files there.<br /><br />
+		PHP configuration is in php.ini file which is loaded from document root, edit it as you need(but if you change it dont forget session.save_path and upload_tmp_dir).<br /><br />
+		PHP locales will not work - setlocale and such.<br /><br />
+		There are 2 ODBC drivers included in this application: PostgreSQL and SQLite3. If you want to use ODBC with them then do something like this:<br /><br />
+		odbc_connect(\'Driver=SQLite3;Database=\' . $path_to_file, \'\', \'\'); // SQLite3<br /><br />
+		odbc_connect(\'Driver=PostgreSQL;Database=\' . $database_name . \';Server=\' . $server, \'\', \'\'); // PostgreSQL<br />]]></string>
 </resources>

@@ -1,0 +1,4 @@
+<resources>
+	<string name="title" />
+	<string name="server_install_new_version_question">Neu MariaDB(%1$s) ist verfügbar zu bauen - willst du es installieren?</string>
+</resources>

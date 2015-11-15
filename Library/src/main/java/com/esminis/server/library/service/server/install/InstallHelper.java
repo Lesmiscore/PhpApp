@@ -69,13 +69,15 @@ public class InstallHelper {
 		output.close();
 	}
 
-	public void fromAssetDirectory(File target, String path, Context context) throws Exception {
-		fromAssetDirectory(target, path, context, true);
-		fromAssetDirectory(target, path, context, false);
+	public void fromAssetDirectory(
+		File target, String path, Context context, boolean overwrite
+	) throws Exception {
+		fromAssetDirectory(target, path, context, true, overwrite);
+		fromAssetDirectory(target, path, context, false, overwrite);
 	}
 	
 	public void fromAssetDirectory(
-		File target, String path, Context context, boolean dryRun
+		File target, String path, Context context, boolean dryRun, boolean overwrite
 	) throws Exception {
 		if (!target.isDirectory() || !target.canWrite()) {
 			return;
@@ -85,12 +87,12 @@ public class InstallHelper {
 			String filePath = path + File.separator + file;
 			File targetFile = new File(target + File.separator + file);
 			if (context.getAssets().list(filePath).length > 0) {
-				if (!targetFile.isDirectory() && targetFile.mkdir()) {
+				if (!targetFile.isDirectory() && !targetFile.mkdirs()) {
 					throw new ErrorWithMessage(R.string.error_cannot_create_directory);
 				}
-				fromAssetDirectory(targetFile, filePath, context);
+				fromAssetDirectory(targetFile, filePath, context, overwrite);
 			} else {
-				if (targetFile.exists()) {
+				if (!overwrite && targetFile.exists()) {
 					throw new ErrorWithMessage(R.string.error_document_root_not_empty);
 				}
 				if (!dryRun) {

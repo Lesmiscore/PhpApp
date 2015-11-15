@@ -23,6 +23,7 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.esminis.server.library.R;
 import com.esminis.server.library.model.manager.Network;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.application.LibraryApplication;
@@ -68,7 +69,10 @@ public class InstallServerTask extends AsyncTask<Void, Void, Boolean> {
 		BroadcastReceiver receiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				if (intent.getAction() == null || !intent.getAction().equals(MainActivity.INTENT_ACTION)) {
+				if (
+					intent.getAction() == null ||
+					!intent.getAction().equals(MainActivity.getIntentAction(context))
+				) {
 					return;
 				}
 				Bundle extras = intent.getExtras();
@@ -78,7 +82,9 @@ public class InstallServerTask extends AsyncTask<Void, Void, Boolean> {
 				canStartInstall = true;
 			}
 		};
-		application.registerReceiver(receiver, new IntentFilter(MainActivity.INTENT_ACTION));
+		application.registerReceiver(
+			receiver, new IntentFilter(MainActivity.getIntentAction(application))
+		);
 		canStartInstall = false;
 		serverControl.requestStop();
 		while (!canStartInstall) {
@@ -87,6 +93,17 @@ public class InstallServerTask extends AsyncTask<Void, Void, Boolean> {
 			} catch (InterruptedException ignored) {}
 		}
 		application.unregisterReceiver(receiver);
+
+		if (!preferences.contains(application, Preferences.PORT)) {
+			preferences.set(application, Preferences.PORT, application.getString(R.string.default_port));
+		}
+		if (!preferences.contains(application, Preferences.ADDRESS)) {
+			preferences.set(application, Preferences.ADDRESS, network.get(0).name);
+		}
+		if (!preferences.contains(application, Preferences.DOCUMENT_ROOT)) {
+			preferences
+				.set(application, Preferences.DOCUMENT_ROOT, defaultDocumentRoot.getAbsolutePath());
+		}
 
 		Subscription subscription = BackgroundService.execute(
 			application, classInstallTask, new Subscriber<Void>() {
@@ -108,22 +125,8 @@ public class InstallServerTask extends AsyncTask<Void, Void, Boolean> {
 		if (!installSuccess) {
 			return false;
 		}
-		initializePreferences();
-		return true;
-	}
-
-	private void initializePreferences() {
-		if (!preferences.contains(application, Preferences.PORT)) {
-			preferences.set(application, Preferences.PORT, "8080");
-		}
-		if (!preferences.contains(application, Preferences.ADDRESS)) {
-			preferences.set(application, Preferences.ADDRESS, network.get(0).name);
-		}
-		if (!preferences.contains(application, Preferences.DOCUMENT_ROOT)) {
-			preferences
-				.set(application, Preferences.DOCUMENT_ROOT, defaultDocumentRoot.getAbsolutePath());
-		}
 		preferences.set(application, Preferences.BUILD, preferences.getBuild(application));
+		return true;
 	}
 
 	@Override

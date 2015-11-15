@@ -136,6 +136,10 @@ public class Preferences {
 		sharedPreferences.edit().putInt(keyMigrate, versionCode).apply();
 	}
 
+	public boolean getIsInstalled(Context context) {
+		return getPreferences(context).contains(Preferences.BUILD);
+	}
+
 	public boolean getIsSameBuild(Context context) {
 		return getString(context, Preferences.BUILD).equals(getBuild(context));
 	}

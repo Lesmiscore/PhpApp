@@ -23,7 +23,9 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 class MariaDbServerLauncher extends ServerLauncher {
@@ -34,72 +36,83 @@ class MariaDbServerLauncher extends ServerLauncher {
 		super(managerProcess);
 	}
 
-	private void install(Context context, File fileSocket, File binary, File documentRoot, File directoryTemp) throws IOException {
-		List<String> environment = getEnvironment();
-		File directoryData = new File(documentRoot, "data");
-		File directoryDataMysql = new File(directoryData, "mysql");
-		File directoryDataTest = new File(directoryData, "test");
-		Process process = Runtime.getRuntime().exec(
-			new String[] {
-				binary.getAbsolutePath(),
-				"--bootstrap",
-				"--lc-messages-dir=" + binary.getParentFile().getAbsolutePath(),
-				"--socket=" + fileSocket,
-				"--tmpdir=" + directoryTemp.getAbsolutePath(),
-				"--basedir=" + documentRoot.getAbsolutePath(),
-				"--datadir=" + directoryData.getAbsolutePath(),
-				"--log-warnings=0", "--loose-skip-ndbcluster", "--max_allowed_packet=8M",
-				"--net_buffer_length=16K"
-			}, environment.toArray(new String[environment.size()]), documentRoot
-		);
-
-		if (!directoryDataMysql.isDirectory()) {
-			directoryDataMysql.mkdirs();
-		}
-		if (!directoryDataTest.isDirectory()) {
-			directoryDataTest.mkdirs();
-		}
-		process.getOutputStream().write("use mysql;\n".getBytes());
-		process.getOutputStream().write(((IOUtils.toString(context.getAssets().open("sql/mysql_system_tables.sql")))).getBytes());
-		process.getOutputStream().write(((IOUtils.toString(context.getAssets().open("sql/mysql_performance_tables.sql")))).getBytes());
-		process.getOutputStream().write(((IOUtils.toString(context.getAssets().open("sql/mysql_system_tables_data.sql")))).getBytes());
-		process.getOutputStream().write(((IOUtils.toString(context.getAssets().open("sql/fill_help_tables.sql")))).getBytes());
-		process.getOutputStream().write("\nexit;\n".getBytes());
-		try {
-			process.waitFor();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private List<String> createCommand(Context context, File binary, String address, String root) throws IOException {
-		final List<String> options = new ArrayList<>();
-		final String[] addressParts = address.split(":");
-		final File directoryTemp = new File(binary.getParentFile(), "temp");
-		final File fileSocket = new File(binary.getParentFile(), "mysql.sock");
-		directoryTemp.mkdirs();
-		synchronized (lock) {
-			install(context, fileSocket, binary, new File(root), directoryTemp);
-		}
-		options.add(binary.getAbsolutePath());
-		options.add("--lc-messages-dir=" + binary.getParentFile().getAbsolutePath());
-		options.add("--tmpdir=" + directoryTemp.getAbsolutePath());
-		options.add("--socket=" + fileSocket);
-		options.add("--bind-address=" + addressParts[0]);
-		options.add("--port=" + addressParts[1]);
-		options.add("--basedir=" + root);
-		options.add("--datadir=" + new File(new File(root), "data").getAbsolutePath());
-		return options;
-	}
-
 	Process start(
-		File binary, String address, String root, File documentRoot, boolean keepRunning,
-		Context context
+		File binary, String address, File documentRoot, boolean keepRunning, Context context
 	) throws IOException {
 		return start(
-			binary, createCommand(context, binary, address, root), context, getEnvironment(), documentRoot,
-			keepRunning
+			binary, createCommand(context, binary, address, documentRoot), context, getEnvironment(),
+			documentRoot, keepRunning
 		);
+	}
+
+	void initializeDataDirectory(Context context, File binary, File root) throws IOException {
+		synchronized (lock) {
+			final List<String> environment = getEnvironment();
+			final List<String> command = createCommandInternal(context, binary, root);
+			Collections.addAll(
+				command, "--bootstrap", "--log-warnings=0", "--loose-skip-ndbcluster",
+				"--max_allowed_packet=8M", "--net_buffer_length=16K"
+			);
+			final File dataMysqlDirectory = new File(root, "mysql");
+			if (!dataMysqlDirectory.isDirectory() && !dataMysqlDirectory.mkdirs()) {
+				throw new IOException("Cannot create directory: " + dataMysqlDirectory.getAbsolutePath());
+			}
+			final Process process = Runtime.getRuntime().exec(
+				command.toArray(new String [command.size()]),
+				environment.toArray(new String[environment.size()]), root
+			);
+			final OutputStream stream = process.getOutputStream();
+			writeToStream(stream, "use mysql;\n");
+			writeToStream(stream, context, "sql/mysql_system_tables.sql");
+			writeToStream(stream, context, "sql/mysql_performance_tables.sql");
+			writeToStream(stream, context, "sql/mysql_system_tables_data.sql");
+			writeToStream(stream, context, "sql/fill_help_tables.sql");
+			writeToStream(stream, "exit;\n");
+			try {
+				process.waitFor();
+			} catch (InterruptedException e) {
+				throw new IOException(e);
+			}
+		}
+	}
+
+	private void writeToStream(
+		OutputStream outputStream, Context context, String assetPath
+	) throws IOException {
+		writeToStream(outputStream, IOUtils.toString(context.getAssets().open(assetPath)));
+	}
+
+	private void writeToStream(OutputStream outputStream, String content) throws IOException {
+		outputStream.write(content.getBytes());
+	}
+
+	private List<String> createCommandInternal(
+		Context context, File binary, File root
+	) throws IOException {
+		final List<String> command = new ArrayList<>();
+		final File directoryTemp = new File(context.getExternalFilesDir(null), "temp");
+		final File fileSocket = new File(binary.getParentFile(), "mysql.sock");
+		if (!directoryTemp.isDirectory() && !directoryTemp.mkdirs()) {
+			throw new IOException("Cannot create directory: " + directoryTemp.getAbsolutePath());
+		}
+		command.add(binary.getAbsolutePath());
+		command.add("--lc-messages-dir=" + new File(binary.getParentFile(), "share"));
+		command.add("--tmpdir=" + directoryTemp.getAbsolutePath());
+		command.add("--socket=" + fileSocket);
+		command.add("--basedir=" + binary.getParentFile().getAbsolutePath());
+		command.add("--datadir=" + root.getAbsolutePath());
+		command.add("--lower-case-table-names=1");
+		return command;
+	}
+
+	private List<String> createCommand(
+		Context context, File binary, String address, File root
+	) throws IOException {
+		final List<String> command = createCommandInternal(context, binary, root);
+		final String[] addressParts = address.split(":");
+		command.add("--bind-address=" + addressParts[0]);
+		command.add("--port=" + addressParts[1]);
+		return command;
 	}
 
 }
