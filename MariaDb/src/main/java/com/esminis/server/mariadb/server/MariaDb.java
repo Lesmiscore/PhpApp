@@ -23,9 +23,7 @@ public class MariaDb extends ServerControl {
 
 	@Override
 	protected Process start(File root, String address) throws IOException {
-		return launcher.start(
-			getBinary(), address, root.getAbsolutePath(), root, isKeepRunning(), context
-		);
+		return launcher.start(getBinary(), address, root, isKeepRunning(), context);
 	}
 
 }

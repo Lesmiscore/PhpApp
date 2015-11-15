@@ -55,7 +55,7 @@ public class InstallToDocumentRoot {
 		if (!file.isDirectory() && !file.mkdir()) {
 			throw new ErrorWithMessage(R.string.error_cannot_create_directory);
 		}
-		helper.fromAssetDirectory(file, "www", context);
+		helper.fromAssetDirectory(file, "www", context, false);
 		HashMap<String, String> variables = new HashMap<>();
 		variables.put("tempDirectory", tempDirectory.getAbsolutePath());
 		helper.preprocessFile(new File(file, "php.ini"), variables);

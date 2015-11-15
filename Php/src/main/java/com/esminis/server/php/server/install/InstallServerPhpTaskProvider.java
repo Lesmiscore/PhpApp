@@ -54,7 +54,7 @@ public class InstallServerPhpTaskProvider implements BackgroundServiceTaskProvid
 			@Override
 			public void call(Subscriber<? super Void> subscriber) {
 				InstallHelper helper = new InstallHelper();
-				if (!preferences.contains(context, Preferences.DOCUMENT_ROOT)) {
+				if (!preferences.getIsInstalled(context)) {
 					try {
 						installToDocumentRoot.install(context, true);
 					} catch (Exception ignored) {}

@@ -1,3 +1,9 @@
 <resources>
-    <string name="title">MariaDb Server</string>
+  <string name="title">MariaDb Server</string>
+  <string name="server_document_root">Data directory</string>
+  <string name="server_install_new_version_question">New version of MariaDB(%1$s) is available, do you want to install it?</string>
+  <string name="error_document_root_does_not_exist">Cannot start server - data directory does not exist</string>
+	<string name="error_document_root_not_empty">Error: data directory not empty</string>
+	<string name="about_content"><![CDATA[<br />This is totally free MariaDB(version %1$s) server for Android.<br /><br /><b>Author</b><br /><br />Tautvydas Andrikys, esminis@esminis.lt<br />]]></string>
+	<string name="manual_content"><![CDATA[<br />This is short manual of some important parts of application:<br /><br />Server data directory by default is sdcard/mariadb so there you will find data files.<br />]]></string>
 </resources>

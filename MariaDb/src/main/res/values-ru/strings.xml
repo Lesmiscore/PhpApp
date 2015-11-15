@@ -1,0 +1,7 @@
+<resources>
+	<string name="title" >MariaDB Сервер</string>
+	<string name="server_install_new_version_question">Обновление версии MariaDB(%1$s) Установить это обновление?</string>
+	<string name="error_document_root_not_empty">Ошибка: data каталог непустой</string>
+	<string name="error_document_root_does_not_exist">Невозможно запустить сервер - data каталог не существует</string>
+	<string name="server_document_root">Data каталог</string>
+</resources>

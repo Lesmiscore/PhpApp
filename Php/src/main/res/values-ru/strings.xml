@@ -1,4 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="title">Сервер для PHP</string>
+	<string name="warning_opcache_disabled">opcache блокируется, потому что корневой каталог документов недоступен для записи</string>
+	<string name="warning_php_ini_directory_does_not_exist">директория %1$s не существует</string>
+	<string name="warning_php_ini_directory_not_writable">директория %1$s недоступна для записи</string>
+	<string name="warning_php_ini_property_not_defined">директория %1$s не определена в php.ini</string><string name="about_content"><![CDATA[<br />Это совершенно бесплатное приложение, с открытым исходным кодом, которое представляет собой локальный PHP сервер. Приложение может быть запущенно автоматически при загрузке системы.<br /><br />
+		PHP(версия %1$s) в настоящий момент имеются следующее модули: core, date, ereg, libxml, openssl, pcre, sqlite3, zlib, bcmath, bz2, calendar, ctype, curl, dom, hash, fileinfo, filter, ftp, gd, gettext, gmp, spl, iconv, intl, json, mbstring, mcrypt, session, standard, mysqlnd, mysqli, odbc, pdo, pdo_mysql, pdo_odbc, pdo_pgsql, pdo_sqlite, pgsql, phar, posix, pspell, recode, reflection, mysql, simplexml, soap, sockets, exif, tidy, tokenizer, wddx, xml, xmlreader, xmlrpc, xmlwriter, xsl, zip, cli_server, mhash, ssh2, opcache, phalcon, yaf, yar, id3, lzf, oauth, quickhash, bbcode, xmldiff, xdiff, rar, gender, stats, eio, judy, mailparse, rpmreader, spl_types, yaml<br /><br />
+		Рекомендации по применению: программирование или поддержка и создание простых сайтов(одновременно поддерживается только один запрос).<br /><br />
+		<b>Автор</b><br /><br />
+		Tautvydas Andrikys, esminis@esminis.lt<br /><br />
+		<b>Перевод на русский</b><br /><br />
+		Бондарев Дмитрий, fserg37@gmail.com<br />]]></string>
+	<string name="modules_summary">Список всех модулей PHP, некоторые могут быть включены или отключены</string>
+	<string name="manual_content"><![CDATA[<br />
+		B етоm руководствe коротко описaны некоторыe части aпликaции:<br /><br />
+		Каталог сервера по умолчанию sdcard/www разместите ваши файлы в этом каталоге.<br /><br />
+		Файл конфигурации PHP - php.ini, зaгружaeтcя из корневой дирeктoрии сервера, можно настроить его как угодно (при изменении, не забывайте про session.save_path и upload_tmp_dir).<br /><br />
+		Локальный PHP не работает – setlocale и т.д.<br /><br />
+		2 ODBC драйверы встроенны в приложение. Чтобы начать их использовать введите:<br /><br />
+		odbc_connect(\'Driver=SQLite3;Database=\' . $path_to_file, \'\', \'\'); // SQLite3<br /><br />
+		odbc_connect(\'Driver=PostgreSQL;Database=\' . $database_name . \';Server=\' . $server, \'\', \'\'); // PostgreSQL<br />]]></string>
+	<string name="error_document_root_does_not_exist">Невозможно запустить сервер - oсновной каталог не существует</string>
+	<string name="error_document_root_not_empty">Ошибка: основной каталог непустой</string>
+	<string name="modules_title">PHP модули</string>
+	<string name="modules_title_builtin">%1$s (встроенный)</string>
+	<string name="reinstall_files">Переустановить файлы</string>
+	<string name="reinstall_files_complete">Переустановление файлы закончено</string>
+	<string name="reinstall_files_summary">Переустановить файлы по умолчанию (index.php, config.ini, …), на основной каталог</string>
+	<string name="server_document_root">Основной каталог</string>
+	<string name="server_index_as_router">Использовать index.php как маршрутизатор скрипт</string>
+	<string name="server_index_as_router_title">Маршрутизатор index.php</string>
+	<string name="server_install_new_version_question">Обновление версии PHP(%1$s) Установить это обновление?</string>
 </resources>

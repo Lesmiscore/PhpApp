@@ -75,8 +75,6 @@ import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity implements OnInstallServerListener {
 
-	static public final String INTENT_ACTION = "STATUS_SERVER_CHANGED";
-
 	private BroadcastReceiver receiver = null;
 	private BroadcastReceiver receiverNetwork = null;
 
@@ -112,6 +110,10 @@ public class MainActivity extends AppCompatActivity implements OnInstallServerLi
 	private boolean syncedDrawerState = false;
 
 	private String titleDefault = null;
+
+	static public String getIntentAction(Context context) {
+		return "STATUS_SERVER_CHANGED_" + context.getPackageName();
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -228,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements OnInstallServerLi
 			resultView();
 		}
 		if (receiver != null) {
-			registerReceiver(receiver, new IntentFilter(INTENT_ACTION));
+			registerReceiver(receiver, new IntentFilter(MainActivity.getIntentAction(this)));
 		}
 		if (receiverNetwork != null) {
 			registerReceiver(receiverNetwork, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
@@ -360,8 +362,10 @@ public class MainActivity extends AppCompatActivity implements OnInstallServerLi
 
 			public void afterTextChanged(Editable text) {
 				String portPreference = activityHelper.getPort(MainActivity.this);
-				int port = portPreference.isEmpty() ? 
-					8080 : Integer.parseInt(portPreference);
+				if (portPreference == null || portPreference.isEmpty()) {
+					portPreference = getString(R.string.default_port);
+				}
+				int port = Integer.parseInt(portPreference);
 				try {
 					port = Integer.parseInt(text.toString());					
 				} catch (NumberFormatException ignored) {}
@@ -380,7 +384,7 @@ public class MainActivity extends AppCompatActivity implements OnInstallServerLi
 
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				if (INTENT_ACTION.equals(intent.getAction())) {
+				if (MainActivity.getIntentAction(context).equals(intent.getAction())) {
 					Bundle extras = intent.getExtras();
 					if (extras != null && extras.containsKey("errorLine")) {
 						resetLog();
@@ -429,7 +433,7 @@ public class MainActivity extends AppCompatActivity implements OnInstallServerLi
 			}
 		});
 		
-		registerReceiver(receiver, new IntentFilter(INTENT_ACTION));
+		registerReceiver(receiver, new IntentFilter(MainActivity.getIntentAction(this)));
 		registerReceiver(receiverNetwork, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 		BackgroundService.execute(getApplication(), StatusServerTaskProvider.class);
 	}

@@ -62,7 +62,7 @@ public class InstallServer {
 			}
 		}
 		File file = serverControl.getBinary();
-		if (file.isFile()) {
+		if (file.isFile() && preferences.getIsInstalled(activity)) {
 			if (!preferences.getIsSameBuild(activity)) {
 				if (listener != null) {
 					listener.OnInstallNewVersionRequest(this);

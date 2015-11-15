@@ -1,0 +1,9 @@
+<resources>
+	<string name="title" >MariaDB Serveris</string>
+	<string name="server_install_new_version_question">Yra nauja MariaDB versija(%1$s), ar norite ją įdiegti?</string>
+	<string name="server_document_root">Duomenų katalogas</string>
+	<string name="error_document_root_does_not_exist">Negalima paleisti serverio - duomenų katalogas neegzistuoja</string>
+	<string name="error_document_root_not_empty">Klaida: duomekų katalogas netuščias</string>
+	<string name="about_content"><![CDATA[<br />MariaDB(versija %1$s) serveris yra pilnai nemokama ir atviro kodo  aplikacija skirta Android.<br /><br /><b>Autorius</b><br /><br />Tautvydas Andrikys, esminis@esminis.lt<br />]]></string>
+	<string name="manual_content"><![CDATA[<br />Šiame žinyne trumpai aprašomos kai kurios svarbios aplikacijos dalys:<br /><br />Serverio duomenų direktorija pagal nutylėjimą yra sdcard/mariadb taigi ten rasite duomenų bazės failus.<br />]]></string>
+</resources>

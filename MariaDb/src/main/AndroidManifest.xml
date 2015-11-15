@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android" package="com.esminis.server.mariadb"
-    >
-
+>
     <application android:name=".application.MariaDbApplication">
         <provider
             android:authorities="com.esminis.server.mariadb.preferences.ContentProvider"

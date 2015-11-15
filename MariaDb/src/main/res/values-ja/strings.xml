@@ -1,0 +1,4 @@
+<resources>
+	<string name="title" />
+	<string name="server_install_new_version_question">MariaDB(%1$s) の新しいバージョンがご利用になれます、インストールされますか？</string>
+</resources>

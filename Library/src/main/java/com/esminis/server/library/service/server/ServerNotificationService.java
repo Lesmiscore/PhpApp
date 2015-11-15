@@ -41,7 +41,7 @@ public class ServerNotificationService extends Service {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-			if (action != null && action.equals(MainActivity.INTENT_ACTION)) {
+			if (action != null && action.equals(MainActivity.getIntentAction(context))) {
 				Bundle extras = intent.getExtras();
 				if (extras == null || (!extras.containsKey("errorLine") && !extras.getBoolean("running"))) {
 					serverNotification.hide(getApplicationContext());
@@ -54,7 +54,7 @@ public class ServerNotificationService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		((LibraryApplication)getApplication()).getComponent().inject(this);
-		registerReceiver(receiver, new IntentFilter(MainActivity.INTENT_ACTION));
+		registerReceiver(receiver, new IntentFilter(MainActivity.getIntentAction(this)));
 		serverControl.requestStatus();
 	}
 
