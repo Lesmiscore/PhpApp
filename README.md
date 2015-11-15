@@ -1,7 +1,7 @@
 # Servers (Android) #
 
 * [Server for PHP](#markdown-header-test-server-for-php)
-* MariaDB Server(#markdown-header-mariadb-server)
+* [MariaDB Server](#markdown-header-mariadb-server)
 
 # Server for PHP #
 
