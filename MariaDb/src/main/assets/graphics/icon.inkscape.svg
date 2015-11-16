@@ -14,9 +14,9 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r"
-   inkscape:export-filename="/home/tautvydas/Documents/Development/Java/ServerForPhp/app/src/main/res/drawable-mdpi/ic_launcher.png"
-   inkscape:export-xdpi="65.954201"
-   inkscape:export-ydpi="65.954201"
+   inkscape:export-filename="/home/tautvydas/Documents/Development/Java/Server/MariaDb/src/main/res/drawable-xxxhdpi/ic_launcher.png"
+   inkscape:export-xdpi="263.8168"
+   inkscape:export-ydpi="263.8168"
    sodipodi:docname="icon.inkscape.svg"
    enable-background="new">
   <defs
@@ -54,10 +54,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="3.572127"
-     inkscape:cx="-19.053119"
-     inkscape:cy="945.61134"
+     inkscape:cx="-60.624989"
+     inkscape:cy="945.05145"
      inkscape:document-units="px"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer7"
      showgrid="false"
      inkscape:snap-global="true"
      inkscape:snap-grids="false"
@@ -83,7 +83,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
