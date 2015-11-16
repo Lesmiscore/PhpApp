@@ -1,5 +1,5 @@
 <resources>
-  <string name="title">MariaDb Server</string>
+  <string name="title">MariaDB Server</string>
   <string name="server_document_root">Data directory</string>
   <string name="server_install_new_version_question">New version of MariaDB(%1$s) is available, do you want to install it?</string>
   <string name="error_document_root_does_not_exist">Cannot start server - data directory does not exist</string>
