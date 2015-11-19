@@ -393,9 +393,8 @@ public class MainActivity extends AppCompatActivity implements OnInstallServerLi
 						findViewById(R.id.stop).setVisibility(View.GONE);
 						if (extras != null && extras.getBoolean("running")) {
 							findViewById(R.id.stop).setVisibility(View.VISIBLE);
-							Spanned title = Html.fromHtml(
-								String.format(getString(R.string.server_running), extras.getString("address"))
-							);
+							final CharSequence title = activityHelper
+								.getServerRunningLabel(extras.getString("address"));
 							setLabel(title);
 							serverNotification.show(
 								MainActivity.this, title.toString(), getString(R.string.server_running_public)

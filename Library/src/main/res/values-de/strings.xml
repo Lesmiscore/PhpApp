@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="server_running"><![CDATA[Server läuft auf <a href="http://%1$s">%1$s</a>]]></string>
+	<string name="server_running"><![CDATA[Server läuft auf %1$s]]></string>
 	<string name="server_stopped">Server ist stopped</string>
 	<string name="server_start">Server starten</string>
 	<string name="server_stop">Stoppen Server</string>

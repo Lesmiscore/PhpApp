@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Environment;
 
 import com.esminis.server.library.activity.DrawerFragment;
+import com.esminis.server.library.activity.MainActivityHelper;
 import com.esminis.server.library.application.LibraryApplication;
 import com.esminis.server.library.model.manager.Log;
 import com.esminis.server.library.model.manager.Network;
@@ -11,9 +12,11 @@ import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.service.server.install.InstallServer;
 import com.esminis.server.library.service.server.install.InstallServerTask;
-import com.esminis.server.mariadb.activity.DrawerMariaDbFragment;
-import com.esminis.server.mariadb.server.InstallServerMariaDbTaskProvider;
+import com.esminis.server.mariadb.activity.MariaDbDrawerFragment;
+import com.esminis.server.mariadb.activity.MariaDbMainActivityHelper;
+import com.esminis.server.mariadb.server.MariaDbInstallServerTaskProvider;
 import com.esminis.server.mariadb.server.MariaDb;
+import com.squareup.otto.Bus;
 
 import java.io.File;
 
@@ -54,7 +57,7 @@ public class MariaDbApplicationModule {
 			) {
 				return new InstallServerTask(
 					serverControl, listener, preferences, network, activity,
-					InstallServerMariaDbTaskProvider.class,
+					MariaDbInstallServerTaskProvider.class,
 					new File(Environment.getExternalStorageDirectory(), "mariadb")
 				);
 			}
@@ -63,7 +66,13 @@ public class MariaDbApplicationModule {
 
 	@Provides
 	public DrawerFragment provide() {
-		return new DrawerMariaDbFragment();
+		return new MariaDbDrawerFragment();
+	}
+
+	@Provides
+	@Singleton
+	public MainActivityHelper provideActivityHelper(Bus bus, Preferences preferences) {
+		return new MariaDbMainActivityHelper(preferences, bus);
 	}
 
 }

@@ -15,7 +15,7 @@ import javax.inject.Inject;
 import rx.Observable;
 import rx.Subscriber;
 
-public class InstallServerMariaDbTaskProvider implements BackgroundServiceTaskProvider {
+public class MariaDbInstallServerTaskProvider implements BackgroundServiceTaskProvider {
 
 	@Inject
 	protected ServerControl serverControl;

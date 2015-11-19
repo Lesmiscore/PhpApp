@@ -7,7 +7,7 @@
 	<string name="about_content" />
 	<string name="manual_content" />
 	<string name="error_document_root_not_empty" />
-	<string name="server_running"><![CDATA[Server is running on <a href="http://%1$s">%1$s</a>]]></string>
+	<string name="server_running"><![CDATA[Server is running on %1$s]]></string>
 	<string name="server_stopped">Server is stopped</string>
 	<string name="server_start">Start server</string>
 	<string name="server_stop">Stop server</string>

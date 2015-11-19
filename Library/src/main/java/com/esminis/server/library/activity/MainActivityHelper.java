@@ -28,6 +28,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,16 +48,15 @@ import javax.inject.Singleton;
 @Singleton
 public class MainActivityHelper {
 
-	@Inject
-	protected Bus bus;
-
+	private final Bus bus;
+	private final Preferences preferences;
 	private WeakReference<Activity> activity = new WeakReference<>(null);
 
 	@Inject
-	protected Preferences preferences;
-
-	@Inject
-	public MainActivityHelper() {}
+	public MainActivityHelper(Preferences preferences, Bus bus) {
+		this.bus = bus;
+		this.preferences = preferences;
+	}
 
 	public String getPort(Context context) {
 		return preferences.getString(context, Preferences.PORT);
@@ -129,7 +129,7 @@ public class MainActivityHelper {
 	}
 
 	public void onResume(Activity activity) {
-		final Activity activityOld = this.activity.get();
+		final Activity activityOld = getActivity();
 		if (activityOld == null || activityOld != activity) {
 			this.activity = new WeakReference<>(activity);
 			bus.register(this);
@@ -143,7 +143,7 @@ public class MainActivityHelper {
 
 	@Subscribe
 	public void onEventMessage(EventMessage event) {
-		final Activity activity = this.activity.get();
+		final Activity activity = getActivity();
 		if (activity == null) {
 			return;
 		}
@@ -167,7 +167,7 @@ public class MainActivityHelper {
 	public void contentMessage(
 		boolean containerVisible, boolean preloader, boolean button, String message
 	) {
-		final Activity activity = this.activity.get();
+		final Activity activity = getActivity();
 		if (activity == null) {
 			return;
 		}
@@ -179,6 +179,23 @@ public class MainActivityHelper {
 				.setVisibility(button ? View.VISIBLE : View.GONE);
 			((TextView)activity.findViewById(R.id.preloader_label)).setText(message);
 		}
+	}
+
+	public CharSequence getServerRunningLabel(String address) {
+		final Activity activity = getActivity();
+		if (activity == null) {
+			return null;
+		}
+		return Html.fromHtml(
+			String.format(
+				activity.getString(R.string.server_running),
+				"<a href=\"http://" + address + "\">" + address + "</a>"
+			)
+		);
+	}
+
+	protected Activity getActivity() {
+		return activity.get();
 	}
 
 }

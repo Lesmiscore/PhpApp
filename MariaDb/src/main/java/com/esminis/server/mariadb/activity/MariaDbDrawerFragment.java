@@ -5,7 +5,7 @@ import android.os.Bundle;
 import com.esminis.server.library.activity.DrawerFragment;
 import com.esminis.server.mariadb.application.MariaDbApplication;
 
-public class DrawerMariaDbFragment extends DrawerFragment {
+public class MariaDbDrawerFragment extends DrawerFragment {
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
