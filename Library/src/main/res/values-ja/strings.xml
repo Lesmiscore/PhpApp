@@ -20,7 +20,7 @@
     <string name="server_keep_running">アプリが終了してもサーバーの稼働を続ける</string>
     <string name="server_keep_running_title">サーバーの稼働を続ける</string>
     <string name="server_port">サーバーポート</string>
-    <string name="server_running"><![CDATA[サーバーは <a href="http://%1$s">%1$s</a> で稼働しています]]></string>
+    <string name="server_running"><![CDATA[サーバーは %1$s で稼働しています]]></string>
     <string name="server_running_public">サーバーは稼働中です</string>
     <string name="server_start">サーバーを開始する</string>
     <string name="server_start_on_boot_summary">デバイスを起動した時にサーバーを開始する</string>

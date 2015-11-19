@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="server_running"><![CDATA[Serveris veikia adresu <a href="http://%1$s">%1$s</a>]]></string>
+	<string name="server_running"><![CDATA[Serveris veikia adresu %1$s]]></string>
 	<string name="server_stopped">Serveris sustabdytas</string>
 	<string name="server_start">Paleisti serverį</string>
 	<string name="server_stop">Sustabdyti serverį</string>
