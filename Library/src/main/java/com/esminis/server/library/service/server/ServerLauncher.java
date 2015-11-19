@@ -26,7 +26,7 @@ import java.util.Map;
 
 abstract public class ServerLauncher {
 
-	private final com.esminis.server.library.model.manager.Process managerProcess;
+	protected final com.esminis.server.library.model.manager.Process managerProcess;
 
 	public ServerLauncher(com.esminis.server.library.model.manager.Process managerProcess) {
 		this.managerProcess = managerProcess;

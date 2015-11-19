@@ -45,6 +45,9 @@ public class Php extends ServerControl {
 	}
 
 	@Override
+	protected void stop(java.lang.Process process) {}
+
+	@Override
 	protected java.lang.Process start(File root, String address) throws IOException {
 		validatePhpIni(new File(root, "php.ini"));
 		return startup.start(

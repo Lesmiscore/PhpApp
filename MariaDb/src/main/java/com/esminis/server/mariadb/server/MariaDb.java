@@ -26,4 +26,9 @@ public class MariaDb extends ServerControl {
 		return launcher.start(getBinary(), address, root, isKeepRunning(), context);
 	}
 
+	@Override
+	protected void stop(java.lang.Process process) {
+		launcher.stop(process, getBinary());
+	}
+
 }
