@@ -36,6 +36,28 @@ class MariaDbServerLauncher extends ServerLauncher {
 		super(managerProcess);
 	}
 
+	void stop(Process process, File binary) {
+		final int pid = managerProcess.getPid(binary);
+		if (pid == 0) {
+			return;
+		}
+		android.os.Process.sendSignal(pid, 15);
+		for (int i = 0; i < 20; i++) {
+			if (process != null) {
+				try {
+					process.exitValue();
+					break;
+				} catch (IllegalThreadStateException ignored) {}
+			} else if ((pid != managerProcess.getPid(binary))) {
+				break;
+			}
+			try {
+				Thread.sleep(250);
+			} catch (InterruptedException ignored) {}
+		}
+	}
+
+
 	Process start(
 		File binary, String address, File documentRoot, boolean keepRunning, Context context
 	) throws IOException {
@@ -112,6 +134,7 @@ class MariaDbServerLauncher extends ServerLauncher {
 		final String[] addressParts = address.split(":");
 		command.add("--bind-address=" + addressParts[0]);
 		command.add("--port=" + addressParts[1]);
+		command.add("--pid-file=" + new File(binary.getParent(), "pid"));
 		return command;
 	}
 

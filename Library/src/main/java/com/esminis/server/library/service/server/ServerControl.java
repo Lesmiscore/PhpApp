@@ -4,8 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
-import android.os.Message;
+import android.os.*;
 import android.support.annotation.StringRes;
 import android.util.Pair;
 
@@ -78,6 +77,8 @@ abstract public class ServerControl {
 		);
 	}
 
+	abstract protected void stop(java.lang.Process process);
+
 	abstract protected java.lang.Process start(File root, String address) throws IOException;
 
 	private void start(String root) {
@@ -110,6 +111,7 @@ abstract public class ServerControl {
 			streamReader.cancel(false);
 			streamReader = null;
 		}
+		stop(process);
 		if (process != null) {
 			process.destroy();
 			process = null;
