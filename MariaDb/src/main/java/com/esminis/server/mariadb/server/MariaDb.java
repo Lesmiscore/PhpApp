@@ -11,7 +11,7 @@ import java.lang.Process;
 
 public class MariaDb extends ServerControl {
 
-	private final MariaDbServerLauncher launcher;
+	final MariaDbServerLauncher launcher;
 
 	public MariaDb(
 		LibraryApplication context, Network network, Preferences preferences,

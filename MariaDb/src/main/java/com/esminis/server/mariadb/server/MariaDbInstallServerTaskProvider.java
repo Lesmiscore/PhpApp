@@ -9,12 +9,15 @@ import com.esminis.server.library.service.server.install.InstallHelper;
 import com.esminis.server.mariadb.application.MariaDbApplication;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import rx.Observable;
 import rx.Subscriber;
 
+@Singleton
 public class MariaDbInstallServerTaskProvider implements BackgroundServiceTaskProvider {
 
 	@Inject
@@ -32,23 +35,33 @@ public class MariaDbInstallServerTaskProvider implements BackgroundServiceTaskPr
 		return Observable.create(new Observable.OnSubscribe<Void>() {
 			@Override
 			public void call(Subscriber<? super Void> subscriber) {
-				final File binary = serverControl.getBinary();
 				try {
-					new InstallHelper().fromAssetDirectory(binary.getParentFile(), "install", context, true);
-					if (!binary.canExecute() && !binary.setExecutable(true)) {
+					final File binary = serverControl.getBinary();
+					if (installFiles(context, binary)) {
+						initializeDataDirectory(context, binary);
+						subscriber.onCompleted();
+					} else {
 						subscriber.onError(new Exception("Install failed: cannot set execute permission"));
-						return;
 					}
-					new MariaDbServerLauncher(managerProcess)
-						.initializeDataDirectory(
-							context, binary, new File(preferences.getString(context, Preferences.DOCUMENT_ROOT))
-						);
-					subscriber.onCompleted();
 				} catch (Exception e) {
 					subscriber.onError(new Exception("Install failed"));
 				}
 			}
 		});
+	}
+
+	private boolean installFiles(Context context, File binary) throws Exception {
+		new InstallHelper().fromAssetDirectory(binary.getParentFile(), "install", context, true);
+		return binary.canExecute() || binary.setExecutable(true);
+	}
+
+	private void initializeDataDirectory(Context context, File binary) throws IOException {
+		if (!(serverControl instanceof MariaDb)) {
+			throw new IOException("Invalid server control");
+		}
+		((MariaDb)serverControl).launcher.initializeDataDirectory(
+			context, binary, new File(preferences.getString(context, Preferences.DOCUMENT_ROOT))
+		);
 	}
 
 }

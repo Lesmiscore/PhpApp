@@ -19,6 +19,7 @@ import android.content.Context;
 
 import com.esminis.server.library.service.server.ServerLauncher;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
@@ -37,23 +38,27 @@ class MariaDbServerLauncher extends ServerLauncher {
 	}
 
 	void stop(Process process, File binary) {
-		final int pid = managerProcess.getPid(binary);
-		if (pid == 0) {
-			return;
-		}
-		android.os.Process.sendSignal(pid, 15);
-		for (int i = 0; i < 20; i++) {
-			if (process != null) {
-				try {
-					process.exitValue();
-					break;
-				} catch (IllegalThreadStateException ignored) {}
-			} else if ((pid != managerProcess.getPid(binary))) {
-				break;
+		final int pid;
+		synchronized (lock) {
+			pid = managerProcess.getPid(binary);
+			if (pid == 0) {
+				return;
 			}
-			try {
-				Thread.sleep(250);
-			} catch (InterruptedException ignored) {}
+			android.os.Process.sendSignal(pid, 15);
+			for (int i = 0; i < 20; i++) {
+				if (process != null) {
+					try {
+						process.exitValue();
+						break;
+					} catch (IllegalThreadStateException ignored) {
+					}
+				} else if ((pid != managerProcess.getPid(binary))) {
+					break;
+				}
+				try {
+					Thread.sleep(250);
+				} catch (InterruptedException ignored) {}
+			}
 		}
 	}
 
@@ -61,38 +66,51 @@ class MariaDbServerLauncher extends ServerLauncher {
 	Process start(
 		File binary, String address, File documentRoot, boolean keepRunning, Context context
 	) throws IOException {
-		return start(
-			binary, createCommand(context, binary, address, documentRoot), context, getEnvironment(),
-			documentRoot, keepRunning
-		);
+		initializeDataDirectory(context, binary, documentRoot);
+		synchronized (lock) {
+			return start(
+				binary, createCommand(context, binary, address, documentRoot), context, getEnvironment(),
+				documentRoot, keepRunning
+			);
+		}
 	}
 
 	void initializeDataDirectory(Context context, File binary, File root) throws IOException {
+		File[] files = root.listFiles();
+		if (files != null && files.length > 0) {
+			return;
+		}
 		synchronized (lock) {
 			final List<String> environment = getEnvironment();
 			final List<String> command = createCommandInternal(context, binary, root);
 			Collections.addAll(
-				command, "--bootstrap", "--log-warnings=0", "--loose-skip-ndbcluster",
-				"--max_allowed_packet=8M", "--net_buffer_length=16K"
+				command, "--bootstrap", "--log-warnings=0", "--max_allowed_packet=8M",
+				"--net_buffer_length=16K"
 			);
 			final File dataMysqlDirectory = new File(root, "mysql");
-			if (!dataMysqlDirectory.isDirectory() && !dataMysqlDirectory.mkdirs()) {
+			if (dataMysqlDirectory.isDirectory()) {
+				return;
+			}
+			if (!dataMysqlDirectory.mkdirs()) {
 				throw new IOException("Cannot create directory: " + dataMysqlDirectory.getAbsolutePath());
 			}
 			final Process process = Runtime.getRuntime().exec(
 				command.toArray(new String [command.size()]),
 				environment.toArray(new String[environment.size()]), root
 			);
-			final OutputStream stream = process.getOutputStream();
-			writeToStream(stream, "use mysql;\n");
-			writeToStream(stream, context, "sql/mysql_system_tables.sql");
-			writeToStream(stream, context, "sql/mysql_performance_tables.sql");
-			writeToStream(stream, context, "sql/mysql_system_tables_data.sql");
-			writeToStream(stream, context, "sql/fill_help_tables.sql");
-			writeToStream(stream, "exit;\n");
 			try {
+				final OutputStream stream = process.getOutputStream();
+				writeToStream(stream, "use mysql;\n");
+				writeToStream(stream, context, "sql/mysql_system_tables.sql");
+				writeToStream(stream, context, "sql/mysql_performance_tables.sql");
+				writeToStream(stream, context, "sql/mysql_system_tables_data.sql");
+				writeToStream(stream, context, "sql/add_root_from_any_host.sql");
+				writeToStream(stream, context, "sql/fill_help_tables.sql");
+				writeToStream(stream, "exit;\n");
 				process.waitFor();
-			} catch (InterruptedException e) {
+			} catch (Throwable e) {
+				FileUtils.deleteDirectory(root);
+				root.mkdirs();
 				throw new IOException(e);
 			}
 		}
