@@ -14,9 +14,9 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r"
-   inkscape:export-filename="/home/tautvydas/Documents/Development/Java/Server/MariaDb/src/main/res/drawable-mdpi/ic_notification_small.png"
-   inkscape:export-xdpi="33.23077"
-   inkscape:export-ydpi="33.23077"
+   inkscape:export-filename="/home/tautvydas/Documents/Development/Java/Server/MariaDb/src/main/res/drawable-xxxhdpi/ic_notification_small.png"
+   inkscape:export-xdpi="132.92308"
+   inkscape:export-ydpi="132.92308"
    sodipodi:docname="icon_notification.inkscape.svg"
    enable-background="new">
   <defs
@@ -54,10 +54,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.5258752"
-     inkscape:cx="75.326263"
+     inkscape:cx="79.681189"
      inkscape:cy="933.00131"
      inkscape:document-units="px"
-     inkscape:current-layer="layer7"
+     inkscape:current-layer="layer3"
      showgrid="false"
      inkscape:snap-global="true"
      inkscape:snap-grids="false"
@@ -125,8 +125,8 @@
      sodipodi:insensitive="true">
     <rect
        ry="4.9356217"
-       y="12.862183"
-       x="20.5"
+       y="12.362183"
+       x="20"
        height="65"
        width="65"
        id="rect5015"
@@ -157,9 +157,9 @@
      style="display:inline">
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:62.82424927px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none"
-       x="21.635086"
-       y="52.081867"
+       style="font-style:normal;font-weight:normal;font-size:67.74208832px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none"
+       x="18.755678"
+       y="52.537415"
        id="text3831-3"
        sodipodi:linespacing="125%"
        transform="scale(1.040067,0.96147653)"
@@ -167,15 +167,15 @@
        inkscape:export-xdpi="177.23077"
        inkscape:export-ydpi="177.23077"><tspan
          sodipodi:role="line"
-         x="21.635086"
-         y="52.081867"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;line-height:125%;font-family:Sawasdee;-inkscape-font-specification:Sawasdee;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1"
+         x="18.755678"
+         y="52.537415"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26.95698357px;line-height:125%;font-family:Sawasdee;-inkscape-font-specification:Sawasdee;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1"
          id="tspan3690">Maria</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:62.82424927px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:1;stroke:none"
-       x="25.827641"
-       y="29.884417"
+       style="font-style:normal;font-weight:normal;font-size:67.74208832px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:1;stroke:none"
+       x="23.276423"
+       y="28.60236"
        id="text3831-3-7"
        sodipodi:linespacing="125%"
        transform="scale(1.040067,0.96147653)"
@@ -184,14 +184,14 @@
        inkscape:export-ydpi="177.23077"><tspan
          sodipodi:role="line"
          id="tspan3833-3-9"
-         x="25.827641"
-         y="29.884417"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.5px;line-height:125%;font-family:Sawasdee;-inkscape-font-specification:Sawasdee;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1">Server</tspan></text>
+         x="23.276423"
+         y="28.60236"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.86988831px;line-height:125%;font-family:Sawasdee;-inkscape-font-specification:Sawasdee;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1">Server</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:62.82424927px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:1;stroke:none"
-       x="32.904667"
-       y="76.821617"
+       style="font-style:normal;font-weight:normal;font-size:67.74208832px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:1;stroke:none"
+       x="30.907431"
+       y="79.213776"
        id="text3831-3-0"
        sodipodi:linespacing="125%"
        transform="scale(1.040067,0.96147653)"
@@ -200,13 +200,8 @@
        inkscape:export-ydpi="177.23077"><tspan
          sodipodi:role="line"
          id="tspan3833-3-5"
-         x="32.904667"
-         y="76.821617"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:27.5px;line-height:125%;font-family:Sawasdee;-inkscape-font-specification:Sawasdee;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1">DB</tspan></text>
+         x="30.907431"
+         y="79.213776"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:29.65268135px;line-height:125%;font-family:Sawasdee;-inkscape-font-specification:Sawasdee;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1">DB</tspan></text>
   </g>
-  <g
-     inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="Logo"
-     style="display:inline" />
 </svg>
