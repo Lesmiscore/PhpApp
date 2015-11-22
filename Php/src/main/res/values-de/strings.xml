@@ -16,8 +16,7 @@
 	<string name="modules_title_builtin">%1$s (ist eingebaut)</string>
 	<string name="modules_title">PHP Erweiterungen</string>
 	<string name="modules_summary">Liste aller PHP Module, Teil von ihnen können Sie ein-oder ausschalten</string>
-	<string name="manual_content"><![CDATA[<br />
--		In dieser Hilfe sind einige wichtige Teile der Anwendung beschrieben.<br /><br />
+	<string name="manual_content"><![CDATA[<br />In dieser Hilfe sind einige wichtige Teile der Anwendung beschrieben.<br /><br />
 -		Root-Verzeichnis des Server ist  sdcard/www (default). Legen Sie Dateien in dem Verzeichnis.<br /><br />
 -		PHP Konfiguration ist in php.ini Datei, die aus Server-Root-Verzeichnis geladet ist. Sie können sie wie Sie wollen koregieren (als Sie ändern, vergessen Sie nicht session.save_path und upload_tmp_dir).<br /><br />
 -		PHP Localen funktionieren nicht - setlocale usw.<br /><br />
