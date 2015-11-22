@@ -5,5 +5,5 @@
 	<string name="error_document_root_not_empty">エラー：データのディレクトリに空きがありません</string>
 	<string name="about_content"><![CDATA[<br />こちらは完全無料の[[[Android]]]向けのサーバーMariaDB]]](バージョン %1$s)です。<br /><br /><b>作者</b><br /><br />Tautvydas Andrikys, esminis@esminis.lt<br />]]></string>
 	<string name="server_document_root">データディレクトリ</string>
-	<string name="manual_content"><![CDATA[<br />こちらはアプリケーションの一部の重要な部分の簡略化されたマニュアルです：<br /><br/>デフォルトのユーザーは空のパスワードで root できます。<br></br>!どの様なホストでもデフォルトの root ユーザーに接続できますので注意が必要です。<br></br><br></br>デフォルトのサーバーデータディレクトリは sdcard/mariadb で、データファイルはその場所で見つけられます。<br>]]></string>
+	<string name="manual_content"><![CDATA[<br />こちらはアプリケーションの一部の重要な部分の簡略化されたマニュアルです：<br /><br/>デフォルトのユーザーは空のパスワードで root できます。<br />!どの様なホストでもデフォルトの root ユーザーに接続できますので注意が必要です。<br /><br />デフォルトのサーバーデータディレクトリは sdcard/mariadb で、データファイルはその場所で見つけられます。<br>]]></string>
 </resources>
