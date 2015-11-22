@@ -10,8 +10,7 @@ PHP(バージョン %1$s)には次のエクステンションがあります：c
 <b>作者</b><br /><br />
 Tautvydas Andrikys, esminis@esminis.lt<br /><br />
 <b>ロシア語翻訳</b><br /><br />
-Бондарев Дмитрий, fserg37@gmail.com<br />]]></string><string name="manual_content"><![CDATA[<br />
--		こちらはアプリケーションの一部の重要な部分の簡略化されたマニュアルです：<br /><br/>
+Бондарев Дмитрий, fserg37@gmail.com<br />]]></string><string name="manual_content"><![CDATA[<br />こちらはアプリケーションの一部の重要な部分の簡略化されたマニュアルです：<br /><br/>
 -		サーバードキュメントのデフォルトのルートはsdcard/wwwですのでファイルはこちらに置いて下さい。<br /><br />
 -		PHP の構成はドキュメントルートからロードされている php.ini ファイルにあり、必要に応じて編集できます(ですが、変更を加えるときは session.save_path と upload_tmp_dir を忘れないようにして下さい)。<br /><br />
 -		PHP ローカルが機能しなくなります - setlocale など。<br /><br />

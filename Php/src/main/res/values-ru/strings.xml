@@ -12,8 +12,7 @@
 		<b>Перевод на русский</b><br /><br />
 		Бондарев Дмитрий, fserg37@gmail.com<br />]]></string>
 	<string name="modules_summary">Список всех модулей PHP, некоторые могут быть включены или отключены</string>
-	<string name="manual_content"><![CDATA[<br />
-		B етоm руководствe коротко описaны некоторыe части aпликaции:<br /><br />
+	<string name="manual_content"><![CDATA[<br />B етоm руководствe коротко описaны некоторыe части aпликaции:<br /><br />
 		Каталог сервера по умолчанию sdcard/www разместите ваши файлы в этом каталоге.<br /><br />
 		Файл конфигурации PHP - php.ini, зaгружaeтcя из корневой дирeктoрии сервера, можно настроить его как угодно (при изменении, не забывайте про session.save_path и upload_tmp_dir).<br /><br />
 		Локальный PHP не работает – setlocale и т.д.<br /><br />
