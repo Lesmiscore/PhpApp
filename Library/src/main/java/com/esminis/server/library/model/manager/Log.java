@@ -22,6 +22,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 
+import com.esminis.server.library.R;
 import com.esminis.server.library.preferences.Preferences;
 
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class Log {
 		List<String> list = new ArrayList<>();
 		list.addAll(Arrays.asList(manager.getString(context, KEY).split("\n")));
 		for (String line : linesArray) {
-			list.add((line.matches("^.+: /[^ ]*$") ? "0" : "1") + line);
+			list.add((line.matches(context.getString(R.string.regex_message)) ? "0" : "1") + line);
 		}
 		manager.set(
 			context, KEY, TextUtils.join("\n", list.subList(Math.max(list.size() - 36, 0), list.size()))
