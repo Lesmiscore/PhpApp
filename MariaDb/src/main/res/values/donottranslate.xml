@@ -9,4 +9,5 @@
 		<item>share/english/errmsg.sys</item>
 	</string-array>
 	<string name="default_port" translatable="false">3306</string>
+	<string name="regex_message" translatable="false"><![CDATA[^([^\\[]+ \\[Note\\].*|[^\\[\\]]+)$]]></string>
 </resources>
