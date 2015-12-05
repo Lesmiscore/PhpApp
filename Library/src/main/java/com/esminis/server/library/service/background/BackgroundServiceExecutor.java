@@ -44,17 +44,22 @@ class BackgroundServiceExecutor {
 		BroadcastReceiver receiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				Bundle bundle = intent.getExtras();
+				final Bundle bundle = intent.getExtras();
 				if (
-					!intentAction.equals(intent.getAction()) ||
-					bundle == null || bundle.getLong(BackgroundService.FIELD_MESSAGE_ID) != messageId ||
+					!intentAction.equals(intent.getAction()) || bundle == null ||
+					bundle.getLong(BackgroundService.FIELD_MESSAGE_ID) != messageId ||
 					!bundle.containsKey(BackgroundService.FIELD_ACTION)
 				) {
 					return;
 				}
-				synchronized (lock) {
-					result = bundle.getInt(BackgroundService.FIELD_ACTION) ==
-						BackgroundService.ACTION_TASK_COMPLETE;
+				final int action = bundle.getInt(BackgroundService.FIELD_ACTION);
+				if (
+					action == BackgroundService.ACTION_TASK_COMPLETE ||
+					action == BackgroundService.ACTION_TASK_FAILED
+				) {
+					synchronized (lock) {
+						result = action == BackgroundService.ACTION_TASK_COMPLETE;
+					}
 				}
 			}
 		};
