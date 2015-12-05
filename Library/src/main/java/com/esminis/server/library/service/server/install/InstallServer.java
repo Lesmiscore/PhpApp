@@ -15,53 +15,45 @@
  */
 package com.esminis.server.library.service.server.install;
 
-import android.app.Activity;
-import android.os.AsyncTask;
-
+import com.esminis.server.library.application.LibraryApplicationComponent;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.activity.MainActivity;
 
 import java.io.File;
 
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 public class InstallServer {
 
 	private final ServerControl serverControl;
 	private final Preferences preferences;
-	private final InstallTaskFactory factory;
 
 	private OnInstallServerListener listener = null;
-	private InstallServerTask installTask = null;
+	private Subscription install = null;
 	private final Object lock = new Object();
-
-	public interface OnInstallListener {
-
-		void onFinished(boolean result);
-
-	}
-
-	public interface InstallTaskFactory {
-
-		InstallServerTask create(Activity activity, OnInstallListener listener);
-
-	}
+	private final LibraryApplicationComponent component;
 
 	public InstallServer(
-		Preferences preferences, ServerControl serverControl, InstallTaskFactory factory
+		Preferences preferences, ServerControl serverControl, LibraryApplicationComponent component
 	) {
-		this.factory = factory;
 		this.preferences = preferences;
 		this.serverControl = serverControl;
+		this.component = component;
 	}
 
 	public void install(MainActivity activity) {
 		synchronized (lock) {
 			this.listener = activity;
-			if (installTask != null) {
+			if (install != null) {
 				return;
 			}
 		}
-		File file = serverControl.getBinary();
+		final File file = serverControl.getBinary();
 		if (file.isFile() && preferences.getIsInstalled(activity)) {
 			if (!preferences.getIsSameBuild(activity)) {
 				if (listener != null) {
@@ -71,36 +63,50 @@ public class InstallServer {
 				finish(true);
 			}
 		} else {
-			start(activity);
+			start();
 		}
 	}
 
-	public void installNewVersionConfirmed(Activity activity) {
-		start(activity);
+	public void installNewVersionConfirmed() {
+		start();
 	}
 
 	public void installFinish() {
 		finish(true);
 	}
 
-	private void start(Activity activity) {
+	private void start() {
 		synchronized (lock) {
-			if (installTask == null) {
-				installTask = factory.create(activity, new OnInstallListener() {
-					@Override
-					public void onFinished(boolean result) {
-						finish(result);
-					}
-				});
-				installTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			if (install != null) {
+				return;
 			}
+			install = Observable.create(component.getInstallTask())
+				.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+					new Subscriber<Void>() {
+						@Override
+						public void onCompleted() {
+							finish(true);
+						}
+
+						@Override
+						public void onError(Throwable e) {
+							finish(false);
+						}
+
+						@Override
+						public void onNext(Void dummy) {}
+					}
+				);
 		}
 	}
 
 	private void finish(boolean success) {
-		OnInstallServerListener listener;
+		final OnInstallServerListener listener;
 		synchronized (lock) {
-			installTask = null;
+			if (install != null) {
+				install.unsubscribe();
+				install = null;
+			}
 			listener = this.listener;
 			this.listener = null;
 		}

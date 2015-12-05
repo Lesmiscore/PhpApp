@@ -1,6 +1,5 @@
 package com.esminis.server.mariadb.application;
 
-import android.app.Activity;
 import android.os.Environment;
 
 import com.esminis.server.library.activity.DrawerFragment;
@@ -10,7 +9,6 @@ import com.esminis.server.library.model.manager.Log;
 import com.esminis.server.library.model.manager.Network;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.ServerControl;
-import com.esminis.server.library.service.server.install.InstallServer;
 import com.esminis.server.library.service.server.install.InstallServerTask;
 import com.esminis.server.mariadb.activity.MariaDbDrawerFragment;
 import com.esminis.server.mariadb.activity.MariaDbMainActivityHelper;
@@ -46,22 +44,13 @@ public class MariaDbApplicationModule {
 	}
 
 	@Provides
-	@Singleton
-	public InstallServer.InstallTaskFactory provideInstallTaskFactory(
+	public InstallServerTask provideInstallTaskFactory(
 		final Network network, final Preferences preferences, final ServerControl serverControl
 	) {
-		return new InstallServer.InstallTaskFactory() {
-			@Override
-			public com.esminis.server.library.service.server.install.InstallServerTask create(
-				Activity activity, InstallServer.OnInstallListener listener
-			) {
-				return new InstallServerTask(
-					serverControl, listener, preferences, network, activity,
-					MariaDbInstallServerTaskProvider.class,
-					new File(Environment.getExternalStorageDirectory(), "mariadb")
-				);
-			}
-		};
+		return new InstallServerTask(
+			serverControl, preferences, network, application, MariaDbInstallServerTaskProvider.class,
+			"mariadb"
+		);
 	}
 
 	@Provides

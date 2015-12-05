@@ -49,11 +49,8 @@ public class LibraryApplicationModule {
 
 	@Provides
 	@Singleton
-	public InstallServer provideInstallServer(
-		Preferences preferences, ServerControl serverControl,
-		InstallServer.InstallTaskFactory installTaskFactory
-	) {
-		return new InstallServer(preferences, serverControl, installTaskFactory);
+	public InstallServer provideInstallServer(Preferences preferences, ServerControl serverControl) {
+		return new InstallServer(preferences, serverControl, application.getComponent());
 	}
 
 }

@@ -451,7 +451,7 @@ public class MainActivity extends AppCompatActivity implements OnInstallServerLi
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					((AlertDialog) dialog).setOnDismissListener(null);
-					installer.installNewVersionConfirmed(MainActivity.this);
+					installer.installNewVersionConfirmed();
 				}
 			})
 			.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

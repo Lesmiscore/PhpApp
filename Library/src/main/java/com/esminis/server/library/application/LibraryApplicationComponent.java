@@ -7,6 +7,7 @@ import com.esminis.server.library.dialog.About;
 import com.esminis.server.library.service.AutoStart;
 import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.service.server.ServerNotificationService;
+import com.esminis.server.library.service.server.install.InstallServerTask;
 import com.esminis.server.library.service.server.tasks.ServerTaskProvider;
 
 import javax.inject.Singleton;
@@ -34,6 +35,8 @@ public interface LibraryApplicationComponent {
 	ServerControl getServerControl();
 
 	DrawerFragment getDrawerFragment();
+
+	InstallServerTask getInstallTask();
 
 }
 
