@@ -1,6 +1,7 @@
 {
   "php" : {"title" : "PHP", "items" : ["PHP"]},
   "gplv3" : {"title" : "GPL v3", "items" : ["Iconv", "GpgError", "Mcrypt", "GetText", "LibEio"]},
+  "gplv2" : {"title" : "GPL v2", "items" : ["GNU C Library"]},
   "lgplv21" : {
     "title" : "LGPL v2.1", "items" : [
       "Aspell", "LibRecode", "GnuTls", "GnuMp", "GnuIdn", "Nettle", "Mhash", "T1lib", "unixODBC",
