@@ -78,11 +78,11 @@ class PhpServerLauncher extends ServerLauncher {
 	private void addStartupModules(
 		List<String> options, File moduleDirectory, File iniDirectory, String[] modules
 	) {
-		List<String> iniModules = getIniModules(iniDirectory);
-		List<String> list = new ArrayList<>();
+		final List<String> iniModules = getIniModules(iniDirectory);
+		final List<String> list = new ArrayList<>();
 		for (String module : modules) {
-			boolean zend = module.startsWith("zend_");
-			File file = new File(moduleDirectory, (zend ? module.substring(5) : module) + ".so");
+			final boolean zend = module.startsWith("zend_");
+			final File file = new File(moduleDirectory, module + ".so");
 			if (file.exists() && !iniModules.contains(file.getName().toLowerCase())) {
 				list.add((zend ? "zend_" : "") + "extension=" + file.getAbsolutePath());
 			}
