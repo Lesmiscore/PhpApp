@@ -25,7 +25,7 @@
 	<string name="go_up">Go up</string>
 	<string name="about">About</string>
 	<string name="licenses">Licenses</string>
-	<string name="server_installation_failed">Server installation failed.</string>
+	<string name="server_installation_failed">Server installation failed: %1$s</string>
 	<string name="server_keep_running_title">Keep server alive</string>
 	<string name="open">Open</string>
 	<string name="settings">Settings</string>

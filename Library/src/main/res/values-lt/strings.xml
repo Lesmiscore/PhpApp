@@ -18,7 +18,7 @@
 	<string name="go_up">Aukštyn</string>
 	<string name="about">Apie</string>
 	<string name="licenses">Licenzijos</string>
-	<string name="server_installation_failed">Nepavyko instaliuoti serverio.</string>
+	<string name="server_installation_failed">Nepavyko instaliuoti serverio: %1$s</string>
 	<string name="server_keep_running_title">Laikyti serverį įjungtą</string>
 	<string name="open">Atidaryti</string>
 	<string name="settings">Nustatymai</string>

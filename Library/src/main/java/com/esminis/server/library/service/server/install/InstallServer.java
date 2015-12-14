@@ -60,7 +60,7 @@ public class InstallServer {
 					listener.OnInstallNewVersionRequest(this);
 				}
 			} else {
-				finish(true);
+				finish(null);
 			}
 		} else {
 			start();
@@ -72,7 +72,7 @@ public class InstallServer {
 	}
 
 	public void installFinish() {
-		finish(true);
+		finish(null);
 	}
 
 	private void start() {
@@ -85,12 +85,12 @@ public class InstallServer {
 					new Subscriber<Void>() {
 						@Override
 						public void onCompleted() {
-							finish(true);
+							finish(null);
 						}
 
 						@Override
 						public void onError(Throwable e) {
-							finish(false);
+							finish(e);
 						}
 
 						@Override
@@ -100,7 +100,7 @@ public class InstallServer {
 		}
 	}
 
-	private void finish(boolean success) {
+	private void finish(Throwable error) {
 		final OnInstallServerListener listener;
 		synchronized (lock) {
 			if (install != null) {
@@ -111,7 +111,7 @@ public class InstallServer {
 			this.listener = null;
 		}
 		if (listener != null) {
-			listener.OnInstallEnd(success);
+			listener.OnInstallEnd(error);
 		}
 	}
 	

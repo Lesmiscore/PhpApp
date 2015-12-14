@@ -34,23 +34,18 @@ import java.util.Set;
 
 public class InstallHelper {
 
-	public boolean fromAssetFiles(File directory, String[] paths, Context context) {
-		try {
-			for (String path : paths) {
-				File file = new File(directory, new File(path).getName());
-				if (!file.isFile() || file.delete()) {
-					fromAssetFile(file, path, context);
-					if (!file.isFile() || (!file.canExecute() && !file.setExecutable(true))) {
-						return false;
-					}
-				}	else {
-					return false;
+	public void fromAssetFiles(File directory, String[] paths, Context context) throws Throwable {
+		for (String path : paths) {
+			File file = new File(directory, new File(path).getName());
+			if (!file.isFile() || file.delete()) {
+				fromAssetFile(file, path, context);
+				if (!file.isFile() || (!file.canExecute() && !file.setExecutable(true))) {
+					throw new IOException("Cannot set file permissions: " + file.getAbsolutePath());
 				}
+			}	else {
+				throw new IOException("Cannot overwrite file: " + file.getAbsolutePath());
 			}
-		} catch (IOException ignored) {
-			return false;
 		}
-		return true;
 	}
 
 	public void fromAssetFile(File target, String path, Context context) throws IOException {

@@ -28,6 +28,7 @@ class BackgroundServiceExecutor {
 
 	private final Object lock = new Object();
 	private Boolean result = null;
+	private Throwable resultError = null;
 	static private long nextMessageId = 0;
 	static final private BackgroundServiceLauncher launcher = new BackgroundServiceLauncher();
 
@@ -59,6 +60,14 @@ class BackgroundServiceExecutor {
 				) {
 					synchronized (lock) {
 						result = action == BackgroundService.ACTION_TASK_COMPLETE;
+						if (
+							action == BackgroundService.ACTION_TASK_FAILED &&
+							bundle.containsKey(BackgroundService.FIELD_ERROR)
+						) {
+							Object object = bundle.getSerializable(BackgroundService.FIELD_ERROR);
+							resultError = object instanceof Throwable ?
+								(Throwable)object : new Exception("Invalid error message: " + object);
+						}
 					}
 				}
 			}
@@ -80,8 +89,10 @@ class BackgroundServiceExecutor {
 		synchronized (lock) {
 			if (result) {
 				subscriber.onCompleted();
-			} else {
+			} else if (resultError == null) {
 				subscriber.onError(new Exception("Task failed: " + provider.getName()));
+			} else {
+				subscriber.onError(resultError);
 			}
 		}
 	}

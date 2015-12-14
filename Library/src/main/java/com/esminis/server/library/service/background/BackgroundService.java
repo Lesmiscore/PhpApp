@@ -40,6 +40,7 @@ public class BackgroundService extends Service {
 	static final String FIELD_PROVIDER = "provider";
 	static final String FIELD_MESSAGE_ID = "id";
 	static final String FIELD_ACTION = "action";
+	static final String FIELD_ERROR = "error";
 
 	static public String getIntentAction(Context context) {
 		return "__BACKGROUND_SERVICE_TASK_" + context.getPackageName() + "__";
@@ -62,7 +63,9 @@ public class BackgroundService extends Service {
 				}
 				Class<?> taskProviderClass = Class.forName(data.getString(FIELD_PROVIDER));
 				if (!BackgroundServiceTaskProvider.class.isAssignableFrom(taskProviderClass)) {
-					sendMessageForSender(intent, ACTION_TASK_FAILED);
+					sendMessageForSenderFailed(
+						intent, new Exception("Invalid task provider class: " + taskProviderClass.getName())
+					);
 					return;
 				}
 				BackgroundServiceTaskProvider provider = (BackgroundServiceTaskProvider)
@@ -75,17 +78,25 @@ public class BackgroundService extends Service {
 
 					@Override
 					public void onError(Throwable e) {
-						sendMessageForSender(intent, ACTION_TASK_FAILED);
+						sendMessageForSenderFailed(intent, e);
 					}
 
 					@Override
 					public void onNext(Void aVoid) {}
 				});
-			} catch (Exception ignored) {
-				sendMessageForSender(intent, ACTION_TASK_FAILED);
+			} catch (Exception e) {
+				sendMessageForSenderFailed(intent, e);
 			}
 		}
 	};
+
+	private void sendMessageForSenderFailed(Intent intent, Throwable throwable) {
+		Intent intentSend = new Intent(getIntentAction(getApplicationContext()));
+		intentSend.putExtra(FIELD_ACTION, ACTION_TASK_FAILED);
+		intentSend.putExtra(FIELD_MESSAGE_ID, intent.getExtras().getLong(FIELD_MESSAGE_ID));
+		intentSend.putExtra(FIELD_ERROR, throwable);
+		sendBroadcast(intentSend);
+	}
 
 	private void sendMessageForSender(Intent intent, int action) {
 		Intent intentSend = new Intent(getIntentAction(getApplicationContext()));
