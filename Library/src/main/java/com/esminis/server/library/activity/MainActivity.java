@@ -35,8 +35,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.Html;
-import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
@@ -98,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements OnInstallServerLi
 
 	private boolean requestResultView = false;
 	
-	private boolean requestResultViewSuccess = false;
+	private Throwable requestResultViewError = null;
 	
 	private boolean paused = true;
 
@@ -270,14 +268,16 @@ public class MainActivity extends AppCompatActivity implements OnInstallServerLi
 	}
 
 	private void resultView() {
-		if (requestResultViewSuccess) {
+		if (requestResultViewError == null) {
 			startup();
 			activityHelper.contentMessage(false, false, false, null);
 			findViewById(R.id.container).setVisibility(View.VISIBLE);
 			removeFocus();
 		} else {
-			activityHelper
-				.contentMessage(true, false, false, getString(R.string.server_installation_failed));
+			activityHelper.contentMessage(
+				true, false, false,
+				getString(R.string.server_installation_failed, requestResultViewError.getMessage())
+			);
 		}
 	}
 	
@@ -469,8 +469,9 @@ public class MainActivity extends AppCompatActivity implements OnInstallServerLi
 		});
 	}
 
-	public void OnInstallEnd(boolean success) {
-		requestResultViewSuccess = success;
+	@Override
+	public void OnInstallEnd(Throwable error) {
+		requestResultViewError = error;
 		requestResultView();
 		drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 	}

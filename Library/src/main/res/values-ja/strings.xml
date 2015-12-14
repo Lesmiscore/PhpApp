@@ -14,7 +14,7 @@
     <string name="loading_text">テキストをロード中…</string>
     <string name="manual">マニュアル</string>
     <string name="open">開く</string>
-    <string name="server_installation_failed">サーバーのインストールに失敗しました。</string>
+    <string name="server_installation_failed">サーバーのインストールに失敗しました：%1$s</string>
     <string name="server_installing">サーバーをインストール中…</string>
     <string name="server_interface">サーバーアドレス</string>
     <string name="server_keep_running">アプリが終了してもサーバーの稼働を続ける</string>

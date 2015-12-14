@@ -18,7 +18,7 @@
 	<string name="go_up">Steigen</string>
 	<string name="about">Über Anwendung</string>
 	<string name="licenses">Lizenzen</string>
-	<string name="server_installation_failed">Mann kann nicht Server installieren.</string>
+	<string name="server_installation_failed">Mann kann nicht Server installieren: %1$s</string>
 	<string name="server_keep_running_title">Der Server läuft</string>
 	<string name="open">Öffnen</string>
 	<string name="settings">Einstellungen</string>

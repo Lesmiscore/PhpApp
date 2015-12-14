@@ -26,6 +26,7 @@ import com.esminis.server.php.R;
 import com.esminis.server.php.application.PhpApplication;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -53,22 +54,20 @@ public class InstallServerPhpTaskProvider implements BackgroundServiceTaskProvid
 		return Observable.create(new Observable.OnSubscribe<Void>() {
 			@Override
 			public void call(Subscriber<? super Void> subscriber) {
-				InstallHelper helper = new InstallHelper();
-				if (!preferences.getIsInstalled(context)) {
-					try {
+				try {
+					if (!preferences.getIsInstalled(context)) {
 						installToDocumentRoot.install(context, true);
-					} catch (Exception ignored) {}
+					}
+					final InstallHelper helper = new InstallHelper();
+					final File moduleDirectory = serverControl.getBinary().getParentFile();
+					final HashMap<String, String> variables = new HashMap<>();
+					helper.fromAssetFiles(moduleDirectory, getInstallPaths(context), context);
+					variables.put("moduleDirectory", moduleDirectory.getAbsolutePath());
+					helper.preprocessFile(new File(moduleDirectory, "odbcinst.ini"), variables);
+					subscriber.onCompleted();
+				} catch (Throwable e) {
+					subscriber.onError(e);
 				}
-				String[] list = getInstallPaths(context);
-				final File moduleDirectory = serverControl.getBinary().getParentFile();
-				if (!helper.fromAssetFiles(moduleDirectory, list, context)) {
-					subscriber.onError(new Exception("Install failed"));
-					return;
-				}
-				HashMap<String, String> variables = new HashMap<>();
-				variables.put("moduleDirectory", moduleDirectory.getAbsolutePath());
-				helper.preprocessFile(new File(moduleDirectory, "odbcinst.ini"), variables);
-				subscriber.onCompleted();
 			}
 		});
 	}

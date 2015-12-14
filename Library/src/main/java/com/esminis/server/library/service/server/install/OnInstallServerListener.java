@@ -4,6 +4,6 @@ public interface OnInstallServerListener {
 
 	void OnInstallNewVersionRequest(InstallServer installer);
 
-	void OnInstallEnd(boolean success);
+	void OnInstallEnd(Throwable error);
 
 }
