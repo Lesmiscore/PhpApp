@@ -41,10 +41,10 @@ public class MariaDbInstallServerTaskProvider implements BackgroundServiceTaskPr
 						initializeDataDirectory(context, binary);
 						subscriber.onCompleted();
 					} else {
-						subscriber.onError(new Exception("Install failed: cannot set execute permission"));
+						subscriber.onError(new Exception("cannot set execute permission"));
 					}
-				} catch (Exception e) {
-					subscriber.onError(new Exception("Install failed"));
+				} catch (Throwable e) {
+					subscriber.onError(e);
 				}
 			}
 		});
