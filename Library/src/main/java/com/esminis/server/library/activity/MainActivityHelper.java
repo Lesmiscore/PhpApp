@@ -29,6 +29,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.method.ScrollingMovementMethod;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
@@ -177,7 +178,9 @@ public class MainActivityHelper {
 			activity.findViewById(R.id.preloader).setVisibility(preloader ? View.VISIBLE : View.GONE);
 			activity.findViewById(R.id.preloader_button_ok)
 				.setVisibility(button ? View.VISIBLE : View.GONE);
-			((TextView)activity.findViewById(R.id.preloader_label)).setText(message);
+			TextView textView = (TextView)activity.findViewById(R.id.preloader_label);
+			textView.setMovementMethod(new ScrollingMovementMethod());
+			textView.setText(message);
 		}
 	}
 
