@@ -1,1 +1,1 @@
-setupServerProject(this, 6, "1.0.2", "com.esminis.server.mariadb")
+setupServerProject(this, 7, "1.0.3", "com.esminis.server.mariadb")
