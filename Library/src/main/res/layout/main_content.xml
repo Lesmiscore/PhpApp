@@ -19,6 +19,7 @@
 			<TextView
 				android:id="@+id/preloader_label"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
+			  android:padding="10dp"
 			/>
 			<Button
 				android:id="@+id/preloader_button_ok" android:layout_marginTop="20dp"

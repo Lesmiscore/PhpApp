@@ -110,8 +110,9 @@ class MariaDbServerLauncher extends ServerLauncher {
 				process.waitFor();
 			} catch (Throwable e) {
 				FileUtils.deleteDirectory(root);
+				//noinspection ResultOfMethodCallIgnored
 				root.mkdirs();
-				throw new IOException(e);
+				throw new IOException(e.toString() + "\n\nLog:\n" + IOUtils.toString(process.getErrorStream()));
 			}
 		}
 	}
