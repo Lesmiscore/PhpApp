@@ -3,7 +3,9 @@ package com.esminis.server.library.application;
 import com.esminis.server.library.activity.DrawerFragment;
 import com.esminis.server.library.activity.DrawerFragmentHelper;
 import com.esminis.server.library.activity.MainActivity;
-import com.esminis.server.library.dialog.About;
+import com.esminis.server.library.dialog.about.AboutPresenter;
+import com.esminis.server.library.dialog.about.AboutPresenterImpl;
+import com.esminis.server.library.model.manager.ProductLicenseManager;
 import com.esminis.server.library.service.AutoStart;
 import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.service.server.ServerNotificationService;
@@ -22,8 +24,6 @@ public interface LibraryApplicationComponent {
 
 	void inject(MainActivity activity);
 
-	void inject(About dialog);
-
 	void inject(DrawerFragment fragment);
 
 	void inject(ServerNotificationService service);
@@ -37,6 +37,8 @@ public interface LibraryApplicationComponent {
 	DrawerFragment getDrawerFragment();
 
 	InstallServerTask getInstallTask();
+
+	ProductLicenseManager getProductLicenseManager();
 
 }
 

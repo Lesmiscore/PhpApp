@@ -52,7 +52,7 @@ import android.widget.TextView;
 
 import com.esminis.server.library.application.LibraryApplication;
 import com.esminis.server.library.model.manager.Network;
-import com.esminis.server.library.dialog.About;
+import com.esminis.server.library.dialog.about.About;
 import com.esminis.server.library.dialog.DirectoryChooser;
 import com.esminis.server.library.permission.PermissionActivityHelper;
 import com.esminis.server.library.model.manager.Log;
