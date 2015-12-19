@@ -17,7 +17,7 @@ allprojects {
     }
 }
 
-def setupServerProject(plugin, int versionCodeId, String versionNameValue, String packageName) {
+def setupServerProject(plugin, int versionCodeId, String versionNameValue, String packageName, int minimumSdkVersion) {
     plugin.apply plugin: 'com.android.application'
     plugin.apply plugin: 'com.neenbedankt.android-apt'
     plugin.android {
@@ -25,7 +25,7 @@ def setupServerProject(plugin, int versionCodeId, String versionNameValue, Strin
         buildToolsVersion "23.0.1"
         defaultConfig {
             applicationId packageName
-            minSdkVersion 16
+            minSdkVersion minimumSdkVersion
             targetSdkVersion 23
             versionName versionNameValue
             versionCode versionCodeId // should increment by 2 since 20
