@@ -1,7 +1,5 @@
 package com.esminis.server.library.dialog.about;
 
-import android.content.Context;
-
 import com.esminis.server.library.R;
 import com.esminis.server.library.application.LibraryApplication;
 import com.esminis.server.library.model.ProductLicense;
