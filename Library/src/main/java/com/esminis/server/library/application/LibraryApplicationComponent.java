@@ -3,6 +3,7 @@ package com.esminis.server.library.application;
 import com.esminis.server.library.activity.DrawerFragment;
 import com.esminis.server.library.activity.DrawerFragmentHelper;
 import com.esminis.server.library.activity.MainActivity;
+import com.esminis.server.library.activity.MainPresenterImpl;
 import com.esminis.server.library.dialog.about.AboutPresenter;
 import com.esminis.server.library.dialog.about.AboutPresenterImpl;
 import com.esminis.server.library.model.manager.ProductLicenseManager;
@@ -22,7 +23,7 @@ public interface LibraryApplicationComponent {
 
 	void inject(AutoStart receiver);
 
-	void inject(MainActivity activity);
+	void inject(MainPresenterImpl mainPresenter);
 
 	void inject(DrawerFragment fragment);
 

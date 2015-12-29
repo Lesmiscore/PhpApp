@@ -15,10 +15,11 @@
  */
 package com.esminis.server.library.service.server.install;
 
+import android.content.Context;
+
 import com.esminis.server.library.application.LibraryApplicationComponent;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.ServerControl;
-import com.esminis.server.library.activity.MainActivity;
 
 import java.io.File;
 
@@ -46,18 +47,18 @@ public class InstallServer {
 		this.component = component;
 	}
 
-	public void install(MainActivity activity) {
+	public void install(Context context, OnInstallServerListener listener) {
 		synchronized (lock) {
-			this.listener = activity;
+			this.listener = listener;
 			if (install != null) {
 				return;
 			}
 		}
 		final File file = serverControl.getBinary();
-		if (file.isFile() && preferences.getIsInstalled(activity)) {
-			if (!preferences.getIsSameBuild(activity)) {
-				if (listener != null) {
-					listener.OnInstallNewVersionRequest(this);
+		if (file.isFile() && preferences.getIsInstalled(context)) {
+			if (!preferences.getIsSameBuild(context)) {
+				if (this.listener != null) {
+					this.listener.OnInstallNewVersionRequest(this);
 				}
 			} else {
 				finish(null);
