@@ -1,8 +1,8 @@
 package com.esminis.server.php.application;
 
-import android.os.Environment;
-
 import com.esminis.server.library.activity.DrawerFragment;
+import com.esminis.server.library.activity.main.MainPresenter;
+import com.esminis.server.library.activity.main.MainPresenterImpl;
 import com.esminis.server.library.application.*;
 import com.esminis.server.library.model.manager.Log;
 import com.esminis.server.library.model.manager.Network;
@@ -33,9 +33,7 @@ public class PhpApplicationModule {
 		Network network, com.esminis.server.library.model.manager.Process process, Log log,
 		Preferences preferences
 	) {
-		return new Php(
-			network, process, preferences, log, application, application.getIsMainApplicationProcess()
-		);
+		return new Php(network, process, preferences, log, application);
 	}
 
 	@Provides
@@ -48,8 +46,13 @@ public class PhpApplicationModule {
 	}
 
 	@Provides
-	public DrawerFragment provideDrawerFragment() {
-		return new DrawerPhpFragment();
+	public DrawerFragment provideDrawerFragment(DrawerPhpFragment implementation) {
+		return implementation;
+	}
+
+	@Provides
+	public MainPresenter provideMainPresenter(MainPresenterImpl implementation) {
+		return implementation;
 	}
 
 }

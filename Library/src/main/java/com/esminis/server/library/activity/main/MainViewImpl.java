@@ -1,4 +1,4 @@
-package com.esminis.server.library.activity;
+package com.esminis.server.library.activity.main;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -6,16 +6,24 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.drawable.DrawerArrowDrawable;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -73,6 +81,7 @@ public class MainViewImpl implements MainView {
 		drawerLayout = (DrawerLayout)activity.findViewById(R.id.drawer_layout);
 		buttonStart = activity.findViewById(R.id.start);
 		buttonStop = activity.findViewById(R.id.stop);
+		setupToolbar(activity);
 		actionBar = activity.getSupportActionBar();
 		if (actionBar != null) {
 			actionBar.setTitle(titleDefault);
@@ -354,7 +363,6 @@ public class MainViewImpl implements MainView {
 
 	@Override
 	public void setServerInterfaces(List<Network> list, int selectedPosition) {
-
 		viewServerInterfaces.setAdapter(
 			new ArrayAdapter<>(getThemeContext(), android.R.layout.simple_spinner_dropdown_item, list)
 		);
@@ -366,7 +374,8 @@ public class MainViewImpl implements MainView {
 				presenter.onServerInterfaceChanged(position);
 			}
 
-			public void onNothingSelected(AdapterView<?> parent) {}
+			public void onNothingSelected(AdapterView<?> parent) {
+			}
 
 		});
 	}
@@ -382,6 +391,24 @@ public class MainViewImpl implements MainView {
 	public void showButton(int button) {
 		buttonStart.setVisibility(button == BUTTON_START ? View.VISIBLE : View.GONE);
 		buttonStop.setVisibility(button == BUTTON_STOP ? View.VISIBLE : View.GONE);
+	}
+
+	private void setupToolbar(@NonNull AppCompatActivity activity) {
+		Toolbar toolbar = (Toolbar)activity.findViewById(R.id.toolbar);
+		if (toolbar != null) {
+			toolbar.setLogo(R.drawable.ic_toolbar);
+			toolbar.inflateMenu(R.menu.main);
+			TypedValue attribute = new TypedValue();
+			activity.getTheme().resolveAttribute(android.R.attr.textColorPrimary, attribute, true);
+			if (attribute.resourceId > 0) {
+				MenuItem item = toolbar.getMenu().findItem(R.id.menu_about);
+				Drawable icon = DrawableCompat.wrap(item.getIcon());
+				DrawableCompat.setTintMode(icon, PorterDuff.Mode.SRC_IN);
+				DrawableCompat.setTint(icon, ContextCompat.getColor(activity, attribute.resourceId));
+				item.setIcon(icon);
+			}
+			activity.setSupportActionBar(toolbar);
+		}
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.esminis.server.library.activity;
+package com.esminis.server.library.activity.main;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
@@ -8,17 +8,23 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.esminis.server.library.EventMessage;
 import com.esminis.server.library.R;
 import com.esminis.server.library.application.LibraryApplication;
 import com.esminis.server.library.model.manager.Log;
 import com.esminis.server.library.model.manager.Network;
 import com.esminis.server.library.permission.PermissionActivityHelper;
 import com.esminis.server.library.permission.PermissionListener;
+import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.background.BackgroundService;
 import com.esminis.server.library.service.server.ServerNotification;
 import com.esminis.server.library.service.server.install.InstallServer;
@@ -28,6 +34,8 @@ import com.esminis.server.library.service.server.tasks.ServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.StartServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.StatusServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.StopServerTaskProvider;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import java.io.File;
 
@@ -51,7 +59,10 @@ public class MainPresenterImpl implements MainPresenter {
 	protected ServerNotification serverNotification;
 
 	@Inject
-	protected MainActivityHelper activityHelper;
+	protected Bus bus;
+
+	@Inject
+	protected Preferences preferences;
 
 	private final ReceiverManager receiverManager = new ReceiverManager();
 
@@ -59,15 +70,12 @@ public class MainPresenterImpl implements MainPresenter {
 	private Throwable installError = null;
 	private boolean showInstallFinishedOnResume = false;
 	private boolean paused = false;
-	private final AppCompatActivity activity;
+	protected AppCompatActivity activity = null;
 
 	static private final String KEY_ERROR = "errors";
 
-	MainPresenterImpl(AppCompatActivity activity) {
-		((LibraryApplication)activity.getApplication()).getComponent().inject(this);
-		this.activity = activity;
-		activityHelper.createToolbar(activity);
-	}
+	@Inject
+	public MainPresenterImpl() {}
 
 	@Override
 	public void onDestroy() {
@@ -80,10 +88,9 @@ public class MainPresenterImpl implements MainPresenter {
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState, MainView view) {
+	public void onCreate(AppCompatActivity activity, Bundle savedInstanceState, MainView view) {
 		this.view = view;
-		activityHelper.onResume(activity);
-		permissionHelper.onResume(activity);
+		permissionHelper.onResume(this.activity = activity);
 		final LibraryApplication application = (LibraryApplication)activity.getApplication();
 		if (savedInstanceState != null) {
 			view.setLog(savedInstanceState.getCharSequence(KEY_ERROR));
@@ -104,7 +111,7 @@ public class MainPresenterImpl implements MainPresenter {
 	@Override
 	public void onResume() {
 		paused = false;
-		activityHelper.onResume(activity);
+		bus.register(this);
 		permissionHelper.onResume(activity);
 		if (showInstallFinishedOnResume) {
 			showInstallFinishedOnResume = false;
@@ -119,7 +126,7 @@ public class MainPresenterImpl implements MainPresenter {
 	@Override
 	public void onPause() {
 		paused = true;
-		activityHelper.onPause();
+		bus.unregister(this);
 		permissionHelper.onPause();
 		receiverManager.onPause();
 	}
@@ -160,7 +167,7 @@ public class MainPresenterImpl implements MainPresenter {
 						@Override
 						public void OnInstallNewVersionRequest(InstallServer installer) {
 							if (view != null) {
-								view.showInstallNewVersionRequest(activityHelper.getMessageNewVersion(activity));
+								view.showInstallNewVersionRequest(getMessageNewVersion(activity));
 							}
 						}
 
@@ -177,7 +184,8 @@ public class MainPresenterImpl implements MainPresenter {
 				}
 
 				@Override
-				public void onDenied() {}
+				public void onDenied() {
+				}
 
 			}
 		);
@@ -195,8 +203,8 @@ public class MainPresenterImpl implements MainPresenter {
 			return;
 		}
 		view.showMainContent();
-		view.setDocumentRoot(activityHelper.getRootDirectory(activity));
-		view.setPort(activityHelper.getPort(activity), true);
+		view.setDocumentRoot(getRootDirectory(activity));
+		view.setPort(getPort(activity), true);
 		receiverManager.add(
 			context, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION), new BroadcastReceiver() {
 				@Override
@@ -217,8 +225,9 @@ public class MainPresenterImpl implements MainPresenter {
 						} else {
 							if (extras != null && extras.getBoolean("running")) {
 								view.showButton(MainView.BUTTON_STOP);
-								final CharSequence title = activityHelper
-									.getServerRunningLabel(extras.getString("address"));
+								final CharSequence title = Html.fromHtml(
+									getServerRunningLabel(activity, extras.getString("address"))
+								);
 								view.setStatusLabel(title);
 								serverNotification.show(
 									activity, title.toString(), activity.getString(R.string.server_running_public)
@@ -236,6 +245,13 @@ public class MainPresenterImpl implements MainPresenter {
 		);
 		resetNetwork();
 		serverStatus();
+	}
+
+	protected String getServerRunningLabel(Context context, String address) {
+		return String.format(
+			context.getString(R.string.server_running),
+			"<a href=\"http://" + address + "\">" + address + "</a>"
+		);
 	}
 
 	@Override
@@ -263,19 +279,19 @@ public class MainPresenterImpl implements MainPresenter {
 
 	@Override
 	public void showDocumentRootChooser() {
-		view.showDocumentRootChooser(new File(activityHelper.getRootDirectory(activity)));
+		view.showDocumentRootChooser(new File(getRootDirectory(activity)));
 	}
 
 	@Override
 	public void onDocumentRootChosen(File documentRoot) {
-		activityHelper.setRootDirectory(activity, documentRoot.getAbsolutePath());
-		view.setDocumentRoot(activityHelper.getRootDirectory(activity));
+		setRootDirectory(activity, documentRoot.getAbsolutePath());
+		view.setDocumentRoot(getRootDirectory(activity));
 		serverRestartIfRunning();
 	}
 
 	@Override
 	public void portModified(String newValue) {
-		String portPreference = activityHelper.getPort(activity);
+		String portPreference = getPort(activity);
 		if (portPreference == null || portPreference.isEmpty()) {
 			portPreference = activity.getString(R.string.default_port);
 		}
@@ -284,7 +300,7 @@ public class MainPresenterImpl implements MainPresenter {
 			port = Integer.parseInt(newValue);
 		} catch (NumberFormatException ignored) {}
 		if (port >= 1024 && port <= 65535) {
-			activityHelper.setPort(activity, String.valueOf(port));
+			setPort(activity, String.valueOf(port));
 			serverRestartIfRunning();
 			view.setPort(String.valueOf(port), true);
 		} else {
@@ -313,10 +329,10 @@ public class MainPresenterImpl implements MainPresenter {
 
 	@Override
 	public void onServerInterfaceChanged(int position) {
-		final String value = activityHelper.getAddress(activity);
+		final String value = getAddress(activity);
 		final String newValue = network.get(position).name;
 		if (!value.equals(newValue)) {
-			activityHelper.setAddress(activity, newValue);
+			setAddress(activity, newValue);
 			serverRestartIfRunning();
 		}
 	}
@@ -343,12 +359,61 @@ public class MainPresenterImpl implements MainPresenter {
 		if (view != null) {
 			boolean changed = network.refresh();
 			view.setServerInterfaces(
-				network.get(), network.getPosition(activityHelper.getAddress(activity))
+				network.get(), network.getPosition(getAddress(activity))
 			);
 			if (changed) {
 				serverRestartIfRunning();
 			}
 		}
+	}
+
+	private String getPort(Context context) {
+		return preferences.getString(context, Preferences.PORT);
+	}
+
+	private void setPort(Context context, String port) {
+		preferences.set(context, Preferences.PORT, port);
+	}
+
+	private String getAddress(Context context) {
+		return preferences.getString(context, Preferences.ADDRESS);
+	}
+
+	private void setAddress(Context context, String address) {
+		preferences.set(context, Preferences.ADDRESS, address);
+	}
+
+	private String getRootDirectory(Context context) {
+		return preferences.getString(context, Preferences.DOCUMENT_ROOT);
+	}
+
+	private void setRootDirectory(Context context, String root) {
+		preferences.set(context, Preferences.DOCUMENT_ROOT, root);
+	}
+
+	private String getMessageNewVersion(Context context) {
+		return context.getString(
+			R.string.server_install_new_version_question, preferences.getBuild(context)
+		);
+	}
+
+	@Subscribe
+	public void onEventMessage(EventMessage event) {
+		View view = activity.findViewById(R.id.container);
+		if (view == null) {
+			return;
+		}
+		final Snackbar snackbar = Snackbar.make(view, event.message, Snackbar.LENGTH_LONG);
+		snackbar.setAction(R.string.dismiss, new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				snackbar.dismiss();
+			}
+		});
+		snackbar.setActionTextColor(
+			ContextCompat.getColor(view.getContext(), event.error ? R.color.error : R.color.main)
+		);
+		snackbar.show();
 	}
 
 }

@@ -13,8 +13,6 @@ import dagger.Component;
 @Component(modules = {PhpApplicationModule.class, LibraryApplicationModule.class})
 public interface PhpApplicationComponent extends LibraryApplicationComponent {
 
-	void inject(DrawerPhpFragment fragment);
-
 	void inject(InstallServerPhpTaskProvider provider);
 
 }

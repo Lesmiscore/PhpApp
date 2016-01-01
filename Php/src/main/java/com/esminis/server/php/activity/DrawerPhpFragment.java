@@ -3,12 +3,15 @@ package com.esminis.server.php.activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
+import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ListView;
@@ -18,7 +21,6 @@ import com.esminis.server.library.activity.DrawerFragment;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.widget.CheckboxRight;
 import com.esminis.server.php.R;
-import com.esminis.server.php.application.PhpApplication;
 import com.esminis.server.php.server.install.InstallToDocumentRoot;
 
 import java.util.HashMap;
@@ -39,10 +41,14 @@ public class DrawerPhpFragment extends DrawerFragment {
 	@Inject
 	protected InstallToDocumentRoot installToDocumentRoot;
 
+	@Inject
+	public DrawerPhpFragment() {
+		super();
+	}
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		((PhpApplication)getActivity().getApplicationContext()).getComponent().inject(this);
 		if (savedInstanceState != null) {
 			initializeModulesDialog();
 		}
@@ -87,13 +93,7 @@ public class DrawerPhpFragment extends DrawerFragment {
 		((ViewGroup)list.getParent()).removeView(list);
 		list.setPadding(0, 0, 0, 0);
 		dialog.setContentView(R.layout.preference_modules);
-		final Toolbar toolbar = activityHelper.createToolbar(dialog, getActivity());
-		toolbar.setPadding(
-			toolbar.getPaddingLeft(), toolbar.getPaddingTop(), 0, toolbar.getPaddingBottom()
-		);
-		toolbar.setLogo(null);
-		toolbar.setTitle(screen.getTitle());
-		initializeToolbarMenu(toolbar);
+		setupToolbar(screen);
 		((ViewGroup)dialog.findViewById(R.id.content)).addView(
 			list, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 		);
@@ -115,7 +115,28 @@ public class DrawerPhpFragment extends DrawerFragment {
 		resetSelectAll();
 	}
 
-	private void initializeToolbarMenu(Toolbar toolbar) {
+	private void setupToolbar(PreferenceScreen screen) {
+		final Dialog dialog = screen.getDialog();
+		Toolbar toolbar = (Toolbar)dialog.findViewById(com.esminis.server.library.R.id.toolbar);
+		if (toolbar == null) {
+			return;
+		}
+		final DrawerArrowDrawable drawable = new DrawerArrowDrawable(getActivity());
+		toolbar.setLogo(com.esminis.server.library.R.drawable.ic_toolbar);
+		drawable.setProgress(1);
+		drawable.setColor(Color.BLACK);
+		toolbar.setNavigationIcon(drawable);
+		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+		toolbar.setPadding(
+			toolbar.getPaddingLeft(), toolbar.getPaddingTop(), 0, toolbar.getPaddingBottom()
+		);
+		toolbar.setLogo(null);
+		toolbar.setTitle(screen.getTitle());
 		checkboxSelectAll = new CheckboxRight(toolbar.getContext());
 		toolbar.getMenu().add("").setActionView(checkboxSelectAll)
 			.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
