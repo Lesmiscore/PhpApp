@@ -38,9 +38,13 @@ public class Php extends ServerControl {
 
 	public Php(
 		Network network, Process managerProcess, Preferences preferences, Log log,
-		LibraryApplication application, boolean mainProcess
+		LibraryApplication application
 	) {
-		super("php", application, network, preferences, log, managerProcess, mainProcess);
+		super(
+			"php",
+			application, network, preferences, log, managerProcess,
+			application.getIsMainApplicationProcess()
+		);
 		this.startup = new PhpServerLauncher(managerProcess);
 	}
 

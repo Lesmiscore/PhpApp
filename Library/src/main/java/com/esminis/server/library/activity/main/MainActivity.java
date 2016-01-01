@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.esminis.server.library.activity;
+package com.esminis.server.library.activity.main;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.esminis.server.library.R;
+import com.esminis.server.library.application.LibraryApplication;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		presenter = new MainPresenterImpl(this);
-		presenter.onCreate(savedInstanceState, new MainViewImpl(this, presenter));
+		presenter = ((LibraryApplication)getApplication()).getComponent().getMainPresenter();
+		presenter.onCreate(this, savedInstanceState, new MainViewImpl(this, presenter));
 	}
 
 	@Override

@@ -39,26 +39,30 @@ import com.squareup.otto.Bus;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 public class DrawerFragment extends PreferenceFragment {
 
+	@Inject
 	protected Preferences preferences;
 
+	@Inject
 	protected ServerControl serverControl;
 
-	protected MainActivityHelper activityHelper;
-
+	@Inject
 	protected Bus bus;
+
+	@Inject
+	public DrawerFragment() {
+		super();
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Context context = getActivity();
-		DrawerFragmentHelper helper = ((LibraryApplication)context.getApplicationContext())
-			.getComponent().getDrawerFragmentHelper();
-		preferences = helper.preferences;
-		serverControl = helper.serverControl;
-		activityHelper = helper.activityHelper;
-		bus = helper.bus;
+		((LibraryApplication)context.getApplicationContext())
+			.getComponent().inject(this);
 		PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(context);
 		setPreferenceScreen(screen);
 		context = new ContextThemeWrapper(getActivity(), R.style.Preference);

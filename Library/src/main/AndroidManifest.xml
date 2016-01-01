@@ -17,7 +17,7 @@
         <receiver android:name="com.esminis.server.library.service.AutoStart">
             <intent-filter><action android:name="android.intent.action.BOOT_COMPLETED" /></intent-filter>
         </receiver>
-        <activity android:name="com.esminis.server.library.activity.MainActivity" android:windowSoftInputMode="stateHidden">
+        <activity android:name=".activity.main.MainActivity" android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

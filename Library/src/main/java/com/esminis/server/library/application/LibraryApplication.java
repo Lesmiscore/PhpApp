@@ -23,7 +23,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 
-import com.esminis.server.library.activity.MainActivity;
+import com.esminis.server.library.activity.main.MainActivity;
 import com.esminis.server.library.service.background.BackgroundService;
 import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.service.server.tasks.StatusServerTaskProvider;

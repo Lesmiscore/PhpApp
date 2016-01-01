@@ -26,7 +26,7 @@ import android.support.v4.app.NotificationCompat.Builder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
 
-import com.esminis.server.library.activity.MainActivity;
+import com.esminis.server.library.activity.main.MainActivity;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.R;
 

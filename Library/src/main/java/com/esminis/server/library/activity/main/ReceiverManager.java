@@ -1,4 +1,4 @@
-package com.esminis.server.library.activity;
+package com.esminis.server.library.activity.main;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

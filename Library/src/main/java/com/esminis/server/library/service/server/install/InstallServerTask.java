@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.os.Environment;
 
 import com.esminis.server.library.R;
-import com.esminis.server.library.activity.MainActivity;
+import com.esminis.server.library.activity.main.MainActivity;
 import com.esminis.server.library.application.LibraryApplication;
 import com.esminis.server.library.model.manager.Network;
 import com.esminis.server.library.preferences.Preferences;

@@ -1,7 +1,8 @@
-package com.esminis.server.library.activity;
+package com.esminis.server.library.activity.main;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -10,7 +11,7 @@ import java.io.File;
 
 public interface MainPresenter {
 
-	void onCreate(Bundle savedInstanceState, MainView view);
+	void onCreate(AppCompatActivity activity, Bundle savedInstanceState, MainView view);
 
 	void onDestroy();
 

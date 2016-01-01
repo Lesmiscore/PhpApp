@@ -25,7 +25,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.esminis.server.library.application.LibraryApplication;
-import com.esminis.server.library.activity.MainActivity;
+import com.esminis.server.library.activity.main.MainActivity;
 
 import javax.inject.Inject;
 
