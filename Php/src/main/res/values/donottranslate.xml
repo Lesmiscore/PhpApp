@@ -34,9 +34,9 @@
 		<item>posix</item><item>POSIX</item><item>Interface to POSIX functions</item>
 		<item>pgsql</item><item>PostgreSQL</item><item>PostgreSQL</item>
 		<item>pspell</item><item>Pspell</item><item>Functions to check the spelling and offer suggestions</item>
-		<!---item>quickhash</item><item>Quickhash</item><item>Quickhash</item>
+		<!---item>quickhash</item><item>Quickhash</item><item>Quickhash</item-->
 		<item>rar</item><item>RAR</item><item>Rar Archiving</item>
-		<item>rpmreader</item><item>RPM Reader</item><item>RPM Header Reading</item-->
+		<!--item>rpmreader</item><item>RPM Reader</item><item>RPM Header Reading</item-->
 		<item>soap</item><item>SOAP</item><item>SOAP Server and Client</item>
 		<!--item>spl_types</item><item>SPL Types</item><item>SPL Type Handling</item-->
 		<item>ssh2</item><item>SSH 2</item><item>Secure Shell 2</item>
