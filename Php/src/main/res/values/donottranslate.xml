@@ -3,7 +3,7 @@
 	<string name="version" translatable="false">7.0.0</string>
 	<string name="build" translatable="false">0</string>
 	<string-array name="modules" translatable="false">
-		<!--item>bbcode</item><item>BBCode</item><item>Bulletin Board Code</item-->
+		<item>bbcode</item><item>BBCode</item><item>Bulletin Board Code</item>
 		<item>bcmath</item><item>BC Math</item><item>Arbitrary Precision Mathematics</item>
 		<item>bz2</item><item>Bzip 2</item><item>Bzip 2</item>
 		<item>calendar</item><item>Calendar</item><item>Functions to simplify converting between different calendar formats</item>
