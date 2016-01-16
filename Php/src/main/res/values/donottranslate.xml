@@ -18,8 +18,8 @@
 		<item>gmp</item><item>GMP</item><item>GNU Multiple Precision</item>
 		<item>recode</item><item>GNU Recode</item><item>Interface to GNU Recode library</item>
 		<item>iconv</item><item>iconv</item><item>Interface to iconv character set conversion facility</item>
-		<!--item>id3</item><item>ID3</item><item>ID3 Tags</item>
-		<item>judy</item><item>Judy</item><item>Judy Arrays</item-->
+		<item>id3</item><item>ID3</item><item>ID3 Tags</item>
+		<!--item>judy</item><item>Judy</item><item>Judy Arrays</item-->
 		<item>lzf</item><item>LZF</item><item>LZF compression</item>
 		<item>mailparse</item><item>Mailparse</item><item>For parsing and working with email messages</item>
 		<item>mcrypt</item><item>Mcrypt</item><item>Interface to mcrypt library</item>
@@ -38,7 +38,7 @@
 		<item>rar</item><item>RAR</item><item>Rar Archiving</item>
 		<!--item>rpmreader</item><item>RPM Reader</item><item>RPM Header Reading</item-->
 		<item>soap</item><item>SOAP</item><item>SOAP Server and Client</item>
-		<!--item>spl_types</item><item>SPL Types</item><item>SPL Type Handling</item-->
+		<item>spl_types</item><item>SPL Types</item><item>SPL Type Handling</item>
 		<item>ssh2</item><item>SSH 2</item><item>Secure Shell 2</item>
 		<item>stats</item><item>Statistics</item><item>Functions useful for statistical computations</item>
 		<item>tidy</item><item>Tidy</item><item>Binding for the Tidy HTML clean and repair utility</item>
