@@ -36,29 +36,9 @@ def setupServerProject(plugin, int versionCodeId, String versionNameValue, Strin
                 proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             }
         }
-        productFlavors {
-
-            developmentNoJniLibs {
-                versionCode versionCodeId - 1
-            }
-            arm {
-                versionCode versionCodeId - 1
-            }
-            x86 {
-                versionCode versionCodeId
-            }
-        }
-        // Temporary while gradle does not fully support ndk
-        sourceSets.developmentNoJniLibs {
+        sourceSets.main {
             jni.srcDirs = []
-        }
-        sourceSets.arm {
-            jniLibs.srcDir 'src/arm/libs'
-            jni.srcDirs = []
-        }
-        sourceSets.x86 {
-            jniLibs.srcDir 'src/x86/libs'
-            jni.srcDirs = []
+            jniLibs.srcDir 'src/main/libs'
         }
         plugin.android {
             packagingOptions {
@@ -80,7 +60,7 @@ def setupServerProject(plugin, int versionCodeId, String versionNameValue, Strin
             return;
         }
         def ndkBuild = plugin.android.ndkDirectory.absolutePath + "/ndk-build"
-        def jniDir = plugin.file("src/" + variant.properties.get('flavorName') + "/jni").absolutePath
+        def jniDir = plugin.file("src/main/jni").absolutePath
         variant.javaCompile.dependsOn plugin.tasks.create(
                 name: "build_" + (String)variant.name, type: Exec
         ) {
