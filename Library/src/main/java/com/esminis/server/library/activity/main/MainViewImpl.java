@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
@@ -17,7 +18,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -34,12 +34,14 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.esminis.server.library.R;
 import com.esminis.server.library.dialog.DirectoryChooser;
 import com.esminis.server.library.dialog.about.About;
+import com.esminis.server.library.model.InstallPackage;
 import com.esminis.server.library.model.Network;
 
 import java.io.File;
@@ -326,7 +328,7 @@ public class MainViewImpl implements MainView {
 		drawerToggle.setDrawerIndicatorEnabled(true);
 		syncDrawer();
 		drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-		setMessage(false, false, false, null);
+		setMessage(false, false, null, null);
 		viewContainer.setVisibility(View.VISIBLE);
 		removeFocus();
 	}
@@ -339,17 +341,19 @@ public class MainViewImpl implements MainView {
 
 	@Override
 	public void setMessage(
-		boolean containerVisible, boolean preloader, boolean button, String message
+		boolean preloaderBackground, boolean preloader, String buttonTitle, String message
 	) {
 		final Activity activity = this.activity.get();
 		if (activity == null) {
 			return;
 		}
 		activity.findViewById(R.id.preloader_container)
-			.setVisibility(containerVisible ? View.VISIBLE : View.GONE);
-		if (containerVisible) {
+			.setVisibility(preloaderBackground ? View.VISIBLE : View.GONE);
+		if (preloaderBackground) {
+			final Button button = (Button)activity.findViewById(R.id.preloader_button_ok);
+			button.setVisibility(buttonTitle != null ? View.VISIBLE : View.GONE);
+			button.setText(buttonTitle);
 			activity.findViewById(R.id.preloader).setVisibility(preloader ? View.VISIBLE : View.GONE);
-			activity.findViewById(R.id.preloader_button_ok).setVisibility(button ? View.VISIBLE : View.GONE);
 			TextView textView = (TextView)activity.findViewById(R.id.preloader_label);
 			textView.setMovementMethod(new ScrollingMovementMethod());
 			textView.setText(message);
@@ -411,4 +415,8 @@ public class MainViewImpl implements MainView {
 		}
 	}
 
+	@Override
+	public void showInstall(InstallPackage[] packages, InstallPackage installedPackage) {
+
+	}
 }

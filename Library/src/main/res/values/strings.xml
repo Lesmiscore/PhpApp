@@ -42,4 +42,7 @@
 	<string name="back_to_licenses">Back to license list</string>
 	<string name="warning_message">Warning: %1$s</string>
 	<string name="permission_files_needed">%1$s needs access to files to work. Please grant access to files.</string>
+	<string name="downloading_packages">Obtaining list of available versions</string>
+	<string name="downloading_packages_failed">Could not obtain list of available versions: %1$s</string>
+	<string name="retry">Retry</string>
 </resources>

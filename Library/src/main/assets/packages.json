@@ -1,23 +1,30 @@
 {
 	"title" : "Servers for Android packages",
- 	"uri" : "https://esminiscdn.com/packages/files/{$package}_{$architecture}_{$version}_{$build}.zip",
+ 	"uri" : "https://esminiscdn.com/packages/files/{$id}.zip",
  	"files" : [
 		{
-			"version" : "7.0.0", "build" : 0, "hash" : "bb1b4e1d8c310ccde8bb111ed4bab6dc",
-			"architecture" : "arm", "package" : "com.esminis.server.php"
+			"id" : 1, "order" : 700, "hash" : "bb1b4e1d8c310ccde8bb111ed4bab6dc",
+			"version" : "7.0.0", "build" : 0, "architecture" : "arm",
+			"minAppVersion" : null, "maxAppVersion" : null,
+			"package" : "com.esminis.server.php"
 		},
 		{
-			"version" : "7.0.0", "build" : 0, "hash" : "[hash]",
-			"architecture" : "x86", "package" : "com.esminis.server.php"
-
+			"id" : 2, "order" : 700, "hash" : "[hash]",
+			"version" : "7.0.0", "build" : 0, "architecture" : "x86",
+			"minAppVersion" : null, "maxAppVersion" : null,
+			"package" : "com.esminis.server.php"
 		},
 		{
-			"version" : "10.1.8", "build" : 0, "hash" : "[hash]",
-			"architecture" : "arm", "package" : "com.esminis.server.mariadb"
+			"id" : 3, "order" : 10108, "hash" : "[hash]",
+			"version" : "10.1.8", "build" : 0, "architecture" : "arm",
+			"minAppVersion" : null, "maxAppVersion" : null,
+			"package" : "com.esminis.server.mariadb"
 		},
 		{
-			"version" : "10.1.8", "build" : 0, "hash" : "[hash]",
-			"architecture" : "x86", "package" : "com.esminis.server.mariadb"
+			"id" : 4, "order" : 10108, "hash" : "[hash]",
+			"version" : "10.1.8", "build" : 0, "architecture" : "x86",
+			"minAppVersion" : null, "maxAppVersion" : null,
+			"package" : "com.esminis.server.mariadb"
 		}
 	]
 }

@@ -1,12 +1,11 @@
 package com.esminis.server.library.activity.main;
 
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.annotation.StringRes;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.esminis.server.library.model.InstallPackage;
 import com.esminis.server.library.model.Network;
 
 import java.io.File;
@@ -34,11 +33,15 @@ public interface MainView {
 
 	boolean onMenuItemSelected(MenuItem item);
 
-	void setMessage(boolean containerVisible, boolean preloader, boolean button, String message);
+	void setMessage(
+		boolean preloaderBackground, boolean preloader, String buttonTitle, String message
+	);
 
 	void showAbout();
 
 	void showDocumentRootChooser(File root);
+
+	void showInstall(InstallPackage[] packages, InstallPackage installedPackage);
 
 	void showInstallNewVersionRequest(CharSequence message);
 
