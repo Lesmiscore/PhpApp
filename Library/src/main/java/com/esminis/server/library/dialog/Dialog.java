@@ -13,23 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.esminis.server.library.dialog.about;
+package com.esminis.server.library.dialog;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.esminis.server.library.application.LibraryApplication;
+public class Dialog<T extends DialogPresenter> extends AlertDialog {
 
-public class About extends AlertDialog {
+	protected final T presenter;
 
-	private AboutPresenter presenter = null;
-
-	public About(Context context) {
+	public Dialog(Context context, T presenter) {
 		super(context);
-		presenter = new AboutPresenterImpl(
-			(LibraryApplication)context.getApplicationContext(), new AboutViewImpl(this)
-		);
+		this.presenter = presenter;
 	}
 
 	@Override

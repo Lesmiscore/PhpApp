@@ -1,9 +1,9 @@
 package com.esminis.server.library.dialog.about;
 
-public interface AboutPresenter {
+import com.esminis.server.library.dialog.DialogPresenter;
 
-	void onCreate();
+public interface AboutPresenter extends DialogPresenter<AboutView> {
 
-	void show();
+	
 
 }

@@ -51,8 +51,6 @@ public interface MainPresenter {
 
 	boolean onMenuItemSelected(MenuItem item);
 
-	void onInstallNewVersionResponse(boolean confirmed);
-
 	void onInstallComplete();
 
 }

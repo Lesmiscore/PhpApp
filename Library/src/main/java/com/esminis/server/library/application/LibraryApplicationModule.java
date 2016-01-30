@@ -15,6 +15,8 @@
  */
 package com.esminis.server.library.application;
 
+import com.esminis.server.library.api.Api;
+import com.esminis.server.library.model.manager.InstallPackageManager;
 import com.esminis.server.library.model.manager.ProductLicenseManager;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.ServerControl;
@@ -45,6 +47,12 @@ public class LibraryApplicationModule {
 	@Singleton
 	public ProductLicenseManager provideProductLicenseManager() {
 		return new ProductLicenseManager(application);
+	}
+
+	@Provides
+	@Singleton
+	public InstallPackageManager provideInstallPackageManager(Api api, Preferences preferences) {
+		return new InstallPackageManager(api, preferences, application);
 	}
 
 	@Provides

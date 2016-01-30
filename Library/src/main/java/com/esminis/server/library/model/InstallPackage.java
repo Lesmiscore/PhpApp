@@ -1,5 +1,9 @@
 package com.esminis.server.library.model;
 
+import android.content.Context;
+
+import com.esminis.server.library.R;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,6 +39,12 @@ public class InstallPackage {
 		data.put("uri", uri);
 		data.put("hash", hash);
 		return data;
+	}
+
+	public String getTitle(Context context) {
+		return context.getString(
+			R.string.install_package_title, context.getString(R.string.title_server), version, build
+		);
 	}
 
 }

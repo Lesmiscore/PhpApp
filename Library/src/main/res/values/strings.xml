@@ -45,4 +45,8 @@
 	<string name="downloading_packages">Obtaining list of available versions</string>
 	<string name="downloading_packages_failed">Could not obtain list of available versions: %1$s</string>
 	<string name="retry">Retry</string>
+	<string name="installing_package"><![CDATA[Installing %1$s]]></string>
+	<string name="install_package_title"><![CDATA[%1$s <b>%2$s</b> (build #%3$s)]]></string>
+	<string name="install_package_title_currently_installed"><![CDATA[%1$s - <b>now installed</b>]]></string>
+	<string name="select_package_to_install"><![CDATA[Select <b>%1$s</b> build to install:]]></string>
 </resources>

@@ -1,7 +1,6 @@
 package com.esminis.server.library.activity.main;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,7 +9,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
@@ -39,9 +37,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.esminis.server.library.R;
+import com.esminis.server.library.application.LibraryApplication;
 import com.esminis.server.library.dialog.DirectoryChooser;
-import com.esminis.server.library.dialog.about.About;
-import com.esminis.server.library.model.InstallPackage;
+import com.esminis.server.library.dialog.about.AboutPresenter;
+import com.esminis.server.library.dialog.about.AboutPresenterImpl;
+import com.esminis.server.library.dialog.about.AboutViewImpl;
+import com.esminis.server.library.dialog.install.InstallPresenterImpl;
+import com.esminis.server.library.dialog.install.InstallViewImpl;
 import com.esminis.server.library.model.Network;
 
 import java.io.File;
@@ -239,14 +241,6 @@ public class MainViewImpl implements MainView {
 	}
 
 	@Override
-	public void showAbout() {
-		final Activity activity = this.activity.get();
-		if (activity != null) {
-			showDialog(new About(activity), null);
-		}
-	}
-
-	@Override
 	public void showDocumentRootChooser(File root) {
 		DirectoryChooser chooser = new DirectoryChooser(getThemeContext());
 		chooser.setParent(root);
@@ -261,34 +255,6 @@ public class MainViewImpl implements MainView {
 	}
 
 	@Override
-	public void showInstallNewVersionRequest(CharSequence message) {
-		showDialog(
-			new AlertDialog.Builder(getThemeContext())
-				.setMessage(message)
-				.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						((AlertDialog) dialog).setOnDismissListener(null);
-						presenter.onInstallNewVersionResponse(true);
-					}
-				})
-				.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						((AlertDialog) dialog).setOnDismissListener(null);
-						presenter.onInstallNewVersionResponse(false);
-					}
-				}).create(),
-			new DialogInterface.OnDismissListener() {
-				@Override
-				public void onDismiss(DialogInterface dialog) {
-					presenter.onInstallNewVersionResponse(false);
-				}
-			}
-		);
-	}
-
-	@Override
 	public void closeDialog() {
 		if (dialog != null) {
 			dialog.dismiss();
@@ -297,15 +263,12 @@ public class MainViewImpl implements MainView {
 		}
 	}
 
-	private void showDialog(Dialog dialog, final DialogInterface.OnDismissListener listener) {
+	private void showDialog(Dialog dialog) {
 		this.dialog = dialog;
 		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
 			@Override
 			public void onDismiss(DialogInterface dialog) {
 				closeDialog();
-				if (listener != null) {
-					listener.onDismiss(dialog);
-				}
 			}
 		});
 		dialog.show();
@@ -378,8 +341,7 @@ public class MainViewImpl implements MainView {
 				presenter.onServerInterfaceChanged(position);
 			}
 
-			public void onNothingSelected(AdapterView<?> parent) {
-			}
+			public void onNothingSelected(AdapterView<?> parent) {}
 
 		});
 	}
@@ -416,7 +378,25 @@ public class MainViewImpl implements MainView {
 	}
 
 	@Override
-	public void showInstall(InstallPackage[] packages, InstallPackage installedPackage) {
-
+	public void showInstall(InstallPresenterImpl presenter) {
+		final Activity activity = this.activity.get();
+		if (activity != null) {
+			final InstallViewImpl dialog = new InstallViewImpl(activity, presenter);
+			presenter.setView(dialog);
+			showDialog(dialog);
+		}
 	}
+
+	@Override
+	public void showAbout() {
+		final Activity activity = this.activity.get();
+		if (activity != null) {
+			final AboutPresenter presenter =
+				new AboutPresenterImpl((LibraryApplication)context.getApplicationContext());
+			final AboutViewImpl dialog = new AboutViewImpl(activity, presenter);
+			presenter.setView(dialog);
+			showDialog(dialog);
+		}
+	}
+
 }

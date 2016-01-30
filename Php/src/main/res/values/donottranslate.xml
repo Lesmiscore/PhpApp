@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string name="title_server">PHP</string>
 	<string name="version" translatable="false">7.0.0</string>
 	<string name="build" translatable="false">0</string>
 	<string-array name="modules" translatable="false">
