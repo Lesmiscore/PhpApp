@@ -18,8 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -29,23 +27,35 @@ public class InstallPackageManager {
 
 	private final Api api;
 	private final Preferences manager;
+	private final Context context;
 
-	@Inject
-	public InstallPackageManager(Api api, Preferences manager) {
+	public InstallPackageManager(Api api, Preferences manager, Context context) {
 		this.api = api;
 		this.manager = manager;
+		this.context = context.getApplicationContext();
 		migrate();
 	}
 
 	private void migrate() {
-		// @todo migration from old version
+		if (!manager.contains(context, Preferences.BUILD)) {
+			return;
+		}
+		final String[] parts = manager.getString(context, Preferences.BUILD).split("_");
+		try {
+			setInstalled(
+				new InstallPackage(
+					0, parts[0], parts.length > 1 ? Integer.valueOf(parts[1]) : 0, null, null
+				)
+			);
+			manager.set(context, Preferences.BUILD, null);
+		} catch (JSONException ignored) {}
 	}
 
-	public void setInstalled(Context context, InstallPackage model) throws JSONException {
+	public void setInstalled(InstallPackage model) throws JSONException {
 		manager.set(context, Preferences.INSTALLED_PACKAGE, model.toJson().toString());
 	}
 
-	public InstallPackage getInstalled(Context context) {
+	public InstallPackage getInstalled() {
 		if (manager.contains(context, Preferences.INSTALLED_PACKAGE)) {
 			try {
 				return new InstallPackage(
@@ -56,7 +66,7 @@ public class InstallPackageManager {
 		return null;
 	}
 
-	public Observable<InstallPackage[]> get(final Context context) {
+	public Observable<InstallPackage[]> get() {
 		return Observable.create(
 			new Observable.OnSubscribe<InstallPackage[]>() {
 				@Override

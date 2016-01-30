@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string name="title_server" translatable="false" />
 	<string name="version" translatable="false" />
 	<string name="build" translatable="false" />
 	<string name="default_port" translatable="false" />

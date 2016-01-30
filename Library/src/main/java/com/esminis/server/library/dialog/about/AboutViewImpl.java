@@ -1,6 +1,5 @@
 package com.esminis.server.library.dialog.about;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -18,18 +17,17 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.esminis.server.library.R;
+import com.esminis.server.library.dialog.Dialog;
 import com.esminis.server.library.widget.ProductLicensesViewer;
 
-public class AboutViewImpl implements AboutView {
+public class AboutViewImpl extends Dialog<AboutPresenter> implements AboutView {
 
 	private final View viewTextAbout;
 	private final View viewTextManual;
 	private final ProductLicensesViewer viewLicenses;
-	private final AlertDialog dialog;
 
-	AboutViewImpl(AlertDialog dialog) {
-		this.dialog = dialog;
-		final Context context = dialog.getContext();
+	public AboutViewImpl(Context context, AboutPresenter presenter) {
+		super(context, presenter);
 		final LayoutInflater inflater = LayoutInflater.from(context);
 		final ViewGroup layout = (ViewGroup)inflater.inflate(R.layout.dialog_about, null);
 		final TabHost tabhost = (TabHost)layout.findViewById(R.id.tabhost);
@@ -38,10 +36,8 @@ public class AboutViewImpl implements AboutView {
 		addTab(tabhost, context, R.string.about, viewTextAbout = createText(inflater, layout));
 		addTab(tabhost, context, R.string.licenses, viewLicenses = new ProductLicensesViewer(context));
 		setupTabTitles(tabhost);
-		dialog.setView(layout);
-		dialog.setButton(
-			DialogInterface.BUTTON_NEGATIVE, context.getString(R.string.close), (Message)null
-		);
+		setView(layout);
+		setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(R.string.close), (Message)null);
 	}
 
 	@Override
@@ -61,17 +57,16 @@ public class AboutViewImpl implements AboutView {
 
 	@Override
 	public void setupOnCreate() {
-		final Window window = dialog.getWindow();
+		final Window window = getWindow();
 		final WindowManager.LayoutParams params = window.getAttributes();
-		params.width = dialog.getContext().getResources()
-			.getDimensionPixelSize(R.dimen.about_dialog_width);
+		params.width = getContext().getResources().getDimensionPixelSize(R.dimen.about_dialog_width);
 		params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
 		window.setAttributes(params);
 	}
 
 	@Override
 	public void setupOnShow() {
-		final Button button = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+		final Button button = getButton(DialogInterface.BUTTON_NEGATIVE);
 		final ViewGroup.LayoutParams params = button.getLayoutParams();
 		button.setTextColor(Color.BLACK);
 		button.setGravity(Gravity.CENTER);

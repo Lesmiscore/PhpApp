@@ -1,11 +1,10 @@
 package com.esminis.server.library.activity.main;
 
-import android.support.annotation.StringRes;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.esminis.server.library.model.InstallPackage;
+import com.esminis.server.library.dialog.install.InstallPresenterImpl;
 import com.esminis.server.library.model.Network;
 
 import java.io.File;
@@ -41,9 +40,7 @@ public interface MainView {
 
 	void showDocumentRootChooser(File root);
 
-	void showInstall(InstallPackage[] packages, InstallPackage installedPackage);
-
-	void showInstallNewVersionRequest(CharSequence message);
+	void showInstall(InstallPresenterImpl presenter);
 
 	void closeDialog();
 

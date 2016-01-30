@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content" android:layout_height="wrap_content"
+>
+	<FrameLayout android:layout_width="300dp" android:layout_height="wrap_content">
+		<TextView
+			android:id="@+id/title"
+			android:layout_height="36dp" android:layout_width="match_parent"
+			android:textColor="#000000" android:paddingLeft="10dp"
+			android:gravity="left|center_vertical" android:visibility="gone"
+		/>
+		<ListView
+			android:id="@+id/list" android:layout_marginTop="36dp"
+			android:layout_width="match_parent" android:layout_height="match_parent"
+		/>
+		<FrameLayout android:layout_width="match_parent" android:layout_height="72dp">
+			<LinearLayout
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:id="@+id/preloader_container" android:visibility="gone"
+				android:gravity="center" android:orientation="horizontal"
+				android:layout_gravity="center"
+				>
+				<ProgressBar
+					android:id="@+id/preloader"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					/>
+				<LinearLayout
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:orientation="vertical" android:gravity="center"
+					>
+					<TextView
+						android:id="@+id/preloader_label"
+						android:layout_width="wrap_content" android:layout_height="wrap_content"
+						android:padding="10dp"
+						/>
+					<Button
+						android:id="@+id/preloader_button_ok" android:layout_marginTop="20dp"
+						android:layout_width="wrap_content" android:layout_height="wrap_content"
+						android:text="@string/grant" android:visibility="gone"
+						/>
+				</LinearLayout>
+			</LinearLayout>
+		</FrameLayout>
+	</FrameLayout>
+</FrameLayout>

@@ -20,7 +20,7 @@ import android.view.View;
 import com.esminis.server.library.EventMessage;
 import com.esminis.server.library.R;
 import com.esminis.server.library.application.LibraryApplication;
-import com.esminis.server.library.model.InstallPackage;
+import com.esminis.server.library.dialog.install.InstallPresenterImpl;
 import com.esminis.server.library.model.manager.InstallPackageManager;
 import com.esminis.server.library.model.manager.Log;
 import com.esminis.server.library.model.manager.Network;
@@ -41,8 +41,6 @@ import com.squareup.otto.Subscribe;
 import java.io.File;
 
 import javax.inject.Inject;
-
-import rx.Subscriber;
 
 public class MainPresenterImpl implements MainPresenter {
 
@@ -69,6 +67,9 @@ public class MainPresenterImpl implements MainPresenter {
 
 	@Inject
 	protected InstallPackageManager installPackageManager;
+
+	@Inject
+	protected InstallPresenterImpl installPresenter;
 
 	private final ReceiverManager receiverManager = new ReceiverManager();
 
@@ -168,8 +169,9 @@ public class MainPresenterImpl implements MainPresenter {
 
 				@Override
 				public void onGranted() {
-					if (installPackageManager.getInstalled(activity) == null) {
-						requestInstall();
+					if (installPackageManager.getInstalled() == null) {
+						view.setMessage(false, false, null, null);
+						view.showInstall(installPresenter);
 					} else {
 						if (paused) {
 							showInstallFinishedOnResume = true;
@@ -177,25 +179,6 @@ public class MainPresenterImpl implements MainPresenter {
 							showInstallFinished(activity);
 						}
 					}
-					/*
-					installServer.install(activity, new OnInstallServerListener() {
-						@Override
-						public void OnInstallNewVersionRequest(InstallServer installer) {
-							if (view != null) {
-								view.showInstallNewVersionRequest(getMessageNewVersion(activity));
-							}
-						}
-
-						@Override
-						public void OnInstallEnd(Throwable error) {
-							installError = error;
-							if (paused) {
-								showInstallFinishedOnResume = true;
-							} else {
-								showInstallFinished(activity);
-							}
-						}
-					});*/
 				}
 
 				@Override
@@ -203,27 +186,6 @@ public class MainPresenterImpl implements MainPresenter {
 
 			}
 		);
-	}
-
-	private void requestInstall() {
-		view.setMessage(true, true, null, activity.getString(R.string.downloading_packages));
-		installPackageManager.get(activity).subscribe(new Subscriber<InstallPackage[]>() {
-			@Override
-			public void onCompleted() {}
-
-			@Override
-			public void onError(Throwable e) {
-				view.setMessage(
-					true, false, activity.getString(R.string.retry),
-					activity.getString(R.string.downloading_packages_failed, e.getMessage())
-				);
-			}
-
-			@Override
-			public void onNext(InstallPackage[] packages) {
-				view.showInstall(packages, installPackageManager.getInstalled(activity));
-			}
-		});
 	}
 
 	private void showInstallFinished(Context context) {
@@ -354,15 +316,6 @@ public class MainPresenterImpl implements MainPresenter {
 	}
 
 	@Override
-	public void onInstallNewVersionResponse(boolean confirmed) {
-		if (confirmed) {
-			installServer.installNewVersionConfirmed();
-		} else {
-			installServer.installFinish();
-		}
-	}
-
-	@Override
 	public void onServerInterfaceChanged(int position) {
 		final String value = getAddress(activity);
 		final String newValue = network.get(position).name;
@@ -426,12 +379,6 @@ public class MainPresenterImpl implements MainPresenter {
 		preferences.set(context, Preferences.DOCUMENT_ROOT, root);
 	}
 
-	private String getMessageNewVersion(Context context) {
-		return context.getString(
-			R.string.server_install_new_version_question, preferences.getBuild(context)
-		);
-	}
-
 	@Subscribe
 	public void onEventMessage(EventMessage event) {
 		View view = activity.findViewById(R.id.container);
@@ -455,4 +402,5 @@ public class MainPresenterImpl implements MainPresenter {
 	public void onInstallComplete() {
 
 	}
+
 }

@@ -10,11 +10,16 @@ public class AboutPresenterImpl implements AboutPresenter {
 
 	private final ProductLicenseManager manager;
 
-	private final AboutView view;
+	private AboutView view = null;
+	private final LibraryApplication application;
 
-	AboutPresenterImpl(LibraryApplication application, AboutView view) {
-		this.view = view;
+	public AboutPresenterImpl(LibraryApplication application) {
 		manager = application.getComponent().getProductLicenseManager();
+		this.application = application;
+	}
+
+	public void setView(AboutView view) {
+		this.view = view;
 		view.setContentManual(application, R.string.manual_content);
 		view.setContentAbout(application, R.string.about_content);
 		view.setLicensesProvider(
@@ -37,12 +42,16 @@ public class AboutPresenterImpl implements AboutPresenter {
 
 	@Override
 	public void onCreate() {
-		view.setupOnCreate();
+		if (view != null) {
+			view.setupOnCreate();
+		}
 	}
 
 	@Override
 	public void show() {
-		view.setupOnShow();
+		if (view != null) {
+			view.setupOnShow();
+		}
 	}
 
 }
