@@ -40,6 +40,7 @@ public class Preferences {
 	final static public String SERVER_STARTED = "serverStarted";
 	final static public String BUILD = "installedPhpBuild";
 	final static public String INDEX_PHP_ROUTER = "indexPhpRouter";
+	final static public String INSTALLED_PACKAGE = "installedPackage";
 
 	private PreferencesBackend backend = null;
 	private final Object lock = new Object();

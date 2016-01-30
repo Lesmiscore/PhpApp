@@ -7,7 +7,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.esminis.server.library.model.InstallPackage;
+
 import java.io.File;
+
+import rx.Observable;
 
 public interface MainPresenter {
 
@@ -48,5 +52,7 @@ public interface MainPresenter {
 	boolean onMenuItemSelected(MenuItem item);
 
 	void onInstallNewVersionResponse(boolean confirmed);
+
+	void onInstallComplete();
 
 }

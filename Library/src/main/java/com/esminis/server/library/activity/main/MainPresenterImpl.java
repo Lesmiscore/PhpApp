@@ -20,6 +20,8 @@ import android.view.View;
 import com.esminis.server.library.EventMessage;
 import com.esminis.server.library.R;
 import com.esminis.server.library.application.LibraryApplication;
+import com.esminis.server.library.model.InstallPackage;
+import com.esminis.server.library.model.manager.InstallPackageManager;
 import com.esminis.server.library.model.manager.Log;
 import com.esminis.server.library.model.manager.Network;
 import com.esminis.server.library.permission.PermissionActivityHelper;
@@ -28,7 +30,6 @@ import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.background.BackgroundService;
 import com.esminis.server.library.service.server.ServerNotification;
 import com.esminis.server.library.service.server.install.InstallServer;
-import com.esminis.server.library.service.server.install.OnInstallServerListener;
 import com.esminis.server.library.service.server.tasks.RestartIfRunningServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.ServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.StartServerTaskProvider;
@@ -40,6 +41,8 @@ import com.squareup.otto.Subscribe;
 import java.io.File;
 
 import javax.inject.Inject;
+
+import rx.Subscriber;
 
 public class MainPresenterImpl implements MainPresenter {
 
@@ -63,6 +66,9 @@ public class MainPresenterImpl implements MainPresenter {
 
 	@Inject
 	protected Preferences preferences;
+
+	@Inject
+	protected InstallPackageManager installPackageManager;
 
 	private final ReceiverManager receiverManager = new ReceiverManager();
 
@@ -96,7 +102,7 @@ public class MainPresenterImpl implements MainPresenter {
 			view.setLog(savedInstanceState.getCharSequence(KEY_ERROR));
 		}
 		view.setMessage(
-			true, false, true,
+			true, false, activity.getString(R.string.grant),
 			activity.getString(R.string.permission_files_needed, activity.getString(R.string.title))
 		);
 		if (savedInstanceState == null) {
@@ -162,7 +168,16 @@ public class MainPresenterImpl implements MainPresenter {
 
 				@Override
 				public void onGranted() {
-					view.setMessage(true, true, false, activity.getString(R.string.server_installing));
+					if (installPackageManager.getInstalled(activity) == null) {
+						requestInstall();
+					} else {
+						if (paused) {
+							showInstallFinishedOnResume = true;
+						} else {
+							showInstallFinished(activity);
+						}
+					}
+					/*
 					installServer.install(activity, new OnInstallServerListener() {
 						@Override
 						public void OnInstallNewVersionRequest(InstallServer installer) {
@@ -180,15 +195,35 @@ public class MainPresenterImpl implements MainPresenter {
 								showInstallFinished(activity);
 							}
 						}
-					});
+					});*/
 				}
 
 				@Override
-				public void onDenied() {
-				}
+				public void onDenied() {}
 
 			}
 		);
+	}
+
+	private void requestInstall() {
+		view.setMessage(true, true, null, activity.getString(R.string.downloading_packages));
+		installPackageManager.get(activity).subscribe(new Subscriber<InstallPackage[]>() {
+			@Override
+			public void onCompleted() {}
+
+			@Override
+			public void onError(Throwable e) {
+				view.setMessage(
+					true, false, activity.getString(R.string.retry),
+					activity.getString(R.string.downloading_packages_failed, e.getMessage())
+				);
+			}
+
+			@Override
+			public void onNext(InstallPackage[] packages) {
+				view.showInstall(packages, installPackageManager.getInstalled(activity));
+			}
+		});
 	}
 
 	private void showInstallFinished(Context context) {
@@ -197,7 +232,7 @@ public class MainPresenterImpl implements MainPresenter {
 		}
 		if (installError != null) {
 			view.setMessage(
-				true, false, false,
+				true, false, null,
 				context.getString(R.string.server_installation_failed, installError.getMessage())
 			);
 			return;
@@ -416,4 +451,8 @@ public class MainPresenterImpl implements MainPresenter {
 		snackbar.show();
 	}
 
+	@Override
+	public void onInstallComplete() {
+
+	}
 }
