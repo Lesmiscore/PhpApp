@@ -1,8 +1,13 @@
 package com.esminis.server.library.dialog.install;
 
+import android.os.Bundle;
+import android.util.Log;
+
 import com.esminis.server.library.R;
 import com.esminis.server.library.model.InstallPackage;
 import com.esminis.server.library.model.manager.InstallPackageManager;
+import com.esminis.server.library.service.background.BackgroundService;
+import com.esminis.server.library.service.server.installpackage.InstallPackageTaskProvider;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -16,6 +21,7 @@ public class InstallPresenterImpl implements InstallPresenter {
 
 	private InstallView view = null;
 	private final InstallPackageManager manager;
+	private InstallPackage installingPackage = null;
 
 	@Inject
 	public InstallPresenterImpl(InstallPackageManager manager) {
@@ -31,7 +37,11 @@ public class InstallPresenterImpl implements InstallPresenter {
 	public void onCreate() {
 		if (view != null) {
 			view.setupOnCreate();
-			downloadList();
+			if (installingPackage == null) {
+				downloadList();
+			} else {
+				view.showMessageInstalling(installingPackage);
+			}
 		}
 	}
 
@@ -42,7 +52,7 @@ public class InstallPresenterImpl implements InstallPresenter {
 	public void downloadList() {
 		final InstallView view = this.view;
 		if (view != null) {
-			view.showMessage(true, R.string.downloading_packages, null);
+			view.showMessage(true, R.string.downloading_packages);
 			manager.get()
 				.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(
 				new Subscriber<InstallPackage[]>() {
@@ -69,10 +79,40 @@ public class InstallPresenterImpl implements InstallPresenter {
 	}
 
 	@Override
-	public void install(InstallPackage model) {
-		final InstallView view = this.view;
+	public void install(final InstallPackage model) {
 		if (view != null) {
 			view.showMessageInstalling(model);
+			installingPackage = model;
+			final Bundle data = new Bundle();
+			try {
+				data.putString("package", model.toJson().toString());
+				BackgroundService.execute(
+					view.getActivity().getApplication(), InstallPackageTaskProvider.class,
+					new Subscriber<Void>() {
+
+						@Override
+						public void onCompleted() {
+							installingPackage = null;
+							Log.d("TEST", "INSTALL COMPLETE");
+						}
+
+						@Override
+						public void onError(Throwable e) {
+							installingPackage = null;
+							if (view != null) {
+								view.showInstallFailedMessage(model, e);
+							}
+						}
+
+						@Override
+						public void onNext(Void dummy) {}
+
+					}, data
+				);
+			} catch (Throwable e) {
+				installingPackage = null;
+				view.showInstallFailedMessage(model, e);
+			}
 		}
 	}
 

@@ -41,6 +41,7 @@ public class BackgroundService extends Service {
 	static final String FIELD_MESSAGE_ID = "id";
 	static final String FIELD_ACTION = "action";
 	static final String FIELD_ERROR = "error";
+	static final String FIELD_DATA = "data";
 
 	static public String getIntentAction(Context context) {
 		return "__BACKGROUND_SERVICE_TASK_" + context.getPackageName() + "__";
@@ -70,20 +71,22 @@ public class BackgroundService extends Service {
 				}
 				BackgroundServiceTaskProvider provider = (BackgroundServiceTaskProvider)
 					taskProviderClass.newInstance();
-				provider.createTask(getApplicationContext()).subscribe(new Subscriber<Void>() {
-					@Override
-					public void onCompleted() {
-						sendMessageForSender(intent, ACTION_TASK_COMPLETE);
-					}
+				provider.createTask(getApplicationContext(), data.getBundle(FIELD_DATA)).subscribe(
+					new Subscriber<Void>() {
+						@Override
+						public void onCompleted() {
+							sendMessageForSender(intent, ACTION_TASK_COMPLETE);
+						}
 
-					@Override
-					public void onError(Throwable e) {
-						sendMessageForSenderFailed(intent, e);
-					}
+						@Override
+						public void onError(Throwable e) {
+							sendMessageForSenderFailed(intent, e);
+						}
 
-					@Override
-					public void onNext(Void aVoid) {}
-				});
+						@Override
+						public void onNext(Void aVoid) {}
+					}
+				);
 			} catch (Exception e) {
 				sendMessageForSenderFailed(intent, e);
 			}
@@ -129,7 +132,7 @@ public class BackgroundService extends Service {
 
 				@Override
 				public void onNext(Void aVoid) {}
-			}
+			}, null
 		);
 	}
 
@@ -137,10 +140,17 @@ public class BackgroundService extends Service {
 		final Application application, final Class<? extends BackgroundServiceTaskProvider> provider,
 		Subscriber<Void> subscriber
 	) {
+		return execute(application, provider, subscriber, null);
+	}
+
+	static public Subscription execute(
+		final Application application, final Class<? extends BackgroundServiceTaskProvider> provider,
+		Subscriber<Void> subscriber, final Bundle data
+	) {
 		return Observable.create(new Observable.OnSubscribe<Void>() {
 			@Override
 			public void call(Subscriber<? super Void> subscriber) {
-				new BackgroundServiceExecutor(application, provider, subscriber);
+				new BackgroundServiceExecutor(application, provider, subscriber, data);
 			}
 		}).subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread())
 			.subscribe(subscriber);

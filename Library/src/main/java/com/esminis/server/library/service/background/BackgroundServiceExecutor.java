@@ -33,8 +33,8 @@ class BackgroundServiceExecutor {
 	static final private BackgroundServiceLauncher launcher = new BackgroundServiceLauncher();
 
 	BackgroundServiceExecutor(
-		Application application, Class<? extends BackgroundServiceTaskProvider> provider,
-		Subscriber<? super Void> subscriber
+		Application application, Class < ?extends BackgroundServiceTaskProvider> provider,
+		Subscriber<? super Void> subscriber, Bundle data
 	) {
 		launcher.start(application);
 		final long messageId;
@@ -76,6 +76,7 @@ class BackgroundServiceExecutor {
 		Intent intent = new Intent(intentAction);
 		intent.putExtra(BackgroundService.FIELD_PROVIDER, provider.getName());
 		intent.putExtra(BackgroundService.FIELD_MESSAGE_ID, messageId);
+		intent.putExtra(BackgroundService.FIELD_DATA, data == null ? new Bundle() : data);
 		application.sendBroadcast(intent);
 		for (;;) {
 			synchronized (lock) {

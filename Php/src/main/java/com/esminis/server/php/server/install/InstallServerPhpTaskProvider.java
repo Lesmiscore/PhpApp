@@ -17,6 +17,7 @@ package com.esminis.server.php.server.install;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.Bundle;
 
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.ServerControl;
@@ -49,7 +50,7 @@ public class InstallServerPhpTaskProvider implements BackgroundServiceTaskProvid
 	protected InstallToDocumentRoot installToDocumentRoot;
 
 	@Override
-	public Observable<Void> createTask(final Context context) {
+	public Observable<Void> createTask(final Context context, Bundle data) {
 		((PhpApplication)context.getApplicationContext()).getComponent().inject(this);
 		return Observable.create(new Observable.OnSubscribe<Void>() {
 			@Override

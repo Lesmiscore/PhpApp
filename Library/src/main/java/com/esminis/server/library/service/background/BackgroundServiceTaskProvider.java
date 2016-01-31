@@ -16,11 +16,12 @@
 package com.esminis.server.library.service.background;
 
 import android.content.Context;
+import android.os.Bundle;
 
 import rx.Observable;
 
 public interface BackgroundServiceTaskProvider {
 
-	Observable<Void> createTask(Context context);
+	Observable<Void> createTask(Context context, Bundle data);
 
 }

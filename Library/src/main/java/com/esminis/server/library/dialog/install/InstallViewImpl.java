@@ -5,7 +5,6 @@ import android.support.annotation.StringRes;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -29,6 +28,11 @@ public class InstallViewImpl extends Dialog<InstallPresenter> implements Install
 		} else {
 			this.activity = null;
 		}
+	}
+
+	@Override
+	public Activity getActivity() {
+		return activity;
 	}
 
 	@Override
@@ -64,7 +68,7 @@ public class InstallViewImpl extends Dialog<InstallPresenter> implements Install
 	}
 
 	@Override
-	public void showMessage(boolean preloader, @StringRes int message, String argument) {
+	public void showMessage(boolean preloader, @StringRes int message, String... argument) {
 		final View button = findViewById(R.id.preloader_button_ok);
 		findViewById(R.id.preloader_container).setVisibility(View.VISIBLE);
 		findViewById(R.id.preloader).setVisibility(preloader ? View.VISIBLE : View.GONE);
@@ -100,4 +104,10 @@ public class InstallViewImpl extends Dialog<InstallPresenter> implements Install
 		showMessage(true, R.string.installing_package, model.getTitle(getContext()));
 	}
 
+	@Override
+	public void showInstallFailedMessage(InstallPackage model, Throwable error) {
+		showMessage(
+			true, R.string.install_package_failed, model.getTitle(getContext()), error.getMessage()
+		);
+	}
 }

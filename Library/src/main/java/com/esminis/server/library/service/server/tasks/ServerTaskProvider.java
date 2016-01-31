@@ -16,6 +16,7 @@
 package com.esminis.server.library.service.server.tasks;
 
 import android.content.Context;
+import android.os.Bundle;
 
 import com.esminis.server.library.application.LibraryApplication;
 import com.esminis.server.library.service.background.BackgroundServiceTaskProvider;
@@ -32,7 +33,7 @@ abstract public class ServerTaskProvider implements BackgroundServiceTaskProvide
 	protected ServerControl serverControl;
 
 	@Override
-	public Observable<Void> createTask(Context context) {
+	public Observable<Void> createTask(Context context, Bundle data) {
 		((LibraryApplication)context.getApplicationContext()).getComponent().inject(this);
 		return Observable.create(new Observable.OnSubscribe<Void>() {
 			@Override
