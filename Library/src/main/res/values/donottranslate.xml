@@ -4,6 +4,7 @@
 	<string name="version" translatable="false" />
 	<string name="build" translatable="false" />
 	<string name="default_port" translatable="false" />
+	<string name="default_document_root_directory" translatable="false" />
 	<string-array name="install_binaries" translatable="false" />
 	<string-array name="install_files" translatable="false" />
 	<string name="regex_message" translatable="false"><![CDATA[^.+: /[^ ]*$]]></string>
