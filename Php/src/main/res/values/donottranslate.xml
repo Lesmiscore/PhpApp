@@ -3,6 +3,7 @@
 	<string name="title_server">PHP</string>
 	<string name="version" translatable="false">7.0.0</string>
 	<string name="build" translatable="false">0</string>
+	<string name="default_document_root_directory" translatable="false">www</string>
 	<string-array name="modules" translatable="false">
 		<item>bbcode</item><item>BBCode</item><item>Bulletin Board Code</item>
 		<item>bcmath</item><item>BC Math</item><item>Arbitrary Precision Mathematics</item>

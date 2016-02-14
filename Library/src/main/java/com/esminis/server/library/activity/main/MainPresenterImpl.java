@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -169,6 +170,7 @@ public class MainPresenterImpl implements MainPresenter {
 
 				@Override
 				public void onGranted() {
+					setupPreferences(activity);
 					if (installPackageManager.getInstalled() == null) {
 						view.setMessage(false, false, null, null);
 						view.showInstall(installPresenter);
@@ -405,6 +407,23 @@ public class MainPresenterImpl implements MainPresenter {
 	@Override
 	public void onInstallComplete() {
 		requestInstallFinished();
+	}
+
+	private void setupPreferences(Context context) {
+		if (!preferences.contains(context, Preferences.PORT)) {
+			preferences.set(context, Preferences.PORT, context.getString(R.string.default_port));
+		}
+		if (!preferences.contains(context, Preferences.ADDRESS)) {
+			preferences.set(context, Preferences.ADDRESS, network.get(0).name);
+		}
+		if (!preferences.contains(context, Preferences.DOCUMENT_ROOT)) {
+			preferences.set(
+				context, Preferences.DOCUMENT_ROOT, new File(
+					Environment.getExternalStorageDirectory(),
+					context.getString(R.string.default_document_root_directory)
+				).getAbsolutePath()
+			);
+		}
 	}
 
 }

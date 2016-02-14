@@ -74,7 +74,7 @@ public class InstallerPackage {
 					sendBroadcast(
 						context, STATE_DOWNLOAD, (((float)count) / fileSize) * 0.99f
 					);
-					time = System.currentTimeMillis();t
+					time = System.currentTimeMillis();
 				}
 			}
 			sendBroadcast(context, STATE_DOWNLOAD, 0.99f);
@@ -145,6 +145,9 @@ public class InstallerPackage {
 		try {
 			output = new FileOutputStream(file);
 			IOUtils.copy(input, output);
+			if (!file.isFile() || (!file.canExecute() && !file.setExecutable(true))) {
+				throw new Exception("Cannot set file permissions: " + file.getAbsolutePath());
+			}
 		} finally {
 			if (output != null) {
 				try {
