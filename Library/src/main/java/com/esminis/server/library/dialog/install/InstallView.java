@@ -13,9 +13,11 @@ public interface InstallView {
 
 	void showMessage(boolean preloader, @StringRes int message, String... argument);
 
-	void showMessageInstalling(InstallPackage model);
+	void showMessageError(@StringRes int message, Throwable error, String... arguments);
 
-	void showInstallFailedMessage(InstallPackage model, Throwable error);
+	void showMessageInstall(InstallPackage model, @StringRes int message, String... arguments);
+
+	void showMessageInstallFailed(InstallPackage model, Throwable error);
 
 	void hideMessage();
 

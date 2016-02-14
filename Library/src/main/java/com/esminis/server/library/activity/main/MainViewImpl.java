@@ -50,6 +50,9 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+import rx.Observable;
+import rx.functions.Action1;
+
 public class MainViewImpl implements MainView {
 
 	private final Context context;
@@ -263,7 +266,7 @@ public class MainViewImpl implements MainView {
 		}
 	}
 
-	private void showDialog(Dialog dialog) {
+	private Observable<Void> showDialog(com.esminis.server.library.dialog.Dialog dialog) {
 		this.dialog = dialog;
 		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
 			@Override
@@ -271,7 +274,7 @@ public class MainViewImpl implements MainView {
 				closeDialog();
 			}
 		});
-		dialog.show();
+		return dialog.showObserved();
 	}
 
 	@Override
@@ -378,12 +381,18 @@ public class MainViewImpl implements MainView {
 	}
 
 	@Override
-	public void showInstall(InstallPresenterImpl presenter) {
+	public void showInstall(final InstallPresenterImpl presenter) {
 		final Activity activity = this.activity.get();
 		if (activity != null) {
 			final InstallViewImpl dialog = new InstallViewImpl(activity, presenter);
 			presenter.setView(dialog);
-			showDialog(dialog);
+			showDialog(dialog).subscribe(new Action1<Void>() {
+				@Override
+				public void call(Void o) {
+					MainViewImpl.this.presenter.onInstallComplete();
+					dialog.dismiss();
+				}
+			});
 		}
 	}
 

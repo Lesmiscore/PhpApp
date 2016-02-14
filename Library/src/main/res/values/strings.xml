@@ -43,11 +43,15 @@
 	<string name="warning_message">Warning: %1$s</string>
 	<string name="permission_files_needed">%1$s needs access to files to work. Please grant access to files.</string>
 	<string name="downloading_packages">Obtaining list of available versions</string>
-	<string name="downloading_packages_failed">Could not obtain list of available versions: %1$s</string>
+	<string name="downloading_packages_failed"><![CDATA[Error - failed to obtain list of available versions with message:<br /><font color="#FF0000">%1$s</font>]]></string>
 	<string name="retry">Retry</string>
-	<string name="installing_package"><![CDATA[Installing %1$s]]></string>
+	<string name="installing_package"><![CDATA[%1$s<br />Installing]]></string>
+	<string name="installing_package_download"><![CDATA[%1$s<br />1 / 2 - downloading: %2$s%%]]></string>
+	<string name="installing_package_files"><![CDATA[%1$s<br />2 / 2 - installing files: %2$s%%]]></string>
 	<string name="install_package_title"><![CDATA[%1$s <b>%2$s</b> (build #%3$s)]]></string>
 	<string name="install_package_title_currently_installed"><![CDATA[%1$s - <b>now installed</b>]]></string>
 	<string name="select_package_to_install"><![CDATA[Select <b>%1$s</b> build to install:]]></string>
-	<string name="install_package_failed"><![CDATA[Install failed <b>%1$s</b>: %2$s]]></string>
+	<string name="install_package_failed"><![CDATA[Error - <b>%2$s</b> install failed with message:<br /><font color="#FF0000">%1$s</font>]]></string>
+	<string name="error_network">network problem, please check your network connection</string>
+	<string name="error_server_response">could not read server response</string>
 </resources>

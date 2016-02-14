@@ -15,6 +15,13 @@ import com.esminis.server.library.R;
 import com.esminis.server.library.dialog.Dialog;
 import com.esminis.server.library.model.InstallPackage;
 
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class InstallViewImpl extends Dialog<InstallPresenter> implements InstallView {
 
 	private final Activity activity;
@@ -100,14 +107,34 @@ public class InstallViewImpl extends Dialog<InstallPresenter> implements Install
 	}
 
 	@Override
-	public void showMessageInstalling(InstallPackage model) {
-		showMessage(true, R.string.installing_package, model.getTitle(getContext()));
+	public void showMessageInstall(
+		InstallPackage model, @StringRes int message, String... arguments
+	) {
+		List<String> argumentsLocal = new ArrayList<>();
+		argumentsLocal.add(model.getTitle(getContext()));
+		Collections.addAll(argumentsLocal, arguments);
+		showMessage(true, message, argumentsLocal.toArray(new String[argumentsLocal.size()]));
 	}
 
 	@Override
-	public void showInstallFailedMessage(InstallPackage model, Throwable error) {
-		showMessage(
-			true, R.string.install_package_failed, model.getTitle(getContext()), error.getMessage()
-		);
+	public void showMessageInstallFailed(InstallPackage model, Throwable error) {
+		showMessageError(R.string.install_package_failed, error, model.getTitle(getContext()));
+	}
+
+	@Override
+	public void showMessageError(@StringRes int message, Throwable error, String... arguments) {
+		final List<String> argumentsLocal = new ArrayList<>();
+		final String errorMessage;
+		if (error instanceof JSONException) {
+			errorMessage = getContext().getString(R.string.error_server_response);
+		} else if (error instanceof IOException) {
+			errorMessage = getContext().getString(R.string.error_network);
+		} else {
+			errorMessage = (error.getMessage() == null ? "" : error.getMessage() + ", ") +
+				error.getClass().getSimpleName();
+		}
+		argumentsLocal.add(errorMessage);
+		Collections.addAll(argumentsLocal, arguments);
+		showMessage(false, message, argumentsLocal.toArray(new String[argumentsLocal.size()]));
 	}
 }

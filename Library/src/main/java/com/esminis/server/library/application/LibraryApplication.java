@@ -47,7 +47,7 @@ abstract public class LibraryApplication<T extends LibraryApplicationComponent> 
 
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				if (MainActivity.getIntentAction(context).equals(intent.getAction())) {
+				if (MainActivity.getIntentActionServerStatus(context).equals(intent.getAction())) {
 					Bundle extras = intent.getExtras();
 					if (extras != null && extras.containsKey("errorLine")) {
 						return;
@@ -60,7 +60,7 @@ abstract public class LibraryApplication<T extends LibraryApplicationComponent> 
 			}
 
 		};
-		registerReceiver(receiver, new IntentFilter(MainActivity.getIntentAction(this)));
+		registerReceiver(receiver, new IntentFilter(MainActivity.getIntentActionServerStatus(this)));
 		BackgroundService.execute(this, StatusServerTaskProvider.class);
 	}
 

@@ -173,11 +173,7 @@ public class MainPresenterImpl implements MainPresenter {
 						view.setMessage(false, false, null, null);
 						view.showInstall(installPresenter);
 					} else {
-						if (paused) {
-							showInstallFinishedOnResume = true;
-						} else {
-							showInstallFinished(activity);
-						}
+						requestInstallFinished();
 					}
 				}
 
@@ -186,6 +182,14 @@ public class MainPresenterImpl implements MainPresenter {
 
 			}
 		);
+	}
+
+	private void requestInstallFinished() {
+		if (paused) {
+			showInstallFinishedOnResume = true;
+		} else {
+			showInstallFinished(activity);
+		}
 	}
 
 	private void showInstallFinished(Context context) {
@@ -211,11 +215,11 @@ public class MainPresenterImpl implements MainPresenter {
 			}
 		);
 		receiverManager.add(
-			context, new IntentFilter(MainActivity.getIntentAction(context)), new BroadcastReceiver() {
+			context, new IntentFilter(MainActivity.getIntentActionServerStatus(context)), new BroadcastReceiver() {
 
 				@Override
 				public void onReceive(Context context, Intent intent) {
-					if (view != null && MainActivity.getIntentAction(context).equals(intent.getAction())) {
+					if (view != null && MainActivity.getIntentActionServerStatus(context).equals(intent.getAction())) {
 						Bundle extras = intent.getExtras();
 						if (extras != null && extras.containsKey("errorLine")) {
 							resetLog();
@@ -400,7 +404,7 @@ public class MainPresenterImpl implements MainPresenter {
 
 	@Override
 	public void onInstallComplete() {
-
+		requestInstallFinished();
 	}
 
 }
