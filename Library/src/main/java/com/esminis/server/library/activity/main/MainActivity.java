@@ -29,8 +29,16 @@ public class MainActivity extends AppCompatActivity {
 
 	private MainPresenter presenter = null;
 
-	static public String getIntentAction(Context context) {
-		return "STATUS_SERVER_CHANGED_" + context.getPackageName();
+	static public String getIntentActionServerStatus(Context context) {
+		return getIntentActionInternal(context, "SERVER_STATUS");
+	}
+
+	static public String getIntentActionInstallPackage(Context context) {
+		return getIntentActionInternal(context, "INSTALL_PACKAGE");
+	}
+
+	static private String getIntentActionInternal(Context context, String prefix) {
+		return context.getPackageName() + "_" + prefix;
 	}
 	
 	@Override

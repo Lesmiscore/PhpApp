@@ -55,7 +55,7 @@ public class InstallServerTask implements Observable.OnSubscribe<Void> {
 			public void onReceive(Context context, Intent intent) {
 				if (
 					intent.getAction() == null ||
-					!intent.getAction().equals(MainActivity.getIntentAction(context))
+					!intent.getAction().equals(MainActivity.getIntentActionServerStatus(context))
 				) {
 					return;
 				}
@@ -69,7 +69,7 @@ public class InstallServerTask implements Observable.OnSubscribe<Void> {
 			}
 		};
 		application.registerReceiver(
-			receiver, new IntentFilter(MainActivity.getIntentAction(application))
+			receiver, new IntentFilter(MainActivity.getIntentActionServerStatus(application))
 		);
 		serverControl.requestStop();
 		try {

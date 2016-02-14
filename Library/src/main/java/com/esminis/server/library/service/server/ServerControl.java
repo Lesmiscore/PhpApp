@@ -166,7 +166,7 @@ abstract public class ServerControl {
 			String line = data.getString("message");
 			if (line != null) {
 				log.add(context, line);
-				Intent intent = new Intent(MainActivity.getIntentAction(context));
+				Intent intent = new Intent(MainActivity.getIntentActionServerStatus(context));
 				intent.putExtra("errorLine", line);
 				context.sendBroadcast(intent);
 			}
@@ -184,7 +184,7 @@ abstract public class ServerControl {
 
 	private void status() {
 		Pair<Boolean, String> status = getStatus();
-		Intent intent = new Intent(MainActivity.getIntentAction(context));
+		Intent intent = new Intent(MainActivity.getIntentActionServerStatus(context));
 		intent.putExtra("running", status.first);
 		if (status.first) {
 			intent.putExtra("address", status.second);
@@ -226,7 +226,7 @@ abstract public class ServerControl {
 		context.registerReceiver(new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				if (MainActivity.getIntentAction(context).equals(intent.getAction())) {
+				if (MainActivity.getIntentActionServerStatus(context).equals(intent.getAction())) {
 					Bundle extra = intent.getExtras();
 					if (extra != null && !extra.containsKey("errorLine") && extra.getBoolean("running")) {
 						requestRestart();
@@ -234,7 +234,7 @@ abstract public class ServerControl {
 					context.unregisterReceiver(this);
 				}
 			}
-		}, new IntentFilter(MainActivity.getIntentAction(context)));
+		}, new IntentFilter(MainActivity.getIntentActionServerStatus(context)));
 		requestStatus();
 	}
 

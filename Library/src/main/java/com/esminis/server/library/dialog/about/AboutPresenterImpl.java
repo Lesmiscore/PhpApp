@@ -6,6 +6,8 @@ import com.esminis.server.library.model.ProductLicense;
 import com.esminis.server.library.model.manager.ProductLicenseManager;
 import com.esminis.server.library.widget.ProductLicensesViewer;
 
+import rx.Observable;
+
 public class AboutPresenterImpl implements AboutPresenter {
 
 	private final ProductLicenseManager manager;
@@ -48,10 +50,11 @@ public class AboutPresenterImpl implements AboutPresenter {
 	}
 
 	@Override
-	public void show() {
+	public Observable<Void> show() {
 		if (view != null) {
 			view.setupOnShow();
 		}
+		return null;
 	}
 
 }

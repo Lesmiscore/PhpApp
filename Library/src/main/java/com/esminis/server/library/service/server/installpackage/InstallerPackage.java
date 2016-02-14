@@ -1,10 +1,12 @@
 package com.esminis.server.library.service.server.installpackage;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
 
+import com.esminis.server.library.activity.main.MainActivity;
 import com.esminis.server.library.service.Crypt;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
@@ -17,7 +19,11 @@ import java.net.URL;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-class InstallPackage {
+public class InstallerPackage {
+
+	static public final int STATE_DOWNLOAD = 1;
+	static public final int STATE_UNINSTALL = 2;
+	static public final int STATE_INSTALL = 3;
 
 	void install(
 		Context context, com.esminis.server.library.model.InstallPackage model
@@ -25,9 +31,11 @@ class InstallPackage {
 		final File file = new File(context.getExternalFilesDir(null), "tmp_install");
 		final File targetDirectory = context.getFilesDir();
 		try {
-			download(model, file);
+			download(context, model, file);
+			sendBroadcast(context, STATE_UNINSTALL, 0);
 			uninstall(targetDirectory);
-			install(file, targetDirectory);
+			sendBroadcast(context, STATE_UNINSTALL, 1);
+			install(context, file, targetDirectory);
 		} finally {
 			if (file.isFile()) {
 				//noinspection ResultOfMethodCallIgnored
@@ -36,14 +44,40 @@ class InstallPackage {
 		}
 	}
 
+	private void sendBroadcast(Context context, int state, float progress) {
+		final Intent intent = new Intent(MainActivity.getIntentActionInstallPackage(context));
+		intent.putExtra("state", state);
+		intent.putExtra("progress", progress);
+		context.sendBroadcast(intent);
+	}
+
 	private void download(
-		com.esminis.server.library.model.InstallPackage model, File fileOutput
+		Context context, com.esminis.server.library.model.InstallPackage model, File fileOutput
 	) throws Throwable {
+		sendBroadcast(context, STATE_DOWNLOAD, 0);
 		final HttpURLConnection connection = (HttpURLConnection)new URL(model.uri).openConnection();
+		connection.setConnectTimeout(20000);
+		connection.setReadTimeout(10000);
 		FileOutputStream output = null;
 		try {
 			output = new FileOutputStream(fileOutput);
-			IOUtils.copy(connection.getInputStream(), output);
+			InputStream inputStream = connection.getInputStream();
+			final float fileSize = (float)connection.getContentLength();
+			byte[] buffer = new byte[1024 * 128];
+			long count = 0;
+			int n;
+			long time = System.currentTimeMillis();
+			while (-1 != (n = inputStream.read(buffer))) {
+				count += n;
+				output.write(buffer, 0, n);
+				if (System.currentTimeMillis() - time >= 1000) {
+					sendBroadcast(
+						context, STATE_DOWNLOAD, (((float)count) / fileSize) * 0.99f
+					);
+					time = System.currentTimeMillis();t
+				}
+			}
+			sendBroadcast(context, STATE_DOWNLOAD, 0.99f);
 		} finally {
 			connection.disconnect();
 			if (output != null) {
@@ -55,6 +89,7 @@ class InstallPackage {
 		if (model.hash != null && !model.hash.equals(Crypt.hash(fileOutput))) {
 			throw new Exception("Downloaded file was corrupted: " + model.uri);
 		}
+		sendBroadcast(context, STATE_DOWNLOAD, 1);
 	}
 
 	private void uninstall(File directory) throws Throwable {
@@ -63,22 +98,31 @@ class InstallPackage {
 			for (File file : list) {
 				if (file.isDirectory()) {
 					uninstall(file);
-				} else if (!file.delete()) {
+				} else if (!FilenameUtils.isExtension(file.getAbsolutePath(), "sqlite") && !file.delete()) {
 					throw new Exception("Cannot uninstall file: " + file);
 				}
 			}
 		}
 	}
 
-	private void install(File file, File targetDirectory) throws Throwable {
+	private void install(Context context, File file, File targetDirectory) throws Throwable {
+		sendBroadcast(context, STATE_INSTALL, 0);
 		InputStream input = null;
 		ZipInputStream zip = null;
 		try {
-			input = new FileInputStream(file);
-			zip = new ZipInputStream(input);
+			zip = new ZipInputStream(input = new FileInputStream(file));
 			ZipEntry entry;
+			int totalEntries = 0;
+			while (zip.getNextEntry() != null) {
+				totalEntries++;
+			}
+			zip.close();
+			input.close();
+			zip = new ZipInputStream(input = new FileInputStream(file));
+			int position = 0;
 			while ((entry = zip.getNextEntry()) != null) {
 				install(targetDirectory, entry.getName(), zip);
+				sendBroadcast(context, STATE_INSTALL, ((float)++position / (float)totalEntries) * 0.99f);
 			}
 		} finally {
 			if (zip != null) {
@@ -92,6 +136,7 @@ class InstallPackage {
 				} catch (IOException ignored) {}
 			}
 		}
+		sendBroadcast(context, STATE_INSTALL, 1);
 	}
 
 	private void install(File targetDirectory, String filename, InputStream input) throws Throwable {
@@ -107,7 +152,6 @@ class InstallPackage {
 				} catch (IOException ignored) {}
 			}
 		}
-		Log.d("TEST", "installed file: " + file.getAbsolutePath() + " " + file.length());
 	}
 
 }

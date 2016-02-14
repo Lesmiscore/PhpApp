@@ -18,12 +18,15 @@ package com.esminis.server.library.dialog;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+
+import rx.Observable;
 
 public class Dialog<T extends DialogPresenter> extends AlertDialog {
 
 	protected final T presenter;
 
-	public Dialog(Context context, T presenter) {
+	public Dialog(Context context, @NonNull  T presenter) {
 		super(context);
 		this.presenter = presenter;
 	}
@@ -35,9 +38,11 @@ public class Dialog<T extends DialogPresenter> extends AlertDialog {
 	}
 
 	@Override
-	public void show() {
+	public void show() {}
+
+	public Observable<Void> showObserved() {
 		super.show();
-		presenter.show();
+		return (Observable<Void>)presenter.show();
 	}
 
 }

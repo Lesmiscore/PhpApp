@@ -13,7 +13,7 @@ import rx.schedulers.Schedulers;
 
 public class InstallPackageTaskProvider implements BackgroundServiceTaskProvider {
 
-	private final InstallPackage installer = new InstallPackage();
+	static private final InstallerPackage installer = new InstallerPackage();
 
 	@Override
 	public Observable<Void> createTask(final Context context, final Bundle data) {
@@ -21,11 +21,13 @@ public class InstallPackageTaskProvider implements BackgroundServiceTaskProvider
 			@Override
 			public void call(Subscriber<? super Void> subscriber) {
 				try {
-					installer.install(
-						context, new com.esminis.server.library.model.InstallPackage(
-							new JSONObject(data.getString("package"))
-						)
-					);
+					synchronized (installer) {
+						installer.install(
+							context.getApplicationContext(), new com.esminis.server.library.model.InstallPackage(
+								new JSONObject(data.getString("package"))
+							)
+						);
+					}
 					subscriber.onCompleted();
 				} catch (Throwable throwable) {
 					subscriber.onError(throwable);
