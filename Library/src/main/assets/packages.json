@@ -21,7 +21,7 @@
 			"package" : "com.esminis.server.mariadb"
 		},
 		{
-			"id" : 4, "order" : 10108, "hash" : "[hash]",
+			"id" : 4, "order" : 10108, "hash" : "1baa2e4c8e57c5b9b615d76c84b36851",
 			"version" : "10.1.8", "build" : 0, "architecture" : "x86",
 			"minAppVersion" : null, "maxAppVersion" : null,
 			"package" : "com.esminis.server.mariadb"
@@ -29,6 +29,12 @@
 	  {
 		  "id" : 5, "order" : 566, "hash" : "e9f7b44d69b53acaf90bf8e531b065c7",
 		  "version" : "5.6.16", "build" : 1, "architecture" : "arm",
+		  "minAppVersion" : null, "maxAppVersion" : null,
+		  "package" : "com.esminis.server.php"
+	  },
+	  {
+		  "id" : 6, "order" : 566, "hash" : "8885a4c54ebe74024b6f7df9d916f99e",
+		  "version" : "5.6.16", "build" : 1, "architecture" : "x86",
 		  "minAppVersion" : null, "maxAppVersion" : null,
 		  "package" : "com.esminis.server.php"
 	  }
