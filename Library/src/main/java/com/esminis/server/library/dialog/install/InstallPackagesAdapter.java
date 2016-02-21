@@ -25,7 +25,7 @@ class InstallPackagesAdapter extends BaseAdapter {
 		}
 		for (int i = list.length - 1; i >= 0; i--) {
 			final InstallPackage model = list[i];
-			if (installed != null && installed.id != model.id) {
+			if (installed == null || installed.id != model.id) {
 				listTemp.add(model);
 			}
 		}

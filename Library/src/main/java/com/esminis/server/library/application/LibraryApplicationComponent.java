@@ -2,6 +2,7 @@ package com.esminis.server.library.application;
 
 import com.esminis.server.library.activity.DrawerFragment;
 import com.esminis.server.library.activity.main.MainPresenter;
+import com.esminis.server.library.model.manager.InstallPackageManager;
 import com.esminis.server.library.model.manager.ProductLicenseManager;
 import com.esminis.server.library.service.AutoStart;
 import com.esminis.server.library.service.server.ServerControl;
@@ -30,6 +31,8 @@ public interface LibraryApplicationComponent {
 	DrawerFragment getDrawerFragment();
 
 	InstallerPackage getInstallerPackage();
+
+	InstallPackageManager getInstallPackageManager();
 
 	ProductLicenseManager getProductLicenseManager();
 

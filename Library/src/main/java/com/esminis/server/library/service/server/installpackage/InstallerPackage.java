@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 
 import com.esminis.server.library.activity.main.MainActivity;
+import com.esminis.server.library.model.manager.InstallPackageManager;
 import com.esminis.server.library.service.Crypt;
 import com.esminis.server.library.service.server.ServerControl;
 
@@ -33,7 +34,7 @@ public class InstallerPackage {
 
 	void install(
 		Context context, com.esminis.server.library.model.InstallPackage model,
-		ServerControl serverControl
+		ServerControl serverControl, InstallPackageManager installPackageManager
 	) throws Throwable {
 		final File file = new File(context.getExternalFilesDir(null), "tmp_install");
 		final File targetDirectory = context.getFilesDir();
@@ -41,6 +42,7 @@ public class InstallerPackage {
 			stopServer(context, serverControl);
 			download(context, model, file);
 			sendBroadcast(context, STATE_UNINSTALL, 0);
+			installPackageManager.setInstalled(null);
 			uninstall(targetDirectory);
 			sendBroadcast(context, STATE_UNINSTALL, 1);
 			install(context, file, targetDirectory);

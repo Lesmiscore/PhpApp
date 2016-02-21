@@ -117,6 +117,7 @@ public class MainPresenterImpl implements MainPresenter {
 		paused = false;
 		bus.register(this);
 		permissionHelper.onResume(activity);
+		requestPackageInstallIfNeeded();
 		if (showInstallFinishedOnResume) {
 			showInstallFinishedOnResume = false;
 			showInstallFinished(activity);
@@ -167,9 +168,7 @@ public class MainPresenterImpl implements MainPresenter {
 				@Override
 				public void onGranted() {
 					setupPreferences(activity);
-					if (installPackageManager.getInstalled() == null || installPresenter.isInstalling()) {
-						requestPackageInstall();
-					} else {
+					if (!requestPackageInstallIfNeeded()) {
 						requestInstallFinished();
 					}
 				}
@@ -179,6 +178,14 @@ public class MainPresenterImpl implements MainPresenter {
 
 			}
 		);
+	}
+
+	private boolean requestPackageInstallIfNeeded() {
+		if (installPackageManager.getInstalled() == null || installPresenter.isInstalling()) {
+			requestPackageInstall();
+			return true;
+		}
+		return false;
 	}
 
 	@Override
