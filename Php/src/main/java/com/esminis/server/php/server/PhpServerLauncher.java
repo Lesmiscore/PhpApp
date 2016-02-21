@@ -75,16 +75,13 @@ class PhpServerLauncher extends ServerLauncher {
 		return list;
 	}
 
-	private void addStartupModules(
-		List<String> options, File moduleDirectory, File iniDirectory, String[] modules
-	) {
+	private void addStartupModules(List<String> options, File iniDirectory, File[] modules) {
 		final List<String> iniModules = getIniModules(iniDirectory);
 		final List<String> list = new ArrayList<>();
-		for (String module : modules) {
-			final boolean zend = module.startsWith("zend_");
-			final File file = new File(moduleDirectory, module + ".so");
-			if (file.exists() && !iniModules.contains(file.getName().toLowerCase())) {
-				list.add((zend ? "zend_" : "") + "extension=" + file.getAbsolutePath());
+		for (File module : modules) {
+			final boolean zend = module.getName().startsWith("zend_");
+			if (!iniModules.contains(module.getName().toLowerCase())) {
+				list.add((zend ? "zend_" : "") + "extension=" + module.getAbsolutePath());
 			}
 		}
 		for (String row : list) {
@@ -94,8 +91,7 @@ class PhpServerLauncher extends ServerLauncher {
 	}
 
 	private List<String> createCommand(
-		File php, String address, String root, File moduleDirectory, File iniDirectory,
-		boolean indexPhpRouter, String[] modules
+		File php, String address, String root, File iniDirectory, boolean indexPhpRouter, File[] modules
 	) {
 		final List<String> options = new ArrayList<>();
 		options.add(php.getAbsolutePath());
@@ -103,7 +99,7 @@ class PhpServerLauncher extends ServerLauncher {
 		options.add(address);
 		options.add("-t");
 		options.add(root);
-		addStartupModules(options, moduleDirectory, iniDirectory, modules);
+		addStartupModules(options, iniDirectory, modules);
 		if (indexPhpRouter) {
 			options.add("index.php");
 		}
@@ -118,11 +114,11 @@ class PhpServerLauncher extends ServerLauncher {
 
 	Process start(
 		File php, String address, String root, File moduleDirectory, File documentRoot,
-		boolean keepRunning, boolean indexPhpRouter, String[] modules, Context context
+		boolean keepRunning, boolean indexPhpRouter, File[] modules, Context context
 	) throws IOException {
 		return start(
 			php, createCommand(
-				php, address, root, moduleDirectory, documentRoot, indexPhpRouter, modules
+				php, address, root, documentRoot, indexPhpRouter, modules
 			), context, getEnvironment(moduleDirectory), documentRoot, keepRunning
 		);
 	}

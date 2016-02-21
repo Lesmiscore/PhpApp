@@ -61,20 +61,20 @@ public class Php extends ServerControl {
 		);
 	}
 
-	private String[] getEnabledModules(Context context, File root) {
-		List<String> modules = new ArrayList<>();
+	private File[] getEnabledModules(Context context, File root) {
+		List<File> modules = new ArrayList<>();
 		String[] list = context.getResources().getStringArray(R.array.modules);
 		for (int i = 0; i < list.length; i += 3) {
 			final String module = list[i];
 			if (preferences.getBoolean(context, "module_" + module)) {
 				if ("zend_opcache".equals(module) && !root.canWrite()) {
 					sendWarning(R.string.warning_opcache_disabled);
-				} else {
-					modules.add(module);
+				} else if (isModuleAvailable(module)) {
+					modules.add(getModuleFile(module));
 				}
 			}
 		}
-		return modules.toArray(new String[modules.size()]);
+		return modules.toArray(new File[modules.size()]);
 	}
 
 	private void validatePhpIni(File file) {
@@ -109,6 +109,14 @@ public class Php extends ServerControl {
 		if (error != null) {
 			sendWarning(error, property);
 		}
+	}
+
+	private File getModuleFile(String name) {
+		return new File(getBinaryDirectory(), name + ".so");
+	}
+
+	public boolean isModuleAvailable(String name) {
+		return getModuleFile(name).isFile();
 	}
 
 }

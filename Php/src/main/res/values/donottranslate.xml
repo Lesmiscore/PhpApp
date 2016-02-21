@@ -9,7 +9,7 @@
 		<item>calendar</item><item>Calendar</item><item>Functions to simplify converting between different calendar formats</item>
 		<item>ctype</item><item>Ctype</item><item>Character type checking</item>
 		<item>fileinfo</item><item>Fileinfo</item><item>File Information</item>
-		<!--item>eio</item><item>Eio</item><item>Asynchronous POSIX I/O</item-->
+		<item>eio</item><item>Eio</item><item>Asynchronous POSIX I/O</item>
 		<item>exif</item><item>EXIF</item><item>Exchangeable image information</item>
 		<item>ftp</item><item>FTP</item><item>File Transfer Protocol</item>
 		<item>gd</item><item>GD</item><item>Image Processing and GD</item>
@@ -29,7 +29,7 @@
 		<item>pdo_mysql</item><item>PDO MySQL</item><item>PDO MySQL driver</item>
 		<item>pdo_odbc</item><item>PDO ODBC</item><item>PDO ODBC driver</item>
 		<item>pdo_pgsql</item><item>PDO PostgreSQL</item><item>PDO PostgreSQL driver</item>
-		<!--item>phalcon</item><item>Phalcon</item><item>Web framework implemented as a C extension</item-->
+		<item>phalcon</item><item>Phalcon</item><item>Web framework implemented as a C extension</item>
 		<item>phar</item><item>Phar</item><item>PHP Archive</item>
 		<item>posix</item><item>POSIX</item><item>Interface to POSIX functions</item>
 		<item>pgsql</item><item>PostgreSQL</item><item>PostgreSQL</item>
