@@ -282,11 +282,14 @@ public class MainViewImpl implements MainView {
 	}
 
 	private Observable<Void> showDialog(com.esminis.server.library.dialog.Dialog dialog) {
+		closeDialog();
 		this.dialog = dialog;
 		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
 			@Override
 			public void onDismiss(DialogInterface dialog) {
-				closeDialog();
+				if (MainViewImpl.this.dialog == dialog) {
+					closeDialog();
+				}
 			}
 		});
 		return dialog.showObserved();
