@@ -21,6 +21,7 @@ import com.esminis.server.library.activity.DrawerFragment;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.widget.CheckboxRight;
 import com.esminis.server.php.R;
+import com.esminis.server.php.server.Php;
 import com.esminis.server.php.server.install.InstallToDocumentRoot;
 
 import java.util.HashMap;
@@ -54,34 +55,12 @@ public class DrawerPhpFragment extends DrawerFragment {
 		}
 	}
 
-	private void setupPreferencesModules(PreferenceScreen screen, Context context) {
-		screen.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				initializeModulesDialog();
-				return false;
-			}
-		});
-		Resources resources = getResources();
-		String[] list = resources.getStringArray(R.array.modules);
-		for (int i = 0; i < list.length; i += 3) {
-			addPreference(list[i], list[i + 1], list[i + 2], screen, context, true);
-		}
-		list = resources.getStringArray(R.array.modules_builtin);
-		for (int i = 0; i < list.length; i += 2) {
-			addPreference(
-				PREFIX_BUILT_IN + i, resources.getString(R.string.modules_title_builtin, list[i]),
-				list[i + 1], screen, context, false
-			);
-		}
-		setupPreferencesValues(screen, context);
-	}
-
 	private void initializeModulesDialog() {
 		PreferenceScreen screen = (PreferenceScreen)findPreference(KEY_MODULES);
 		if (screen == null) {
 			return;
 		}
+		setupModulesDialogPreferences(screen, screen.getContext());
 		final Dialog dialog = screen.getDialog();
 		if (dialog == null) {
 			return;
@@ -97,6 +76,25 @@ public class DrawerPhpFragment extends DrawerFragment {
 		((ViewGroup)dialog.findViewById(R.id.content)).addView(
 			list, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 		);
+	}
+
+	private void setupModulesDialogPreferences(PreferenceScreen screen, Context context) {
+		screen.removeAll();
+		Resources resources = getResources();
+		String[] list = resources.getStringArray(R.array.modules);
+		for (int i = 0; i < list.length; i += 3) {
+			if (((Php)serverControl).isModuleAvailable(list[i])) {
+				addPreference(list[i], list[i + 1], list[i + 2], screen, context, true);
+			}
+		}
+		list = resources.getStringArray(R.array.modules_builtin);
+		for (int i = 0; i < list.length; i += 2) {
+			addPreference(
+				PREFIX_BUILT_IN + i, resources.getString(R.string.modules_title_builtin, list[i]),
+				list[i + 1], screen, context, false
+			);
+		}
+		setupPreferencesValues(screen, context);
 	}
 
 	private void setModulesSelected(boolean selected) {
@@ -239,12 +237,19 @@ public class DrawerPhpFragment extends DrawerFragment {
 	@Override
 	protected void setupPreferences(PreferenceScreen screen, Context context) {
 		final PreferenceScreen modules = getPreferenceManager().createPreferenceScreen(context);
+		setupModulesDialogPreferences(modules, modules.getContext());
 		modules.setTitle(R.string.modules_title);
 		modules.setSummary(R.string.modules_summary);
 		modules.setKey(KEY_MODULES);
+		modules.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				initializeModulesDialog();
+				return false;
+			}
+		});
 		screen.addPreference(modules);
 		super.setupPreferences(screen, context);
-		setupPreferencesModules(modules, context);
 		screen.addPreference(
 			restartOnChange(
 				createPreferenceCheckbox(
