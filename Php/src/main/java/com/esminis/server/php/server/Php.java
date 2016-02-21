@@ -55,7 +55,7 @@ public class Php extends ServerControl {
 	protected java.lang.Process start(File root, String address) throws IOException {
 		validatePhpIni(new File(root, "php.ini"));
 		return startup.start(
-			getBinary(), address, root.getAbsolutePath(), getBinary().getParentFile(), root,
+			getBinary(), address, root.getAbsolutePath(), getBinaryDirectory(), root,
 			isKeepRunning(), preferences.getBoolean(context, Preferences.INDEX_PHP_ROUTER),
 			getEnabledModules(context, root), context
 		);

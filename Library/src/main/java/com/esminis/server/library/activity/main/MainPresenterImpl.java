@@ -30,7 +30,6 @@ import com.esminis.server.library.permission.PermissionListener;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.background.BackgroundService;
 import com.esminis.server.library.service.server.ServerNotification;
-import com.esminis.server.library.service.server.install.InstallServer;
 import com.esminis.server.library.service.server.tasks.RestartIfRunningServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.ServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.StartServerTaskProvider;
@@ -47,9 +46,6 @@ public class MainPresenterImpl implements MainPresenter {
 
 	@Inject
 	protected PermissionActivityHelper permissionHelper;
-
-	@Inject
-	protected InstallServer installServer;
 
 	@Inject
 	protected Network network;

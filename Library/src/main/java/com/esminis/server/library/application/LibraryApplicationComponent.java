@@ -6,7 +6,7 @@ import com.esminis.server.library.model.manager.ProductLicenseManager;
 import com.esminis.server.library.service.AutoStart;
 import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.service.server.ServerNotificationService;
-import com.esminis.server.library.service.server.install.InstallServerTask;
+import com.esminis.server.library.service.server.installpackage.InstallerPackage;
 import com.esminis.server.library.service.server.tasks.ServerTaskProvider;
 
 import javax.inject.Singleton;
@@ -29,7 +29,7 @@ public interface LibraryApplicationComponent {
 
 	DrawerFragment getDrawerFragment();
 
-	InstallServerTask getInstallTask();
+	InstallerPackage getInstallerPackage();
 
 	ProductLicenseManager getProductLicenseManager();
 
