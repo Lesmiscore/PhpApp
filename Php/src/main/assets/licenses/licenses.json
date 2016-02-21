@@ -23,6 +23,7 @@
   "phalcon" : {"title" : "Phalcon", "items" : ["Phalcon"]},
   "libssh2" : {"title" : "LibSsh2", "items" : ["LibSsh2"]},
   "libvpx" : {"title" : "LibVpx", "items" : ["LibVpx"]},
+  "libwebp" : {"title" : "LibWebP", "items" : ["LibWebP"]},
   "curl" : {"title" : "Curl", "items" : ["Curl"]},
   "zlib" : {"title" : "Zlib", "items" : ["Zlib"]},
   "tidy" : {"title" : "Tidy", "items" : ["Tidy"]},
