@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.esminis.server.library.application.LibraryApplication;
+import com.esminis.server.library.model.manager.InstallPackageManager;
 import com.esminis.server.library.service.background.BackgroundServiceTaskProvider;
 
 import org.json.JSONObject;
@@ -18,6 +19,8 @@ public class InstallPackageTaskProvider implements BackgroundServiceTaskProvider
 	public Observable<Void> createTask(final Context context, final Bundle data) {
 		final LibraryApplication application = (LibraryApplication)context.getApplicationContext();
 		final InstallerPackage installer = application.getComponent().getInstallerPackage();
+		final InstallPackageManager installPackageManager = application.getComponent()
+			.getInstallPackageManager();
 		return Observable.create(new Observable.OnSubscribe<Void>() {
 			@Override
 			public void call(Subscriber<? super Void> subscriber) {
@@ -26,7 +29,7 @@ public class InstallPackageTaskProvider implements BackgroundServiceTaskProvider
 						installer.install(
 							application, new com.esminis.server.library.model.InstallPackage(
 								new JSONObject(data.getString("package"))
-							), application.getComponent().getServerControl()
+							), application.getComponent().getServerControl(), installPackageManager
 						);
 					}
 					subscriber.onCompleted();

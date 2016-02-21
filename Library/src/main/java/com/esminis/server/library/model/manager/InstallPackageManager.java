@@ -52,15 +52,16 @@ public class InstallPackageManager {
 	}
 
 	public void setInstalled(InstallPackage model) throws JSONException {
-		manager.set(context, Preferences.INSTALLED_PACKAGE, model.toJson().toString());
+		manager.set(
+			context, Preferences.INSTALLED_PACKAGE, model == null ? null : model.toJson().toString()
+		);
 	}
 
 	public InstallPackage getInstalled() {
 		if (manager.contains(context, Preferences.INSTALLED_PACKAGE)) {
 			try {
-				return new InstallPackage(
-					new JSONObject(manager.getString(context, Preferences.INSTALLED_PACKAGE))
-				);
+				final String content = manager.getString(context, Preferences.INSTALLED_PACKAGE);
+				return content == null ? null : new InstallPackage(new JSONObject(content));
 			} catch (JSONException ignored) {}
 		}
 		return null;
