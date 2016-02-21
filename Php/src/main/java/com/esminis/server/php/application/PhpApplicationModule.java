@@ -4,6 +4,7 @@ import com.esminis.server.library.activity.DrawerFragment;
 import com.esminis.server.library.activity.main.MainPresenter;
 import com.esminis.server.library.activity.main.MainPresenterImpl;
 import com.esminis.server.library.application.*;
+import com.esminis.server.library.model.manager.InstallPackageManager;
 import com.esminis.server.library.model.manager.Log;
 import com.esminis.server.library.model.manager.Network;
 import com.esminis.server.library.preferences.Preferences;
@@ -40,9 +41,10 @@ public class PhpApplicationModule {
 	@Provides
 	@Singleton
 	public InstallerPackage provideInstallerPackage(
-		Preferences preferences, ServerControl control, InstallToDocumentRoot installToDocumentRoot
+		ServerControl control, InstallToDocumentRoot installToDocumentRoot,
+		InstallPackageManager installPackageManager
 	) {
-		return new InstallerPackagePhp(preferences, control, installToDocumentRoot);
+		return new InstallerPackagePhp(control, installToDocumentRoot, installPackageManager);
 	}
 
 	@Provides

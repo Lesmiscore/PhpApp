@@ -83,7 +83,7 @@ public class MainViewImpl implements MainView {
 		viewLog = (TextView)activity.findViewById(R.id.error);
 		viewPort = (TextView)activity.findViewById(R.id.server_port);
 		viewServerStatusLabel = (TextView)activity.findViewById(R.id.label);
-		titleDefault = context.getString(R.string.title) + " " + context.getString(R.string.version);
+		titleDefault = context.getString(R.string.title);
 		viewContainer = activity.findViewById(R.id.container);
 		drawerLayout = (DrawerLayout)activity.findViewById(R.id.drawer_layout);
 		buttonStart = activity.findViewById(R.id.start);

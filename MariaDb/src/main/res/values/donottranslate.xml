@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="title_server">MariaDB</string>
-	<string name="version" translatable="false">10.1.8</string>
-	<string name="build" translatable="false">0</string>
 	<string name="default_document_root_directory" translatable="false">mariadb</string>
 	<string-array name="install_binaries" translatable="false">
 		<item>mysqld</item>
