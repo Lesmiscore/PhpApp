@@ -4,6 +4,6 @@
 	<string name="error_document_root_not_empty">Ошибка: data каталог непустой</string>
 	<string name="error_document_root_does_not_exist">Невозможно запустить сервер - data каталог не существует</string>
 	<string name="server_document_root">Data каталог</string>
-	<string name="about_content"><![CDATA[<br />Это абсолютно бесплатный сервер MariaDB (версия %1$s) для Android.<br /><br /><b>Автор</b><br /><br />Tautvydas Andrikys, esminis@esminis.lt</a><br />]]></string>
+	<string name="about_content"><![CDATA[<br />Это абсолютно бесплатный сервер MariaDB для Android.<br /><br /><b>Автор</b><br /><br />Tautvydas Andrikys, esminis@esminis.lt</a><br />]]></string>
 	<string name="manual_content"><![CDATA[<br />B етоm руководствe коротко описaны некоторыe части aпликaции:<br /><br />Стандартный пользователь - <b>root с пустым паролем</b>.<br />! По умолчанию пользователь root может подключаться от любого хоста, будьте осторожны.<br /><br />По умолчанию папка с данными на сервере - sdcard/mariadb, там вы найдете ваши данные.<br />]]></string>
 </resources>

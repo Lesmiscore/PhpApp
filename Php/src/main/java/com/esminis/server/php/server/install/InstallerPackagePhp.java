@@ -2,7 +2,7 @@ package com.esminis.server.php.server.install;
 
 import android.content.Context;
 
-import com.esminis.server.library.preferences.Preferences;
+import com.esminis.server.library.model.manager.InstallPackageManager;
 import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.service.server.installpackage.InstallHelper;
 import com.esminis.server.library.service.server.installpackage.InstallerPackage;
@@ -12,24 +12,24 @@ import java.util.HashMap;
 
 public class InstallerPackagePhp extends InstallerPackage {
 
-	private final Preferences preferences;
 	private final ServerControl serverControl;
 	private final InstallHelper helper = new InstallHelper();
 	private final InstallToDocumentRoot installToDocumentRoot;
+	private final InstallPackageManager installPackageManager;
 
 	public InstallerPackagePhp(
-		Preferences preferences, ServerControl serverControl,
-		InstallToDocumentRoot installToDocumentRoot
+		ServerControl serverControl, InstallToDocumentRoot installToDocumentRoot,
+		InstallPackageManager installPackageManager
 	) {
-		this.preferences = preferences;
 		this.serverControl = serverControl;
 		this.installToDocumentRoot = installToDocumentRoot;
+		this.installPackageManager = installPackageManager;
 	}
 
 	@Override
 	protected void onInstallComplete(Context context) throws Throwable {
 		installOdbcInstIni(context, serverControl.getBinaryDirectory());
-		if (!preferences.getIsInstalled(context)) {
+		if (installPackageManager.getInstalled() == null) {
 			installToDocumentRoot.install(context, true);
 		}
 	}

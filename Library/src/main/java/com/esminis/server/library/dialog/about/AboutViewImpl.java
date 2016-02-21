@@ -108,8 +108,7 @@ public class AboutViewImpl extends Dialog<AboutPresenter> implements AboutView {
 	}
 
 	private void setContentText(View view, Context context, int content) {
-		((TextView)view.findViewById(R.id.content))
-			.setText(Html.fromHtml(context.getString(content, context.getString(R.string.version))));
+		((TextView)view.findViewById(R.id.content)).setText(Html.fromHtml(context.getString(content)));
 	}
 
 }

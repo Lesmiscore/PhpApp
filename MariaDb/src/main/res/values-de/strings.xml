@@ -3,7 +3,7 @@
 	<string name="server_install_new_version_question">Neu MariaDB(%1$s) ist verfügbar zu bauen - willst du es installieren?</string>
 	<string name="error_document_root_does_not_exist">Der Server kann nicht gestartet werden - das Dateiverzeichnis fehlt.</string>
 	<string name="error_document_root_not_empty">Fehler: Das Dateiverzeichnis ist nicht leer.</string>
-	<string name="about_content"><![CDATA[<br />Dies ist ein absolut kostenloser MariaDB Server(Version %1$s) für Android.<br /><br /><b>Autor</b><br /><br />Tautvydas Andrikys, esminis@esminis.lt<br />]]></string>
+	<string name="about_content"><![CDATA[<br />Dies ist ein absolut kostenloser MariaDB Server für Android.<br /><br /><b>Autor</b><br /><br />Tautvydas Andrikys, esminis@esminis.lt<br />]]></string>
 	<string name="server_document_root">Dateiverzeichnis</string>
 	<string name="manual_content"><![CDATA[<br />In dieser Hilfe sind einige wichtige Teile der Anwendung beschrieben.<br /><br />Der Standardnutzer ist <b>root mit leerem Passwort</b>.<br />! Der Nutzer root kann standardmäßig Verbindungen von jedem beliebigen Host aus aufbauen. Gehen Sie also sorgfältig vor.<br /><br />Das Dateiverzeichnis des Servers ist auf sdcard/mariadb voreingestellt. Dort finden Sie Ihre Dateien.<br />]]></string>
 </resources>

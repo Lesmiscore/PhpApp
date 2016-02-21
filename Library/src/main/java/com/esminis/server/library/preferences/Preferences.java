@@ -137,18 +137,4 @@ public class Preferences {
 		sharedPreferences.edit().putInt(keyMigrate, versionCode).apply();
 	}
 
-	public boolean getIsInstalled(Context context) {
-		return getPreferences(context).contains(Preferences.BUILD);
-	}
-
-	public boolean getIsSameBuild(Context context) {
-		return getString(context, Preferences.BUILD).equals(getBuild(context));
-	}
-
-	public String getBuild(Context context) {
-		String build = context.getString(R.string.build);
-		return context.getString(R.string.version) +
-			(build.isEmpty() || build.equals("0") ? "" : "_" + build);
-	}
-
 }
