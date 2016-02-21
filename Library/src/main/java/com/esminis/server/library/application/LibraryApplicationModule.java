@@ -19,8 +19,6 @@ import com.esminis.server.library.api.Api;
 import com.esminis.server.library.model.manager.InstallPackageManager;
 import com.esminis.server.library.model.manager.ProductLicenseManager;
 import com.esminis.server.library.preferences.Preferences;
-import com.esminis.server.library.service.server.ServerControl;
-import com.esminis.server.library.service.server.install.InstallServer;
 import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
@@ -53,12 +51,6 @@ public class LibraryApplicationModule {
 	@Singleton
 	public InstallPackageManager provideInstallPackageManager(Api api, Preferences preferences) {
 		return new InstallPackageManager(api, preferences, application);
-	}
-
-	@Provides
-	@Singleton
-	public InstallServer provideInstallServer(Preferences preferences, ServerControl serverControl) {
-		return new InstallServer(preferences, serverControl, application.getComponent());
 	}
 
 }

@@ -6,10 +6,10 @@ import com.esminis.server.library.model.manager.Log;
 import com.esminis.server.library.model.manager.Network;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.ServerControl;
-import com.esminis.server.library.service.server.install.InstallServerTask;
+import com.esminis.server.library.service.server.installpackage.InstallerPackage;
 import com.esminis.server.mariadb.activity.MariaDBPresenterImpl;
+import com.esminis.server.mariadb.server.InstallerPackageMariaDb;
 import com.esminis.server.mariadb.server.MariaDb;
-import com.esminis.server.mariadb.server.MariaDbInstallServerTaskProvider;
 
 import javax.inject.Singleton;
 
@@ -37,19 +37,14 @@ public class MariaDbApplicationModule {
 	}
 
 	@Provides
-	public InstallServerTask provideInstallTaskFactory(
-		final Network network, final Preferences preferences, final ServerControl serverControl
-	) {
-		return new InstallServerTask(
-			serverControl, preferences, network, application, MariaDbInstallServerTaskProvider.class,
-			"mariadb"
-		);
-	}
-
-	@Provides
 	public MainPresenter provideMainPresenter(MariaDBPresenterImpl implementation) {
 		return implementation;
 	}
 
+	@Provides
+	@Singleton
+	public InstallerPackage provideInstallerPackage(Preferences preferences, ServerControl control) {
+		return new InstallerPackageMariaDb(preferences, control);
+	}
 
 }

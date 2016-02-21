@@ -3,7 +3,7 @@ package com.esminis.server.library.application;
 import com.esminis.server.library.activity.DrawerFragment;
 import com.esminis.server.library.activity.main.MainPresenter;
 import com.esminis.server.library.service.server.ServerControl;
-import com.esminis.server.library.service.server.install.InstallServerTask;
+import com.esminis.server.library.service.server.installpackage.InstallerPackage;
 
 import javax.inject.Singleton;
 
@@ -20,7 +20,7 @@ public class LibraryApplicationServerModule {
 	}
 
 	@Provides
-	public InstallServerTask provideInstallTask() {
+	public InstallerPackage provideInstallerPackage() {
 		throw new RuntimeException("Not implemented");
 	}
 

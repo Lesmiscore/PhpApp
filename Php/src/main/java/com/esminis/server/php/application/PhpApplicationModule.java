@@ -8,10 +8,11 @@ import com.esminis.server.library.model.manager.Log;
 import com.esminis.server.library.model.manager.Network;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.ServerControl;
-import com.esminis.server.library.service.server.install.InstallServerTask;
+import com.esminis.server.library.service.server.installpackage.InstallerPackage;
 import com.esminis.server.php.activity.DrawerPhpFragment;
 import com.esminis.server.php.server.Php;
-import com.esminis.server.php.server.install.InstallServerPhpTaskProvider;
+import com.esminis.server.php.server.install.InstallToDocumentRoot;
+import com.esminis.server.php.server.install.InstallerPackagePhp;
 
 import javax.inject.Singleton;
 
@@ -37,12 +38,11 @@ public class PhpApplicationModule {
 	}
 
 	@Provides
-	public InstallServerTask provideInstallTask(
-		final Network network, final Preferences preferences, final ServerControl serverControl
+	@Singleton
+	public InstallerPackage provideInstallerPackage(
+		Preferences preferences, ServerControl control, InstallToDocumentRoot installToDocumentRoot
 	) {
-		return new InstallServerTask(
-			serverControl, preferences, network, application, InstallServerPhpTaskProvider.class, "www"
-		);
+		return new InstallerPackagePhp(preferences, control, installToDocumentRoot);
 	}
 
 	@Provides

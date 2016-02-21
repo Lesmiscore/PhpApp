@@ -1,10 +1,14 @@
 package com.esminis.server.library.service.server.installpackage;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
 
 import com.esminis.server.library.activity.main.MainActivity;
 import com.esminis.server.library.service.Crypt;
+import com.esminis.server.library.service.server.ServerControl;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -16,6 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -26,11 +32,13 @@ public class InstallerPackage {
 	static public final int STATE_INSTALL = 3;
 
 	void install(
-		Context context, com.esminis.server.library.model.InstallPackage model
+		Context context, com.esminis.server.library.model.InstallPackage model,
+		ServerControl serverControl
 	) throws Throwable {
 		final File file = new File(context.getExternalFilesDir(null), "tmp_install");
 		final File targetDirectory = context.getFilesDir();
 		try {
+			stopServer(context, serverControl);
 			download(context, model, file);
 			sendBroadcast(context, STATE_UNINSTALL, 0);
 			uninstall(targetDirectory);
@@ -49,6 +57,36 @@ public class InstallerPackage {
 		intent.putExtra("state", state);
 		intent.putExtra("progress", progress);
 		context.sendBroadcast(intent);
+	}
+
+	private void stopServer(Context context, ServerControl serverControl) {
+		final CyclicBarrier barrier = new CyclicBarrier(2);
+		final BroadcastReceiver receiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if (
+					intent.getAction() == null ||
+						!intent.getAction().equals(MainActivity.getIntentActionServerStatus(context))
+					) {
+					return;
+				}
+				final Bundle extras = intent.getExtras();
+				if (extras == null || extras.containsKey("errorLine") || extras.getBoolean("running")) {
+					return;
+				}
+				try {
+					barrier.await();
+				} catch (InterruptedException | BrokenBarrierException ignored) {}
+			}
+		};
+		context.registerReceiver(
+			receiver, new IntentFilter(MainActivity.getIntentActionServerStatus(context))
+		);
+		serverControl.requestStop();
+		try {
+			barrier.await();
+		} catch (InterruptedException | BrokenBarrierException ignored) {}
+		context.unregisterReceiver(receiver);
 	}
 
 	private void download(
@@ -121,7 +159,14 @@ public class InstallerPackage {
 			zip = new ZipInputStream(input = new FileInputStream(file));
 			int position = 0;
 			while ((entry = zip.getNextEntry()) != null) {
-				install(targetDirectory, entry.getName(), zip);
+				if (entry.isDirectory()) {
+					final File directory = new File(targetDirectory, entry.getName());
+					if (!directory.mkdirs()) {
+						throw new IOException("Cannot create directory: " + directory.getAbsolutePath());
+					}
+				} else {
+					install(targetDirectory, entry.getName(), zip);
+				}
 				sendBroadcast(context, STATE_INSTALL, ((float)++position / (float)totalEntries) * 0.99f);
 			}
 		} finally {
@@ -136,6 +181,7 @@ public class InstallerPackage {
 				} catch (IOException ignored) {}
 			}
 		}
+		onInstallComplete(context);
 		sendBroadcast(context, STATE_INSTALL, 1);
 	}
 
@@ -156,5 +202,7 @@ public class InstallerPackage {
 			}
 		}
 	}
+
+	protected void onInstallComplete(Context context) throws Throwable {}
 
 }

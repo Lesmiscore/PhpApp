@@ -71,6 +71,10 @@ abstract public class ServerControl {
 		return binary;
 	}
 
+	public File getBinaryDirectory() {
+		return binary.getParentFile();
+	}
+
 	protected void sendWarning(@StringRes int message, String... parameters) {
 		getServerHandler().sendError(
 			context.getString(R.string.warning_message, context.getString(message, parameters))
