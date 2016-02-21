@@ -18,6 +18,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
@@ -44,6 +45,7 @@ import com.esminis.server.library.dialog.about.AboutPresenterImpl;
 import com.esminis.server.library.dialog.about.AboutViewImpl;
 import com.esminis.server.library.dialog.install.InstallPresenterImpl;
 import com.esminis.server.library.dialog.install.InstallViewImpl;
+import com.esminis.server.library.model.InstallPackage;
 import com.esminis.server.library.model.Network;
 
 import java.io.File;
@@ -62,6 +64,7 @@ public class MainViewImpl implements MainView {
 	private final TextView viewDocumentRoot;
 	private final TextView viewLog;
 	private final TextView viewPort;
+	private final TextView viewInstalledPackage;
 	private final Spinner viewServerInterfaces;
 	private final TextView viewServerStatusLabel;
 	private final ActionBarDrawerToggle drawerToggle;
@@ -82,6 +85,7 @@ public class MainViewImpl implements MainView {
 		viewDocumentRoot = (TextView)activity.findViewById(R.id.server_root);
 		viewLog = (TextView)activity.findViewById(R.id.error);
 		viewPort = (TextView)activity.findViewById(R.id.server_port);
+		viewInstalledPackage = (TextView)activity.findViewById(R.id.server_build);
 		viewServerStatusLabel = (TextView)activity.findViewById(R.id.label);
 		titleDefault = context.getString(R.string.title);
 		viewContainer = activity.findViewById(R.id.container);
@@ -196,6 +200,12 @@ public class MainViewImpl implements MainView {
 				presenter.serverStop();
 			}
 		});
+		viewInstalledPackage.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				presenter.requestPackageInstall();
+			}
+		});
 	}
 
 	@Override
@@ -223,6 +233,11 @@ public class MainViewImpl implements MainView {
 	@Override
 	public CharSequence getLog() {
 		return viewLog.getText();
+	}
+
+	@Override
+	public void setInstalledPackage(InstallPackage model) {
+		viewInstalledPackage.setText(Html.fromHtml(model.getTitle(viewInstalledPackage.getContext())));
 	}
 
 	@Override
@@ -384,6 +399,7 @@ public class MainViewImpl implements MainView {
 	public void showInstall(final InstallPresenterImpl presenter) {
 		final Activity activity = this.activity.get();
 		if (activity != null) {
+			setMessage(false, false, null, null);
 			final InstallViewImpl dialog = new InstallViewImpl(activity, presenter);
 			presenter.setView(dialog);
 			showDialog(dialog).subscribe(new Action1<Void>() {

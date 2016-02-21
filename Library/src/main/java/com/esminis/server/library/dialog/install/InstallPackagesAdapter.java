@@ -25,7 +25,7 @@ class InstallPackagesAdapter extends BaseAdapter {
 		}
 		for (int i = list.length - 1; i >= 0; i--) {
 			final InstallPackage model = list[i];
-			if (installed != model) {
+			if (installed != null && installed.id != model.id) {
 				listTemp.add(model);
 			}
 		}
@@ -60,9 +60,8 @@ class InstallPackagesAdapter extends BaseAdapter {
 		view.setText(
 			Html.fromHtml(
 				model == installed ?
-					"+ " + view.getContext()
-						.getString(R.string.install_package_title_currently_installed, title) :
-					"- " + title
+					view.getContext().getString(R.string.install_package_title_currently_installed, title) :
+					title
 			)
 		);
 		view.setClickable(installed == model);

@@ -33,6 +33,7 @@ public class InstallPresenterImpl implements InstallPresenter {
 	private final InstallPackageManager manager;
 	private InstallPackage installingPackage = null;
 	private final PublishSubject<Void> subject = PublishSubject.create();
+	private boolean installing = false;
 
 	@Inject
 	public InstallPresenterImpl(InstallPackageManager manager) {
@@ -94,6 +95,7 @@ public class InstallPresenterImpl implements InstallPresenter {
 	@Override
 	public void install(final InstallPackage model) {
 		if (view != null) {
+			installing = true;
 			view.showMessageInstall(model, R.string.installing_package);
 			installingPackage = model;
 			final Bundle data = new Bundle();
@@ -101,16 +103,9 @@ public class InstallPresenterImpl implements InstallPresenter {
 			final String action = MainActivity.getIntentActionInstallPackage(application);
 			final BroadcastReceiver receiver = new BroadcastReceiver() {
 
-				private InstallView view = null;
-
-				private BroadcastReceiver setView(InstallView view) {
-					this.view = view;
-					return this;
-				}
-
 				@Override
 				public void onReceive(Context context, Intent intent) {
-					if (InstallPresenterImpl.this.view == view && action.equals(intent.getAction())) {
+					if (view != null && action.equals(intent.getAction())) {
 						final String progress = String
 							.valueOf(Math.round(intent.getFloatExtra("progress", 0) * 100));
 						switch (intent.getIntExtra("state", 0)) {
@@ -123,7 +118,7 @@ public class InstallPresenterImpl implements InstallPresenter {
 						}
 					}
 				}
-			}.setView(view);
+			};
 			application.registerReceiver(receiver, new IntentFilter(action));
 			try {
 				data.putString("package", model.toJson().toString());
@@ -166,12 +161,18 @@ public class InstallPresenterImpl implements InstallPresenter {
 
 	private void installFinished(Context context, BroadcastReceiver receiver) {
 		installingPackage = null;
+		installing = false;
 		context.unregisterReceiver(receiver);
 	}
 
 	@Override
 	public InstallPackage getInstalled() {
 		return manager.getInstalled();
+	}
+
+	@Override
+	public boolean isInstalling() {
+		return installing;
 	}
 
 }

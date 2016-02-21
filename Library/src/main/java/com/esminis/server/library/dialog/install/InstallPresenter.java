@@ -13,4 +13,6 @@ public interface InstallPresenter extends DialogPresenter<InstallView> {
 
 	InstallPackage getInstalled();
 
+	boolean isInstalling();
+
 }
