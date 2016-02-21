@@ -5,6 +5,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.esminis.server.library.dialog.install.InstallPresenterImpl;
+import com.esminis.server.library.model.InstallPackage;
 import com.esminis.server.library.model.Network;
 
 import java.io.File;
@@ -23,6 +24,8 @@ public interface MainView {
 	void setLog(CharSequence log);
 
 	void setServerInterfaces(List<Network> list, int selectedPosition);
+
+	void setInstalledPackage(InstallPackage model);
 
 	CharSequence getLog();
 

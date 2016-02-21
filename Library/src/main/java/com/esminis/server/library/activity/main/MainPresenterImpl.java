@@ -167,9 +167,8 @@ public class MainPresenterImpl implements MainPresenter {
 				@Override
 				public void onGranted() {
 					setupPreferences(activity);
-					if (installPackageManager.getInstalled() == null) {
-						view.setMessage(false, false, null, null);
-						view.showInstall(installPresenter);
+					if (installPackageManager.getInstalled() == null || installPresenter.isInstalling()) {
+						requestPackageInstall();
 					} else {
 						requestInstallFinished();
 					}
@@ -180,6 +179,11 @@ public class MainPresenterImpl implements MainPresenter {
 
 			}
 		);
+	}
+
+	@Override
+	public void requestPackageInstall() {
+		view.showInstall(installPresenter);
 	}
 
 	private void requestInstallFinished() {
@@ -204,6 +208,7 @@ public class MainPresenterImpl implements MainPresenter {
 		view.showMainContent();
 		view.setDocumentRoot(getRootDirectory(activity));
 		view.setPort(getPort(activity), true);
+		view.setInstalledPackage(installPackageManager.getInstalled());
 		receiverManager.add(
 			context, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION), new BroadcastReceiver() {
 				@Override

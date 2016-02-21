@@ -53,4 +53,6 @@ public interface MainPresenter {
 
 	void onInstallComplete();
 
+	void requestPackageInstall();
+
 }

@@ -25,16 +25,14 @@ import java.util.List;
 public class InstallViewImpl extends Dialog<InstallPresenter> implements InstallView {
 
 	private final Activity activity;
+	private final boolean isCancelable;
+	private boolean installing = false;
 
 	public InstallViewImpl(Activity activity, final InstallPresenter presenter) {
 		super(activity, presenter);
 		setView(LayoutInflater.from(activity).inflate(R.layout.dialog_install, null));
-		if (presenter.getInstalled() == null) {
-			this.activity = activity;
-			setCancelable(false);
-		} else {
-			this.activity = null;
-		}
+		this.activity = activity;
+		setCancelable(isCancelable = presenter.getInstalled() != null);
 	}
 
 	@Override
@@ -95,11 +93,12 @@ public class InstallViewImpl extends Dialog<InstallPresenter> implements Install
 	@Override
 	public void hideMessage() {
 		findViewById(R.id.preloader_container).setVisibility(View.GONE);
+		setCancelable(isCancelable);
 	}
 
 	@Override
 	public void onBackPressed() {
-		if (activity == null) {
+		if (isCancelable && !presenter.isInstalling()) {
 			super.onBackPressed();
 		} else {
 			activity.finish();
@@ -114,11 +113,13 @@ public class InstallViewImpl extends Dialog<InstallPresenter> implements Install
 		argumentsLocal.add(model.getTitle(getContext()));
 		Collections.addAll(argumentsLocal, arguments);
 		showMessage(true, message, argumentsLocal.toArray(new String[argumentsLocal.size()]));
+		setCancelable(false);
 	}
 
 	@Override
 	public void showMessageInstallFailed(InstallPackage model, Throwable error) {
 		showMessageError(R.string.install_package_failed, error, model.getTitle(getContext()));
+		setCancelable(isCancelable);
 	}
 
 	@Override
@@ -137,4 +138,5 @@ public class InstallViewImpl extends Dialog<InstallPresenter> implements Install
 		Collections.addAll(argumentsLocal, arguments);
 		showMessage(false, message, argumentsLocal.toArray(new String[argumentsLocal.size()]));
 	}
+
 }

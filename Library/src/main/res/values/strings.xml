@@ -54,4 +54,5 @@
 	<string name="install_package_failed"><![CDATA[Error - <b>%2$s</b> install failed with message:<br /><font color="#FF0000">%1$s</font>]]></string>
 	<string name="error_network">network problem, please check your network connection</string>
 	<string name="error_server_response">could not read server response</string>
+	<string name="server_build">Server version &amp; build</string>
 </resources>
