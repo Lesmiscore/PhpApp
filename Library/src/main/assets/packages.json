@@ -1,42 +1,78 @@
 {
 	"title" : "Servers for Android packages",
- 	"uri" : "https://esminiscdn.com/packages/files/{$id}.zip",
- 	"files" : [
+	"uri" : "https://esminiscdn.com/packages/files/{$id}.zip",
+	"files" : [
 		{
-			"id" : 1, "order" : 700, "hash" : "22f85767bdebc731d1258e438f7bdab3",
+			"id" : 1, "order" : 1000, "hash" : "22f85767bdebc731d1258e438f7bdab3",
 			"version" : "7.0.0", "build" : 0, "architecture" : "arm",
 			"minAppVersion" : null, "maxAppVersion" : null,
 			"package" : "com.esminis.server.php"
 		},
 		{
-			"id" : 2, "order" : 700, "hash" : "526a2df2ddfcd63ae2d3ad9f960d8b1a",
+			"id" : 2, "order" : 1000, "hash" : "526a2df2ddfcd63ae2d3ad9f960d8b1a",
 			"version" : "7.0.0", "build" : 0, "architecture" : "x86",
 			"minAppVersion" : null, "maxAppVersion" : null,
 			"package" : "com.esminis.server.php"
 		},
 		{
-			"id" : 3, "order" : 10108, "hash" : "113f9945865cc1b8dcbb41871674a33a",
+			"id" : 3, "order" : 1000, "hash" : "113f9945865cc1b8dcbb41871674a33a",
 			"version" : "10.1.8", "build" : 0, "architecture" : "arm",
 			"minAppVersion" : null, "maxAppVersion" : null,
 			"package" : "com.esminis.server.mariadb"
 		},
 		{
-			"id" : 4, "order" : 10108, "hash" : "1baa2e4c8e57c5b9b615d76c84b36851",
+			"id" : 4, "order" : 1000, "hash" : "1baa2e4c8e57c5b9b615d76c84b36851",
 			"version" : "10.1.8", "build" : 0, "architecture" : "x86",
 			"minAppVersion" : null, "maxAppVersion" : null,
 			"package" : "com.esminis.server.mariadb"
 		},
-	  {
-		  "id" : 5, "order" : 566, "hash" : "e9f7b44d69b53acaf90bf8e531b065c7",
-		  "version" : "5.6.16", "build" : 1, "architecture" : "arm",
-		  "minAppVersion" : null, "maxAppVersion" : null,
-		  "package" : "com.esminis.server.php"
-	  },
-	  {
-		  "id" : 6, "order" : 566, "hash" : "8885a4c54ebe74024b6f7df9d916f99e",
-		  "version" : "5.6.16", "build" : 1, "architecture" : "x86",
-		  "minAppVersion" : null, "maxAppVersion" : null,
-		  "package" : "com.esminis.server.php"
-	  }
+		{
+			"id" : 5, "order" : 999, "hash" : "e9f7b44d69b53acaf90bf8e531b065c7",
+			"version" : "5.6.16", "build" : 1, "architecture" : "arm",
+			"minAppVersion" : null, "maxAppVersion" : null,
+			"package" : "com.esminis.server.php"
+		},
+		{
+			"id" : 6, "order" : 999, "hash" : "8885a4c54ebe74024b6f7df9d916f99e",
+			"version" : "5.6.16", "build" : 1, "architecture" : "x86",
+			"minAppVersion" : null, "maxAppVersion" : null,
+			"package" : "com.esminis.server.php"
+		},
+		{
+			"id" : 7, "order" : 998, "hash" : "7e047ef046d3ec7c0c59e9cb7547e975",
+			"version" : "5.6.16", "build" : 0, "architecture" : "arm",
+			"minAppVersion" : null, "maxAppVersion" : null,
+			"package" : "com.esminis.server.php"
+		},
+		{
+			"id" : 8, "order" : 998, "hash" : "cb4e365387efafec83bb2b2158e69317",
+			"version" : "5.6.16", "build" : 0, "architecture" : "x86",
+			"minAppVersion" : null, "maxAppVersion" : null,
+			"package" : "com.esminis.server.php"
+		},
+		{
+			"id" : 9, "order" : 997, "hash" : "f64ea88da65c476315b1b75923dbe782",
+			"version" : "5.6.12", "build" : 0, "architecture" : "arm",
+			"minAppVersion" : null, "maxAppVersion" : null,
+			"package" : "com.esminis.server.php"
+		},
+		{
+			"id" : 10, "order" : 997, "hash" : "df6fe322f10ebfb9611423672f470eb7",
+			"version" : "5.6.12", "build" : 0, "architecture" : "x86",
+			"minAppVersion" : null, "maxAppVersion" : null,
+			"package" : "com.esminis.server.php"
+		},
+		{
+			"id" : 11, "order" : 996, "hash" : "45d4cdbd3b1f37d59ca541ca902ad9cb",
+			"version" : "5.6.9", "build" : 0, "architecture" : "arm",
+			"minAppVersion" : null, "maxAppVersion" : null,
+			"package" : "com.esminis.server.php"
+		},
+		{
+			"id" : 12, "order" : 996, "hash" : "9f0fb2b8c836115954a66b39a768994d",
+			"version" : "5.6.9", "build" : 0, "architecture" : "x86",
+			"minAppVersion" : null, "maxAppVersion" : null,
+			"package" : "com.esminis.server.php"
+		}
 	]
 }
