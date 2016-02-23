@@ -236,8 +236,18 @@ public class MainViewImpl implements MainView {
 	}
 
 	@Override
-	public void setInstalledPackage(InstallPackage model) {
-		viewInstalledPackage.setText(Html.fromHtml(model.getTitle(viewInstalledPackage.getContext())));
+	public void setInstallPackages(InstallPackage installed, InstallPackage newest) {
+		viewInstalledPackage.setText(
+			Html.fromHtml(
+				installed.getTitle(viewInstalledPackage.getContext()) + "<small> - " + (
+					newest == null || newest.id == installed.id ?
+						context.getString(R.string.install_package_newest) : context.getString(
+							R.string.install_package_not_newest,
+							newest.getTitle(viewInstalledPackage.getContext())
+						)
+				) + "</small>"
+			)
+		);
 	}
 
 	@Override

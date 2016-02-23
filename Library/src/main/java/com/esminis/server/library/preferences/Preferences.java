@@ -41,6 +41,7 @@ public class Preferences {
 	final static public String BUILD = "installedPhpBuild";
 	final static public String INDEX_PHP_ROUTER = "indexPhpRouter";
 	final static public String INSTALLED_PACKAGE = "installedPackage";
+	final static public String NEWEST_PACKAGE = "newestPackage";
 
 	private PreferencesBackend backend = null;
 	private final Object lock = new Object();
