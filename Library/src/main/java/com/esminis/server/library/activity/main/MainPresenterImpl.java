@@ -215,7 +215,9 @@ public class MainPresenterImpl implements MainPresenter {
 		view.showMainContent();
 		view.setDocumentRoot(getRootDirectory(activity));
 		view.setPort(getPort(activity), true);
-		view.setInstalledPackage(installPackageManager.getInstalled());
+		view.setInstallPackages(
+			installPackageManager.getInstalled(), installPackageManager.getNewest()
+		);
 		receiverManager.add(
 			context, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION), new BroadcastReceiver() {
 				@Override

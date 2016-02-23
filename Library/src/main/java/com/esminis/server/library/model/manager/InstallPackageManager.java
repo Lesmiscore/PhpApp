@@ -52,19 +52,15 @@ public class InstallPackageManager {
 	}
 
 	public void setInstalled(InstallPackage model) throws JSONException {
-		manager.set(
-			context, Preferences.INSTALLED_PACKAGE, model == null ? null : model.toJson().toString()
-		);
+		setPreference(Preferences.INSTALLED_PACKAGE, model);
 	}
 
 	public InstallPackage getInstalled() {
-		if (manager.contains(context, Preferences.INSTALLED_PACKAGE)) {
-			try {
-				final String content = manager.getString(context, Preferences.INSTALLED_PACKAGE);
-				return content == null ? null : new InstallPackage(new JSONObject(content));
-			} catch (JSONException ignored) {}
-		}
-		return null;
+		return getPreference(Preferences.INSTALLED_PACKAGE);
+	}
+
+	public InstallPackage getNewest() {
+		return getPreference(Preferences.NEWEST_PACKAGE);
 	}
 
 	public Observable<InstallPackage[]> get() {
@@ -99,6 +95,7 @@ public class InstallPackageManager {
 									return order.get(lhs) - order.get(rhs);
 								}
 							});
+							setPreference(Preferences.NEWEST_PACKAGE, result.get(result.size() - 1));
 							subscriber.onNext(result.toArray(new InstallPackage[result.size()]));
 							subscriber.onCompleted();
 						}
@@ -108,10 +105,6 @@ public class InstallPackageManager {
 				}
 			}
 		).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread());
-	}
-
-	public InstallPackage getNewest(InstallPackage[] list) {
-		return list[list.length - 1];
 	}
 
 	private InstallPackage parse(JSONObject data, String uriFormat) throws JSONException {
@@ -152,6 +145,20 @@ public class InstallPackageManager {
 			return "x86";
 		}
 		throw new Exception("Architecture not supported");
+	}
+
+	private InstallPackage getPreference(String name) {
+		if (manager.contains(context, name)) {
+			try {
+				final String content = manager.getString(context, name);
+				return content == null ? null : new InstallPackage(new JSONObject(content));
+			} catch (JSONException ignored) {}
+		}
+		return null;
+	}
+
+	private void setPreference(String name, InstallPackage model) throws JSONException {
+		manager.set(context, name, model == null ? null : model.toJson().toString());
 	}
 
 }

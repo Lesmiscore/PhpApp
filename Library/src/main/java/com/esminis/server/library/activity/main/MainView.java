@@ -25,7 +25,7 @@ public interface MainView {
 
 	void setServerInterfaces(List<Network> list, int selectedPosition);
 
-	void setInstalledPackage(InstallPackage model);
+	void setInstallPackages(InstallPackage installed, InstallPackage newest);
 
 	CharSequence getLog();
 

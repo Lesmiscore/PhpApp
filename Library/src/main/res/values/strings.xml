@@ -55,4 +55,6 @@
 	<string name="error_network">network problem, please check your network connection</string>
 	<string name="error_server_response">could not read server response</string>
 	<string name="server_build">Server version &amp; build</string>
+	<string name="install_package_newest">this is the newest available version</string>
+	<string name="install_package_not_newest">a newer version is available %1$s</string>
 </resources>
