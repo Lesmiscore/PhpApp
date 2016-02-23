@@ -1,5 +1,6 @@
 package com.esminis.server.library.dialog.install;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.support.annotation.StringRes;
 import android.text.Html;
@@ -17,17 +18,24 @@ import com.esminis.server.library.model.InstallPackage;
 
 import org.json.JSONException;
 
-import java.io.IOException;
+import java.net.ConnectException;
+import java.net.MalformedURLException;
+import java.net.NoRouteToHostException;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import javax.net.ssl.SSLException;
 
 public class InstallViewImpl extends Dialog<InstallPresenter> implements InstallView {
 
 	private final Activity activity;
 	private final boolean isCancelable;
-	private boolean installing = false;
 
+	@SuppressLint("InflateParams")
 	public InstallViewImpl(Activity activity, final InstallPresenter presenter) {
 		super(activity, presenter);
 		setView(LayoutInflater.from(activity).inflate(R.layout.dialog_install, null));
@@ -128,11 +136,16 @@ public class InstallViewImpl extends Dialog<InstallPresenter> implements Install
 		final String errorMessage;
 		if (error instanceof JSONException) {
 			errorMessage = getContext().getString(R.string.error_server_response);
-		} else if (error instanceof IOException) {
+		} else if (
+			error instanceof ConnectException || error instanceof NoRouteToHostException ||
+			error instanceof SSLException || error instanceof SocketTimeoutException ||
+			error instanceof SocketException || error instanceof UnknownHostException ||
+			error instanceof MalformedURLException
+		) {
 			errorMessage = getContext().getString(R.string.error_network);
 		} else {
-			errorMessage = (error.getMessage() == null ? "" : error.getMessage() + ", ") +
-				error.getClass().getSimpleName();
+			errorMessage = error.getClass().getSimpleName() +
+				(error.getMessage() == null ? "" : ", " + error.getMessage());
 		}
 		argumentsLocal.add(errorMessage);
 		Collections.addAll(argumentsLocal, arguments);
