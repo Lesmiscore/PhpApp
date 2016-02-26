@@ -36,4 +36,18 @@
 	<string name="back_to_licenses">Вернуться к списку лицензий</string>
 	<string name="warning_message">Предупреждение: %1$s</string>
 	<string name="downloading_packages">Получение списка доступных версий</string>
+	<string name="downloading_packages_failed"><![CDATA[Ошибка - не удалось получить список доступных версий с сообщением:<br /><font color="#FF0000">%1$s</font>]]></string>
+	<string name="error_network">проблема с сетью, пожалуйста, проверьте ваше подключение к сети</string>
+	<string name="error_server_response">не удалось прочитать ответ сервера</string>
+	<string name="install_package_failed"><![CDATA[Ошибка - установка <b>%2$s</b> не удалась с сообщением:<br /><font color="#FF0000">%1$s</font>]]></string>
+	<string name="install_package_newest">это последняя доступная версия</string>
+	<string name="install_package_not_newest">доступна новая версия %1$s</string>
+	<string name="install_package_title"><![CDATA[%1$s <b>%2$s</b> (сборка #%3$s)]]></string>
+	<string name="install_package_title_currently_installed"><![CDATA[%1$s - <b>сейчас установлено</b>]]></string>
+	<string name="installing_package"><![CDATA[%1$s<br />Установка]]></string>
+	<string name="installing_package_download"><![CDATA[%1$s<br />1 / 2 - скачивание: %2$s%%]]></string>
+	<string name="installing_package_files"><![CDATA[%1$s<br />2 / 2 - установка файлов: %2$s%%]]></string>
+	<string name="retry">Попытаться снова</string>
+	<string name="select_package_to_install"><![CDATA[Выбрать сборку <b>%1$s</b> для установки:]]></string>
+	<string name="server_build">Версия и сборка сервера</string>
 </resources>

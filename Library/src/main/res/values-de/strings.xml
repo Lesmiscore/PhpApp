@@ -35,4 +35,19 @@
 	<string name="grant">Zulassen</string>
 	<string name="back_to_licenses">Zurück zur Liste der Lizenzen</string>
 	<string name="warning_message">Warnung: %1$s</string>
+	<string name="downloading_packages">Ruft Liste der verfügbaren Versionen ab</string>
+	<string name="downloading_packages_failed"><![CDATA[Fehler - Abrufen der Liste der verfügbaren Versionen mit Meldung ist fehlgeschlagen:<br /><font color="#FF0000">%1$s</font>]]></string>
+	<string name="error_network">Netzwerkproblem, bitte überprüfen Sie die Netzwerkverbindung</string>
+	<string name="error_server_response">konnte Server-Antwort nicht lesen</string>
+	<string name="install_package_failed"><![CDATA[Fehler - <b>%2$s</b> Installation mit Meldung ist fehlgeschlagen:<br /><font color="#FF0000">%1$s</font>]]></string>
+	<string name="install_package_newest">dies ist die neueste verfügbare Version</string>
+	<string name="install_package_not_newest">eine neuere Version ist verfügbar %1$s</string>
+	<string name="install_package_title"><![CDATA[%1$s <b>%2$s</b> (Build #%3$s)]]></string>
+	<string name="install_package_title_currently_installed"><![CDATA[%1$s - <b>derzeit installiert</b>]]></string>
+	<string name="installing_package"><![CDATA[%1$s<br />Installieren]]></string>
+	<string name="installing_package_download"><![CDATA[%1$s<br />1 / 2 - downloaden: %2$s%%]]></string>
+	<string name="installing_package_files"><![CDATA[%1$s<br />2 / 2 - Installieren von Dateien: %2$s%%]]></string>
+	<string name="retry">Wiederholen</string>
+	<string name="server_build">Server-Version &amp; Build</string>
+	<string name="select_package_to_install"><![CDATA[Wählen Sie <b>%1$s</b> Build zu installieren:]]></string>
 </resources>
