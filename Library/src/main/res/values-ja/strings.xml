@@ -35,4 +35,10 @@
     <string name="permission_files_needed">%1$s は動作にファイルへのアクセスを必要とします。ファイルへのアクセスを許可してください。</string>
     <string name="back_to_licenses">ライセンスリストへと戻る</string>
     <string name="warning_message">警告：%1$s</string>
+    <string name="downloading_packages">利用可能なバージョンの一覧を取得する</string>
+    <string name="downloading_packages_failed"><![CDATA[エラー―以下メッセージと共に、利用可能なバージョンの一覧の取得に失敗しました：<br /><font color="#FF0000">%1$s</font>]]></string>
+    <string name="error_network">ネットワークに問題があります、ネットワーク接続を確認してください</string>
+    <string name="error_server_response">サーバの応答を読み込めません</string>
+    <string name="install_package_failed"><![CDATA[エラー―以下メッセージと共に、<b>%2$s</b>のインストールに失敗しました：<br /><font color="#FF0000">%1$s</font>]]></string>
+    <string name="install_package_not_newest">新しいバージョンが利用可能です %1$s</string>
 </resources>

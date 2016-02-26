@@ -237,6 +237,9 @@ public class MainViewImpl implements MainView {
 
 	@Override
 	public void setInstallPackages(InstallPackage installed, InstallPackage newest) {
+		if (viewInstalledPackage == null || installed == null) {
+			return;
+		}
 		viewInstalledPackage.setText(
 			Html.fromHtml(
 				installed.getTitle(viewInstalledPackage.getContext()) + "<small> - " + (
