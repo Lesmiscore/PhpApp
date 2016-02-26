@@ -27,8 +27,8 @@ public class InstallPackage {
 		this.id = data.getInt("id");
 		this.version = data.getString("version");
 		this.build = data.getInt("build");
-		this.uri = data.getString("uri");
-		this.hash = data.getString("hash");
+		this.uri = data.has("uri") ? data.getString("uri") : null;
+		this.hash = data.has("hash") ? data.getString("hash") : null;
 	}
 
 	public JSONObject toJson() throws JSONException {
