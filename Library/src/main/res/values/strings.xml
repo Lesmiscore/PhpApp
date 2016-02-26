@@ -49,7 +49,7 @@
 	<string name="installing_package_download"><![CDATA[%1$s<br />1 / 2 - downloading: %2$s%%]]></string>
 	<string name="installing_package_files"><![CDATA[%1$s<br />2 / 2 - installing files: %2$s%%]]></string>
 	<string name="install_package_title"><![CDATA[%1$s <b>%2$s</b> (build #%3$s)]]></string>
-	<string name="install_package_title_currently_installed"><![CDATA[%1$s - <b>now installed</b>]]></string>
+	<string name="install_package_title_currently_installed"><![CDATA[%1$s - <b>currently installed</b>]]></string>
 	<string name="select_package_to_install"><![CDATA[Select <b>%1$s</b> build to install:]]></string>
 	<string name="install_package_failed"><![CDATA[Error - <b>%2$s</b> install failed with message:<br /><font color="#FF0000">%1$s</font>]]></string>
 	<string name="error_network">network problem, please check your network connection</string>

@@ -35,4 +35,19 @@
 	<string name="permission_files_needed">%1$s reikia priėjimo prie failų. Prašome suteikti priėjimą prie failų.</string>
 	<string name="back_to_licenses">Atgal į licenzijų sarašą</string>
 	<string name="warning_message">Įspėjimas: %1$s</string>
+	<string name="server_build">Serverio versija</string>
+	<string name="select_package_to_install"><![CDATA[Pasirinkite <b>%1$s</b> versiją kurią norite instaliuoti:]]></string>
+	<string name="retry">Bandyti dar kartą</string>
+	<string name="installing_package_files"><![CDATA[%1$s<br />2 / 2 - diegiami failai: %2$s%%]]></string>
+	<string name="installing_package_download"><![CDATA[%1$s<br />1 / 2 - parsiunčiama: %2$s%%]]></string>
+	<string name="installing_package"><![CDATA[%1$s<br />Diegiama]]></string>
+	<string name="install_package_title_currently_installed"><![CDATA[%1$s - <b>instaliuota</b>]]></string>
+	<string name="install_package_title"><![CDATA[%1$s <b>%2$s</b> (#%3$s)]]></string>
+	<string name="install_package_not_newest">yra naujesnė versija %1$s</string>
+	<string name="install_package_newest">naujausia versija</string>
+	<string name="install_package_failed"><![CDATA[Klaida - <b>%2$s</b> diegimas nepavyko, su klaida:<br /><font color="#FF0000">%1$s</font>]]></string>
+	<string name="error_server_response">nepavyko nuskaityti serverio atsakymo</string>
+	<string name="error_network">tinklo klaida, patikrinkite tinklo nustatymus</string>
+	<string name="downloading_packages_failed"><![CDATA[Klaida - nepavyko gauti galimų versijų:<br /><font color="#FF0000">%1$s</font>]]></string>
+	<string name="downloading_packages">Gaunamas sąrašas galimų versijų</string>
 </resources>
