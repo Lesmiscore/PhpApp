@@ -47,4 +47,13 @@ public class InstallPackage {
 		);
 	}
 
+	@Override
+	public boolean equals(Object object) {
+		if (!(object instanceof InstallPackage)) {
+			return false;
+		}
+		final InstallPackage model = (InstallPackage)object;
+		return id == model.id ||
+			(build == model.build && version != null && version.equals(model.version));
+	}
 }
