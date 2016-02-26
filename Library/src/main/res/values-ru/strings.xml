@@ -35,4 +35,5 @@
 	<string name="grant">Разрешить</string>
 	<string name="back_to_licenses">Вернуться к списку лицензий</string>
 	<string name="warning_message">Предупреждение: %1$s</string>
+	<string name="downloading_packages">Получение списка доступных версий</string>
 </resources>
