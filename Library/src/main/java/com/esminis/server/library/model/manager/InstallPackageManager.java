@@ -2,6 +2,7 @@ package com.esminis.server.library.model.manager;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.Debug;
 
 import com.esminis.server.library.api.Api;
 import com.esminis.server.library.model.InstallPackage;
@@ -37,7 +38,10 @@ public class InstallPackageManager {
 	}
 
 	private void migrate() {
-		if (!manager.contains(context, Preferences.BUILD)) {
+		if (
+			!manager.contains(context, Preferences.BUILD) ||
+			manager.getString(context, Preferences.BUILD) == null
+		) {
 			return;
 		}
 		final String[] parts = manager.getString(context, Preferences.BUILD).split("_");

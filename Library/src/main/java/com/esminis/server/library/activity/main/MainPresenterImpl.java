@@ -22,6 +22,7 @@ import com.esminis.server.library.EventMessage;
 import com.esminis.server.library.R;
 import com.esminis.server.library.application.LibraryApplication;
 import com.esminis.server.library.dialog.install.InstallPresenterImpl;
+import com.esminis.server.library.model.InstallPackage;
 import com.esminis.server.library.model.manager.InstallPackageManager;
 import com.esminis.server.library.model.manager.Log;
 import com.esminis.server.library.model.manager.Network;
@@ -41,6 +42,8 @@ import com.squareup.otto.Subscribe;
 import java.io.File;
 
 import javax.inject.Inject;
+
+import rx.Subscriber;
 
 public class MainPresenterImpl implements MainPresenter {
 
@@ -167,6 +170,22 @@ public class MainPresenterImpl implements MainPresenter {
 
 				@Override
 				public void onGranted() {
+					installPackageManager.get().subscribe(new Subscriber<InstallPackage[]>() {
+						@Override
+						public void onCompleted() {
+							view.setInstallPackages(
+								installPackageManager.getInstalled(), installPackageManager.getNewest()
+							);
+						}
+
+						@Override
+						public void onError(Throwable e) {
+							onCompleted();
+						}
+
+						@Override
+						public void onNext(InstallPackage[] installPackages) {}
+					});
 					setupPreferences(activity);
 					if (!requestPackageInstallIfNeeded()) {
 						requestInstallFinished();
