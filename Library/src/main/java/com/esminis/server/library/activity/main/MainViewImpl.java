@@ -240,7 +240,7 @@ public class MainViewImpl implements MainView {
 		viewInstalledPackage.setText(
 			Html.fromHtml(
 				installed.getTitle(viewInstalledPackage.getContext()) + "<small> - " + (
-					newest == null || newest.id == installed.id ?
+					newest == null || newest.equals(installed) ?
 						context.getString(R.string.install_package_newest) : context.getString(
 							R.string.install_package_not_newest,
 							newest.getTitle(viewInstalledPackage.getContext())
