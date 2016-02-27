@@ -9,7 +9,7 @@ This is totally free PHP server for Android that works using PHP built-in server
 
 ## Features ##
 
-* PHP 5.6.12
+* PHP 5.4+, 7+
 * Start server on Android device boot(if needed)
 * Keep server running even if app is killed(if needed)
 * Show notification when server is running(if needed)
@@ -111,7 +111,7 @@ This is totally free MariaDB server for Android.
 
 ## Features ##
 
-* MariaDB 10.1.8
+* MariaDB 10.1.+
 * Start server on Android device boot(if needed)
 * Keep server running even if app is killed(if needed)
 * Show notification when server is running(if needed)
