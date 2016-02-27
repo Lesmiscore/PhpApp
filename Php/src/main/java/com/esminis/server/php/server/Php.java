@@ -66,7 +66,10 @@ public class Php extends ServerControl {
 		String[] list = context.getResources().getStringArray(R.array.modules);
 		for (int i = 0; i < list.length; i += 3) {
 			final String module = list[i];
-			if (preferences.getBoolean(context, "module_" + module)) {
+			final String moduleName = "module_" + module;
+			if (
+				!preferences.contains(context, moduleName) || preferences.getBoolean(context, moduleName)
+			) {
 				if ("zend_opcache".equals(module) && !root.canWrite()) {
 					sendWarning(R.string.warning_opcache_disabled);
 				} else if (isModuleAvailable(module)) {
