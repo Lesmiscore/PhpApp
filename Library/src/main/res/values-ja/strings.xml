@@ -41,4 +41,13 @@
     <string name="error_server_response">サーバの応答を読み込めません</string>
     <string name="install_package_failed"><![CDATA[エラー―以下メッセージと共に、<b>%2$s</b>のインストールに失敗しました：<br /><font color="#FF0000">%1$s</font>]]></string>
     <string name="install_package_not_newest">新しいバージョンが利用可能です %1$s</string>
+    <string name="install_package_newest">こちらが最新の利用可能なバージョンです</string>
+    <string name="install_package_title"><![CDATA[%1$s <b>%2$s</b> (ビルド #%3$s)]]></string>
+    <string name="install_package_title_currently_installed"><![CDATA[%1$s ― <b>現在インストールされています</b>]]></string>
+    <string name="installing_package"><![CDATA[%1$s<br />インストール中です]]></string>
+    <string name="installing_package_download"><![CDATA[%1$s<br />1 / 2 ― ダウンロード中： %2$s%%]]></string>
+    <string name="installing_package_files"><![CDATA[%1$s<br />2 / 2 ― ファイルのインストール中： %2$s%%]]></string>
+    <string name="retry">再試行</string>
+    <string name="select_package_to_install"><![CDATA[インストールしてビルドするには <b>%1$s</b> を選択してください：]]></string>
+    <string name="server_build">サーバ・バージョンとビルド</string>
 </resources>
