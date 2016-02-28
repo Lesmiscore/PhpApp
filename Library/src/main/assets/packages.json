@@ -3,6 +3,18 @@
 	"uri" : "https://esminiscdn.com/packages/files/{$id}.zip",
 	"files" : [
 		{
+			"id" : 14, "order" : 1001, "hash" : "8745a98f82066f860937cf05c11ca79c",
+			"version" : "7.0.0", "build" : 1, "architecture" : "x86",
+			"minAppVersion" : null, "maxAppVersion" : null,
+			"package" : "com.esminis.server.php"
+		},
+		{
+			"id" : 13, "order" : 1001, "hash" : "a053ffa43de75528db3ea6b38de38b3b",
+			"version" : "7.0.0", "build" : 1, "architecture" : "arm",
+			"minAppVersion" : null, "maxAppVersion" : null,
+			"package" : "com.esminis.server.php"
+		},
+		{
 			"id" : 1, "order" : 1000, "hash" : "22f85767bdebc731d1258e438f7bdab3",
 			"version" : "7.0.0", "build" : 0, "architecture" : "arm",
 			"minAppVersion" : null, "maxAppVersion" : null,
