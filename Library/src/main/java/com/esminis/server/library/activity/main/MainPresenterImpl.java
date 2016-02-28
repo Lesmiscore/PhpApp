@@ -173,9 +173,11 @@ public class MainPresenterImpl implements MainPresenter {
 					installPackageManager.get().subscribe(new Subscriber<InstallPackage[]>() {
 						@Override
 						public void onCompleted() {
-							view.setInstallPackages(
-								installPackageManager.getInstalled(), installPackageManager.getNewest()
-							);
+							if (view != null) {
+								view.setInstallPackages(
+									installPackageManager.getInstalled(), installPackageManager.getNewest()
+								);
+							}
 						}
 
 						@Override
