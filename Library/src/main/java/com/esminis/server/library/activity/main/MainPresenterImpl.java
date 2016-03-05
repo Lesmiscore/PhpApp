@@ -30,7 +30,7 @@ import com.esminis.server.library.permission.PermissionActivityHelper;
 import com.esminis.server.library.permission.PermissionListener;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.background.BackgroundService;
-import com.esminis.server.library.service.server.ServerNotification;
+import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.service.server.tasks.RestartIfRunningServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.ServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.StartServerTaskProvider;
@@ -57,9 +57,6 @@ public class MainPresenterImpl implements MainPresenter {
 	protected Log log;
 
 	@Inject
-	protected ServerNotification serverNotification;
-
-	@Inject
 	protected Bus bus;
 
 	@Inject
@@ -70,6 +67,9 @@ public class MainPresenterImpl implements MainPresenter {
 
 	@Inject
 	protected InstallPresenterImpl installPresenter;
+
+	@Inject
+	protected ServerControl serverControl;
 
 	private final ReceiverManager receiverManager = new ReceiverManager();
 
@@ -259,17 +259,14 @@ public class MainPresenterImpl implements MainPresenter {
 						} else {
 							if (extras != null && extras.getBoolean("running")) {
 								view.showButton(MainView.BUTTON_STOP);
-								final CharSequence title = Html.fromHtml(
-									getServerRunningLabel(activity, extras.getString("address"))
-								);
-								view.setStatusLabel(title);
-								serverNotification.show(
-									activity, title.toString(), activity.getString(R.string.server_running_public)
+								view.setStatusLabel(
+									Html.fromHtml(
+										serverControl.getServerRunningLabel(activity, extras.getString("address"))
+									)
 								);
 							} else {
 								view.showButton(MainView.BUTTON_START);
 								view.setStatusLabel(activity.getString(R.string.server_stopped));
-								serverNotification.hide(activity);
 							}
 						}
 					}
@@ -279,13 +276,6 @@ public class MainPresenterImpl implements MainPresenter {
 		);
 		resetNetwork();
 		serverStatus();
-	}
-
-	protected String getServerRunningLabel(Context context, String address) {
-		return String.format(
-			context.getString(R.string.server_running),
-			"<a href=\"http://" + address + "\">" + address + "</a>"
-		);
 	}
 
 	@Override

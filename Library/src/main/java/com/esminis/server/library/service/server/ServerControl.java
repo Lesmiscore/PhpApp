@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.*;
 import android.support.annotation.StringRes;
+import android.text.Html;
 import android.util.Pair;
 
 import com.esminis.server.library.R;
@@ -33,6 +34,7 @@ abstract public class ServerControl {
 	private final boolean mainProcess;
 	protected final Preferences preferences;
 	private final Network network;
+	private final ServerNotification serverNotification;
 
 	private ServerStreamReader streamReader = null;
 	private java.lang.Process process = null;
@@ -43,7 +45,8 @@ abstract public class ServerControl {
 	public ServerControl(
 		String binaryName, LibraryApplication context,
 		Network network, Preferences preferences, Log log,
-		com.esminis.server.library.model.manager.Process managerProcess, boolean mainProcess
+		com.esminis.server.library.model.manager.Process managerProcess, boolean mainProcess,
+		ServerNotification serverNotification
 	) {
 		this.binary = new File(context.getFilesDir(), binaryName);
 		this.context = context;
@@ -53,6 +56,8 @@ abstract public class ServerControl {
 		this.preferences = preferences;
 		this.log = log;
 		address = getIPAddress() + ":" + preferences.getString(context, Preferences.PORT);
+		this.serverNotification = serverNotification;
+		getServerHandler();
 	}
 
 	private String getIPAddress() {
@@ -107,6 +112,7 @@ abstract public class ServerControl {
 				getServerHandler().sendError(error.getCause().getMessage());
 			}
 		}
+		getStatus();
 	}
 
 	private void stop() {
@@ -121,6 +127,7 @@ abstract public class ServerControl {
 			process = null;
 		}
 		managerProcess.kill(getBinary());
+		getStatus();
 	}
 
 	private Pair<Boolean, String> getStatus() {
@@ -141,20 +148,23 @@ abstract public class ServerControl {
 				running = true;
 			}
 		}
+		if (running) {
+			serverNotification.show(
+				context.getApplicationContext(),
+				Html.fromHtml(getServerRunningLabel(context, address)).toString(),
+				context.getString(R.string.server_running_public)
+			);
+		} else {
+			serverNotification.hide(context.getApplicationContext());
+		}
 		return new Pair<>(running, realAddress);
 	}
 
 	public void onHandlerReady() {
 		status();
-		if (
-			start || (preferences.getBoolean(context, Preferences.SERVER_STARTED) && isKeepRunning())
-		) {
+		if (start || preferences.getBoolean(context, Preferences.SERVER_STARTED)) {
 			requestStart();
 		}
-	}
-
-	protected boolean isKeepRunning() {
-		return preferences.getBoolean(context, Preferences.KEEP_RUNNING);
 	}
 
 	public void onHandlerMessage(Message message) {
@@ -258,6 +268,13 @@ abstract public class ServerControl {
 		);
 		bundle.putString(Preferences.PORT, preferences.getString(context, Preferences.PORT));
 		getServerHandler().sendAction(action, bundle);
+	}
+
+	public String getServerRunningLabel(Context context, String address) {
+		return String.format(
+			context.getString(R.string.server_running),
+			"<a href=\"http://" + address + "\">" + address + "</a>"
+		);
 	}
 
 }

@@ -9,6 +9,7 @@ import com.esminis.server.library.model.manager.Log;
 import com.esminis.server.library.model.manager.Network;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.ServerControl;
+import com.esminis.server.library.service.server.ServerNotification;
 import com.esminis.server.library.service.server.installpackage.InstallerPackage;
 import com.esminis.server.php.activity.DrawerPhpFragment;
 import com.esminis.server.php.server.Php;
@@ -33,9 +34,9 @@ public class PhpApplicationModule {
 	@Singleton
 	public ServerControl provideServerControl(
 		Network network, com.esminis.server.library.model.manager.Process process, Log log,
-		Preferences preferences
+		Preferences preferences, ServerNotification serverNotification
 	) {
-		return new Php(network, process, preferences, log, application);
+		return new Php(network, process, preferences, log, application, serverNotification);
 	}
 
 	@Provides

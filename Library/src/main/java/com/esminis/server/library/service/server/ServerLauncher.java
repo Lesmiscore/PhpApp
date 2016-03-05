@@ -15,9 +15,6 @@
  */
 package com.esminis.server.library.service.server;
 
-import android.app.ActivityManager;
-import android.content.Context;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,8 +39,7 @@ abstract public class ServerLauncher {
 	}
 
 	protected Process start(
-		File binary, List<String> command, Context context, List<String> environment,
-		File workDirectory, boolean keepRunning
+		File binary, List<String> command, List<String> environment, File workDirectory
 	) throws IOException {
 		final Process process = Runtime.getRuntime().exec(
 			command.toArray(new String[command.size()]),
@@ -51,27 +47,10 @@ abstract public class ServerLauncher {
 		);
 		int pid = managerProcess.getPid(binary);
 		if (pid > 0) {
-			final String commandString;
-			if (!keepRunning) {
-				List<ActivityManager.RunningAppProcessInfo> processes =
-					((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE))
-						.getRunningAppProcesses();
-				int pidMe = 0;
-				if (processes != null) {
-					for (ActivityManager.RunningAppProcessInfo info : processes) {
-						if (info.processName.equalsIgnoreCase(context.getPackageName())) {
-							pidMe = info.pid;
-						}
-					}
-				}
-				commandString = "ls /proc/" + pidMe + " > /dev/null 2>&1 && " +
-					"ls /proc/" + pid + " > /dev/null 2>&1";
-			} else {
-				commandString = "ls " + binary.getAbsolutePath() + " > /dev/null";
-			}
 			Runtime.getRuntime().exec(
 				new String[] {
-					"/system/bin/sh", "-c", "while " + commandString + ";do sleep 5;done; kill -9 " + pid
+					"/system/bin/sh", "-c",
+					"while ls " + binary.getAbsolutePath() + " > /dev/null;do sleep 5;done; kill -9 " + pid
 				}
 			);
 		}
