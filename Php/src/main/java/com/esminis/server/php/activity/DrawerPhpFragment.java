@@ -21,8 +21,10 @@ import com.esminis.server.library.activity.DrawerFragment;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.widget.CheckboxRight;
 import com.esminis.server.php.R;
+import com.esminis.server.php.application.PhpApplication;
 import com.esminis.server.php.server.Php;
 import com.esminis.server.php.server.install.InstallToDocumentRoot;
+import com.squareup.otto.Bus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,8 +45,18 @@ public class DrawerPhpFragment extends DrawerFragment {
 	protected InstallToDocumentRoot installToDocumentRoot;
 
 	@Inject
+	protected Bus bus;
+
+	@Inject
 	public DrawerPhpFragment() {
 		super();
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		((PhpApplication)getActivity().getApplicationContext())
+			.getComponent().inject(this);
 	}
 
 	@Override
