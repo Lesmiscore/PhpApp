@@ -15,8 +15,6 @@
  */
 package com.esminis.server.php.server;
 
-import android.content.Context;
-
 import com.esminis.server.library.service.server.ServerLauncher;
 
 import java.io.BufferedReader;

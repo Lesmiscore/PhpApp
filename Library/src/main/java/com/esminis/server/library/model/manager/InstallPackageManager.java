@@ -2,7 +2,6 @@ package com.esminis.server.library.model.manager;
 
 import android.content.Context;
 import android.os.Build;
-import android.os.Debug;
 
 import com.esminis.server.library.api.Api;
 import com.esminis.server.library.model.InstallPackage;
