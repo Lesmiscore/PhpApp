@@ -21,7 +21,6 @@ import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 
 import com.esminis.server.library.BuildConfig;
-import com.esminis.server.library.R;
 
 import java.util.HashMap;
 import java.util.Map;
