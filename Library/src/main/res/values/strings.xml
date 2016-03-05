@@ -15,7 +15,6 @@
 	<string name="server_port">Server port</string>
 	<string name="server_start_on_boot_title">Start on boot</string>
 	<string name="server_start_on_boot_summary">Start server on device boot</string>
-	<string name="server_keep_running">Keep server running if app is killed</string>
 	<string name="server_interface">Server address</string>
 	<string name="server_installing">Installing server…</string>
 	<string name="loading_text">Loading text…</string>
@@ -26,7 +25,6 @@
 	<string name="about">About</string>
 	<string name="licenses">Licenses</string>
 	<string name="server_installation_failed">Server installation failed: %1$s</string>
-	<string name="server_keep_running_title">Keep server alive</string>
 	<string name="open">Open</string>
 	<string name="settings">Settings</string>
 	<string name="manual">Manual</string>

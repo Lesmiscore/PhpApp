@@ -113,13 +113,12 @@ class PhpServerLauncher extends ServerLauncher {
 	}
 
 	Process start(
-		File php, String address, String root, File moduleDirectory, File documentRoot,
-		boolean keepRunning, boolean indexPhpRouter, File[] modules, Context context
+		File php, String address, String root, File moduleDirectory, File documentRoot, boolean indexPhpRouter, File[] modules
 	) throws IOException {
 		return start(
 			php, createCommand(
 				php, address, root, documentRoot, indexPhpRouter, modules
-			), context, getEnvironment(moduleDirectory), documentRoot, keepRunning
+			), getEnvironment(moduleDirectory), documentRoot
 		);
 	}
 

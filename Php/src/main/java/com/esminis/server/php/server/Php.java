@@ -23,6 +23,7 @@ import com.esminis.server.library.model.manager.Network;
 import com.esminis.server.library.model.manager.Process;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.ServerControl;
+import com.esminis.server.library.service.server.ServerNotification;
 import com.esminis.server.php.R;
 
 import java.io.File;
@@ -38,12 +39,11 @@ public class Php extends ServerControl {
 
 	public Php(
 		Network network, Process managerProcess, Preferences preferences, Log log,
-		LibraryApplication application
+		LibraryApplication application, ServerNotification serverNotification
 	) {
 		super(
-			"php",
-			application, network, preferences, log, managerProcess,
-			application.getIsMainApplicationProcess()
+			"php", application, network, preferences, log, managerProcess,
+			application.getIsMainApplicationProcess(), serverNotification
 		);
 		this.startup = new PhpServerLauncher(managerProcess);
 	}
@@ -56,8 +56,8 @@ public class Php extends ServerControl {
 		validatePhpIni(new File(root, "php.ini"));
 		return startup.start(
 			getBinary(), address, root.getAbsolutePath(), getBinaryDirectory(), root,
-			isKeepRunning(), preferences.getBoolean(context, Preferences.INDEX_PHP_ROUTER),
-			getEnabledModules(context, root), context
+			preferences.getBoolean(context, Preferences.INDEX_PHP_ROUTER),
+			getEnabledModules(context, root)
 		);
 	}
 

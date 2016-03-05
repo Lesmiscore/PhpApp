@@ -84,18 +84,9 @@ public class DrawerFragment extends PreferenceFragment {
 		});
 		screen.addPreference(preference);
 		screen.addPreference(
-			restartOnChange(
-				createPreferenceCheckbox(
-					context, Preferences.KEEP_RUNNING, false,
-					R.string.server_keep_running_title, R.string.server_keep_running
-				)
-			)
-		);
-		screen.addPreference(
 			requestStatusOnChange(
 				createPreferenceCheckbox(
-					context, Preferences.SHOW_NOTIFICATION_SERVER,
-					!preferences.getBoolean(context, Preferences.KEEP_RUNNING),
+					context, Preferences.SHOW_NOTIFICATION_SERVER, true,
 					R.string.show_notification_server, R.string.show_notification_server_summary
 				)
 			)
@@ -151,44 +142,9 @@ public class DrawerFragment extends PreferenceFragment {
 			return;
 		}
 		Context context = getActivity();
-		if (context == null) {
-			return;
+		if (context != null) {
+			preferences.set(context, preference.getKey(), (Boolean)newValueObject);
 		}
-		final String name = preference.getKey();
-		final boolean value = (Boolean)newValueObject;
-		preferences.set(context, name, value);
-		if (
-			Preferences.KEEP_RUNNING.equals(name) && !value &&
-			preferences.getBoolean(context, Preferences.START_ON_BOOT)
-		) {
-			setPreferenceValue(Preferences.START_ON_BOOT, false);
-		} else if (
-			Preferences.START_ON_BOOT.equals(name) && value &&
-			!preferences.getBoolean(context, Preferences.KEEP_RUNNING)
-		) {
-			setPreferenceValue(Preferences.KEEP_RUNNING, true);
-		}
-		if (
-			Preferences.SHOW_NOTIFICATION_SERVER.equals(name) && value &&
-			preferences.getBoolean(context, Preferences.KEEP_RUNNING)
-		) {
-			setPreferenceValue(Preferences.START_ON_BOOT, false);
-			setPreferenceValue(Preferences.KEEP_RUNNING, false);
-			serverControl.requestRestartIfRunning();
-		} else if (
-			(
-				preferences.getBoolean(context, Preferences.KEEP_RUNNING) ||
-				(Preferences.KEEP_RUNNING.equals(name) && value)
-			) && preferences.getBoolean(context, Preferences.SHOW_NOTIFICATION_SERVER)
-		) {
-			setPreferenceValue(Preferences.SHOW_NOTIFICATION_SERVER, false);
-			serverControl.requestStatus();
-		}
-	}
-
-	private void setPreferenceValue(String name, boolean checked) {
-		preferences.set(getActivity(), name, checked);
-		((CheckBoxPreference)findPreference(name)).setChecked(checked);
 	}
 
 	private Preference requestStatusOnChange(Preference preference) {

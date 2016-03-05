@@ -61,7 +61,10 @@ public class ServerNotification {
 	}
 
 	public void show(Context context, CharSequence title, CharSequence titlePublic) {
-		if (!preferences.getBoolean(context, Preferences.SHOW_NOTIFICATION_SERVER)) {
+		if (
+			!preferences.contains(context, Preferences.SHOW_NOTIFICATION_SERVER) ||
+			!preferences.getBoolean(context, Preferences.SHOW_NOTIFICATION_SERVER)
+		) {
 			hide(context);
 			return;
 		}

@@ -63,14 +63,11 @@ class MariaDbServerLauncher extends ServerLauncher {
 	}
 
 
-	Process start(
-		File binary, String address, File documentRoot, boolean keepRunning, Context context
-	) throws IOException {
+	Process start(File binary, String address, File documentRoot, Context context) throws IOException {
 		initializeDataDirectory(context, binary, documentRoot);
 		synchronized (lock) {
 			return start(
-				binary, createCommand(context, binary, address, documentRoot), context, getEnvironment(),
-				documentRoot, keepRunning
+				binary, createCommand(context, binary, address, documentRoot), getEnvironment(), documentRoot
 			);
 		}
 	}
