@@ -34,7 +34,6 @@ import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.application.LibraryApplication;
 import com.esminis.server.library.R;
-import com.squareup.otto.Bus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,9 +47,6 @@ public class DrawerFragment extends PreferenceFragment {
 
 	@Inject
 	protected ServerControl serverControl;
-
-	@Inject
-	protected Bus bus;
 
 	@Inject
 	public DrawerFragment() {
