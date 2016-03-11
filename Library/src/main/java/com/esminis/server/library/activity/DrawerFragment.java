@@ -17,6 +17,7 @@ package com.esminis.server.library.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -35,6 +36,7 @@ import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.application.LibraryApplication;
 import com.esminis.server.library.R;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -118,6 +120,22 @@ public class DrawerFragment extends PreferenceFragment {
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
+		if (savedInstanceState != null) {
+			Bundle bundle = savedInstanceState.getBundle("android:preferences");
+			if (bundle != null) {
+				try {
+				Parcelable parcelable = bundle.getParcelable("modules");
+					if (parcelable != null) {
+						Field field = parcelable.getClass().getDeclaredField("dialogBundle");
+						field.setAccessible(true);
+						Bundle bundleTemp = (Bundle)field.get(parcelable);
+						if (bundleTemp != null) {
+							bundleTemp.setClassLoader(getClass().getClassLoader());
+						}
+					}
+				} catch (Throwable ignored) {}
+			}
+		}
 		super.onActivityCreated(savedInstanceState);
 		if (getView() == null) {
 			return;
