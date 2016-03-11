@@ -87,7 +87,7 @@ public class BackgroundService extends Service {
 						public void onNext(Void aVoid) {}
 					}
 				);
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				sendMessageForSenderFailed(intent, e);
 			}
 		}
