@@ -163,7 +163,7 @@ public class InstallerPackage {
 			while ((entry = zip.getNextEntry()) != null) {
 				if (entry.isDirectory()) {
 					final File directory = new File(targetDirectory, entry.getName());
-					if (!directory.mkdirs()) {
+					if (!directory.isDirectory() && !directory.mkdirs()) {
 						throw new IOException("Cannot create directory: " + directory.getAbsolutePath());
 					}
 				} else {
