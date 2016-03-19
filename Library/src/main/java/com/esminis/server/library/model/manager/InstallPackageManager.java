@@ -81,9 +81,10 @@ public class InstallPackageManager {
 						final String uriFormat = data.getString("uri");
 						final Map<InstallPackage, Integer> order = new HashMap<>();
 						final String architecture = getArchitecture();
+						final int androidVersion = Build.VERSION.SDK_INT;
 						for (int i = 0; i < list.length(); i++) {
 							final JSONObject item = list.getJSONObject(i);
-							if (isUsable(item, packageName, architecture, versionCode)) {
+							if (isUsable(item, packageName, architecture, versionCode, androidVersion)) {
 								final InstallPackage model = parse(item, uriFormat);
 								result.add(model);
 								order.put(model, item.getInt("order"));
@@ -118,12 +119,14 @@ public class InstallPackageManager {
 	}
 
 	private boolean isUsable(
-		JSONObject data, String packageName, String architecture, int versionCode
+		JSONObject data, String packageName, String architecture, int versionCode, int androidVersion
 	) throws JSONException {
 		return packageName.equals(data.getString("package").toLowerCase()) &&
 			architecture.equals(data.getString("architecture").toLowerCase()) &&
 			(data.isNull("minAppVersion") || data.getInt("minAppVersion") <= versionCode) &&
-			(data.isNull("maxAppVersion") || data.getInt("maxAppVersion") >= versionCode);
+			(data.isNull("maxAppVersion") || data.getInt("maxAppVersion") >= versionCode) &&
+			(data.isNull("minAndroidVersion") || data.getInt("minAndroidVersion") <= androidVersion) &&
+			(data.isNull("maxAndroidVersion") || data.getInt("maxAndroidVersion") >= androidVersion);
 	}
 
 	private String getArchitecture() throws Exception {

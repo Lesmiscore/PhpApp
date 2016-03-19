@@ -7,7 +7,7 @@ import retrofit2.http.GET;
 
 public interface EsminisServiceApi {
 
-	@GET("packages")
+	@GET("packages/packages.test.json")
 	Call<JSONObject> get();
 
 }
