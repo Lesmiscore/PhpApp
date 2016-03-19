@@ -3,6 +3,18 @@
 	"uri" : "https://esminiscdn.com/packages/files/{$id}.zip",
 	"files" : [
 		{
+			"id" : 28, "order" : 1001, "hash" : "6b933d9f8eccd3a838da85c83aa4c042",
+			"version" : "10.1.12", "build" : 0, "architecture" : "x86",
+			"minAppVersion" : null, "maxAppVersion" : null,
+			"package" : "com.esminis.server.mariadb"
+		},
+		{
+			"id" : 27, "order" : 1001, "hash" : "4f0cac26088847c42452f724643e2aad",
+			"version" : "10.1.12", "build" : 0, "architecture" : "arm",
+			"minAppVersion" : null, "maxAppVersion" : null,
+			"package" : "com.esminis.server.mariadb"
+		},
+		{
 			"id" : 26, "order" : 999, "hash" : "fe886767435febcacc90039c4dca8449",
 			"version" : "5.6.19", "build" : 0, "architecture" : "x86",
 			"minAppVersion" : null, "maxAppVersion" : null,
