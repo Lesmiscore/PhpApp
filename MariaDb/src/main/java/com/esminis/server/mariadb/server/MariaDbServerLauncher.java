@@ -16,6 +16,7 @@
 package com.esminis.server.mariadb.server;
 
 import android.content.Context;
+import android.os.StatFs;
 
 import com.esminis.server.library.service.server.ServerLauncher;
 
@@ -24,10 +25,15 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.schedulers.Schedulers;
 
 class MariaDbServerLauncher extends ServerLauncher {
 
@@ -72,6 +78,11 @@ class MariaDbServerLauncher extends ServerLauncher {
 		}
 	}
 
+	private long getFreeSpace(File file) {
+		StatFs stat = new StatFs(file.getPath());
+		return stat.getAvailableBlocks() * stat.getBlockSize();
+	}
+
 	void initializeDataDirectory(Context context, File binary, File root) throws IOException {
 		File[] files = root.listFiles();
 		if (files != null && files.length > 0) {
@@ -95,8 +106,43 @@ class MariaDbServerLauncher extends ServerLauncher {
 				command.toArray(new String [command.size()]),
 				environment.toArray(new String[environment.size()]), root
 			);
+			final Object[] finishedWithError = {null};
 			try {
 				final OutputStream stream = process.getOutputStream();
+				Observable.create(new Observable.OnSubscribe<Void>() {
+					@Override
+					public void call(Subscriber<? super Void> subscriber) {
+						final InputStream inputStream = process.getErrorStream();
+						String data = "";
+						for (;;) {
+							synchronized (finishedWithError) {
+								if (finishedWithError[0] != null) {
+									break;
+								}
+							}
+							try {
+								int available = inputStream.available();
+								if (available > 0) {
+									for (int i = 0; i < available; i++) {
+										data += (char)inputStream.read();
+									}
+									if (
+										getFreeSpace(dataMysqlDirectory) < 1024 * 1024 ||
+										data.contains("No space left on device")
+									) {
+										synchronized (finishedWithError) {
+											finishedWithError[0] = new IOException("No space left on device");
+										}
+										process.destroy();
+										break;
+									}
+								}
+							} catch (Throwable ignored) {}
+							Thread.yield();
+						}
+						subscriber.onCompleted();
+					}
+				}).subscribeOn(Schedulers.newThread()).subscribe();
 				writeToStream(stream, "use mysql;\n");
 				writeToStream(stream, context, "sql/mysql_system_tables.sql");
 				writeToStream(stream, context, "sql/mysql_performance_tables.sql");
@@ -109,7 +155,21 @@ class MariaDbServerLauncher extends ServerLauncher {
 				FileUtils.deleteDirectory(root);
 				//noinspection ResultOfMethodCallIgnored
 				root.mkdirs();
-				throw new IOException(e.toString() + "\n\nLog:\n" + IOUtils.toString(process.getErrorStream()));
+				synchronized (finishedWithError) {
+					if (finishedWithError[0] != null && finishedWithError[0] instanceof IOException) {
+						throw (IOException)finishedWithError[0];
+					} else {
+						throw new IOException(
+							e.toString() + "\n\nLog:\n" + IOUtils.toString(process.getErrorStream())
+						);
+					}
+				}
+			} finally {
+				synchronized (finishedWithError) {
+					if (finishedWithError[0] == null) {
+						finishedWithError[0] = true;
+					}
+				}
 			}
 		}
 	}

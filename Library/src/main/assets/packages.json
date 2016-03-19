@@ -3,15 +3,29 @@
 	"uri" : "https://esminiscdn.com/packages/files/{$id}.zip",
 	"files" : [
 		{
+			"id" : 30, "order" : 1002, "hash" : "53328a9455cffb14def2b9b707fe661f",
+			"version" : "10.1.12", "build" : 1, "architecture" : "x86",
+			"minAppVersion" : null, "maxAppVersion" : null,
+			"package" : "com.esminis.server.mariadb"
+		},
+		{
+			"id" : 29, "order" : 1002, "hash" : "eaf434bc68c642517be4075a531cbfe5",
+			"version" : "10.1.12", "build" : 1, "architecture" : "arm",
+			"minAppVersion" : null, "maxAppVersion" : null,
+			"package" : "com.esminis.server.mariadb"
+		},
+		{
 			"id" : 28, "order" : 1001, "hash" : "6b933d9f8eccd3a838da85c83aa4c042",
 			"version" : "10.1.12", "build" : 0, "architecture" : "x86",
 			"minAppVersion" : null, "maxAppVersion" : null,
+			"minAndroidVersion" : 17, "maxAndroidVersion" : null,
 			"package" : "com.esminis.server.mariadb"
 		},
 		{
 			"id" : 27, "order" : 1001, "hash" : "4f0cac26088847c42452f724643e2aad",
 			"version" : "10.1.12", "build" : 0, "architecture" : "arm",
 			"minAppVersion" : null, "maxAppVersion" : null,
+			"minAndroidVersion" : 17, "maxAndroidVersion" : null,
 			"package" : "com.esminis.server.mariadb"
 		},
 		{
@@ -114,12 +128,14 @@
 			"id" : 3, "order" : 1000, "hash" : "113f9945865cc1b8dcbb41871674a33a",
 			"version" : "10.1.8", "build" : 0, "architecture" : "arm",
 			"minAppVersion" : null, "maxAppVersion" : null,
+			"minAndroidVersion" : 17, "maxAndroidVersion" : null,
 			"package" : "com.esminis.server.mariadb"
 		},
 		{
 			"id" : 4, "order" : 1000, "hash" : "1baa2e4c8e57c5b9b615d76c84b36851",
 			"version" : "10.1.8", "build" : 0, "architecture" : "x86",
 			"minAppVersion" : null, "maxAppVersion" : null,
+			"minAndroidVersion" : 17, "maxAndroidVersion" : null,
 			"package" : "com.esminis.server.mariadb"
 		},
 		{
