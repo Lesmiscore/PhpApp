@@ -16,6 +16,7 @@
 package com.esminis.server.mariadb.server;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.StatFs;
 
 import com.esminis.server.library.service.server.ServerLauncher;
@@ -80,7 +81,10 @@ class MariaDbServerLauncher extends ServerLauncher {
 
 	private long getFreeSpace(File file) {
 		StatFs stat = new StatFs(file.getPath());
-		return stat.getAvailableBlocks() * stat.getBlockSize();
+		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+			return stat.getAvailableBlocksLong() * stat.getBlockSizeLong();
+		}
+		return (long)stat.getAvailableBlocks() * (long)stat.getBlockSize();
 	}
 
 	void initializeDataDirectory(Context context, File binary, File root) throws IOException {
@@ -127,7 +131,7 @@ class MariaDbServerLauncher extends ServerLauncher {
 										data += (char)inputStream.read();
 									}
 									if (
-										getFreeSpace(dataMysqlDirectory) < 1024 * 1024 ||
+										getFreeSpace(dataMysqlDirectory) < 1024L * 1024L ||
 										data.contains("No space left on device")
 									) {
 										synchronized (finishedWithError) {
