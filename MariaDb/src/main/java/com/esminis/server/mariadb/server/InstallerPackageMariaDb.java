@@ -12,11 +12,10 @@ import java.io.IOException;
 public class InstallerPackageMariaDb extends InstallerPackage {
 
 	private final ServerControl serverControl;
-	private final Preferences preferences;
 
 	public InstallerPackageMariaDb(Preferences preferences, ServerControl serverControl) {
+		super(preferences);
 		this.serverControl = serverControl;
-		this.preferences = preferences;
 	}
 
 	@Override

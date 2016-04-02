@@ -286,12 +286,14 @@ public class MainPresenterImpl implements MainPresenter {
 	@Override
 	public void serverStart() {
 		log.clear(activity);
+		preferences.set(activity, Preferences.SERVER_STARTED, true);
 		serverTask(StartServerTaskProvider.class);
 		resetLog();
 	}
 
 	@Override
 	public void serverStop() {
+		preferences.set(activity, Preferences.SERVER_STARTED, false);
 		serverTask(StopServerTaskProvider.class);
 		resetLog();
 	}

@@ -95,7 +95,7 @@ abstract public class ServerControl {
 			return;
 		}
 		if (getStatus().first) {
-			stop();
+			stop(false);
 		}
 		final File fileRoot = new File(root);
 		if (!fileRoot.isDirectory()) {
@@ -106,7 +106,6 @@ abstract public class ServerControl {
 			process = start(fileRoot, address);
 			streamReader = new ServerStreamReader(this, getServerHandler());
 			streamReader.execute(process.getErrorStream());
-			preferences.set(context, Preferences.SERVER_STARTED, true);
 		} catch (IOException error) {
 			if (process == null) {
 				getServerHandler().sendError(error.getCause().getMessage());
@@ -115,8 +114,7 @@ abstract public class ServerControl {
 		getStatus();
 	}
 
-	private void stop() {
-		preferences.set(context, Preferences.SERVER_STARTED, false);
+	private void stop(boolean restartIfUserDidNotStop) {
 		if (streamReader != null) {
 			streamReader.cancel(false);
 			streamReader = null;
@@ -128,6 +126,9 @@ abstract public class ServerControl {
 		}
 		managerProcess.kill(getBinary());
 		getStatus();
+		if (restartIfUserDidNotStop && preferences.getBoolean(context, Preferences.SERVER_STARTED)) {
+			requestStart();
+		}
 	}
 
 	private Pair<Boolean, String> getStatus() {
@@ -191,7 +192,7 @@ abstract public class ServerControl {
 			address = getIPAddress() + ":" + data.getString("port");
 			start(data.getString("documentRoot"));
 		} else if ("stop".equals(action)) {
-			stop();
+			stop(true);
 		}
 		status();
 	}

@@ -43,9 +43,11 @@ public class PhpApplicationModule {
 	@Singleton
 	public InstallerPackage provideInstallerPackage(
 		ServerControl control, InstallToDocumentRoot installToDocumentRoot,
-		InstallPackageManager installPackageManager
+		InstallPackageManager installPackageManager, Preferences preferences
 	) {
-		return new InstallerPackagePhp(control, installToDocumentRoot, installPackageManager);
+		return new InstallerPackagePhp(
+			control, installToDocumentRoot, installPackageManager, preferences
+		);
 	}
 
 	@Provides
