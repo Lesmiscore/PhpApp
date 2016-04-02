@@ -78,6 +78,7 @@ public class MainPresenterImpl implements MainPresenter {
 	private boolean showInstallFinishedOnResume = false;
 	private boolean paused = false;
 	protected AppCompatActivity activity = null;
+	private boolean permissionsGranted = false;
 
 	static private final String KEY_ERROR = "errors";
 
@@ -170,6 +171,7 @@ public class MainPresenterImpl implements MainPresenter {
 
 				@Override
 				public void onGranted() {
+					permissionsGranted = true;
 					installPackageManager.get().subscribe(new Subscriber<InstallPackage[]>() {
 						@Override
 						public void onCompleted() {
@@ -202,7 +204,10 @@ public class MainPresenterImpl implements MainPresenter {
 	}
 
 	private boolean requestPackageInstallIfNeeded() {
-		if (installPackageManager.getInstalled() == null || installPresenter.isInstalling()) {
+		if (
+			permissionsGranted &&
+			(installPackageManager.getInstalled() == null || installPresenter.isInstalling())
+		) {
 			requestPackageInstall();
 			return true;
 		}
