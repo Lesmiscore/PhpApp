@@ -42,8 +42,10 @@ public class AutoStart extends BroadcastReceiver {
 			((LibraryApplication)applicationContext).getComponent().inject(this);
 		}
 		if (preferences.getBoolean(context, Preferences.START_ON_BOOT)) {
+			preferences.set(context, Preferences.SERVER_STARTED, true);
 			serverControl.requestStart();
 		} else {
+			preferences.set(context, Preferences.SERVER_STARTED, false);
 			serverControl.requestStop();
 		}
 	}

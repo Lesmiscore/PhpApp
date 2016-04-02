@@ -3,6 +3,7 @@ package com.esminis.server.php.server.install;
 import android.content.Context;
 
 import com.esminis.server.library.model.manager.InstallPackageManager;
+import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.service.server.installpackage.InstallHelper;
 import com.esminis.server.library.service.server.installpackage.InstallerPackage;
@@ -19,8 +20,9 @@ public class InstallerPackagePhp extends InstallerPackage {
 
 	public InstallerPackagePhp(
 		ServerControl serverControl, InstallToDocumentRoot installToDocumentRoot,
-		InstallPackageManager installPackageManager
+		InstallPackageManager installPackageManager, Preferences preferences
 	) {
+		super(preferences);
 		this.serverControl = serverControl;
 		this.installToDocumentRoot = installToDocumentRoot;
 		this.installPackageManager = installPackageManager;

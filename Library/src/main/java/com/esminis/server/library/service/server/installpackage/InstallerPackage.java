@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.esminis.server.library.activity.main.MainActivity;
 import com.esminis.server.library.model.manager.InstallPackageManager;
+import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.Crypt;
 import com.esminis.server.library.service.server.ServerControl;
 
@@ -26,11 +27,20 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import javax.inject.Inject;
+
 public class InstallerPackage {
 
 	static public final int STATE_DOWNLOAD = 1;
 	static public final int STATE_UNINSTALL = 2;
 	static public final int STATE_INSTALL = 3;
+
+	protected final Preferences preferences;
+
+	@Inject
+	public InstallerPackage(Preferences preferences) {
+		this.preferences = preferences;
+	}
 
 	void install(
 		Context context, com.esminis.server.library.model.InstallPackage model,
@@ -84,6 +94,7 @@ public class InstallerPackage {
 		context.registerReceiver(
 			receiver, new IntentFilter(MainActivity.getIntentActionServerStatus(context))
 		);
+		preferences.set(context, Preferences.SERVER_STARTED, false);
 		serverControl.requestStop();
 		try {
 			barrier.await();
