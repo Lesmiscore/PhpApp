@@ -10,6 +10,7 @@
 		<item>ctype</item><item>Ctype</item><item>Character type checking</item>
 		<item>fileinfo</item><item>Fileinfo</item><item>File Information</item>
 		<item>eio</item><item>Eio</item><item>Asynchronous POSIX I/O</item>
+		<item>ev</item><item>Ev</item><item>Provides inteface to libev library</item>
 		<item>exif</item><item>EXIF</item><item>Exchangeable image information</item>
 		<item>ftp</item><item>FTP</item><item>File Transfer Protocol</item>
 		<item>gd</item><item>GD</item><item>Image Processing and GD</item>
@@ -19,6 +20,7 @@
 		<item>recode</item><item>GNU Recode</item><item>Interface to GNU Recode library</item>
 		<item>iconv</item><item>iconv</item><item>Interface to iconv character set conversion facility</item>
 		<item>id3</item><item>ID3</item><item>ID3 Tags</item>
+		<item>inotify</item><item>Inotify</item><item>The inotify extension exposes the inotify functions</item>
 		<item>judy</item><item>Judy</item><item>Judy Arrays</item>
 		<item>lzf</item><item>LZF</item><item>LZF compression</item>
 		<item>mailparse</item><item>Mailparse</item><item>For parsing and working with email messages</item>
@@ -43,6 +45,8 @@
 		<item>stats</item><item>Statistics</item><item>Functions useful for statistical computations</item>
 		<item>tidy</item><item>Tidy</item><item>Binding for the Tidy HTML clean and repair utility</item>
 		<item>tokenizer</item><item>Tokenizer</item><item>Interface to the PHP tokenizer</item>
+		<item>weakref</item><item>Weakref</item><item>Weak references</item>
+		<item>zend_xdebug</item><item>Xdebug</item><item>The Xdebug extension provides a lot of valuable debug information</item>
 		<item>xdiff</item><item>XDiff</item><item>Create and apply patches to text and binary files</item>
 		<item>xmldiff</item><item>XMLDiff</item><item>XML diff and merge</item>
 		<item>xsl</item><item>XSL</item><item>XSLT transformations using the libxslt library</item>
