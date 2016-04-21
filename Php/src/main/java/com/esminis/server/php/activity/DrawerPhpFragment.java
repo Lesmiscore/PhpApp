@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -132,7 +133,10 @@ public class DrawerPhpFragment extends DrawerFragment {
 			return;
 		}
 		final DrawerArrowDrawable drawable = new DrawerArrowDrawable(getActivity());
-		toolbar.setLogo(com.esminis.server.library.R.drawable.ic_toolbar);
+		toolbar.setLogo(
+			VectorDrawableCompat
+				.create(getResources(), com.esminis.server.library.R.drawable.ic_toolbar, null)
+		);
 		drawable.setProgress(1);
 		drawable.setColor(Color.BLACK);
 		toolbar.setNavigationIcon(drawable);
