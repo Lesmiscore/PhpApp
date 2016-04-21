@@ -9,8 +9,8 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="744.09448819"
-   height="1052.3622047"
+   width="65.5"
+   height="65.5"
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r"
@@ -18,7 +18,7 @@
    inkscape:export-xdpi="177.23077"
    inkscape:export-ydpi="177.23077"
    sodipodi:docname="logo.inkscape.svg"
-   enable-background="new">
+   style="enable-background:new">
   <defs
      id="defs4">
     <clipPath
@@ -30,7 +30,7 @@
          height="45"
          width="45"
          id="rect4747"
-         style="opacity:0.98999999;color:#000000;fill:#ff0000;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:0.98999999;fill:#ff0000;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;enable-background:accumulate"
          ry="2.25" />
     </clipPath>
     <clipPath
@@ -42,7 +42,7 @@
          height="39"
          width="39"
          id="rect4916"
-         style="opacity:0.98999999;color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:0.98999999;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;enable-background:accumulate"
          ry="1.95" />
     </clipPath>
   </defs>
@@ -54,10 +54,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2"
-     inkscape:cx="63.344489"
-     inkscape:cy="953.94797"
+     inkscape:cx="-22.405511"
+     inkscape:cy="112.94797"
      inkscape:document-units="px"
-     inkscape:current-layer="layer7"
+     inkscape:current-layer="layer2"
      showgrid="false"
      inkscape:snap-global="true"
      inkscape:snap-grids="false"
@@ -92,47 +92,52 @@
      inkscape:label="Back shadow"
      id="g5013"
      inkscape:groupmode="layer"
+     transform="translate(0,-986.86218)"
      sodipodi:insensitive="true">
     <rect
        ry="4.9356217"
-       y="12.862183"
-       x="20.5"
+       y="987.36218"
+       x="0.5"
        height="65"
        width="65"
        id="rect5015"
-       style="color:#000000;fill:#cccccc;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#cccccc;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;enable-background:accumulate" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer7"
      inkscape:label="Back"
-     style="display:inline">
+     style="display:inline"
+     transform="translate(0,-986.86218)">
     <rect
-       style="color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;opacity:0"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:0;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;enable-background:accumulate"
        id="rect4623"
        width="65"
        height="65"
-       x="20"
-       y="12.362183"
+       x="0"
+       y="986.86218"
        ry="4.9356217" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="Title"
-     style="display:inline" />
+     style="display:inline"
+     transform="translate(0,-986.86218)" />
   <g
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Logo"
-     style="display:inline">
+     style="display:inline"
+     transform="translate(0,-986.86218)">
     <g
        id="g4003"
        style="fill:#000000;fill-opacity:1"
        clip-path="url(#clipPath4745)"
        inkscape:export-filename="/home/tautvydas/Documents/Development/Java/ServerForPhp/app/src/main/res/drawable-hdpi/ic_logo.png"
        inkscape:export-xdpi="144"
-       inkscape:export-ydpi="144">
+       inkscape:export-ydpi="144"
+       transform="translate(-20,974.5)">
       <rect
          y="22.362183"
          x="30"
