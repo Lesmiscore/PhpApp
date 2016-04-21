@@ -5,12 +5,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -256,6 +254,11 @@ public class MainViewImpl implements MainView {
 	@Override
 	public boolean createMenu(MenuInflater inflater, Menu menu) {
 		inflater.inflate(R.menu.main, menu);
+		final Activity activity = this.activity.get();
+		if (activity != null) {
+			menu.findItem(R.id.menu_about)
+				.setIcon(VectorDrawableCompat.create(activity.getResources(), R.drawable.ic_info, null));
+		}
 		return true;
 	}
 
@@ -396,16 +399,20 @@ public class MainViewImpl implements MainView {
 	private void setupToolbar(@NonNull AppCompatActivity activity) {
 		Toolbar toolbar = (Toolbar)activity.findViewById(R.id.toolbar);
 		if (toolbar != null) {
-			toolbar.setLogo(R.drawable.ic_toolbar);
+			toolbar.setLogo(
+				VectorDrawableCompat.create(activity.getResources(), R.drawable.ic_toolbar, null)
+			);
 			toolbar.inflateMenu(R.menu.main);
 			TypedValue attribute = new TypedValue();
 			activity.getTheme().resolveAttribute(android.R.attr.textColorPrimary, attribute, true);
 			if (attribute.resourceId > 0) {
-				MenuItem item = toolbar.getMenu().findItem(R.id.menu_about);
-				Drawable icon = DrawableCompat.wrap(item.getIcon());
-				DrawableCompat.setTintMode(icon, PorterDuff.Mode.SRC_IN);
-				DrawableCompat.setTint(icon, ContextCompat.getColor(activity, attribute.resourceId));
-				item.setIcon(icon);
+				final VectorDrawableCompat icon = VectorDrawableCompat.create(
+					activity.getResources(), R.drawable.ic_info, null
+				);
+				if (icon != null) {
+					icon.setTint(ContextCompat.getColor(activity, attribute.resourceId));
+					toolbar.getMenu().findItem(R.id.menu_about).setIcon(icon);
+				}
 			}
 			activity.setSupportActionBar(toolbar);
 		}

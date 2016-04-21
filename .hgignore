@@ -5,3 +5,4 @@ syntax: regexp
 ^(MariaDb|Php|Library)/src/main/obj/.+$
 ^.+\.apk$
 ^(MariaDb|Php|Library)/manifest\-.+\.txt$
+^build/.+$
