@@ -9,16 +9,16 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="744.09448819"
-   height="1052.3622047"
+   width="65.5"
+   height="65.5"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.91 r"
    inkscape:export-filename="/home/tautvydas/Documents/Development/Java/ServerForPhp/app/src/main/res/drawable-mdpi/ic_launcher.png"
    inkscape:export-xdpi="65.954201"
    inkscape:export-ydpi="65.954201"
-   sodipodi:docname="logo.icon.inkscape.svg"
-   enable-background="new">
+   sodipodi:docname="icon.inkscape.svg"
+   style="enable-background:new">
   <defs
      id="defs4">
     <clipPath
@@ -30,7 +30,7 @@
          height="45"
          width="45"
          id="rect4747"
-         style="opacity:0.98999999;color:#000000;fill:#ff0000;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:0.98999999;fill:#ff0000;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;enable-background:accumulate"
          ry="2.25" />
     </clipPath>
     <clipPath
@@ -42,7 +42,7 @@
          height="39"
          width="39"
          id="rect4916"
-         style="opacity:0.98999999;color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:0.98999999;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;enable-background:accumulate"
          ry="1.95" />
     </clipPath>
   </defs>
@@ -53,9 +53,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.0517505"
-     inkscape:cx="59.191906"
-     inkscape:cy="963.90324"
+     inkscape:zoom="3.2194239"
+     inkscape:cx="84.99798"
+     inkscape:cy="-27.47684"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="false"
@@ -67,9 +67,9 @@
      inkscape:snap-page="true"
      inkscape:snap-center="false"
      inkscape:window-width="1920"
-     inkscape:window-height="1025"
-     inkscape:window-x="-2"
-     inkscape:window-y="-3"
+     inkscape:window-height="1028"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
@@ -92,58 +92,62 @@
      inkscape:label="Back shadow"
      id="g5013"
      inkscape:groupmode="layer"
-     sodipodi:insensitive="true">
+     transform="translate(0,-986.86219)">
     <rect
        ry="4.9356217"
-       y="12.862183"
-       x="20.5"
+       y="987.36218"
+       x="0.5"
        height="65"
        width="65"
        id="rect5015"
-       style="color:#000000;fill:#cccccc;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#cccccc;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;enable-background:accumulate" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer7"
      inkscape:label="Back"
-     style="display:inline">
+     style="display:inline"
+     transform="translate(0,-986.86219)">
     <rect
-       style="color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;enable-background:accumulate"
        id="rect4623"
        width="65"
        height="65"
-       x="20"
-       y="12.362183"
+       x="0"
+       y="986.86218"
        ry="4.9356217" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="Title"
-     style="display:inline">
+     style="display:inline"
+     transform="translate(0,-986.86219)">
     <text
        xml:space="preserve"
-       style="font-size:33.10398865px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#aaaaaa;fill-opacity:1;stroke:none;font-family:Sans"
-       x="36.211983"
-       y="60.119003"
+       style="font-style:normal;font-weight:normal;font-size:33.10398865px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#aaaaaa;fill-opacity:1;stroke:none"
+       x="16.982452"
+       y="1073.6643"
        id="text3831-3"
        sodipodi:linespacing="125%"
-       transform="scale(1.040067,0.96147654)"><tspan
+       transform="scale(1.040067,0.96147653)"><tspan
          sodipodi:role="line"
          id="tspan3833-3"
-         x="36.211983"
-         y="60.119003"
-         style="font-size:8.40259266px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#999999;fill-opacity:1;font-family:Sawasdee;-inkscape-font-specification:Sawasdee">for PHP</tspan></text>
+         x="16.982452"
+         y="1073.6643"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.40259266px;line-height:125%;font-family:Sawasdee;-inkscape-font-specification:Sawasdee;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#999999;fill-opacity:1">for PHP</tspan></text>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Logo"
-     style="display:inline">
+     style="display:inline"
+     transform="translate(0,-986.86219)">
     <g
        id="g4003"
        style="fill:#006600;fill-opacity:0.6"
-       clip-path="url(#clipPath4745)">
+       clip-path="url(#clipPath4745)"
+       transform="translate(-20,974.5)">
       <rect
          y="22.362183"
          x="30"

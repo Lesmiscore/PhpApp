@@ -3,4 +3,5 @@
 	<dimen name="preference_widget_width">48dp</dimen>
 	<dimen name="about_dialog_width">320dp</dimen>
 	<dimen name="install_dialog_width">320dp</dimen>
+	<dimen name="size_icon_notification_large">64dp</dimen>
 </resources>

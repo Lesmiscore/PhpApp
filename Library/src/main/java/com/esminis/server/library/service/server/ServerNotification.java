@@ -20,10 +20,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.NotificationCompat.Builder;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
 
 import com.esminis.server.library.activity.main.MainActivity;
@@ -76,10 +76,6 @@ public class ServerNotification {
 			Builder builder = setupNotificationBuilder(context, title)
 				.setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
 				.setPublicVersion(setupNotificationBuilder(context, titlePublic).build());
-			Drawable drawable = ContextCompat.getDrawable(context, R.drawable.ic_notification_large);
-			if (drawable != null && drawable instanceof BitmapDrawable) {
-				builder.setLargeIcon(((BitmapDrawable) drawable).getBitmap());
-			}
 			Intent intent = new Intent(context, MainActivity.class);
 			intent.setAction(Intent.ACTION_MAIN);
 			intent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -96,9 +92,16 @@ public class ServerNotification {
 			.setSmallIcon(R.drawable.ic_notification_small)
 			.setContentTitle(context.getString(R.string.title)).setContentText(title)
 			.setOnlyAlertOnce(true).setOngoing(true).setAutoCancel(false).setShowWhen(false);
-		Drawable drawable = ContextCompat.getDrawable(context, R.drawable.ic_notification_large);
-		if (drawable != null && drawable instanceof BitmapDrawable) {
-			builder.setLargeIcon(((BitmapDrawable) drawable).getBitmap());
+		final VectorDrawableCompat icon = VectorDrawableCompat
+			.create(context.getResources(), R.drawable.ic_notification_large, null);
+		if (icon != null) {
+			final int size = context.getResources()
+				.getDimensionPixelSize(R.dimen.size_icon_notification_large);
+			final Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+			final Canvas canvas = new Canvas(bitmap);
+			icon.setBounds(0, 0, size, size);
+			icon.draw(canvas);
+			builder.setLargeIcon(bitmap);
 		}
 		return builder;
 	}
