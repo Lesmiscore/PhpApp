@@ -9,8 +9,8 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="744.09448819"
-   height="1052.3622047"
+   width="65.5"
+   height="65.5"
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r"
@@ -18,7 +18,7 @@
    inkscape:export-xdpi="65.954201"
    inkscape:export-ydpi="65.954201"
    sodipodi:docname="logo.inkscape.svg"
-   enable-background="new">
+   style="enable-background:new">
   <defs
      id="defs4">
     <clipPath
@@ -30,7 +30,7 @@
          height="45"
          width="45"
          id="rect4747"
-         style="opacity:0.98999999;color:#000000;fill:#ff0000;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:0.98999999;fill:#ff0000;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;enable-background:accumulate"
          ry="2.25" />
     </clipPath>
     <clipPath
@@ -42,7 +42,7 @@
          height="39"
          width="39"
          id="rect4916"
-         style="opacity:0.98999999;color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:0.98999999;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;marker:none;enable-background:accumulate"
          ry="1.95" />
     </clipPath>
   </defs>
@@ -54,8 +54,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="3.572127"
-     inkscape:cx="-19.053119"
-     inkscape:cy="945.61134"
+     inkscape:cx="-37.381208"
+     inkscape:cy="37.939771"
      inkscape:document-units="px"
      inkscape:current-layer="layer7"
      showgrid="false"
@@ -88,15 +88,15 @@
     </rdf:RDF>
   </metadata>
   <g
-     style="display:none"
+     style="display:inline"
      inkscape:label="Back shadow"
      id="g5013"
      inkscape:groupmode="layer"
-     sodipodi:insensitive="true">
+     transform="translate(0,-986.86218)">
     <rect
        ry="4.9356217"
-       y="12.862183"
-       x="20.5"
+       y="987.36218"
+       x="0.5"
        height="65"
        width="65"
        id="rect5015"
@@ -106,14 +106,15 @@
      inkscape:groupmode="layer"
      id="layer7"
      inkscape:label="Back"
-     style="display:inline">
+     style="display:inline"
+     transform="translate(0,-986.86218)">
     <rect
        style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#ffffff;fill-opacity:0;fill-rule:nonzero;stroke:none;marker:none;enable-background:accumulate"
        id="rect4623"
        width="65"
        height="65"
-       x="20"
-       y="12.362183"
+       x="0"
+       y="986.86218"
        ry="4.9356217"
        inkscape:export-filename="/home/tautvydas/Documents/Development/Java/Server/MariaDb/src/main/res/drawable-xxxhdpi/ic_toolbar.png"
        inkscape:export-xdpi="177.23077"
@@ -123,12 +124,13 @@
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="Title"
-     style="display:inline">
+     style="display:inline"
+     transform="translate(0,-986.86218)">
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:33.10398865px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;"
-       x="35.186562"
-       y="60.119003"
+       style="font-style:normal;font-weight:normal;font-size:33.10398865px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="15.957031"
+       y="1073.6643"
        id="text3831-3"
        sodipodi:linespacing="125%"
        transform="scale(1.040067,0.96147653)"
@@ -137,22 +139,24 @@
        inkscape:export-ydpi="177.23077"><tspan
          sodipodi:role="line"
          id="tspan3833-3"
-         x="35.186562"
-         y="60.119003"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.40259266px;line-height:125%;font-family:Sawasdee;-inkscape-font-specification:Sawasdee;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;">MariaDB</tspan></text>
+         x="15.957031"
+         y="1073.6643"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.40259266px;line-height:125%;font-family:Sawasdee;-inkscape-font-specification:Sawasdee;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1">MariaDB</tspan></text>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Logo"
-     style="display:inline">
+     style="display:inline"
+     transform="translate(0,-986.86218)">
     <g
        id="g4003"
        style="fill:#000000;fill-opacity:1"
        clip-path="url(#clipPath4745)"
        inkscape:export-filename="/home/tautvydas/Documents/Development/Java/Server/MariaDb/src/main/res/drawable-xxxhdpi/ic_toolbar.png"
        inkscape:export-xdpi="177.23077"
-       inkscape:export-ydpi="177.23077">
+       inkscape:export-ydpi="177.23077"
+       transform="translate(-20,974.5)">
       <rect
          y="22.362183"
          x="30"
