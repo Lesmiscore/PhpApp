@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0-beta3'
+        classpath 'com.android.tools.build:gradle:2.1.0-rc1'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
     }
 }
@@ -17,18 +17,14 @@ allprojects {
     }
 }
 
-def setupServerProject(plugin, int versionCodeId, String versionNameValue, String packageName) {
-    plugin.apply plugin: 'com.android.application'
+def setupProject(plugin) {
     plugin.apply plugin: 'com.neenbedankt.android-apt'
     plugin.android {
         compileSdkVersion 23
-        buildToolsVersion "23.0.1"
+        buildToolsVersion "23.0.2"
         defaultConfig {
-            applicationId packageName
             minSdkVersion 16
             targetSdkVersion 23
-            versionName versionNameValue
-            versionCode versionCodeId
             vectorDrawables.useSupportLibrary true
             jackOptions {
                 enabled false
@@ -36,29 +32,58 @@ def setupServerProject(plugin, int versionCodeId, String versionNameValue, Strin
         }
         buildTypes {
             release {
-                minifyEnabled true
+                minifyEnabled false
                 proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            }
-        }
-        sourceSets.main {
-            jni.srcDirs = []
-            jniLibs.srcDir 'src/main/libs'
-        }
-        plugin.android {
-            packagingOptions {
-                exclude 'META-INF/LICENSE.txt'
             }
         }
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_7
         }
+        packagingOptions {
+            exclude 'META-INF/LICENSE.txt'
+        }
     }
+}
+
+def setupProjectDependencies(plugin) {
     plugin.dependencies {
-        compile plugin.fileTree(include: ['*.jar'], dir: 'libs')
+        compile fileTree(include: ['*.jar'], dir: 'libs')
         apt 'com.google.dagger:dagger-compiler:2.0'
         compile 'javax.inject:javax.inject:1'
         compile 'javax.annotation:javax.annotation-api:1.2'
         compile 'com.google.dagger:dagger:2.0'
+    }
+}
+
+def setupLibraryProject(plugin) {
+    plugin.apply plugin: 'com.android.library'
+    setupProject(plugin)
+    setupProjectDependencies(plugin)
+    plugin.dependencies {
+        compile 'com.android.support:support-v4:23.3.0'
+        compile 'com.android.support:appcompat-v7:23.3.0'
+        compile 'com.android.support:design:23.3.0'
+        compile 'com.squareup:otto:1.3.8'
+        compile 'io.reactivex:rxandroid:0.25.0'
+        compile 'org.apache.commons:commons-io:1.3.2'
+        compile 'com.squareup.retrofit2:retrofit:2.0.0-beta3'
+    }
+}
+
+def setupServerProject(plugin, int versionCodeId, String versionNameValue, String packageName) {
+    plugin.apply plugin: 'com.android.application'
+    setupProject(plugin)
+    setupProjectDependencies(plugin)
+    plugin.android.defaultConfig {
+        applicationId packageName
+        versionName versionNameValue
+        versionCode versionCodeId
+    }
+    plugin.android.sourceSets.main {
+        jni.srcDirs = []
+        jniLibs.srcDir 'src/main/libs'
+    }
+    plugin.dependencies {
         compile plugin.project(':Library')
     }
     // Temporary while gradle does not fully support ndk
