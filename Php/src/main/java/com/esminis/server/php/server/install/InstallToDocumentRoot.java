@@ -61,6 +61,7 @@ public class InstallToDocumentRoot {
 		helper.fromAssetDirectory(file, file.getName(), context, false);
 		HashMap<String, String> variables = new HashMap<>();
 		variables.put("tempDirectory", tempDirectory.getAbsolutePath());
+		variables.put("documentRootDirectory", file.getAbsolutePath());
 		helper.preprocessFile(new File(file, "php.ini"), variables);
 	}
 

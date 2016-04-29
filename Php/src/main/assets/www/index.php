@@ -8,14 +8,6 @@ function getProjectDirectory() {
     return dirname(__FILE__);
 }
 
-function getCAFile() {
-    $path = getProjectDirectory() . '/composer.phar.ca.pem';
-    if (!is_file($path)) {
-        file_put_contents($path, file_get_contents('http://curl.haxx.se/ca/cacert.pem'));
-    }
-    return $path;
-}
-
 function getComposer() {
     $path = getProjectDirectory() . '/composer.phar';
     putenv('COMPOSER_HOME=' . getProjectDirectory());
@@ -40,7 +32,7 @@ function composer($arguments) {
         }
     }
     $command[] = '-d';
-    $command[] = 'openssl.cafile=' . getCAFile();
+    $command[] = 'openssl.cafile=' . getProjectDirectory() . '/cacert.pem';
     $command[] = getComposer();
     $command[] = '--no-interaction';
     $command = array_merge($command, $arguments);
