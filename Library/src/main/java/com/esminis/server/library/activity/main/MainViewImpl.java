@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.drawable.InsetDrawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.graphics.drawable.VectorDrawableCompat;
@@ -256,8 +257,11 @@ public class MainViewImpl implements MainView {
 		inflater.inflate(R.menu.main, menu);
 		final Activity activity = this.activity.get();
 		if (activity != null) {
-			menu.findItem(R.id.menu_about)
-				.setIcon(VectorDrawableCompat.create(activity.getResources(), R.drawable.ic_info, null));
+			menu.findItem(R.id.menu_about).setIcon(
+				new InsetDrawable(
+					VectorDrawableCompat.create(activity.getResources(), R.drawable.ic_info, null), 0
+				)
+			);
 		}
 		return true;
 	}
@@ -411,7 +415,7 @@ public class MainViewImpl implements MainView {
 				);
 				if (icon != null) {
 					icon.setTint(ContextCompat.getColor(activity, attribute.resourceId));
-					toolbar.getMenu().findItem(R.id.menu_about).setIcon(icon);
+					toolbar.getMenu().findItem(R.id.menu_about).setIcon(new InsetDrawable(icon, 0));
 				}
 			}
 			activity.setSupportActionBar(toolbar);
