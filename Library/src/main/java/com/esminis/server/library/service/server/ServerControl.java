@@ -120,11 +120,11 @@ abstract public class ServerControl {
 			streamReader = null;
 		}
 		stop(process);
+		managerProcess.kill(getBinary());
 		if (process != null) {
 			process.destroy();
 			process = null;
 		}
-		managerProcess.kill(getBinary());
 		getStatus();
 		if (restartIfUserDidNotStop && preferences.getBoolean(context, Preferences.SERVER_STARTED)) {
 			requestStart();
