@@ -19,6 +19,7 @@ import android.content.Context;
 import android.os.Environment;
 
 import com.esminis.server.library.ErrorWithMessage;
+import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.server.installpackage.InstallHelper;
 import com.esminis.server.php.R;
 
@@ -40,14 +41,15 @@ public class InstallToDocumentRoot {
 	private final Object lock = new Object();
 	private boolean installInProgress = false;
 
+	private final Preferences preferences;
+
 	@Inject
-	public InstallToDocumentRoot() {}
+	public InstallToDocumentRoot(Preferences preferences) {
+		this.preferences = preferences;
+	}
 
 	void install(Context context, boolean ifNoDirectory) throws Exception {
-		File file = new File(
-			Environment.getExternalStorageDirectory(),
-			context.getString(com.esminis.server.library.R.string.default_document_root_directory)
-		);
+		final File file = new File(preferences.getString(context, Preferences.DOCUMENT_ROOT));
 		File tempDirectory = new File(context.getExternalFilesDir(null), "tmp");
 		if (!tempDirectory.isDirectory() && !tempDirectory.mkdir()) {
 			tempDirectory = file;
@@ -58,7 +60,7 @@ public class InstallToDocumentRoot {
 		if (!file.isDirectory() && !file.mkdir()) {
 			throw new ErrorWithMessage(R.string.error_cannot_create_directory);
 		}
-		helper.fromAssetDirectory(file, file.getName(), context, false);
+		helper.fromAssetDirectory(file, "www", context, false);
 		HashMap<String, String> variables = new HashMap<>();
 		variables.put("tempDirectory", tempDirectory.getAbsolutePath());
 		variables.put("documentRootDirectory", file.getAbsolutePath());
