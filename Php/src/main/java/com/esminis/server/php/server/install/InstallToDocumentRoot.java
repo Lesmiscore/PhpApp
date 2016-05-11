@@ -16,7 +16,6 @@
 package com.esminis.server.php.server.install;
 
 import android.content.Context;
-import android.os.Environment;
 
 import com.esminis.server.library.ErrorWithMessage;
 import com.esminis.server.library.preferences.Preferences;
