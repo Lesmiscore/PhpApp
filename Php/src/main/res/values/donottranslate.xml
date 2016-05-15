@@ -2,12 +2,14 @@
 <resources>
 	<string name="title_server">PHP</string>
 	<string name="default_document_root_directory" translatable="false">www</string>
+	<string name="about_content_parameter">core, date, ereg, libxml, openssl, pcre, sqlite3, zlib, bcmath, bz2, calendar, ctype, curl, dom, hash, fileinfo, filter, ftp, gd, gettext, gmp, spl, iconv, intl, json, mbstring, mcrypt, session, standard, mysqlnd, mysqli, odbc, pdo, pdo_mysql, pdo_odbc, pdo_pgsql, pdo_sqlite, pgsql, phar, posix, pspell, recode, reflection, mysql, simplexml, soap, sockets, exif, tidy, tokenizer, wddx, xml, xmlreader, xmlrpc, xmlwriter, xsl, zip, cli_server, mhash, ssh2, opcache, phalcon, yaf, yar, id3, lzf, oauth, quickhash, bbcode, xmldiff, xdiff, rar, gender, stats, eio, judy, mailparse, rpmreader, spl_types, yaml, ev, inotify, weakref, xdebug, dba, imagick</string>
 	<string-array name="modules" translatable="false">
 		<item>bbcode</item><item>BBCode</item><item>Bulletin Board Code</item>
 		<item>bcmath</item><item>BC Math</item><item>Arbitrary Precision Mathematics</item>
 		<item>bz2</item><item>Bzip 2</item><item>Bzip 2</item>
 		<item>calendar</item><item>Calendar</item><item>Functions to simplify converting between different calendar formats</item>
 		<item>ctype</item><item>Ctype</item><item>Character type checking</item>
+		<item>dba</item><item>DBA</item><item>Database Abstraction Layer(dbm-style), included backends: gdbm, flatfile, inifile, db4, cdb, cdb_make</item>
 		<item>fileinfo</item><item>Fileinfo</item><item>File Information</item>
 		<item>eio</item><item>Eio</item><item>Asynchronous POSIX I/O</item>
 		<item>ev</item><item>Ev</item><item>Provides inteface to libev library</item>
@@ -20,6 +22,7 @@
 		<item>recode</item><item>GNU Recode</item><item>Interface to GNU Recode library</item>
 		<item>iconv</item><item>iconv</item><item>Interface to iconv character set conversion facility</item>
 		<item>id3</item><item>ID3</item><item>ID3 Tags</item>
+		<item>imagick</item><item>ImageMagick</item><item>ImageMagick Image Processing, if temporary files will be required for ImageMagick, then use Imagick::setRegistry("temporary-path", $path_writable_directory)</item>
 		<item>inotify</item><item>Inotify</item><item>The inotify extension exposes the inotify functions</item>
 		<item>judy</item><item>Judy</item><item>Judy Arrays</item>
 		<item>lzf</item><item>LZF</item><item>LZF compression</item>
@@ -27,7 +30,7 @@
 		<item>mcrypt</item><item>Mcrypt</item><item>Interface to mcrypt library</item>
 		<item>mysqli</item><item>Mysqli</item><item>MySQL Improved Extension</item>
 		<item>oauth</item><item>OAuth</item><item>OAuth 1.0a consumer and provider bindings</item>
-		<item>odbc</item><item>ODBC</item><item>ODBC</item>
+		<item>odbc</item><item>ODBC</item><item>ODBC, included drivers: PostgreSQL and SQLite3</item>
 		<item>pdo_mysql</item><item>PDO MySQL</item><item>PDO MySQL driver</item>
 		<item>pdo_odbc</item><item>PDO ODBC</item><item>PDO ODBC driver</item>
 		<item>pdo_pgsql</item><item>PDO PostgreSQL</item><item>PDO PostgreSQL driver</item>
