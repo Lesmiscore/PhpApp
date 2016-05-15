@@ -5,7 +5,9 @@
 	<string name="server_install_new_version_question" />
 	<string name="error_document_root_does_not_exist" />
 	<string name="about_content" />
+	<string name="about_content_parameter" />
 	<string name="manual_content" />
+	<string name="manual_content_parameter" />
 	<string name="error_document_root_not_empty" />
 	<string name="server_running"><![CDATA[Server is running on %1$s]]></string>
 	<string name="server_stopped">Server is stopped</string>

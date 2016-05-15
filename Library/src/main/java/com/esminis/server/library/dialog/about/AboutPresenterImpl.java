@@ -22,8 +22,8 @@ public class AboutPresenterImpl implements AboutPresenter {
 
 	public void setView(AboutView view) {
 		this.view = view;
-		view.setContentManual(application, R.string.manual_content);
-		view.setContentAbout(application, R.string.about_content);
+		view.setContentManual(application, R.string.manual_content, R.string.manual_content_parameter);
+		view.setContentAbout(application, R.string.about_content, R.string.about_content_parameter);
 		view.setLicensesProvider(
 			new ProductLicensesViewer.ProductLicenseProvider() {
 
