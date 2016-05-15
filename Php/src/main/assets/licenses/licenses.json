@@ -1,6 +1,8 @@
 {
   "php" : {"title" : "PHP", "items" : ["PHP"]},
-  "gplv3" : {"title" : "GPL v3", "items" : ["Iconv", "GpgError", "Mcrypt", "GetText", "LibEio"]},
+  "gplv3" : {
+    "title" : "GPL v3", "items" : ["Iconv", "GpgError", "Mcrypt", "GetText", "LibEio", "GDBM"]
+  },
   "gplv2" : {"title" : "GPL v2", "items" : ["GNU C Library"]},
   "lgplv21" : {
     "title" : "LGPL v2.1", "items" : [
@@ -35,5 +37,7 @@
   "bzip2" : {"title" : "Bzip2", "items" : ["Bzip2"]},
   "freetype" : {"title" : "FreeType", "items" : ["FreeType"]},
   "libjpeg" : {"title" : "LibJpeg", "items" : ["LibJpeg"]},
-  "libpng" : {"title" : "LibPng", "items" : ["LibPng"]}
+  "libpng" : {"title" : "LibPng", "items" : ["LibPng"]},
+  "imagemagick" : {"title" : "ImageMagick", "items" : ["ImageMagick"]},
+  "berkeleydb" : {"title" : "BerkeleyDB", "items" : ["BerkeleyDB"]}
 }
