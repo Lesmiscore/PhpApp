@@ -41,13 +41,13 @@ public class AboutViewImpl extends Dialog<AboutPresenter> implements AboutView {
 	}
 
 	@Override
-	public void setContentAbout(Context context, int content) {
-		setContentText(viewTextAbout, context, content);
+	public void setContentAbout(Context context, @StringRes int content, @StringRes int parameter) {
+		setContentText(viewTextAbout, context, content, parameter);
 	}
 
 	@Override
-	public void setContentManual(Context context, int content) {
-		setContentText(viewTextManual, context, content);
+	public void setContentManual(Context context, @StringRes int content, @StringRes int parameter) {
+		setContentText(viewTextManual, context, content, parameter);
 	}
 
 	@Override
@@ -107,8 +107,11 @@ public class AboutViewImpl extends Dialog<AboutPresenter> implements AboutView {
 		}
 	}
 
-	private void setContentText(View view, Context context, int content) {
-		((TextView)view.findViewById(R.id.content)).setText(Html.fromHtml(context.getString(content)));
+	private void setContentText(
+		View view, Context context, @StringRes int content, @StringRes int parameter
+	) {
+		((TextView)view.findViewById(R.id.content))
+			.setText(Html.fromHtml(context.getString(content, context.getString(parameter))));
 	}
 
 }
