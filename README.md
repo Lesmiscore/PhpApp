@@ -23,7 +23,9 @@ This is totally free PHP server for Android that works using PHP built-in server
 * bz2 - Bzip 2
 * calendar - Calendar
 * ctype - Ctype
+* dba - DBA
 * eio - Eio
+* ev - Ev
 * exif - EXIF
 * fileinfo - Fileinfo
 * ftp - FTP
@@ -34,6 +36,8 @@ This is totally free PHP server for Android that works using PHP built-in server
 * recode - GNU Recode
 * iconv - iconv
 * id3 - ID3
+* imagick - ImageMagick
+* inotify - Inotify
 * judy - Judy Arrays
 * lzf - LZF
 * mailparse - Mailparse
@@ -60,6 +64,8 @@ This is totally free PHP server for Android that works using PHP built-in server
 * stats - Statistics
 * tidy - Tidy
 * tokenizer - Tokenizer
+* weakref - Weakref
+* xdebug - Xdebug
 * xdiff - XDiff
 * xmldiff - XMLDiff
 * xsl - XSL
