@@ -57,11 +57,16 @@ public class InstallHelper {
 		fromAssetDirectory(target, path, context, false, overwrite);
 	}
 	
-	public void fromAssetDirectory(
+	private void fromAssetDirectory(
 		File target, String path, Context context, boolean dryRun, boolean overwrite
 	) throws Exception {
-		if (!target.isDirectory() || !target.canWrite()) {
+		if (!target.isDirectory()) {
 			return;
+		}
+		if (!target.canWrite()) {
+			throw new ErrorWithMessage(
+				R.string.error_cannot_write_to_directory, target.getAbsolutePath()
+			);
 		}
 		String[] files = context.getAssets().list(path);
 		for (String file : files) {

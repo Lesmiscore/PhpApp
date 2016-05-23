@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="title_server">PHP</string>
+	<string name="title_server" translatable="false">PHP</string>
 	<string name="default_document_root_directory" translatable="false">www</string>
-	<string name="about_content_parameter">core, date, ereg, libxml, openssl, pcre, sqlite3, zlib, bcmath, bz2, calendar, ctype, curl, dom, hash, fileinfo, filter, ftp, gd, gettext, gmp, spl, iconv, intl, json, mbstring, mcrypt, session, standard, mysqlnd, mysqli, odbc, pdo, pdo_mysql, pdo_odbc, pdo_pgsql, pdo_sqlite, pgsql, phar, posix, pspell, recode, reflection, mysql, simplexml, soap, sockets, exif, tidy, tokenizer, wddx, xml, xmlreader, xmlrpc, xmlwriter, xsl, zip, cli_server, mhash, ssh2, opcache, phalcon, yaf, yar, id3, lzf, oauth, quickhash, bbcode, xmldiff, xdiff, rar, gender, stats, eio, judy, mailparse, rpmreader, spl_types, yaml, ev, inotify, weakref, xdebug, dba, imagick</string>
+	<string name="about_content_parameter" translatable="false">core, date, ereg, libxml, openssl, pcre, sqlite3, zlib, bcmath, bz2, calendar, ctype, curl, dom, hash, fileinfo, filter, ftp, gd, gettext, gmp, spl, iconv, intl, json, mbstring, mcrypt, session, standard, mysqlnd, mysqli, odbc, pdo, pdo_mysql, pdo_odbc, pdo_pgsql, pdo_sqlite, pgsql, phar, posix, pspell, recode, reflection, mysql, simplexml, soap, sockets, exif, tidy, tokenizer, wddx, xml, xmlreader, xmlrpc, xmlwriter, xsl, zip, cli_server, mhash, ssh2, opcache, phalcon, yaf, yar, id3, lzf, oauth, quickhash, bbcode, xmldiff, xdiff, rar, gender, stats, eio, judy, mailparse, rpmreader, spl_types, yaml, ev, inotify, weakref, xdebug, dba, imagick</string>
 	<string-array name="modules" translatable="false">
 		<item>bbcode</item><item>BBCode</item><item>Bulletin Board Code</item>
 		<item>bcmath</item><item>BC Math</item><item>Arbitrary Precision Mathematics</item>

@@ -1,6 +1,7 @@
 package com.esminis.server.library.permission;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -24,8 +25,8 @@ class PermissionRequester {
 	@Inject
 	public PermissionRequester() {}
 
-	public boolean hasPermission(Activity activity, String permission) {
-		return activity != null && ContextCompat.checkSelfPermission(activity, permission) ==
+	public boolean hasPermission(Context context, String permission) {
+		return context != null && ContextCompat.checkSelfPermission(context, permission) ==
 			PackageManager.PERMISSION_GRANTED;
 	}
 
