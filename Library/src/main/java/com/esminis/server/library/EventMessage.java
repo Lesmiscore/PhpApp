@@ -15,32 +15,49 @@
  */
 package com.esminis.server.library;
 
+import android.content.Context;
+import android.support.annotation.StringRes;
+
 import com.squareup.otto.Bus;
 
 public class EventMessage {
 
-	public final int message;
-	public final boolean error;
+	private final int message;
+	private final Throwable error;
 
-	private EventMessage(int message, boolean error) {
+	private EventMessage(@StringRes int message) {
 		this.message = message;
+		error = null;
+	}
+
+	private EventMessage(Throwable error) {
 		this.error = error;
+		message = 0;
+	}
+
+	public boolean isError() {
+		return error != null;
+	}
+
+	public String getMessage(Context context) {
+		if (!isError()) {
+			return context.getString(message);
+		}
+		if (error instanceof ErrorWithMessage) {
+			return ((ErrorWithMessage)error).getMessage(context);
+		}
+		return context.getString(R.string.error_operation_failed);
 	}
 
 	static public void post(Bus bus, Throwable throwable) {
 		if (bus != null) {
-			bus.post(
-				new EventMessage(
-					throwable instanceof ErrorWithMessage ?
-						((ErrorWithMessage) throwable).messageId : R.string.error_operation_failed, true
-				)
-			);
+			bus.post(new EventMessage(throwable));
 		}
 	}
 
-	static public void post(Bus bus, int message) {
+	static public void post(Bus bus, @StringRes int message) {
 		if (bus != null) {
-			bus.post(new EventMessage(message, false));
+			bus.post(new EventMessage(message));
 		}
 	}
 

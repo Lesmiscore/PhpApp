@@ -15,13 +15,22 @@
  */
 package com.esminis.server.library;
 
+import android.content.Context;
+import android.support.annotation.StringRes;
+
 public class ErrorWithMessage extends Exception {
 
-	public final int messageId;
+	private final int messageId;
+	private final String[] parameters;
 
-	public ErrorWithMessage(int messageId) {
+	public ErrorWithMessage(@StringRes int messageId, String... parameters) {
 		super();
 		this.messageId = messageId;
+		this.parameters = parameters;
+	}
+
+	String getMessage(Context context) {
+		return context.getString(messageId, (Object[])parameters);
 	}
 
 }

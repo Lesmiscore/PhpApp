@@ -50,13 +50,13 @@ public class InstallToDocumentRoot {
 	void install(Context context, boolean ifNoDirectory) throws Exception {
 		final File file = new File(preferences.getString(context, Preferences.DOCUMENT_ROOT));
 		File tempDirectory = new File(context.getExternalFilesDir(null), "tmp");
-		if (!tempDirectory.isDirectory() && !tempDirectory.mkdir()) {
+		if (!tempDirectory.isDirectory() && !tempDirectory.mkdirs()) {
 			tempDirectory = file;
 		}
 		if (ifNoDirectory && file.isDirectory()) {
 			return;
 		}
-		if (!file.isDirectory() && !file.mkdir()) {
+		if (!file.isDirectory() && !file.mkdirs()) {
 			throw new ErrorWithMessage(R.string.error_cannot_create_directory);
 		}
 		helper.fromAssetDirectory(file, "www", context, false);

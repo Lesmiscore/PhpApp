@@ -419,7 +419,7 @@ public class MainPresenterImpl implements MainPresenter {
 		if (view == null) {
 			return;
 		}
-		final Snackbar snackbar = Snackbar.make(view, event.message, Snackbar.LENGTH_LONG);
+		final Snackbar snackbar = Snackbar.make(view, event.getMessage(activity), Snackbar.LENGTH_LONG);
 		snackbar.setAction(R.string.dismiss, new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -427,7 +427,7 @@ public class MainPresenterImpl implements MainPresenter {
 			}
 		});
 		snackbar.setActionTextColor(
-			ContextCompat.getColor(view.getContext(), event.error ? R.color.error : R.color.main)
+			ContextCompat.getColor(view.getContext(), event.isError() ? R.color.error : R.color.main)
 		);
 		snackbar.show();
 	}

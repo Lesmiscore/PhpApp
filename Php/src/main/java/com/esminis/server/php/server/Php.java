@@ -70,7 +70,7 @@ public class Php extends ServerControl {
 			if (
 				!preferences.contains(context, moduleName) || preferences.getBoolean(context, moduleName)
 			) {
-				if ("zend_opcache".equals(module) && !root.canWrite()) {
+				if ("zend_opcache".equals(module) && !canWriteToDirectory(root)) {
 					sendWarning(R.string.warning_opcache_disabled);
 				} else if (isModuleAvailable(module)) {
 					modules.add(getModuleFile(module));
@@ -78,6 +78,18 @@ public class Php extends ServerControl {
 			}
 		}
 		return modules.toArray(new File[modules.size()]);
+	}
+
+	private boolean canWriteToDirectory(File directory) {
+		if (!directory.canWrite()) {
+			return false;
+		}
+		try {
+			//noinspection ResultOfMethodCallIgnored
+			File.createTempFile(".temp", "lock", directory).delete();
+			return true;
+		} catch (IOException ignored) {}
+		return false;
 	}
 
 	private void validatePhpIni(File file) {
