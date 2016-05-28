@@ -5,8 +5,10 @@ import java.io.IOException;
 
 public class FileUtils {
 
+	private FileUtils() {}
+
 	static public boolean canWriteToDirectory(File directory) {
-		if (!directory.canWrite()) {
+		if (directory == null || !directory.canWrite()) {
 			return false;
 		}
 		try {
