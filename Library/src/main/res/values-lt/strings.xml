@@ -50,4 +50,5 @@
 	<string name="error_network">tinklo klaida, patikrinkite tinklo nustatymus</string>
 	<string name="downloading_packages_failed"><![CDATA[Klaida - nepavyko gauti galimų versijų:<br /><font color="#FF0000">%1$s</font>]]></string>
 	<string name="downloading_packages">Gaunamas sąrašas galimų versijų</string>
+	<string name="error_cannot_write_to_directory">Negalima rašyti į direktoriją %1$s</string>
 </resources>
