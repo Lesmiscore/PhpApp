@@ -38,10 +38,11 @@ import android.widget.TextView;
 
 import com.esminis.server.library.R;
 import com.esminis.server.library.application.LibraryApplication;
-import com.esminis.server.library.dialog.DirectoryChooser;
+import com.esminis.server.library.dialog.directorychooser.DirectoryChooser;
 import com.esminis.server.library.dialog.about.AboutPresenter;
 import com.esminis.server.library.dialog.about.AboutPresenterImpl;
 import com.esminis.server.library.dialog.about.AboutViewImpl;
+import com.esminis.server.library.dialog.directorychooser.OnDirectoryChooserListener;
 import com.esminis.server.library.dialog.install.InstallPresenterImpl;
 import com.esminis.server.library.dialog.install.InstallViewImpl;
 import com.esminis.server.library.model.InstallPackage;
@@ -283,7 +284,7 @@ public class MainViewImpl implements MainView {
 		DirectoryChooser chooser = new DirectoryChooser(getThemeContext());
 		chooser.setParent(root);
 		chooser.setOnDirectoryChooserListener(
-			new DirectoryChooser.OnDirectoryChooserListener() {
+			new OnDirectoryChooserListener() {
 				public void OnDirectoryChosen(File directory) {
 					presenter.onDocumentRootChosen(directory);
 				}

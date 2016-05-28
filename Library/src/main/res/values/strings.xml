@@ -58,4 +58,7 @@
 	<string name="server_build">Server version &amp; build</string>
 	<string name="install_package_newest">this is the newest available version</string>
 	<string name="install_package_not_newest">a newer version is available %1$s</string>
+	<string name="selected_directory"><![CDATA[Selected directory:<br /><b>%1$s</b>]]></string>
+	<string name="create_directory">New directory</string>
+	<string name="warning_selected_directory_not_writable">Warning: this directory is not writable, if you choose this directory then some functions might not work</string>
 </resources>

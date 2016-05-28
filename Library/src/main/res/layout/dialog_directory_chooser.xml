@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content" android:layout_height="match_parent"
+  android:orientation="vertical"
+>
+	<TextView
+		android:id="@+id/title"
+		android:layout_width="match_parent" android:layout_height="wrap_content"
+		android:paddingLeft="16dp" android:paddingRight="16dp"
+		android:paddingTop="8dp" android:paddingBottom="8dp"
+		android:textColor="#000000"
+	  android:gravity="left|center_vertical"
+		android:background="#EEEEEE"
+	/>
+	<TextView
+		android:id="@+id/error"
+		android:layout_width="match_parent" android:layout_height="wrap_content"
+		android:paddingLeft="16dp" android:paddingRight="16dp"
+		android:paddingTop="8dp" android:paddingBottom="8dp"
+		android:visibility="gone"
+	  style="@style/ErrorField"
+	/>
+	<FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+		<ListView
+			android:id="@+id/list"
+			android:layout_width="match_parent" android:layout_height="wrap_content"
+			android:layout_marginBottom="48dp"
+			android:divider="#EEEEEE" android:dividerHeight="1dp"
+			/>
+		<LinearLayout
+			android:layout_width="wrap_content" android:layout_height="48dp"
+			android:orientation="horizontal" android:layout_gravity="right|bottom"
+		>
+			<Button
+				android:id="@+id/button_create_directory"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:text="@string/create_directory"
+				style="?attr/borderlessButtonStyle"/>
+			<Button
+				android:id="@+id/button_choose"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:text="@string/choose"
+				style="?attr/borderlessButtonStyle"/>
+		</LinearLayout>
+	</FrameLayout>
+</LinearLayout>

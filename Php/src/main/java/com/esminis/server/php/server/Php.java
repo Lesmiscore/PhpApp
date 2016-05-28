@@ -22,6 +22,7 @@ import com.esminis.server.library.model.manager.Log;
 import com.esminis.server.library.model.manager.Network;
 import com.esminis.server.library.model.manager.Process;
 import com.esminis.server.library.preferences.Preferences;
+import com.esminis.server.library.service.FileUtils;
 import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.service.server.ServerNotification;
 import com.esminis.server.php.R;
@@ -70,7 +71,7 @@ public class Php extends ServerControl {
 			if (
 				!preferences.contains(context, moduleName) || preferences.getBoolean(context, moduleName)
 			) {
-				if ("zend_opcache".equals(module) && !canWriteToDirectory(root)) {
+				if ("zend_opcache".equals(module) && !FileUtils.canWriteToDirectory(root)) {
 					sendWarning(R.string.warning_opcache_disabled);
 				} else if (isModuleAvailable(module)) {
 					modules.add(getModuleFile(module));
@@ -78,18 +79,6 @@ public class Php extends ServerControl {
 			}
 		}
 		return modules.toArray(new File[modules.size()]);
-	}
-
-	private boolean canWriteToDirectory(File directory) {
-		if (!directory.canWrite()) {
-			return false;
-		}
-		try {
-			//noinspection ResultOfMethodCallIgnored
-			File.createTempFile(".temp", "lock", directory).delete();
-			return true;
-		} catch (IOException ignored) {}
-		return false;
 	}
 
 	private void validatePhpIni(File file) {

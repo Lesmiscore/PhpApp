@@ -39,4 +39,8 @@
 	<style name="SettingsModules.SelectAll.Checkbox">
 		<item name="android:layout_gravity">center</item>
 	</style>
+	<style name="ErrorField">
+		<item name="android:background">@color/error</item>
+		<item name="android:textColor">#FFFFFF</item>
+	</style>
 </resources>
