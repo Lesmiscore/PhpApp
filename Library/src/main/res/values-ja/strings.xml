@@ -50,4 +50,5 @@
     <string name="retry">再試行</string>
     <string name="select_package_to_install"><![CDATA[インストールしてビルドするには <b>%1$s</b> を選択してください：]]></string>
     <string name="server_build">サーバ・バージョンとビルド</string>
+    <string name="error_cannot_write_to_directory">ディレクトリ %1$s　に書き出す事ができません</string>
 </resources>

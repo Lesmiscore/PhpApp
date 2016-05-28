@@ -50,4 +50,5 @@
 	<string name="retry">Wiederholen</string>
 	<string name="server_build">Server-Version &amp; Build</string>
 	<string name="select_package_to_install"><![CDATA[Wählen Sie <b>%1$s</b> Build zu installieren:]]></string>
+	<string name="error_cannot_write_to_directory">Verzeichnis %1$s kann nicht beschrieben werden</string>
 </resources>

@@ -50,4 +50,5 @@
 	<string name="retry">Попытаться снова</string>
 	<string name="select_package_to_install"><![CDATA[Выбрать сборку <b>%1$s</b> для установки:]]></string>
 	<string name="server_build">Версия и сборка сервера</string>
+	<string name="error_cannot_write_to_directory">Невозможно записать в каталог %1$s</string>
 </resources>
