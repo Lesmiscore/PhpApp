@@ -31,7 +31,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-class DialogPageDirectoryChooserAdapter extends ArrayAdapter<DirectoryRecord> {
+class DialogPageDirectoryChooserAdapter extends ArrayAdapter<DialogPageDirectoryChooserRecord> {
 
 	private final Map<String, File[]> cache = new HashMap<>();
 	private final VectorDrawableCompat iconLock;
@@ -55,17 +55,17 @@ class DialogPageDirectoryChooserAdapter extends ArrayAdapter<DirectoryRecord> {
 			iconLock.setTint(((TextView)convertView).getCurrentTextColor());
 		}
 		final TextView viewText = (TextView)convertView;
-		final DirectoryRecord model = getItem(position);
+		final DialogPageDirectoryChooserRecord model = getItem(position);
 		viewText.setText(model.title);
 		viewText.setCompoundDrawables(null, null, model.isWritable ? null : iconLock, null);
 		return convertView;
 	}
 
 	void setParent(File parent) {
-		File[] list = parent.listFiles();
-		final File parentFile = parent.getParentFile();
-		if (list == null && cache.containsKey(parent.getAbsolutePath())) {
-			list = cache.get(parent.getAbsolutePath());
+		File[] list = parent == null ? null : parent.listFiles();
+		final File parentFile = parent == null ? null : parent.getParentFile();
+		if (list == null && cache.containsKey(parent == null ? null : parent.getAbsolutePath())) {
+			list = cache.get(parent == null ? null : parent.getAbsolutePath());
 		}
 		if (parentFile == null || parentFile.listFiles() == null) {
 			cache.put(parentFile == null ? null : parentFile.getAbsolutePath(), new File[] {parent});
@@ -73,7 +73,7 @@ class DialogPageDirectoryChooserAdapter extends ArrayAdapter<DirectoryRecord> {
 		clear();
 		if (parentFile != null) {
 			add(
-				new DirectoryRecord(
+				new DialogPageDirectoryChooserRecord(
 					parentFile, Html.fromHtml(
 						String.format(
 							"<font color=#000000><b>.. (%1$s)</b></font>",
@@ -86,7 +86,7 @@ class DialogPageDirectoryChooserAdapter extends ArrayAdapter<DirectoryRecord> {
 		if (list != null) {
 			for (File file : list) {
 				if (file.isDirectory()) {
-					add(new DirectoryRecord(file));
+					add(new DialogPageDirectoryChooserRecord(file));
 				}
 			}
 		}

@@ -18,17 +18,17 @@ package com.esminis.server.library.dialog.directorychooser;
 import com.esminis.server.library.service.Utils;
 import java.io.File;
 
-class DirectoryRecord {
+class DialogPageDirectoryChooserRecord {
 
 	final File file;
 	final CharSequence title;
 	final boolean isWritable;
 
-	DirectoryRecord(File file) {
+	DialogPageDirectoryChooserRecord(File file) {
 		this(file, file.getName(), Utils.canWriteToDirectory(file));
 	}
 
-	DirectoryRecord(File file, CharSequence title, boolean isWritable) {
+	DialogPageDirectoryChooserRecord(File file, CharSequence title, boolean isWritable) {
 		this.file = file;
 		this.title = title;
 		this.isWritable = isWritable;
