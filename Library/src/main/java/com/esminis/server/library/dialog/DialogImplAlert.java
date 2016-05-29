@@ -13,31 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.esminis.server.library.dialog.dialogpager;
+package com.esminis.server.library.dialog;
 
 import android.content.Context;
-import android.support.v4.view.ViewPager;
-import android.util.AttributeSet;
-import android.view.MotionEvent;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 
-public class ViewDialogPager extends ViewPager {
+import rx.Observable;
 
-	public ViewDialogPager(Context context) {
+public class DialogImplAlert<T extends DialogPresenter>
+	extends android.app.AlertDialog implements Dialog
+{
+
+	protected final T presenter;
+
+	public DialogImplAlert(Context context, @NonNull  T presenter) {
 		super(context);
-	}
-
-	public ViewDialogPager(Context context, AttributeSet attrs) {
-		super(context, attrs);
+		this.presenter = presenter;
 	}
 
 	@Override
-	public boolean onTouchEvent(MotionEvent ev) {
-		return false;
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		presenter.onCreate();
 	}
 
 	@Override
-	public boolean onInterceptTouchEvent(MotionEvent ev) {
-		return false;
+	public void show() {}
+
+	public Observable<Void> showObserved() {
+		super.show();
+		return (Observable<Void>)presenter.show();
 	}
 
 }

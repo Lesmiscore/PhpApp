@@ -24,39 +24,37 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.esminis.server.library.R;
-import com.esminis.server.library.dialog.dialogpager.DialogPagerPager;
-import com.esminis.server.library.dialog.dialogpager.DialogPager;
+import com.esminis.server.library.dialog.pager.DialogPagerPage;
 import com.esminis.server.library.service.Utils;
 
 import java.io.File;
 
-class DialogPageDirectoryChooser implements DialogPagerPager {
+class DialogPageDirectoryChooserPage implements DialogPagerPage {
 
 	private final DialogPageDirectoryChooserAdapter adapter;
-	private OnDirectoryChooserListener listener = null;
-	private final DirectoryChooserState data;
+	private final DirectoryChooserPresenter presenter;
 	private final TextView viewError;
 	private final TextView viewTitle;
 	private final View buttonCreateDirectory;
 	private final ViewGroup layout;
 
-	DialogPageDirectoryChooser(
-		final DialogPager pager, ViewGroup container, DirectoryChooserState data
+	DialogPageDirectoryChooserPage(
+		ViewGroup container, DirectoryChooserPresenter presenter, final DirectoryChooserView view
 	) {
 		container.addView(
-			layout = (ViewGroup) LayoutInflater.from(pager.getContext())
+			layout = (ViewGroup) LayoutInflater.from(container.getContext())
 				.inflate(R.layout.dialog_directory_chooser_page_choose, container, false)
 		);
 		final ListView listView = (ListView) layout.findViewById(R.id.list);
-		this.data = data;
-		adapter = new DialogPageDirectoryChooserAdapter(pager.getContext());
+		this.presenter = presenter;
+		adapter = new DialogPageDirectoryChooserAdapter(container.getContext());
 		viewError = (TextView) layout.findViewById(R.id.error);
 		viewTitle = (TextView) layout.findViewById(R.id.title);
 		buttonCreateDirectory = layout.findViewById(R.id.button_create_directory);
 		buttonCreateDirectory.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					pager.setCurrentItem(DirectoryChooserAdapter.PAGE_DIRECTORY_CREATE);
+					view.showDirectoryCreate();
 				}
 			}
 		);
@@ -64,10 +62,12 @@ class DialogPageDirectoryChooser implements DialogPagerPager {
 			new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					final OnDirectoryChooserListener listener =
+						DialogPageDirectoryChooserPage.this.presenter.getOnDirectoryChooserListener();
 					if (listener != null) {
-						listener.OnDirectoryChosen(DialogPageDirectoryChooser.this.data.directory);
+						listener.OnDirectoryChosen(DialogPageDirectoryChooserPage.this.presenter.getDirectory());
 					}
-					pager.dismiss();
+					view.dismiss();
 				}
 			}
 		);
@@ -75,7 +75,7 @@ class DialogPageDirectoryChooser implements DialogPagerPager {
 			public void onItemClick(
 				AdapterView<?> parent, View view, int position, long id
 			) {
-				DialogPageDirectoryChooser.this.data.directory = adapter.getItem(position).file;
+				DialogPageDirectoryChooserPage.this.presenter.setDirectory(adapter.getItem(position).file);
 				onStateChanged();
 			}
 		});
@@ -84,7 +84,7 @@ class DialogPageDirectoryChooser implements DialogPagerPager {
 
 	@Override
 	public void onStateChanged() {
-		final File parent = data.directory;
+		final File parent = presenter.getDirectory();
 		if (parent != null) {
 			viewTitle.setText(
 				Html.fromHtml(
@@ -102,10 +102,6 @@ class DialogPageDirectoryChooser implements DialogPagerPager {
 			}
 		}
 		buttonCreateDirectory.setEnabled(Utils.canWriteToDirectory(parent));
-	}
-
-	void setOnDirectoryChooserListener(OnDirectoryChooserListener listener) {
-		this.listener = listener;
 	}
 
 	@Override

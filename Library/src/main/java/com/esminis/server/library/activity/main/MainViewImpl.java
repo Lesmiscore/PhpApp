@@ -16,7 +16,6 @@
 package com.esminis.server.library.activity.main;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -53,10 +52,13 @@ import android.widget.TextView;
 
 import com.esminis.server.library.R;
 import com.esminis.server.library.application.LibraryApplication;
-import com.esminis.server.library.dialog.directorychooser.DirectoryChooser;
 import com.esminis.server.library.dialog.about.AboutPresenter;
 import com.esminis.server.library.dialog.about.AboutPresenterImpl;
 import com.esminis.server.library.dialog.about.AboutViewImpl;
+import com.esminis.server.library.dialog.directorychooser.DirectoryChooserPresenter;
+import com.esminis.server.library.dialog.directorychooser.DirectoryChooserPresenterImpl;
+import com.esminis.server.library.dialog.directorychooser.DirectoryChooserView;
+import com.esminis.server.library.dialog.directorychooser.DirectoryChooserViewImpl;
 import com.esminis.server.library.dialog.directorychooser.OnDirectoryChooserListener;
 import com.esminis.server.library.dialog.install.InstallPresenterImpl;
 import com.esminis.server.library.dialog.install.InstallViewImpl;
@@ -74,7 +76,7 @@ public class MainViewImpl implements MainView {
 
 	private final Context context;
 	private final MainPresenter presenter;
-	private Dialog dialog = null;
+	private com.esminis.server.library.dialog.Dialog dialog = null;
 
 	private final TextView viewDocumentRoot;
 	private final TextView viewLog;
@@ -296,16 +298,21 @@ public class MainViewImpl implements MainView {
 
 	@Override
 	public void showDocumentRootChooser(File root) {
-		DirectoryChooser chooser = new DirectoryChooser(getThemeContext());
-		chooser.setParent(root);
-		chooser.setOnDirectoryChooserListener(
-			new OnDirectoryChooserListener() {
-				public void OnDirectoryChosen(File directory) {
-					presenter.onDocumentRootChosen(directory);
+		final Activity activity = this.activity.get();
+		if (activity != null) {
+			final DirectoryChooserPresenter presenter = new DirectoryChooserPresenterImpl();
+			final DirectoryChooserViewImpl dialog = new DirectoryChooserViewImpl(activity, presenter);
+			presenter.setView(dialog);
+			presenter.setDirectory(root);
+			presenter.setOnDirectoryChooserListener(
+				new OnDirectoryChooserListener() {
+					public void OnDirectoryChosen(File directory) {
+						MainViewImpl.this.presenter.onDocumentRootChosen(directory);
+					}
 				}
-			}
-		);
-		chooser.show();
+			);
+			showDialog(dialog);
+		}
 	}
 
 	@Override

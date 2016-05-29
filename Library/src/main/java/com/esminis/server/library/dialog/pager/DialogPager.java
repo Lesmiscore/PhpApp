@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.esminis.server.library.dialog.dialogpager;
+package com.esminis.server.library.dialog.pager;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v4.view.ViewPager;
@@ -23,27 +22,25 @@ import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 
 import com.esminis.server.library.R;
+import com.esminis.server.library.dialog.DialogImpl;
+import com.esminis.server.library.dialog.DialogPresenter;
 
-abstract public class DialogPager<Adapter extends DialogPagerAdapter> extends Dialog {
+abstract public class DialogPager
+	<View, Presenter extends DialogPresenter<View>> extends DialogImpl<Presenter>
+{
 
 	private OnShowListener listener = null;
 
-	protected final Adapter adapter;
 	private final ViewPager pager;
 
-	protected DialogPager(Context context, Class<Adapter> adapterClass) {
-		super(context);
+	protected DialogPager(Context context, Presenter presenter) {
+		super(context, presenter);
 		final FrameLayout layout = new FrameLayout(context);
 		layout.addView(
-			pager = (ViewPager)LayoutInflater.from(context)
-				.inflate(R.layout.dialog_directory_chooser, layout, false)
+			pager = (ViewPager)LayoutInflater.from(context).inflate(R.layout.dialog_pager, layout, false)
 		);
 		setContentView(layout);
-		try {
-			pager.setAdapter(adapter = adapterClass.getConstructor(DialogPager.class).newInstance(this));
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+
 		super.setOnShowListener(new OnShowListener() {
 			public void onShow(DialogInterface dialog) {
 				if (listener != null) {
@@ -51,6 +48,10 @@ abstract public class DialogPager<Adapter extends DialogPagerAdapter> extends Di
 				}
 			}
 		});
+	}
+
+	protected void setAdapter(DialogPagerAdapter adapter) {
+		pager.setAdapter(adapter);
 	}
 
 	@Override
@@ -62,7 +63,7 @@ abstract public class DialogPager<Adapter extends DialogPagerAdapter> extends Di
 		return pager.getCurrentItem();
 	}
 
-	public void setCurrentItem(int position) {
+	protected void setCurrentItem(int position) {
 		pager.setCurrentItem(position);
 	}
 

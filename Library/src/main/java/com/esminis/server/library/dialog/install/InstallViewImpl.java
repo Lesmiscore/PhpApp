@@ -28,7 +28,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.esminis.server.library.R;
-import com.esminis.server.library.dialog.Dialog;
+import com.esminis.server.library.dialog.DialogImplAlert;
 import com.esminis.server.library.model.InstallPackage;
 
 import org.json.JSONException;
@@ -45,7 +45,7 @@ import java.util.List;
 
 import javax.net.ssl.SSLException;
 
-public class InstallViewImpl extends Dialog<InstallPresenter> implements InstallView {
+public class InstallViewImpl extends DialogImplAlert<InstallPresenter> implements InstallView {
 
 	private final Activity activity;
 	private final boolean isCancelable;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.esminis.server.library.dialog.dialogpager;
+package com.esminis.server.library.dialog.pager;
 
 import android.util.SparseArray;
 import android.view.View;
@@ -21,31 +21,29 @@ import android.view.ViewGroup;
 
 import com.esminis.server.library.service.Utils;
 
-abstract public class DialogPagerAdapter<State> extends android.support.v4.view.PagerAdapter {
+abstract public class DialogPagerAdapter extends android.support.v4.view.PagerAdapter {
 
-	private final SparseArray<DialogPagerPager> pages = new SparseArray<>();
+	private final SparseArray<DialogPagerPage> pages = new SparseArray<>();
 	private Integer position = null;
-	protected final State state;
 	protected final DialogPager pager;
 
-	protected DialogPagerAdapter(DialogPager pager, State state) {
+	protected DialogPagerAdapter(DialogPager pager) {
 		this.pager = pager;
-		this.state = state;
 	}
 
 	@Override
 	abstract public int getCount();
 
-	abstract public DialogPagerPager create(ViewGroup container, int position);
+	abstract public DialogPagerPage create(ViewGroup container, int position);
 
 	@Override
 	public boolean isViewFromObject(View view, Object object) {
-		return object instanceof DialogPagerPager && ((DialogPagerPager)object).getLayout() == view;
+		return object instanceof DialogPagerPage && ((DialogPagerPage)object).getLayout() == view;
 	}
 
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {
-		final DialogPagerPager page = pages.get(position);
+		final DialogPagerPage page = pages.get(position);
 		if (page == object) {
 			pages.remove(position);
 			container.removeView(page.getLayout());
@@ -54,7 +52,7 @@ abstract public class DialogPagerAdapter<State> extends android.support.v4.view.
 
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
-		final DialogPagerPager page = create(container, position);
+		final DialogPagerPage page = create(container, position);
 		pages.put(position, page);
 		return page;
 	}
@@ -62,10 +60,10 @@ abstract public class DialogPagerAdapter<State> extends android.support.v4.view.
 	@Override
 	public void setPrimaryItem(ViewGroup container, int position, Object object) {
 		if (
-			(this.position == null || this.position != position) && object instanceof DialogPagerPager
+			(this.position == null || this.position != position) && object instanceof DialogPagerPage
 		) {
 			this.position = position;
-			DialogPagerPager page = (DialogPagerPager)object;
+			DialogPagerPage page = (DialogPagerPage)object;
 			Utils.keyboardHide(pager);
 			page.onStateChanged();
 			page.onShow();
