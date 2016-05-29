@@ -31,12 +31,12 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-class DirectoryChooserAdapter extends ArrayAdapter<DirectoryRecord> {
+class DialogPageDirectoryChooserAdapter extends ArrayAdapter<DirectoryRecord> {
 
 	private final Map<String, File[]> cache = new HashMap<>();
 	private final VectorDrawableCompat iconLock;
 
-	DirectoryChooserAdapter(Context context) {
+	DialogPageDirectoryChooserAdapter(Context context) {
 		super(context, 0);
 		final File directory = Environment.getExternalStorageDirectory();
 		cache.put(directory.getParent(), new File[] {directory});

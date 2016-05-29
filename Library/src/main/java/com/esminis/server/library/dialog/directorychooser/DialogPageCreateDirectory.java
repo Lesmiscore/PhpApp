@@ -25,11 +25,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.esminis.server.library.R;
+import com.esminis.server.library.dialog.dialogpager.DialogPage;
 import com.esminis.server.library.service.Utils;
 
 import java.io.File;
 
-class CreateDirectoryPage implements Page {
+class DialogPageCreateDirectory implements DialogPage<File> {
 
 	private File parent = null;
 	private TextView viewTitle;
@@ -37,7 +38,7 @@ class CreateDirectoryPage implements Page {
 	private EditText viewInput;
 	private View buttonSave;
 
-	CreateDirectoryPage(final DirectoryChooser chooser, ViewGroup container) {
+	DialogPageCreateDirectory(final DirectoryChooser chooser, ViewGroup container) {
 		final ViewGroup layout = (ViewGroup) LayoutInflater.from(chooser.getContext())
 			.inflate(R.layout.view_directory_chooser_page_create, container);
 		viewTitle = (TextView)layout.findViewById(R.id.title);
@@ -45,14 +46,10 @@ class CreateDirectoryPage implements Page {
 		viewInput = (EditText)layout.findViewById(R.id.input);
 		viewInput.addTextChangedListener(new TextWatcher() {
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-			}
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-			}
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
 			@Override
 			public void afterTextChanged(Editable text) {
@@ -86,7 +83,8 @@ class CreateDirectoryPage implements Page {
 	}
 
 	@Override
-	public void onShow() {
+	public void onShow(File parent) {
+		this.parent = parent;
 		viewInput.setText(null);
 		Utils.keyboardShow(viewInput);
 		viewTitle.setText(
@@ -96,11 +94,6 @@ class CreateDirectoryPage implements Page {
 				)
 			)
 		);
-	}
-
-	@Override
-	public void setParent(File parent) {
-		this.parent = parent;
 	}
 
 }

@@ -18,38 +18,47 @@ package com.esminis.server.library.dialog.directorychooser;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.view.View;
+import android.os.Environment;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.esminis.server.library.service.Utils;
+import com.esminis.server.library.dialog.dialogpager.DialogPageFactory;
+import com.esminis.server.library.dialog.dialogpager.DialogPager;
 
 import java.io.File;
 
 public class DirectoryChooser extends Dialog {
 
-	private final Page[] pages;
-	private final ViewGroup[] pagesLayouts;
-	private int activePage = 0;
 	private OnShowListener listener = null;
+	private final DialogPager<File> pager;
+	private final DialogPageDirectoryChooser pageDirectoryChooser;
+	private final DialogPageCreateDirectory pageCreateDirectory;
 	
 	public DirectoryChooser(Context context) {
 		super(context);
 		final FrameLayout layout = new FrameLayout(context);
 		setContentView(layout);
-		pagesLayouts = new ViewGroup[] {new FrameLayout(context), new FrameLayout(context)};
-		pages = new Page[] {
-			new DirectoryChooserPage(this, pagesLayouts[0]),
-			new CreateDirectoryPage(this, pagesLayouts[1])
-		};
-		for (View view : pagesLayouts) {
-			layout.addView(view);
-			view.setVisibility(View.GONE);
-		}
-		showPage(activePage);
+		pager = new DialogPager<>(this, layout);
+		pageDirectoryChooser = pager.add(
+			new DialogPageFactory<DialogPageDirectoryChooser>() {
+				@Override
+				public DialogPageDirectoryChooser create(ViewGroup container) {
+					return new DialogPageDirectoryChooser(DirectoryChooser.this, container);
+				}
+			}
+		);
+		pageCreateDirectory = pager.add(
+			new DialogPageFactory<DialogPageCreateDirectory>() {
+				@Override
+				public DialogPageCreateDirectory create(ViewGroup container) {
+					return new DialogPageCreateDirectory(DirectoryChooser.this, container);
+				}
+			}
+		);
+		setParent(Environment.getExternalStorageDirectory());
 		super.setOnShowListener(new DialogInterface.OnShowListener() {
 			public void onShow(DialogInterface dialog) {
-				showPage(activePage);
+				showChooser();
 				if (listener != null) {
 					listener.onShow(dialog);
 				}
@@ -58,14 +67,7 @@ public class DirectoryChooser extends Dialog {
 	}
 
 	public void setParent(File parent) {
-		pages[0].setParent(parent);
-	}
-
-	private void showPage(int page) {
-		Utils.keyboardHide(this);
-		pagesLayouts[activePage].setVisibility(View.GONE);
-		pagesLayouts[activePage = page].setVisibility(View.VISIBLE);
-		pages[activePage].onShow();
+		pager.show(pageDirectoryChooser, parent);
 	}
 
 	@Override
@@ -74,24 +76,23 @@ public class DirectoryChooser extends Dialog {
 	}
 	
 	public void setOnDirectoryChooserListener(OnDirectoryChooserListener listener) {
-		((DirectoryChooserPage)pages[0]).setOnDirectoryChooserListener(listener);
+		pageDirectoryChooser.setOnDirectoryChooserListener(listener);
 	}
 
 	void showCreateDirectory(File parent) {
-		pages[1].setParent(parent);
-		showPage(1);
+		pager.show(pageCreateDirectory, parent);
 	}
 
 	void showChooser() {
-		showPage(0);
+		pager.show(pageDirectoryChooser, pageDirectoryChooser.getParent());
 	}
 
 	@Override
 	public void onBackPressed() {
-		if (activePage == 0) {
+		if (pager.isActive(pageDirectoryChooser)) {
 			super.onBackPressed();
 		} else {
-			showPage(0);
+			showChooser();
 		}
 	}
 }
