@@ -5,4 +5,5 @@
 	<dimen name="install_dialog_width">320dp</dimen>
 	<dimen name="size_icon_notification_large">64dp</dimen>
 	<dimen name="size_icon_small">16dp</dimen>
+	<dimen name="dialog_button_font_size">12dp</dimen>
 </resources>

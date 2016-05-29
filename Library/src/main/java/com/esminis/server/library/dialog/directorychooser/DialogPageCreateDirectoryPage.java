@@ -80,16 +80,19 @@ class DialogPageCreateDirectoryPage implements DialogPagerPage {
 		viewInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				return actionId == EditorInfo.IME_ACTION_DONE && create(view);
+				return actionId == EditorInfo.IME_ACTION_DONE && !create(view);
 			}
 		});
 	}
 
 	private boolean create(DirectoryChooserView view) {
 		final String name = viewInput.getText().toString().trim();
+		if (name.isEmpty()) {
+			return false;
+		}
 		final File parent = presenter.getDirectory();
 		final File file = new File(parent, name);
-		if (parent == null || name.isEmpty() || file.isDirectory() || !file.mkdirs()) {
+		if (parent == null || file.isDirectory() || !file.mkdirs()) {
 			viewError.setVisibility(View.VISIBLE);
 			viewError.setText(
 				file.isDirectory() ? R.string.error_directory_already_exists :

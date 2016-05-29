@@ -2,4 +2,5 @@
 <resources>
 	<color name="main">#66A366</color>
 	<color name="error">#F32733</color>
+	<color name="dialog_header_background">#EEEEEE</color>
 </resources>

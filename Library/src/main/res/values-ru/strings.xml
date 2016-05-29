@@ -51,4 +51,11 @@
 	<string name="select_package_to_install"><![CDATA[Выбрать сборку <b>%1$s</b> для установки:]]></string>
 	<string name="server_build">Версия и сборка сервера</string>
 	<string name="error_cannot_write_to_directory">Невозможно записать в каталог %1$s</string>
+	<string name="create">Создать</string>
+	<string name="create_directory">Создать каталог</string>
+	<string name="create_directory_in"><![CDATA[Создать каталог в:<br /><b>%1$s</b>]]></string>
+	<string name="enter_directory_name_here">Введите имя каталога сюда…</string>
+	<string name="error_directory_already_exists">Ошибка: каталог уже существует</string>
+	<string name="selected_directory"><![CDATA[Избранный каталог:<br /><b>%1$s</b>]]></string>
+	<string name="warning_selected_directory_not_writable">Предупреждение: в этот каталог невозможнf запись, если вы выберете его, некоторые функции могут не работать</string>
 </resources>
