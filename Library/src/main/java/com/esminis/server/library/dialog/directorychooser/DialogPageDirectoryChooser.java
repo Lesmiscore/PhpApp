@@ -15,7 +15,6 @@
  */
 package com.esminis.server.library.dialog.directorychooser;
 
-import android.os.Environment;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,24 +24,25 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.esminis.server.library.R;
+import com.esminis.server.library.dialog.dialogpager.DialogPage;
 import com.esminis.server.library.service.Utils;
 
 import java.io.File;
 
-class DirectoryChooserPage implements Page {
+class DialogPageDirectoryChooser implements DialogPage<File> {
 
-	private final DirectoryChooserAdapter adapter;
+	private final DialogPageDirectoryChooserAdapter adapter;
 	private OnDirectoryChooserListener listener = null;
 	private File parent;
 	private final TextView viewError;
 	private final TextView viewTitle;
 	private final View buttonCreateDirectory;
 
-	DirectoryChooserPage(final DirectoryChooser chooser, ViewGroup container) {
+	DialogPageDirectoryChooser(final DirectoryChooser chooser, ViewGroup container) {
 		final ViewGroup layout = (ViewGroup)LayoutInflater.from(chooser.getContext())
 			.inflate(R.layout.view_directory_chooser_page, container);
 		final ListView listView = (ListView) layout.findViewById(R.id.list);
-		adapter = new DirectoryChooserAdapter(chooser.getContext());
+		adapter = new DialogPageDirectoryChooserAdapter(chooser.getContext());
 		viewError = (TextView) layout.findViewById(R.id.error);
 		viewTitle = (TextView) layout.findViewById(R.id.title);
 		buttonCreateDirectory = layout.findViewById(R.id.button_create_directory);
@@ -68,16 +68,19 @@ class DirectoryChooserPage implements Page {
 			public void onItemClick(
 				AdapterView<?> parent, View view, int position, long id
 			) {
-				setParent(adapter.getItem(position).file);
+				onShow(adapter.getItem(position).file);
 			}
 		});
 		listView.setAdapter(adapter);
-		setParent(Environment.getExternalStorageDirectory());
+	}
+
+	public File getParent() {
+		return parent;
 	}
 
 	@Override
-	public void setParent(File parent) {
-		this.parent = parent;
+	public void onShow(File file) {
+		parent = file;
 		if (parent != null) {
 			viewTitle.setText(
 				Html.fromHtml(
@@ -95,11 +98,6 @@ class DirectoryChooserPage implements Page {
 			}
 		}
 		buttonCreateDirectory.setEnabled(Utils.canWriteToDirectory(parent));
-	}
-
-	@Override
-	public void onShow() {
-		setParent(parent);
 	}
 
 	void setOnDirectoryChooserListener(OnDirectoryChooserListener listener) {
