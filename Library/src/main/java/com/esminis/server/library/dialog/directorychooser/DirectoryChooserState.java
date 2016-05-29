@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.esminis.server.library.dialog.dialogpager;
+package com.esminis.server.library.dialog.directorychooser;
 
-import android.view.ViewGroup;
+import android.os.Environment;
 
-public interface DialogPageFactory<Page extends DialogPage> {
+import java.io.File;
 
-	Page create(ViewGroup container);
+class DirectoryChooserState {
+
+	File directory = Environment.getExternalStorageDirectory();
 
 }

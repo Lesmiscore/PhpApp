@@ -15,84 +15,32 @@
  */
 package com.esminis.server.library.dialog.directorychooser;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.os.Environment;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
-import com.esminis.server.library.dialog.dialogpager.DialogPageFactory;
 import com.esminis.server.library.dialog.dialogpager.DialogPager;
 
 import java.io.File;
 
-public class DirectoryChooser extends Dialog {
+public class DirectoryChooser extends DialogPager<DirectoryChooserAdapter> {
 
-	private OnShowListener listener = null;
-	private final DialogPager<File> pager;
-	private final DialogPageDirectoryChooser pageDirectoryChooser;
-	private final DialogPageCreateDirectory pageCreateDirectory;
-	
 	public DirectoryChooser(Context context) {
-		super(context);
-		final FrameLayout layout = new FrameLayout(context);
-		setContentView(layout);
-		pager = new DialogPager<>(this, layout);
-		pageDirectoryChooser = pager.add(
-			new DialogPageFactory<DialogPageDirectoryChooser>() {
-				@Override
-				public DialogPageDirectoryChooser create(ViewGroup container) {
-					return new DialogPageDirectoryChooser(DirectoryChooser.this, container);
-				}
-			}
-		);
-		pageCreateDirectory = pager.add(
-			new DialogPageFactory<DialogPageCreateDirectory>() {
-				@Override
-				public DialogPageCreateDirectory create(ViewGroup container) {
-					return new DialogPageCreateDirectory(DirectoryChooser.this, container);
-				}
-			}
-		);
-		setParent(Environment.getExternalStorageDirectory());
-		super.setOnShowListener(new DialogInterface.OnShowListener() {
-			public void onShow(DialogInterface dialog) {
-				showChooser();
-				if (listener != null) {
-					listener.onShow(dialog);
-				}
-			}
-		});
+		super(context, DirectoryChooserAdapter.class);
 	}
 
 	public void setParent(File parent) {
-		pager.show(pageDirectoryChooser, parent);
+		adapter.setParent(parent);
 	}
 
-	@Override
-	public void setOnShowListener(OnShowListener listener) {
-		this.listener = listener;
-	}
-	
 	public void setOnDirectoryChooserListener(OnDirectoryChooserListener listener) {
-		pageDirectoryChooser.setOnDirectoryChooserListener(listener);
-	}
-
-	void showCreateDirectory(File parent) {
-		pager.show(pageCreateDirectory, parent);
-	}
-
-	void showChooser() {
-		pager.show(pageDirectoryChooser, pageDirectoryChooser.getParent());
+		adapter.setOnDirectoryChooserListener(listener);
 	}
 
 	@Override
 	public void onBackPressed() {
-		if (pager.isActive(pageDirectoryChooser)) {
+		if (getCurrentItem() == 0) {
 			super.onBackPressed();
 		} else {
-			showChooser();
+			setCurrentItem(DirectoryChooserAdapter.PAGE_DIRECTORY_CHOOSER);
 		}
 	}
 }
