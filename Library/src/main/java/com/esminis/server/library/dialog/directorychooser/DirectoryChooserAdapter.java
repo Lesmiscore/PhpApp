@@ -17,21 +17,23 @@ package com.esminis.server.library.dialog.directorychooser;
 
 import android.view.ViewGroup;
 
-import com.esminis.server.library.dialog.dialogpager.DialogPagerPager;
-import com.esminis.server.library.dialog.dialogpager.DialogPager;
-import com.esminis.server.library.dialog.dialogpager.DialogPagerAdapter;
+import com.esminis.server.library.dialog.pager.DialogPagerPage;
+import com.esminis.server.library.dialog.pager.DialogPagerAdapter;
 
-import java.io.File;
-
-public class DirectoryChooserAdapter extends DialogPagerAdapter<DirectoryChooserState> {
+class DirectoryChooserAdapter extends DialogPagerAdapter {
 
 	static final int PAGE_DIRECTORY_CHOOSER = 0;
 	static final int PAGE_DIRECTORY_CREATE = 1;
 
-	private OnDirectoryChooserListener listener = null;
+	private final DirectoryChooserPresenter presenter;
+	private final DirectoryChooserView view;
 
-	public DirectoryChooserAdapter(DialogPager pager) {
-		super(pager, new DirectoryChooserState());
+	DirectoryChooserAdapter(
+		DirectoryChooserPresenter presenter, DirectoryChooserViewImpl view
+	) {
+		super(view);
+		this.presenter = presenter;
+		this.view = view;
 	}
 
 	@Override
@@ -40,35 +42,14 @@ public class DirectoryChooserAdapter extends DialogPagerAdapter<DirectoryChooser
 	}
 
 	@Override
-	public DialogPagerPager create(ViewGroup container, int position) {
+	public DialogPagerPage create(ViewGroup container, int position) {
 		switch (position) {
 			case PAGE_DIRECTORY_CHOOSER:
-				final DialogPageDirectoryChooser page = new DialogPageDirectoryChooser(
-					pager, container, state
-				);
-				page.setOnDirectoryChooserListener(
-					new OnDirectoryChooserListener() {
-						@Override
-						public void OnDirectoryChosen(File directory) {
-							if (listener != null) {
-								listener.OnDirectoryChosen(directory);
-							}
-						}
-					}
-				);
-				return page;
+				return new DialogPageDirectoryChooserPage(container, presenter, view);
 			case PAGE_DIRECTORY_CREATE:
-				return new DialogPageCreateDirectory(pager, container, state);
+				return new DialogPageCreateDirectoryPage(container, presenter, view);
 		}
 		throw new RuntimeException("Unsupporetd page type");
-	}
-
-	void setParent(File parent) {
-		state.directory = parent;
-	}
-
-	void setOnDirectoryChooserListener(OnDirectoryChooserListener listener) {
-		this.listener = listener;
 	}
 
 }

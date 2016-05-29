@@ -13,16 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.esminis.server.library.dialog.dialogpager;
+package com.esminis.server.library.dialog.directorychooser;
 
-import android.view.View;
+public interface DirectoryChooserView {
 
-public interface DialogPagerPager {
+	void showDirectoryChooser();
 
-	void onStateChanged();
+	void showDirectoryCreate();
 
-	void onShow();
-
-	View getLayout();
+	void dismiss();
 
 }

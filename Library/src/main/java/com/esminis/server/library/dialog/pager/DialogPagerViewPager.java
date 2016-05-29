@@ -13,20 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.esminis.server.library.dialog;
+package com.esminis.server.library.dialog.pager;
 
-import android.content.DialogInterface;
+import android.content.Context;
+import android.support.v4.view.ViewPager;
+import android.util.AttributeSet;
+import android.view.MotionEvent;
 
-import rx.Observable;
+public class DialogPagerViewPager extends ViewPager {
 
-public interface Dialog {
+	public DialogPagerViewPager(Context context) {
+		super(context);
+	}
 
-	void dismiss();
+	public DialogPagerViewPager(Context context, AttributeSet attrs) {
+		super(context, attrs);
+	}
 
-	void setOnDismissListener(DialogInterface.OnDismissListener listener);
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		return false;
+	}
 
-	void show();
-
-	Observable<Void> showObserved();
+	@Override
+	public boolean onInterceptTouchEvent(MotionEvent event) {
+		return false;
+	}
 
 }

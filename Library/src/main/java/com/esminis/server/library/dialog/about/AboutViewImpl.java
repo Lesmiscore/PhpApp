@@ -32,10 +32,10 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.esminis.server.library.R;
-import com.esminis.server.library.dialog.Dialog;
+import com.esminis.server.library.dialog.DialogImplAlert;
 import com.esminis.server.library.widget.ProductLicensesViewer;
 
-public class AboutViewImpl extends Dialog<AboutPresenter> implements AboutView {
+public class AboutViewImpl extends DialogImplAlert<AboutPresenter> implements AboutView {
 
 	private final View viewTextAbout;
 	private final View viewTextManual;

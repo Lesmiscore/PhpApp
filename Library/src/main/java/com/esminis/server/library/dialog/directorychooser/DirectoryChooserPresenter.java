@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.esminis.server.library.dialog;
+package com.esminis.server.library.dialog.directorychooser;
 
-import android.content.DialogInterface;
+import com.esminis.server.library.dialog.DialogPresenter;
 
-import rx.Observable;
+import java.io.File;
 
-public interface Dialog {
+public interface DirectoryChooserPresenter extends DialogPresenter<DirectoryChooserView> {
 
-	void dismiss();
+	void setDirectory(File directory);
 
-	void setOnDismissListener(DialogInterface.OnDismissListener listener);
+	File getDirectory();
 
-	void show();
+	void setOnDirectoryChooserListener(OnDirectoryChooserListener listener);
 
-	Observable<Void> showObserved();
+	OnDirectoryChooserListener getOnDirectoryChooserListener();
 
 }

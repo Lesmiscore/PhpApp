@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.esminis.server.library.dialog.directorychooser;
+package com.esminis.server.library.dialog.pager;
 
-import android.os.Environment;
+import android.view.View;
 
-import java.io.File;
+public interface DialogPagerPage {
 
-class DirectoryChooserState {
+	void onStateChanged();
 
-	File directory = Environment.getExternalStorageDirectory();
+	void onShow();
+
+	View getLayout();
 
 }

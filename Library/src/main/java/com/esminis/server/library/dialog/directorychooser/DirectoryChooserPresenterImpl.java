@@ -15,32 +15,50 @@
  */
 package com.esminis.server.library.dialog.directorychooser;
 
-import android.content.Context;
-
-import com.esminis.server.library.dialog.dialogpager.DialogPager;
-
 import java.io.File;
 
-public class DirectoryChooser extends DialogPager<DirectoryChooserAdapter> {
+import rx.Observable;
 
-	public DirectoryChooser(Context context) {
-		super(context, DirectoryChooserAdapter.class);
-	}
+public class DirectoryChooserPresenterImpl implements DirectoryChooserPresenter {
 
-	public void setParent(File parent) {
-		adapter.setParent(parent);
-	}
+	private File directory = null;
+	private DirectoryChooserView view = null;
+	private OnDirectoryChooserListener listener = null;
 
-	public void setOnDirectoryChooserListener(OnDirectoryChooserListener listener) {
-		adapter.setOnDirectoryChooserListener(listener);
+	@Override
+	public void setDirectory(File directory) {
+		this.directory = directory;
 	}
 
 	@Override
-	public void onBackPressed() {
-		if (getCurrentItem() == 0) {
-			super.onBackPressed();
-		} else {
-			setCurrentItem(DirectoryChooserAdapter.PAGE_DIRECTORY_CHOOSER);
-		}
+	public File getDirectory() {
+		return directory;
 	}
+
+	@Override
+	public void setOnDirectoryChooserListener(OnDirectoryChooserListener listener) {
+		this.listener = listener;
+	}
+
+	@Override
+	public OnDirectoryChooserListener getOnDirectoryChooserListener() {
+		return listener;
+	}
+
+	@Override
+	public void setView(DirectoryChooserView view) {
+		this.view = view;
+	}
+
+	@Override
+	public void onCreate() {}
+
+	@Override
+	public Observable<Void> show() {
+		if (view != null) {
+			view.showDirectoryChooser();
+		}
+		return null;
+	}
+
 }

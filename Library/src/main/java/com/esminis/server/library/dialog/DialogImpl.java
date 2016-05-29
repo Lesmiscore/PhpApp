@@ -15,18 +15,33 @@
  */
 package com.esminis.server.library.dialog;
 
-import android.content.DialogInterface;
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import rx.Observable;
 
-public interface Dialog {
+public class DialogImpl<T extends DialogPresenter> extends android.app.Dialog implements Dialog {
 
-	void dismiss();
+	protected final T presenter;
 
-	void setOnDismissListener(DialogInterface.OnDismissListener listener);
+	public DialogImpl(Context context, @NonNull  T presenter) {
+		super(context);
+		this.presenter = presenter;
+	}
 
-	void show();
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		presenter.onCreate();
+	}
 
-	Observable<Void> showObserved();
+	@Override
+	public void show() {}
+
+	public Observable<Void> showObserved() {
+		super.show();
+		return (Observable<Void>)presenter.show();
+	}
 
 }
