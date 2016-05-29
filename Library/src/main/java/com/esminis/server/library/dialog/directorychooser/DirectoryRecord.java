@@ -15,8 +15,7 @@
  */
 package com.esminis.server.library.dialog.directorychooser;
 
-import com.esminis.server.library.service.FileUtils;
-
+import com.esminis.server.library.service.Utils;
 import java.io.File;
 
 class DirectoryRecord {
@@ -26,7 +25,7 @@ class DirectoryRecord {
 	final boolean isWritable;
 
 	DirectoryRecord(File file) {
-		this(file, file.getName(), FileUtils.canWriteToDirectory(file));
+		this(file, file.getName(), Utils.canWriteToDirectory(file));
 	}
 
 	DirectoryRecord(File file, CharSequence title, boolean isWritable) {
