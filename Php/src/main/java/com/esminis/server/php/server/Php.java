@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Tautvydas Andrikys
+ * Copyright 2016 Tautvydas Andrikys
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import com.esminis.server.library.model.manager.Log;
 import com.esminis.server.library.model.manager.Network;
 import com.esminis.server.library.model.manager.Process;
 import com.esminis.server.library.preferences.Preferences;
-import com.esminis.server.library.service.FileUtils;
+import com.esminis.server.library.service.Utils;
 import com.esminis.server.library.service.server.ServerControl;
 import com.esminis.server.library.service.server.ServerNotification;
 import com.esminis.server.php.R;
@@ -71,7 +71,7 @@ public class Php extends ServerControl {
 			if (
 				!preferences.contains(context, moduleName) || preferences.getBoolean(context, moduleName)
 			) {
-				if ("zend_opcache".equals(module) && !FileUtils.canWriteToDirectory(root)) {
+				if ("zend_opcache".equals(module) && !Utils.canWriteToDirectory(root)) {
 					sendWarning(R.string.warning_opcache_disabled);
 				} else if (isModuleAvailable(module)) {
 					modules.add(getModuleFile(module));

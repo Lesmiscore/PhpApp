@@ -22,7 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.esminis.server.library.service.KeyboardUtils;
+import com.esminis.server.library.service.Utils;
 
 import java.io.File;
 
@@ -62,7 +62,7 @@ public class DirectoryChooser extends Dialog {
 	}
 
 	private void showPage(int page) {
-		KeyboardUtils.hide(this);
+		Utils.keyboardHide(this);
 		pagesLayouts[activePage].setVisibility(View.GONE);
 		pagesLayouts[activePage = page].setVisibility(View.VISIBLE);
 		pages[activePage].onShow();
