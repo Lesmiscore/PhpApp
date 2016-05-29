@@ -51,4 +51,11 @@
 	<string name="server_build">Server-Version &amp; Build</string>
 	<string name="select_package_to_install"><![CDATA[Wählen Sie <b>%1$s</b> Build zu installieren:]]></string>
 	<string name="error_cannot_write_to_directory">Verzeichnis %1$s kann nicht beschrieben werden</string>
+	<string name="create">Erstellen</string>
+	<string name="create_directory">Verzeichnis erstellen</string>
+	<string name="create_directory_in"><![CDATA[Verzeichnis erstellen in:<br /><b>%1$s</b>]]></string>
+	<string name="enter_directory_name_here">Namen des Verzeichnisses hier eingeben…</string>
+	<string name="error_directory_already_exists">Fehler: Verzeichnis existiert bereits</string>
+	<string name="selected_directory"><![CDATA[Ausgewähltes Verzeichnis:<br /><b>%1$s</b>]]></string>
+	<string name="warning_selected_directory_not_writable">Warnung: dieses Verzeichnis ist nicht schreibbar, wenn Sie es auswählen werden einige Funktionen vielleicht nicht funktionieren</string>
 </resources>

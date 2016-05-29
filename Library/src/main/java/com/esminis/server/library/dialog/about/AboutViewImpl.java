@@ -20,7 +20,9 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Message;
 import android.support.annotation.StringRes;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,6 +86,10 @@ public class AboutViewImpl extends DialogImplAlert<AboutPresenter> implements Ab
 		final Button button = getButton(DialogInterface.BUTTON_NEGATIVE);
 		final ViewGroup.LayoutParams params = button.getLayoutParams();
 		button.setTextColor(Color.BLACK);
+		button.setTextSize(
+			TypedValue.COMPLEX_UNIT_PX,
+			getContext().getResources().getDimensionPixelSize(R.dimen.dialog_button_font_size)
+		);
 		button.setGravity(Gravity.CENTER);
 		params.width = ViewGroup.LayoutParams.MATCH_PARENT;
 		button.setLayoutParams(params);

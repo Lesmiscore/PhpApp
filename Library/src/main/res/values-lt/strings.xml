@@ -51,4 +51,11 @@
 	<string name="downloading_packages_failed"><![CDATA[Klaida - nepavyko gauti galimų versijų:<br /><font color="#FF0000">%1$s</font>]]></string>
 	<string name="downloading_packages">Gaunamas sąrašas galimų versijų</string>
 	<string name="error_cannot_write_to_directory">Negalima rašyti į direktoriją %1$s</string>
+	<string name="create">Sukurti</string>
+	<string name="create_directory">Sukurti direktoriją</string>
+	<string name="enter_directory_name_here">Įveskite direktorijos pavadinimą…</string>
+	<string name="error_directory_already_exists">Klaida: tokia direktorija jau yra</string>
+	<string name="selected_directory"><![CDATA[Pasirinkta direktorija:<br /><b>%1$s</b>]]></string>
+	<string name="warning_selected_directory_not_writable">Įspėjimas: į šią direktorija negalima rašyti, pasirinkus šią direktoriją kai kurios funkcijos gali neveikti</string>
+	<string name="create_directory_in"><![CDATA[Sukurti direktorijos viduje:<br /><b>%1$s</b>]]></string>
 </resources>

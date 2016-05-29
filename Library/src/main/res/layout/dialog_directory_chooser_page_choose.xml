@@ -11,7 +11,7 @@
 		android:paddingTop="8dp" android:paddingBottom="8dp"
 		android:textColor="#000000"
 	  android:gravity="left|center_vertical"
-		android:background="#EEEEEE"
+		android:background="@color/dialog_header_background"
 	/>
 	<TextView
 		android:id="@+id/error"
@@ -35,12 +35,12 @@
 			<Button
 				android:id="@+id/button_create_directory"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:text="@string/create_directory"
+				android:text="@string/create_directory" android:textSize="@dimen/dialog_button_font_size"
 				style="?attr/borderlessButtonStyle"/>
 			<Button
 				android:id="@+id/button_choose"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:text="@string/choose"
+				android:text="@string/choose" android:textSize="@dimen/dialog_button_font_size"
 				style="?attr/borderlessButtonStyle"/>
 		</LinearLayout>
 	</FrameLayout>

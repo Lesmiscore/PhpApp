@@ -51,4 +51,11 @@
     <string name="select_package_to_install"><![CDATA[インストールしてビルドするには <b>%1$s</b> を選択してください：]]></string>
     <string name="server_build">サーバ・バージョンとビルド</string>
     <string name="error_cannot_write_to_directory">ディレクトリ %1$s　に書き出す事ができません</string>
+    <string name="create">作成</string>
+    <string name="create_directory">ディレクトリを作成</string>
+    <string name="create_directory_in"><![CDATA[ディレクトリをここに作成：<br /><b>%1$s</b>]]></string>
+    <string name="enter_directory_name_here">ここにディレクトリ名を入力…</string>
+    <string name="error_directory_already_exists">エラー：ディレクトリ名はすでに存在しています</string>
+    <string name="selected_directory"><![CDATA[選択されたディレクトリ：<br /><b>%1$s</b>]]></string>
+    <string name="warning_selected_directory_not_writable">注意：このディレクトリは書き込み不可です、実行した場合一部の機能が動作しない場合があります</string>
 </resources>

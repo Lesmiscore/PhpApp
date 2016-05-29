@@ -74,12 +74,7 @@ class DialogPageDirectoryChooserAdapter extends ArrayAdapter<DialogPageDirectory
 		if (parentFile != null) {
 			add(
 				new DialogPageDirectoryChooserRecord(
-					parentFile, Html.fromHtml(
-						String.format(
-							"<font color=#000000><b>.. (%1$s)</b></font>",
-							getContext().getString(R.string.go_up).toUpperCase()
-						)
-					), true
+					parentFile, Html.fromHtml(String.format("<b>.. (%1$s)</b>", getContext().getString(R.string.go_up).toUpperCase())), true
 				)
 			);
 		}
