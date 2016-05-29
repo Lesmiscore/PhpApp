@@ -60,7 +60,7 @@
 	<string name="install_package_not_newest">a newer version is available %1$s</string>
 	<string name="selected_directory"><![CDATA[Selected directory:<br /><b>%1$s</b>]]></string>
 	<string name="create_directory">Create directory</string>
-	<string name="warning_selected_directory_not_writable">Warning: this directory is not writable, if you choose this directory then some functions might not work</string>
+	<string name="warning_selected_directory_not_writable">Warning: this directory is not writable, if you choose it then some functions might not work</string>
 	<string name="create">Create</string>
 	<string name="create_directory_in"><![CDATA[Create directory in:<br /><b>%1$s</b>]]></string>
 	<string name="enter_directory_name_here">Enter directory name here…</string>
