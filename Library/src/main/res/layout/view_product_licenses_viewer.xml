@@ -3,7 +3,7 @@
     <ListView
         android:id="@+id/list_licenses"
         android:layout_height="match_parent" android:layout_width="match_parent"
-        android:divider="#EEEEEE" android:dividerHeight="1dp"
+        android:divider="@color/toolbar_background" android:dividerHeight="1dp"
     />
     <Button
         android:id="@+id/button_back" android:visibility="gone"

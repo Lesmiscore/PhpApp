@@ -18,17 +18,20 @@ package com.esminis.server.library.dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
+import android.view.Window;
+
+import com.esminis.server.library.R;
 
 import rx.Observable;
 
-public class DialogImplAlert<T extends DialogPresenter>
-	extends android.app.AlertDialog implements Dialog
-{
+public class DialogImplAlert<T extends DialogPresenter> extends AlertDialog implements Dialog {
 
 	protected final T presenter;
 
 	public DialogImplAlert(Context context, @NonNull  T presenter) {
-		super(context);
+		super(context, R.style.DialogAlertTheme);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.presenter = presenter;
 	}
 
