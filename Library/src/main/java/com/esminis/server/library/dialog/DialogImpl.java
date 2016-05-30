@@ -18,6 +18,7 @@ package com.esminis.server.library.dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.view.Window;
 
 import rx.Observable;
 
@@ -27,6 +28,7 @@ public class DialogImpl<T extends DialogPresenter> extends android.app.Dialog im
 
 	public DialogImpl(Context context, @NonNull  T presenter) {
 		super(context);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.presenter = presenter;
 	}
 

@@ -11,7 +11,7 @@
 		android:paddingTop="8dp" android:paddingBottom="8dp"
 		android:textColor="#000000"
 	  android:gravity="left|center_vertical"
-		android:background="@color/dialog_header_background"
+		android:background="@color/toolbar_background"
 	/>
 	<TextView
 		android:id="@+id/error"
@@ -21,16 +21,18 @@
 		android:visibility="gone"
 	  style="@style/ErrorField"
 	/>
-	<FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
+	<FrameLayout android:layout_width="match_parent" android:layout_height="match_parent" android:background="#FFFFFF">
 		<ListView
 			android:id="@+id/list"
 			android:layout_width="match_parent" android:layout_height="match_parent"
-			android:divider="#EEEEEE" android:dividerHeight="1dp"
+			android:divider="@color/toolbar_background" android:dividerHeight="1dp"
 		  android:layout_marginBottom="48dp"
 		/>
 		<LinearLayout
-			android:layout_width="wrap_content" android:layout_height="48dp"
-			android:orientation="horizontal" android:layout_gravity="right|bottom"
+			android:layout_width="match_parent" android:layout_height="48dp"
+			android:orientation="horizontal" android:layout_gravity="bottom"
+			android:background="@color/toolbar_background"
+		  android:gravity="right"
 		>
 			<Button
 				android:id="@+id/button_create_directory"

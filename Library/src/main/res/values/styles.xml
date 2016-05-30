@@ -44,4 +44,10 @@
 		<item name="android:background">@color/error</item>
 		<item name="android:textColor">#FFFFFF</item>
 	</style>
+	<style name="DialogAlertTheme" parent="@style/Theme.AppCompat.Light.Dialog.Alert">
+		<item name="buttonBarStyle">@style/DialogAlertButtonBar</item>
+	</style>
+	<style name="DialogAlertButtonBar">
+		<item name="android:background">@color/toolbar_background</item>
+	</style>
 </resources>
