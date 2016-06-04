@@ -31,6 +31,7 @@ import com.esminis.server.library.model.manager.Log;
 import com.esminis.server.library.model.manager.Network;
 import com.esminis.server.library.preferences.Preferences;
 import com.esminis.server.library.service.background.BackgroundService;
+import com.esminis.server.library.service.background.BackgroundServiceTaskProvider;
 import com.esminis.server.library.service.server.tasks.RestartIfRunningServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.RestartServerTaskProvider;
 import com.esminis.server.library.service.server.tasks.StartServerTaskProvider;
@@ -39,6 +40,8 @@ import com.esminis.server.library.service.server.tasks.StopServerTaskProvider;
 
 import java.io.File;
 import java.io.IOException;
+
+import rx.Subscriber;
 
 abstract public class ServerControl {
 
@@ -142,7 +145,7 @@ abstract public class ServerControl {
 		}
 		getStatus();
 		if (restartIfUserDidNotStop && preferences.getBoolean(context, Preferences.SERVER_STARTED)) {
-			requestStart();
+			requestStart(null);
 		}
 	}
 
@@ -179,7 +182,7 @@ abstract public class ServerControl {
 	public void onHandlerReady() {
 		status();
 		if (start || preferences.getBoolean(context, Preferences.SERVER_STARTED)) {
-			requestStart();
+			requestStart(null);
 		}
 	}
 
@@ -222,9 +225,27 @@ abstract public class ServerControl {
 		context.sendBroadcast(intent);
 	}
 
-	public void requestStart() {
+	private void requestMainExecute(
+		Class<? extends BackgroundServiceTaskProvider> provider, Subscriber<Void> mainSubscriber
+	) {
+		if (mainSubscriber == null) {
+			mainSubscriber = new Subscriber<Void>() {
+				@Override
+				public void onCompleted() {}
+
+				@Override
+				public void onError(Throwable e) {}
+
+				@Override
+				public void onNext(Void aVoid) {}
+			};
+		}
+		BackgroundService.execute(context, provider, mainSubscriber);
+	}
+
+	public void requestStart(Subscriber<Void> mainSubscriber) {
 		if (mainProcess) {
-			BackgroundService.execute(context, StartServerTaskProvider.class);
+			requestMainExecute(StartServerTaskProvider.class, mainSubscriber);
 		} else if (getServerHandler().isReady()) {
 			sendAction("start");
 		} else {
@@ -232,25 +253,25 @@ abstract public class ServerControl {
 		}
 	}
 
-	public void requestStatus() {
+	public void requestStatus(Subscriber<Void> mainSubscriber) {
 		if (mainProcess) {
-			BackgroundService.execute(context, StatusServerTaskProvider.class);
+			requestMainExecute(StatusServerTaskProvider.class, mainSubscriber);
 		} else {
 			sendAction("status");
 		}
 	}
 
-	public void requestStop() {
+	public void requestStop(Subscriber<Void> mainSubscriber) {
 		if (mainProcess) {
-			BackgroundService.execute(context, StopServerTaskProvider.class);
+			requestMainExecute(StopServerTaskProvider.class, mainSubscriber);
 		} else {
 			sendAction("stop");
 		}
 	}
 
-	public void requestRestartIfRunning() {
+	public void requestRestartIfRunning(Subscriber<Void> mainSubscriber) {
 		if (mainProcess) {
-			BackgroundService.execute(context, RestartIfRunningServerTaskProvider.class);
+			requestMainExecute(RestartIfRunningServerTaskProvider.class, mainSubscriber);
 			return;
 		}
 		context.registerReceiver(new BroadcastReceiver() {
@@ -259,21 +280,21 @@ abstract public class ServerControl {
 				if (MainActivity.getIntentActionServerStatus(context).equals(intent.getAction())) {
 					Bundle extra = intent.getExtras();
 					if (extra != null && !extra.containsKey("errorLine") && extra.getBoolean("running")) {
-						requestRestart();
+						requestRestart(null);
 					}
 					context.unregisterReceiver(this);
 				}
 			}
 		}, new IntentFilter(MainActivity.getIntentActionServerStatus(context)));
-		requestStatus();
+		requestStatus(null);
 	}
 
-	public void requestRestart() {
+	public void requestRestart(Subscriber<Void> mainSubscriber) {
 		if (mainProcess) {
-			BackgroundService.execute(context, RestartServerTaskProvider.class);
+			requestMainExecute(RestartServerTaskProvider.class, mainSubscriber);
 		} else {
-			requestStop();
-			requestStart();
+			requestStop(null);
+			requestStart(null);
 		}
 	}
 

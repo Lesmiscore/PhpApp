@@ -55,7 +55,7 @@ public class ServerNotificationService extends Service {
 		super.onCreate();
 		((LibraryApplication)getApplication()).getComponent().inject(this);
 		registerReceiver(receiver, new IntentFilter(MainActivity.getIntentActionServerStatus(this)));
-		serverControl.requestStatus();
+		serverControl.requestStatus(null);
 	}
 
 	@Nullable

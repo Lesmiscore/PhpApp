@@ -50,4 +50,5 @@
 	<style name="DialogAlertButtonBar">
 		<item name="android:background">@color/toolbar_background</item>
 	</style>
+	<style name="ExternalIntentLayout" />
 </resources>

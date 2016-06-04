@@ -29,7 +29,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 
-class PermissionRequester {
+public class PermissionRequester {
 
 	static private final int REQUEST_CODE_PERMISSION = 1;
 

@@ -175,7 +175,7 @@ public class DrawerFragment extends PreferenceFragment {
 		preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				serverControl.requestStatus();
+				serverControl.requestStatus(null);
 				return true;
 			}
 		});
@@ -190,7 +190,7 @@ public class DrawerFragment extends PreferenceFragment {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				onPreferenceChanged(preference, newValue);
-				serverControl.requestRestartIfRunning();
+				serverControl.requestRestartIfRunning(null);
 				return true;
 			}
 		});

@@ -15,6 +15,7 @@
  */
 package com.esminis.server.library.activity.main;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,8 @@ import android.view.MenuItem;
 import java.io.File;
 
 public interface MainPresenter {
+
+	String MAIN_PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 	void onCreate(AppCompatActivity activity, Bundle savedInstanceState, MainView view);
 

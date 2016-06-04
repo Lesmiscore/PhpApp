@@ -41,6 +41,8 @@ public class Preferences {
 	final static public String INSTALLED_PACKAGE = "installedPackage";
 	final static public String NEWEST_PACKAGE = "newestPackage";
 
+	final static public String PREFIX_EXTERNAL_INTENT_PERMISSION = "external_intent_";
+
 	private PreferencesBackend backend = null;
 	private final Object lock = new Object();
 

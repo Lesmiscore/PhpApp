@@ -40,7 +40,7 @@ abstract public class LibraryApplication<T extends LibraryApplicationComponent> 
 		component = createComponent();
 		final ServerControl serverControl = component.getServerControl();
 		if (!getIsMainApplicationProcess()) {
-			serverControl.requestStatus();
+			serverControl.requestStatus(null);
 			return;
 		}
 		BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -53,7 +53,7 @@ abstract public class LibraryApplication<T extends LibraryApplicationComponent> 
 						return;
 					}
 					if (extras != null && extras.getBoolean("running")) {
-						serverControl.requestRestart();
+						serverControl.requestRestart(null);
 					}
 					unregisterReceiver(this);
 				}

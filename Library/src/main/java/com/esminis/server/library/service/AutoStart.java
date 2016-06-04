@@ -43,10 +43,10 @@ public class AutoStart extends BroadcastReceiver {
 		}
 		if (preferences.getBoolean(context, Preferences.START_ON_BOOT)) {
 			preferences.set(context, Preferences.SERVER_STARTED, true);
-			serverControl.requestStart();
+			serverControl.requestStart(null);
 		} else {
 			preferences.set(context, Preferences.SERVER_STARTED, false);
-			serverControl.requestStop();
+			serverControl.requestStop(null);
 		}
 	}
 	
