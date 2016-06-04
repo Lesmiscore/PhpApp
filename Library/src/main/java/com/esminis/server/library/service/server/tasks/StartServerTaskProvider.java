@@ -19,7 +19,7 @@ public class StartServerTaskProvider extends ServerTaskProvider {
 
 	@Override
 	protected void execute() {
-		serverControl.requestStart();
+		serverControl.requestStart(null);
 	}
 
 }

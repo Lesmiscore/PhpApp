@@ -15,10 +15,14 @@
  */
 package com.esminis.server.library.application;
 
+import com.esminis.server.library.activity.external.IntentPresenter;
+import com.esminis.server.library.activity.external.IntentPresenterImpl;
 import com.esminis.server.library.api.Api;
 import com.esminis.server.library.model.manager.InstallPackageManager;
 import com.esminis.server.library.model.manager.ProductLicenseManager;
+import com.esminis.server.library.permission.PermissionRequester;
 import com.esminis.server.library.preferences.Preferences;
+import com.esminis.server.library.service.server.ServerControl;
 import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
@@ -51,6 +55,16 @@ public class LibraryApplicationModule {
 	@Singleton
 	public InstallPackageManager provideInstallPackageManager(Api api, Preferences preferences) {
 		return new InstallPackageManager(api, preferences, application);
+	}
+
+	@Provides
+	public IntentPresenter provideIntentPresenter(
+		ServerControl control, Preferences preferences, PermissionRequester permissionRequester,
+	  InstallPackageManager installPackageManager
+	) {
+		return new IntentPresenterImpl(
+			preferences, control, permissionRequester, installPackageManager
+		);
 	}
 
 }

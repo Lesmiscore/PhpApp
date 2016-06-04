@@ -19,7 +19,7 @@ public class StopServerTaskProvider extends ServerTaskProvider {
 
 	@Override
 	protected void execute() {
-		serverControl.requestStop();
+		serverControl.requestStop(null);
 	}
 
 }

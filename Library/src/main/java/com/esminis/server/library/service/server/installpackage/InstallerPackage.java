@@ -110,7 +110,7 @@ public class InstallerPackage {
 			receiver, new IntentFilter(MainActivity.getIntentActionServerStatus(context))
 		);
 		preferences.set(context, Preferences.SERVER_STARTED, false);
-		serverControl.requestStop();
+		serverControl.requestStop(null);
 		try {
 			barrier.await();
 		} catch (InterruptedException | BrokenBarrierException ignored) {}

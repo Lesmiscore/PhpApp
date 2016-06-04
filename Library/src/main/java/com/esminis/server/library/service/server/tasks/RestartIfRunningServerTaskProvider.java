@@ -19,7 +19,7 @@ public class RestartIfRunningServerTaskProvider extends ServerTaskProvider {
 
 	@Override
 	protected void execute() {
-		serverControl.requestRestartIfRunning();
+		serverControl.requestRestartIfRunning(null);
 	}
 
 }

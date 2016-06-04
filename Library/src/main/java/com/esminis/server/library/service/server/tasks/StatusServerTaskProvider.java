@@ -19,7 +19,7 @@ public class StatusServerTaskProvider extends ServerTaskProvider {
 
 	@Override
 	protected void execute() {
-		serverControl.requestStatus();
+		serverControl.requestStatus(null);
 	}
 
 }

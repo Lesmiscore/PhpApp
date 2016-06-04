@@ -16,6 +16,7 @@
 package com.esminis.server.library.application;
 
 import com.esminis.server.library.activity.DrawerFragment;
+import com.esminis.server.library.activity.external.IntentPresenter;
 import com.esminis.server.library.activity.main.MainPresenter;
 import com.esminis.server.library.model.manager.InstallPackageManager;
 import com.esminis.server.library.model.manager.ProductLicenseManager;
@@ -52,6 +53,8 @@ public interface LibraryApplicationComponent {
 	ProductLicenseManager getProductLicenseManager();
 
 	MainPresenter getMainPresenter();
+
+	IntentPresenter getIntentPresenter();
 
 }
 

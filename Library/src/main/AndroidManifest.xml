@@ -15,7 +15,9 @@
         android:label="@string/title"
     >
         <receiver android:name="com.esminis.server.library.service.AutoStart">
-            <intent-filter><action android:name="android.intent.action.BOOT_COMPLETED" /></intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
         </receiver>
         <activity android:name=".activity.main.MainActivity" android:windowSoftInputMode="stateHidden">
             <intent-filter>
@@ -23,6 +25,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+		    <activity android:name=".activity.external.IntentActivity" android:windowSoftInputMode="stateHidden" android:theme="@style/ThemeApplication.Translucent">
+			    <intent-filter>
+				    <category android:name="android.intent.category.DEFAULT" />
+				    <action android:name="com.esminis.server.START" />
+				    <action android:name="com.esminis.server.STOP" />
+				    <action android:name="com.esminis.server.RESTART" />
+			    </intent-filter>
+		    </activity>
         <service android:name=".service.background.BackgroundService" android:process=":background" />
         <service android:name=".service.server.ServerNotificationService" />
 

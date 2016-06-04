@@ -68,7 +68,7 @@ public class ServerStreamReader extends AsyncTask<InputStream, Void, Void> {
 			handler.sendError(TextUtils.join("\n", lines));
 		}
 		if (!isCancelled()) {
-			serverControl.requestStop();
+			serverControl.requestStop(null);
 		}
 		return null;
 	}

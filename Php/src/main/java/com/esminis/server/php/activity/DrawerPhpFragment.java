@@ -122,7 +122,7 @@ public class DrawerPhpFragment extends DrawerFragment {
 			}
 		}
 		preferences.setBooleans(getActivity(), values);
-		serverControl.requestRestartIfRunning();
+		serverControl.requestRestartIfRunning(null);
 		resetSelectAll();
 	}
 

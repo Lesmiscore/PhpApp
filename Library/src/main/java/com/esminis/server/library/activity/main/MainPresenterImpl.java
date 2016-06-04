@@ -182,7 +182,7 @@ public class MainPresenterImpl implements MainPresenter {
 	@Override
 	public void requestPermission() {
 		permissionHelper.request(
-			Manifest.permission.WRITE_EXTERNAL_STORAGE, new PermissionListener() {
+			MainPresenter.MAIN_PERMISSION, new PermissionListener() {
 
 				@Override
 				public void onGranted() {
