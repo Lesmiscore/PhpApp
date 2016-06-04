@@ -1,1 +1,1 @@
-setupServerProject(this, 60, "1.8.9", "com.esminis.server.php")
+setupServerProject(this, 61, "1.8.10", "com.esminis.server.php")
