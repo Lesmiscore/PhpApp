@@ -71,6 +71,10 @@
 	<string name="server_action_title_stop_progress">Stopping server…</string>
 	<string name="server_action_title_restart">restart server</string>
 	<string name="server_action_title_restart_progress">Restarting server…</string>
+	<string name="server_action_title_get">get server settings(address, document root) and status</string>
+	<string name="server_action_title_get_progress">Getting server settings and status…</string>
+	<string name="server_action_title_set">set server settings(address, document root)</string>
+	<string name="server_action_title_set_progress">Setting server settings…</string>
 	<string name="application_requested_server_action"><![CDATA[<b>%1$s</b> is requesting <b>%2$s</b> to <b>%3$s</b>.<br />Do you allow it?]]></string>
 	<string name="remember_choice_for_application"><![CDATA[Remember my choice for <b>%1$s</b>]]></string>
 	<string name="deny">Deny</string>

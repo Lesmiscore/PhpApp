@@ -31,6 +31,8 @@
 				    <action android:name="com.esminis.server.START" />
 				    <action android:name="com.esminis.server.STOP" />
 				    <action android:name="com.esminis.server.RESTART" />
+				    <action android:name="com.esminis.server.GET" />
+				    <action android:name="com.esminis.server.SET" />
 			    </intent-filter>
 		    </activity>
         <service android:name=".service.background.BackgroundService" android:process=":background" />
