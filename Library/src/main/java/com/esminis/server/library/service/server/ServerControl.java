@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.*;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.text.Html;
 import android.util.Pair;
@@ -40,8 +41,13 @@ import com.esminis.server.library.service.server.tasks.StopServerTaskProvider;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.TimeUnit;
 
+import rx.Observable;
 import rx.Subscriber;
+import rx.schedulers.Schedulers;
 
 abstract public class ServerControl {
 
@@ -251,6 +257,55 @@ abstract public class ServerControl {
 		} else {
 			start = true;
 		}
+	}
+
+	public void requestStatus(final Context context, @NonNull Subscriber<Void> mainSubscriber) {
+		if (!mainProcess) {
+			mainSubscriber.onError(new Exception("Not main process"));
+			return;
+		}
+		Observable.create(new Observable.OnSubscribe<Void>() {
+			@Override
+			public void call(Subscriber<? super Void> subscriber) {
+				final Boolean[] running = {false};
+				final CyclicBarrier barrier = new CyclicBarrier(2);
+				final BroadcastReceiver receiver = new BroadcastReceiver() {
+					@Override
+					public void onReceive(Context context, Intent intent) {
+						if (MainActivity.getIntentActionServerStatus(context).equals(intent.getAction())) {
+							final Bundle extras = intent.getExtras();
+							if (extras != null && extras.containsKey("errorLine")) {
+								return;
+							}
+							if (extras != null) {
+								if (extras.getBoolean("running")) {
+									synchronized (running) {
+										running[0] = true;
+									}
+								}
+								try {
+									barrier.await();
+								} catch (Exception ignored) {}
+							}
+						}
+					}
+				};
+				context.registerReceiver(
+					receiver, new IntentFilter(MainActivity.getIntentActionServerStatus(context))
+				);
+				requestStatus(null);
+				try {
+					barrier.await(10, TimeUnit.SECONDS);
+				} catch (Exception ignored) {}
+				synchronized (running) {
+					if (running[0]) {
+						subscriber.onNext(null);
+					}
+				}
+				context.unregisterReceiver(receiver);
+				subscriber.onCompleted();
+			}
+		}).subscribeOn(Schedulers.newThread()).subscribe(mainSubscriber);
 	}
 
 	public void requestStatus(Subscriber<Void> mainSubscriber) {

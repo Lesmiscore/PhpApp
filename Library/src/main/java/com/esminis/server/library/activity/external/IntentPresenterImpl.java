@@ -3,6 +3,7 @@ package com.esminis.server.library.activity.external;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.esminis.server.library.activity.main.MainPresenter;
 import com.esminis.server.library.model.manager.InstallPackageManager;
@@ -41,24 +42,25 @@ public class IntentPresenterImpl implements IntentPresenter {
 	@Override
 	public void onCreate(Context context, IntentView view, Intent intent, String application) {
 		this.view = view;
-		this.preferenceKey = Preferences.PREFIX_EXTERNAL_INTENT_PERMISSION + application;
 		if (
 			intent == null || application == null || !context.getPackageName().equals(intent.getPackage())
 		) {
-			view.finish(IntentAction.ERROR_INVALID_INTENT);
+			view.finish(IntentAction.ERROR_INVALID_INTENT, null);
 		} else if (
 			!permissionRequester.hasPermission(context, MainPresenter.MAIN_PERMISSION)
 		) {
-			view.finish(IntentAction.ERROR_NO_ANDROID_PERMISSIONS);
+			view.finish(IntentAction.ERROR_NO_ANDROID_PERMISSIONS, null);
 		} else if (installPackageManager.getInstalled() == null) {
-			view.finish(IntentAction.ERROR_SERVER_NOT_INSTALLED);
+			view.finish(IntentAction.ERROR_SERVER_NOT_INSTALLED, null);
 		} else {
 			try {
 				action = IntentAction.get(intent.getAction());
 			} catch (Throwable throwable) {
-				view.finish(IntentAction.ERROR_INVALID_ACTION);
+				view.finish(IntentAction.ERROR_INVALID_ACTION, null);
 				return;
 			}
+			preferenceKey = Preferences.PREFIX_EXTERNAL_INTENT_PERMISSION + application + "_" +
+				action.getName();
 			view.setup(this.application = application, action);
 			final Boolean allow = rememberedAllow(context);
 			if (allow != null) {
@@ -81,14 +83,14 @@ public class IntentPresenterImpl implements IntentPresenter {
 			preferences.set(context, preferenceKey, allowed ? "1" : "0");
 		}
 		if (!allowed) {
-			view.finish(IntentAction.ERROR_USER_DENIED);
+			view.finish(IntentAction.ERROR_USER_DENIED, null);
 			return;
 		}
 		if (action == null) {
-			view.finish(IntentAction.ERROR_INVALID_ACTION);
+			view.finish(IntentAction.ERROR_INVALID_ACTION, null);
 			return;
 		}
-		final Boolean[] result = {null, null};
+		final Boolean[] result = {null, null, false};
 		Observable.create(new Observable.OnSubscribe<Void>() {
 			@Override
 			public void call(Subscriber<? super Void> subscriber) {
@@ -111,6 +113,7 @@ public class IntentPresenterImpl implements IntentPresenter {
 			}
 		});
 		final Subscriber<Void> subscriber = new Subscriber<Void>() {
+
 			@Override
 			public void onCompleted() {
 				synchronized (result) {
@@ -128,7 +131,11 @@ public class IntentPresenterImpl implements IntentPresenter {
 			}
 
 			@Override
-			public void onNext(Void dummy) {}
+			public void onNext(Void dummy) {
+				synchronized (result) {
+					result[2] = true;
+				}
+			}
 		};
 		if (action == IntentAction.START) {
 			serverControl.requestStart(subscriber);
@@ -136,6 +143,11 @@ public class IntentPresenterImpl implements IntentPresenter {
 			serverControl.requestStop(subscriber);
 		} else if (action == IntentAction.RESTART) {
 			serverControl.requestRestart(subscriber);
+		} else if (action == IntentAction.GET) {
+			serverControl.requestStatus(context, subscriber);
+		} else if (action == IntentAction.SET) {
+			// @todo execute set, don`t forget to validate all fields
+			serverControl.requestRestartIfRunning(subscriber);
 		}
 		view.showExecutingAction(application, action);
 	}
@@ -143,9 +155,14 @@ public class IntentPresenterImpl implements IntentPresenter {
 	private void finished(Boolean[] result) {
 		if (result[0] != null && result[1] != null) {
 			if (result[1]) {
-				view.finish(Activity.RESULT_OK);
+				final Bundle data = new Bundle();
+				if (action == IntentAction.GET) {
+					data.putBoolean("running", result[2]);
+					// @todo all fields: address, port, document_root
+				}
+				view.finish(Activity.RESULT_OK, data);
 			} else {
-				view.finish(IntentAction.ERROR_SERVER_ACTION_FAILED);
+				view.finish(IntentAction.ERROR_SERVER_ACTION_FAILED, null);
 			}
 		}
 	}

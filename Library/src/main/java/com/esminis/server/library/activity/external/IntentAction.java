@@ -27,6 +27,16 @@ public class IntentAction {
 	static public final IntentAction RESTART = new IntentAction("RESTART");
 
 	/**
+	 * Get server status, document root, address, port
+	 */
+	static public final IntentAction GET = new IntentAction("GET");
+
+	/**
+	 * Set server document root, address, port
+	 */
+	static public final IntentAction SET = new IntentAction("SET");
+
+	/**
 	 * Error - user has not granted permissions to server application, you should show user message
 	 * to start server application and grant it permissions
 	 */

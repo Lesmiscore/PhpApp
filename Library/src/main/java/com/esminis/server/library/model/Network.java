@@ -15,11 +15,29 @@
  */
 package com.esminis.server.library.model;
 
+import android.support.annotation.NonNull;
+
+import java.net.NetworkInterface;
+
 public class Network {
 
-	public String name;
-	public String address;
-	public String title;
+	static public final Network ALL = new Network();
+
+	public final String name;
+	public final String address;
+	public final String title;
+
+	public Network(@NonNull NetworkInterface item, String address) {
+		name = item.getName();
+		this.address = address;
+		this.title = address + " (" + item.getDisplayName() + ")";
+	}
+
+	private Network() {
+		name = "all";
+		address = "0.0.0.0";
+		title = address + " (" + name + ")";
+	}
 
 	@Override
 	public String toString() {

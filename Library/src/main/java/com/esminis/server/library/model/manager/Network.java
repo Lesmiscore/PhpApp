@@ -48,7 +48,7 @@ public class Network {
 			add(interfaces, false);
 			add(interfaces, true);
 		} catch (SocketException ignored) {}
-		add("0.0.0.0", "all", "0.0.0.0 (all)");
+		list.add(com.esminis.server.library.model.Network.ALL);
 		if (listOld.size() != list.size()) {
 			return true;
 		}
@@ -74,12 +74,12 @@ public class Network {
 	private void add(NetworkInterface item, InetAddress address) {
 		String host = address.getHostAddress().toUpperCase();
 		if (PATTERN_IPV4.matcher(host).matches()) {
-			add(host, item.getName(), host + "(" + item.getDisplayName() + ")");
+			add(item, host);
 		}
 	}
 
-	private void add(String address, String name, String title) {
-		list.add(create(address, name, title));
+	private void add(NetworkInterface item, String address) {
+		list.add(new com.esminis.server.library.model.Network(item, address));
 	}
 	
 	public int getPosition(String name) {
@@ -99,12 +99,4 @@ public class Network {
 		return list.get(position);
 	}
 
-	public com.esminis.server.library.model.Network create(String address, String name, String title) {
-		com.esminis.server.library.model.Network model = new com.esminis.server.library.model.Network();
-		model.address = address;
-		model.name = name;
-		model.title = title;
-		return model;
-	}
-	
 }
